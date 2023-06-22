@@ -74,6 +74,8 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
 
+          
+        {% if user.is_superuser %}
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-user"></i>
@@ -88,148 +90,11 @@
                   <i class="fas fa-user-cog"></i>
                   <p>Gestionar Usuarios</p>
                 </a>
-              </li>              
-
+              </li>
             </ul>
 
-            <!--li class="nav-item has-treeview">
-              <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-user"></i>
-                <p>
-                  Pacientes
-                  <i class="fas fa-angle-left right"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="/pacientelistado/" class="nav-link">
-                    <i class="fas fa-search nav-icon"></i>
-                    <p>Buscar</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-
-            <li class="nav-item has-treeview">
-              <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-user-md"></i>
-                <p>
-                  Profesionales
-                  <i class="fas fa-angle-left right"></i>
-                </p>
-              </a>
-
-              {% if request.user.is_staff %}
-
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="/profesionallistado/" class="nav-link">
-                    <i class="fas fa-id-card nav-icon"></i>
-                    <p>Datos Profesional</p>
-                  </a>
-                </li>
-              </ul>
-
-              {% endif %}
-
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="/datosbancarioslistado/" class="nav-link">
-                    <i class="fas fa-money-check-alt nav-icon"></i>
-                    <p>Datos Bancarios</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-
-
-            <li class="nav-item has-treeview">
-              <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-calendar-alt"></i>
-                <p>
-                  Turnos
-                  <i class="fas fa-angle-left right"></i>
-                </p>
-              </a>
-
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="/turnolistado/" class="nav-link">
-                    <i class="fas fa-calendar-check nav-icon"></i>
-                    <p>Listado de Turnos</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-
-            <li class="nav-item has-treeview">
-              <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-chart-bar"></i>
-                <p>
-                  Estadisticas
-                  <i class="fas fa-angle-left right"></i>
-                </p>
-              </a>
-
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="/estadisticaobrasocialmes/" class="nav-link">
-                    <i class="fas fa-calendar-check nav-icon"></i>
-                    <p>Atenciones por Mes</p>
-                  </a>
-                </li>
-              </ul>
-
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="/estadisticapacientemes/" class="nav-link">
-                    <i class="fas fa-address-card nav-icon"></i>
-                    <p>Atenciones por Paciente</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-
-
-            <li class="nav-item has-treeview">
-              <a href="#" class="nav-link">
-                <i class="fas fa-graduation-cap"></i>
-                <p>
-                  Capacitaciones 
-                  <i class="fas fa-angle-left right"></i>
-                </p>
-              </a>
-
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="/listadoalumno/" class="nav-link">
-                    <i class="fas fa-user-graduate"></i>
-                    <p>Alumnos</p>
-                  </a>
-                </li>
-              </ul>
-
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="/listadocurso/" class="nav-link">
-                    <i class="fas fa-book-reader"></i>
-                    <p>Cursos</p>
-                  </a>
-                </li>
-              </ul>
-
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="/listadoinscripcion/" class="nav-link">
-                    <i class="fas fa-scroll"></i>
-                    <p>Inscripciones</p>
-                  </a>
-                </li>
-              </ul>
-
-            </li-->
-
           </li>
+        {% endif %}  
         </ul>
       </nav>
     </div>
