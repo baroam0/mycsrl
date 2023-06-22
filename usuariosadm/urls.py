@@ -17,10 +17,12 @@ Including another URLconf
 
 from django.urls import path
 
-from .views import edit_user, create_user, list_user
+from .views import edit_user, create_user, list_user, change_password
+
 
 urlpatterns = [
     path('useradmlist/', list_user, name='useradmlist'),
     path('useradmedit/<int:pk>', edit_user, name='useradmedit'),
     path('useradmnew/', create_user, name='useradmnew'),
+    path('changepassword/', change_password, name='change_password')
 ]

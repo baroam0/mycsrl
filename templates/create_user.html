@@ -1,3 +1,6 @@
+
+{% load static %}
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,7 +17,10 @@
   <!-- icheck bootstrap -->
   <link rel="stylesheet" href="../../plugins/icheck-bootstrap/icheck-bootstrap.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+  <!--link rel="stylesheet" href="../../dist/css/adminlte.min.css"-->
+  <!--link rel="stylesheet" href="../../dist/css/adminlte.min.css"-->
+  <link href="{% static 'dist/css/adminlte.min.css' %}" rel="stylesheet">
+
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
@@ -26,7 +32,7 @@
 
   <div class="card">
     <div class="card-body register-card-body">
-      <p class="login-box-msg">Register a new membership</p>
+      <!--p class="login-box-msg">Register a new membership</p-->
 
       <form action="../../index.html" method="post">
         <div class="input-group mb-3">
@@ -63,12 +69,12 @@
         </div>
         <div class="row">
           <div class="col-8">
-            <div class="icheck-primary">
+            <!--div class="icheck-primary">
               <input type="checkbox" id="agreeTerms" name="terms" value="agree">
               <label for="agreeTerms">
                I agree to the <a href="#">terms</a>
               </label>
-            </div>
+            </div-->
           </div>
           <!-- /.col -->
           <div class="col-4">
@@ -78,7 +84,7 @@
         </div>
       </form>
 
-      <div class="social-auth-links text-center">
+      <!--div class="social-auth-links text-center">
         <p>- OR -</p>
         <a href="#" class="btn btn-block btn-primary">
           <i class="fab fa-facebook mr-2"></i>
@@ -88,9 +94,9 @@
           <i class="fab fa-google-plus mr-2"></i>
           Sign up using Google+
         </a>
-      </div>
+      </div-->
 
-      <a href="login.html" class="text-center">I already have a membership</a>
+      <!--a href="login.html" class="text-center">I already have a membership</a-->
     </div>
     <!-- /.form-box -->
   </div><!-- /.card -->

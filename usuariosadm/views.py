@@ -1,13 +1,22 @@
 
 
-from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.shortcuts import render, redirect
+
+#from django.contrib.auth.forms import PasswordChangeForm
+
+from django.contrib.auth import update_session_auth_hash
+from django.contrib import messages
+
+from .forms import UserCreationForm, UserChangeForm, PasswordChangeForm
+from .models import UserAdm
 
 
 def list_user(request):
     """Funcion para listar """
-    return render(request, 'create_user.html', {'form': form})
+    usuarios = UserAdm.objects.all()
+    return render(request, 'usuariosadm/useradm_list.html', {'usuarios': usuarios})
 
 
 def create_user(request):
@@ -16,23 +25,45 @@ def create_user(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('user_list')  # Redirect to a user list page
+            return redirect('useradmlist')  # Redirect to a user list page
     else:
         form = UserCreationForm()
-    return render(request, 'create_user.html', {'form': form})
+    return render(request, 'usuariosadm/useradm_edit.html', {'form': form})
 
 
-def edit_user(request, user_id):
+
+def edit_user(request, pk):
     """Funcion para editar usuario """
-    user = User.objects.get(pk=user_id)
-    if request.method == 'POST':
+    user = UserAdm.objects.get(pk=pk)
+
+    if request.method == 'POST':        
         form = UserChangeForm(request.POST, instance=user)
         if form.is_valid():
             form.save()
-            return redirect('user_list')  # Redirect to a user list page
+            new_password = make_password(request.POST.get('password'))
+            user.password = new_password
+            user.save()
+            return redirect('useradmlist')  # Redirect to a user list page
     else:
         form = UserChangeForm(instance=user)
-    return render(request, 'edit_user.html', {'form': form})
+    return render(request, 'usuariosadm/useradm_edit.html', {'form': form})
 
+
+
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('home')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'change_password.html', {
+        'form': form
+    })
 
 # Create your views here.
