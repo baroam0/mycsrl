@@ -40,9 +40,9 @@ def edit_user(request, pk):
         form = UserChangeForm(request.POST, instance=user)
         if form.is_valid():
             form.save()
-            new_password = make_password(request.POST.get('password'))
-            user.password = new_password
-            user.save()
+            #new_password = make_password(request.POST.get('password'))
+            #user.password = new_password
+            #user.save()
             return redirect('useradmlist')  # Redirect to a user list page
     else:
         form = UserChangeForm(instance=user)
