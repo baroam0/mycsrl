@@ -146,9 +146,6 @@ class UserChangeForm(forms.ModelForm):
             user_permissions.queryset = user_permissions.queryset.select_related('content_type')
 
 
-
-
-
 class SetPasswordForm(forms.Form):
     """
     A form that lets a user change set their password without entering the old
@@ -221,3 +218,25 @@ class PasswordChangeForm(SetPasswordForm):
                 code='password_incorrect',
             )
         return old_password
+
+    def __init__(self, *args, **kwargs):
+        super(PasswordChangeForm, self).__init__(*args, **kwargs)
+
+        for field in iter(self.fields):
+            if field == "old_password":
+                self.fields[field].widget.attrs.update({
+                    'class': 'form-control',
+                    'placeholder': 'Contraseña antigua'
+                })
+            
+            if field == "new_password1":
+                self.fields[field].widget.attrs.update({
+                    'class': 'form-control',
+                    'placeholder': 'Contraseña nueva'
+                })
+            
+            if field == "new_password2":
+                self.fields[field].widget.attrs.update({
+                    'class': 'form-control',
+                    'placeholder': 'Repetir contraseña nueva'
+                })
