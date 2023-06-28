@@ -94,7 +94,27 @@
             </ul>
 
           </li>
-        {% endif %}  
+        {% endif %}
+
+
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-dollar-sign"></i>
+              <p>
+                Gastos
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/user/useradmlist/" class="nav-link">
+                  <i class="fas fa-user-cog"></i>
+                  <p>Gastos de Obra</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
         </ul>
       </nav>
     </div>
@@ -130,17 +150,6 @@
   </div>
 
   <footer class="main-footer">
-
-    {% if cumplepaciente %}
-      {%for dato in cumplepaciente %}
-        
-            <div class="alert alert-secondary" role="alert">
-                Hoy es el cumple de {{dato.apellido.upper}}, {{dato.nombre.upper}} - {{dato.telefono}}
-            </div>
-        
-      {% endfor %}
-    {% endif %}
-
     <strong>Copyright &copy; 2023 </strong>
     Todos los Derechos Reservados.
     <div class="float-right d-none d-sm-inline-block">

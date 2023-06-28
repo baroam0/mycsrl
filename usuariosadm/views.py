@@ -31,7 +31,6 @@ def create_user(request):
     return render(request, 'usuariosadm/useradm_edit.html', {'form': form})
 
 
-
 def edit_user(request, pk):
     """Funcion para editar usuario """
     user = UserAdm.objects.get(pk=pk)
@@ -47,7 +46,6 @@ def edit_user(request, pk):
     else:
         form = UserChangeForm(instance=user)
     return render(request, 'usuariosadm/useradm_edit.html', {'form': form})
-
 
 
 def change_password(request):
