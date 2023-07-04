@@ -45,10 +45,10 @@ def obra_new(request):
             messages.success(request, "SE HA GRABADO LOS DATOS BANCARIOS")
             return redirect('/obralistado')
     else:
-        form = DatosBancariosForm()
+        form = ObraForm()
         return render(
             request,
-            'bancos/banco_edit.html',
+            'pagos/obra_edit.html',
             {"form": form}
         )
 

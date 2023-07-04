@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="container">
+
+        <br>
+        <div class="row">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4">
+                <h2>DATOS BANCARIOS</h2>
+            </div>
+            <div class="col-sm-4"></div>
+        </div>
+
+        <div class="row">
+            
+            <div class="col-12">
+                <hr>
+                <form  method="POST">{% csrf_token %}
+                    {{ form.as_p }}
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-2">
+                            <button class="btn btn-primary" id="btn-guardar" type="submit">
+                                <i class="fas fa-check"></i>
+                                Aceptar
+                            </button>
+                        </div>
+
+                        <div class="col-8">
+                        </div>
+
+                        <div class="col-2">    
+                            <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="IrListadoDatosBancarios()">
+                                <i class="far fa-times-circle"></i>
+                                Cancelar
+                            </button>
+                        </div>                        
+                    </div>
+                    <hr>
+                </form>
+            </div>
+            
+        </div>
+        
+    </div>
+
+
+    
+
+{% endblock %}
+
+
+{% block js_extra %}
+
+    <script>
+        $(document).ready(function () {
+            $('#id_banco').select2();
+        });
+
+    
+    </script>
+    
+    
+    <script>
+        function IrListadoDatosBancarios() {
+            window.location.replace("/datosbancarioslistado");
+        }
+    </script>
+
+{% endblock %}
