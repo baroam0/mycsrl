@@ -24,7 +24,7 @@ class Proveedor(models.Model):
         return self.descripcion
 
     class Meta:
-        verbose_name_plural = "Rubros"
+        verbose_name_plural = "Proveedores"
 
 
 
