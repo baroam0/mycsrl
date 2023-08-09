@@ -18,10 +18,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-from .views import (obra_new, listadoobra, obra_edit, listadoproveedor, 
+from .views import (listadofactura, obra_new, listadoobra, obra_edit, listadoproveedor, 
                     proveedor_edit, proveedor_new)
 
 urlpatterns = [
+    path('facturas/listado/', listadofactura, name='obralistado'),
     path('obra/listado/', listadoobra, name='obralistado'),
     path('obra/obranew/', obra_new, name='obranew'),
     path('obra/obraedit/<int:pk>', obra_edit, name='obraedit'),

@@ -57,7 +57,7 @@ class DetalleFactura(models.Model):
     PAGADO = "PG"
     CUENTACORRIENTE = "CC"
     CHOICESESTADOPAGO = [
-        (PAGADO, "Cuenta Corriente"),
+        (PAGADO, "Pagado"),
         (CUENTACORRIENTE, "Cuenta Corriente")
     ]
 

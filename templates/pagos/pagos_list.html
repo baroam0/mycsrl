@@ -57,7 +57,7 @@
                 <tbody>
                     {% for result in results %}
                     <tr>
-                        <td>{{result }}</td>
+                        <td>{{result.obra.descripcion }}</td>
                         <td>{{usuario.first_name}}</td>
                         <td>{{usuario.last_name}}</td>
                         <td>{% if usuario.is_staff == True  %}

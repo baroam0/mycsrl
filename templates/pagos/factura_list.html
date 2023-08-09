@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-sm-4"></div>
             <div class="col-sm-4">
-                <h3> Listado de Obras. </h3>
+                <h3> Listado de Facturas. </h3>
                 <!--h3> DATOS BANCARIOS - {{usuario.last_name}}, {{usuario.first_name}} </h3-->
             </div>
             <div class="col-sm-4"></div>
@@ -60,11 +60,11 @@
                     {% for resultado in resultados %}
                     <tr>
    
-                        <td>{{resultado.descripcion }}</td>
+                        <td>{{resultado.obra.descripcion }}</td>
                         <td>{{resultado.usuario}} </td>
 
                         <td>
-                            <button type="button" class="btn btn-link btn-sm" onclick="location.href='/pagos/obra/obraedit/' + {{ resultado.pk }}">
+                            <button type="button" class="btn btn-link btn-sm" onclick="location.href='/pagos/factura/facturadetalleedit/' + {{ resultado.pk }}">
                                 <i class="fas fa-pencil-alt"></i>
                             </button>
                         </td>
