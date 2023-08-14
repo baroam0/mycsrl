@@ -14,7 +14,6 @@
         </div>
 
         <div class="row">
-            
             <div class="col-12">
                 <hr>
                 <form  method="POST">{% csrf_token %}
@@ -34,7 +33,7 @@
                         </div>
 
                         <div class="col-2">    
-                            <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="IrListadoDatosBancarios()">
+                            <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="IrListadoFactura()">
                                 <i class="far fa-times-circle"></i>
                                 Cancelar
                             </button>
@@ -42,9 +41,50 @@
                     </div>
                     <hr>
                 </form>
-            </div>
-            
+            </div>            
         </div>
+
+        {%if detallefactura %}
+            <div class="row">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Proveedor</th>
+                            <th>Rubro</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Precio Total</th>
+                            <th>Cargador por...</th>
+                            <th>Accion</th>
+                        </tr>
+                    </thead>
+    
+                    <tbody>
+                        {% for detalle in detallefactura %}
+                        <tr>
+       
+                            <td>{{detalle.proveedor.descripcion }}</td>
+                            <td>{{detalle.rubro.descripcion }}</td>
+                            <td>{{detalle.cantidad }}</td>
+                            <td>{{detalle.preciounitario }}</td>
+                            <td>{{detalle.preciototal }}</td>
+                            <td>{{detalle.usuario}} </td>
+    
+                            <td>
+                                <button type="button" class="btn btn-link btn-sm" onclick="location.href='/pagos/factura/edit/' + {{ resultado.pk }}">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+
+        
+
+        
         
     </div>
 
@@ -62,8 +102,8 @@
     
     
     <script>
-        function IrListadoDatosBancarios() {
-            window.location.replace("/datosbancarioslistado");
+        function IrListadoFactura() {
+            window.location.replace("/pagos/factura/listado");
         }
     </script>
 

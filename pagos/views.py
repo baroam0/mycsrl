@@ -5,6 +5,8 @@ from django.shortcuts import render, redirect
 
 from django.core.paginator import Paginator
 
+from django.db.models import F
+
 from .forms import FacturaForm, ObraForm, ProveedorForm
 from .models import Factura, DetalleFactura, Obra, Proveedor
 
@@ -31,11 +33,12 @@ def factura_new(request):
         usuario = request.user
         form = FacturaForm(request.POST)
         if form.is_valid():
-            obra = form.save(commit=False)
-            obra.usuario = usuario
-            obra.save()
+            factura = form.save(commit=False)
+            factura.usuario = usuario
+            factura.save()
             messages.success(request, "SE HA GRABADO LA FACTURA")
-            return redirect('/pagos/obra/listado')
+            ultima_factura = Factura.objects.latest('pk')
+            return redirect('/pagos/factura/edit/' + str(ultima_factura.pk))
     else:
         form = FacturaForm()
         return render(
@@ -46,23 +49,28 @@ def factura_new(request):
 
 
 def factura_edit(request, pk):
-    consulta = Obra.objects.get(pk=pk)
+    factura = Factura.objects.get(pk=pk)
+    detallefactura = DetalleFactura.objects.filter(
+        factura=factura).annotate(preciototal=F('cantidad') * F('preciounitario'))
    
     if request.POST:
-        form = ObraForm(request.POST, instance=consulta)
+        form = FacturaForm(request.POST, instance=factura)
         if form.is_valid():
-            obra = form.save(commit=False)
+            factura = form.save(commit=False)
             usuario = request.user
-            obra.usuario = usuario
-            obra.save()
-            messages.success(request, "SE HA GRABADO LOS DATOS DE OBRA")
+            factura.usuario = usuario
+            factura.save()
+            messages.success(request, "SE HA GRABADO LA FACTURA")
             return redirect('/pagos/obra/listado')
     else:
-        form = ObraForm(instance=consulta)
+        form = FacturaForm(instance=factura)
         return render(
             request,
-            'pagos/obra_edit.html',
-            {"form": form}
+            'pagos/factura_edit.html',
+            {
+                "form": form,
+                "detallefactura": detallefactura
+            }
         )
 
 
