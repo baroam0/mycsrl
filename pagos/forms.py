@@ -56,6 +56,25 @@ class DetalleFacturaForm(forms.ModelForm):
 
 """
 
+
+class FacturaForm(forms.ModelForm):
+
+    obra = forms.ModelChoiceField(
+        queryset=Obra.objects.all(), label="Obra"
+    )
+    
+    def __init__(self, *args, **kwargs):
+        super(FacturaForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+
+    class Meta:
+        model = Factura
+        fields = ["obra"]
+
+
 class ObraForm(forms.ModelForm):
    
     descripcion = forms.CharField(

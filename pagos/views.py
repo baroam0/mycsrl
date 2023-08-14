@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 
 from django.core.paginator import Paginator
 
-from .forms import ObraForm, ProveedorForm
+from .forms import FacturaForm, ObraForm, ProveedorForm
 from .models import Factura, DetalleFactura, Obra, Proveedor
 
 
@@ -24,6 +24,59 @@ def listadofactura(request):
         {
             'resultados': resultados
         })
+
+
+def factura_new(request):
+    if request.POST:
+        usuario = request.user
+        form = FacturaForm(request.POST)
+        if form.is_valid():
+            obra = form.save(commit=False)
+            obra.usuario = usuario
+            obra.save()
+            messages.success(request, "SE HA GRABADO LA FACTURA")
+            return redirect('/pagos/obra/listado')
+    else:
+        form = FacturaForm()
+        return render(
+            request,
+            'pagos/factura_edit.html',
+            {"form": form}
+        )
+
+
+def factura_edit(request, pk):
+    consulta = Obra.objects.get(pk=pk)
+   
+    if request.POST:
+        form = ObraForm(request.POST, instance=consulta)
+        if form.is_valid():
+            obra = form.save(commit=False)
+            usuario = request.user
+            obra.usuario = usuario
+            obra.save()
+            messages.success(request, "SE HA GRABADO LOS DATOS DE OBRA")
+            return redirect('/pagos/obra/listado')
+    else:
+        form = ObraForm(instance=consulta)
+        return render(
+            request,
+            'pagos/obra_edit.html',
+            {"form": form}
+        )
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def facturadetalle_edit(request, pk):
