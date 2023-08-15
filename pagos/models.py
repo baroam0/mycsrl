@@ -54,8 +54,8 @@ class Factura(models.Model):
 
 
 class DetalleFactura(models.Model):
-    PAGADO = "PG"
-    CUENTACORRIENTE = "CC"
+    PAGADO = "PAGADO"
+    CUENTACORRIENTE = "CUENTA CORRIENTE"
     CHOICESESTADOPAGO = [
         (PAGADO, "Pagado"),
         (CUENTACORRIENTE, "Cuenta Corriente")
@@ -64,22 +64,22 @@ class DetalleFactura(models.Model):
     factura = models.ForeignKey(Factura, on_delete=models.CASCADE)
 
     estadopago = models.CharField(
-        max_length=2,
+        max_length=20,
         choices=CHOICESESTADOPAGO,
         default=PAGADO,
     )
 
     CHOICESUNIDAD = [
-        ("M3", "Metro Cubico"),
-        ("M2", "Metro Cuadrado"),
-        ("UN", "Unidad"),
-        ("LT", "Litro")
+        ("Metro Cubico", "Metro Cubico"),
+        ("Metro Cuadrado", "Metro Cuadrado"),
+        ("Unidad", "Unidad"),
+        ("Litro", "Litro")
     ]
 
     unidad = models.CharField(
-        max_length=2,
+        max_length=20,
         choices=CHOICESUNIDAD,
-        default="UN",
+        default="Unidad",
     )
 
     cantidad = models.DecimalField(max_digits=10, decimal_places=2)

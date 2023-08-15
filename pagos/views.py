@@ -4,10 +4,11 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 
 from django.core.paginator import Paginator
+from django.http import JsonResponse
 
 from django.db.models import F
 
-from .forms import FacturaForm, ObraForm, ProveedorForm
+from .forms import DetalleFacturaForm, FacturaForm, ObraForm, ProveedorForm
 from .models import Factura, DetalleFactura, Obra, Proveedor
 
 
@@ -53,6 +54,7 @@ def factura_edit(request, pk):
     detallefactura = DetalleFactura.objects.filter(
         factura=factura).annotate(preciototal=F('cantidad') * F('preciounitario'))
    
+
     if request.POST:
         form = FacturaForm(request.POST, instance=factura)
         if form.is_valid():
@@ -64,27 +66,16 @@ def factura_edit(request, pk):
             return redirect('/pagos/obra/listado')
     else:
         form = FacturaForm(instance=factura)
+        formdetallefactura =DetalleFacturaForm() 
         return render(
             request,
             'pagos/factura_edit.html',
             {
                 "form": form,
+                "formdetallefactura": formdetallefactura,
                 "detallefactura": detallefactura
             }
         )
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 def facturadetalle_edit(request, pk):
@@ -222,5 +213,11 @@ def proveedor_edit(request, pk):
             {"form": form}
         )
 
+
+def ajaxdetallefactura(request, pk):
+    facturadetalle = DetalleFactura.objects.get(pk=pk)
+    form = DetalleFacturaForm(instance=facturadetalle)
+    form_html = form.as_p()  # or form.as_table() for table representation
+    return JsonResponse({'form_html': form_html})
 
 # Create your views here.

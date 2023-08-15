@@ -18,14 +18,19 @@
                 <hr>
                 <form  method="POST">{% csrf_token %}
                     {{ form.as_p }}
+                </form>
 
-                    <hr>
+                <div id="form-container">
 
+                </div>
+
+                <form method="POST">{% csrf_token %}
+                    
                     <div class="row">
                         <div class="col-2">
                             <button class="btn btn-primary" id="btn-guardar" type="submit">
-                                <i class="fas fa-check"></i>
-                                Aceptar
+                                <i class="fas fa-save"></i>
+                                Guardar
                             </button>
                         </div>
 
@@ -33,7 +38,7 @@
                         </div>
 
                         <div class="col-2">    
-                            <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="IrListadoFactura()">
+                            <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="ClearHideForm()">
                                 <i class="far fa-times-circle"></i>
                                 Cancelar
                             </button>
@@ -51,9 +56,11 @@
                         <tr>
                             <th>Proveedor</th>
                             <th>Rubro</th>
+                            <th>Unidad</th>
                             <th>Cantidad</th>
                             <th>Precio Unitario</th>
                             <th>Precio Total</th>
+                            <th>Estado</th>
                             <th>Cargador por...</th>
                             <th>Accion</th>
                         </tr>
@@ -65,13 +72,15 @@
        
                             <td>{{detalle.proveedor.descripcion }}</td>
                             <td>{{detalle.rubro.descripcion }}</td>
+                            <td>{{detalle.unidad }}</td>
                             <td>{{detalle.cantidad }}</td>
                             <td>{{detalle.preciounitario }}</td>
                             <td>{{detalle.preciototal }}</td>
+                            <td>{{detalle.estadopago }}</td>
                             <td>{{detalle.usuario}} </td>
     
                             <td>
-                                <button type="button" class="btn btn-link btn-sm" onclick="location.href='/pagos/factura/edit/' + {{ resultado.pk }}">
+                                <button type="button" class="btn btn-link btn-sm" onclick="LoadDetailBillForm({{detalle.pk}})">
                                     <i class="fas fa-pencil-alt"></i>
                                 </button>
                             </td>
@@ -93,15 +102,48 @@
 {% block js_extra %}
 
     <script>
+
+        function ShowDetailBillForm() {
+            $("#detallefacturaformulario").show();
+        }
+
+        function HideDetailBillForm() {
+            $("#detallefacturaformulario").hide();
+        }
+
+        function ClearHideForm() {
+            $('#form-container').html('');
+        }
+
+
+        function LoadDetailBillForm(pk){
+
+            ClearHideForm();
+
+            $.ajax({
+                url: '/pagos/factura/ajaxfacturadetalle/' + pk,
+                type: 'GET',
+                success: function(response){
+                    $('#form-container').html(response.form_html);
+                },
+                error: function(error){
+                    console.log(error);
+
+                }
+
+            })
+
+        }
+
         $(document).ready(function () {
+            HideDetailBillForm();
             $('#id_obra').select2();
         });
 
+
+
     
-    </script>
-    
-    
-    <script>
+   
         function IrListadoFactura() {
             window.location.replace("/pagos/factura/listado");
         }
