@@ -37,8 +37,10 @@ class DetalleFacturaForm(forms.ModelForm):
     preciounitario = forms.DecimalField(label="Precio Unitario")
     proveedor = forms.ModelChoiceField(
         queryset=Proveedor.objects.all(), 
-        label="Proveedor"
+        label="Proveedor",
+        widget=forms.Select(attrs = {'onchange' : 'CargarRubro();'})
     )
+
 
     rubro = forms.ModelChoiceField(
         queryset=Rubro.objects.all(), 

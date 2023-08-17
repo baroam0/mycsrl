@@ -9,7 +9,7 @@ from django.http import JsonResponse
 from django.db.models import F
 
 from .forms import DetalleFacturaForm, FacturaForm, ObraForm, ProveedorForm
-from .models import Factura, DetalleFactura, Obra, Proveedor
+from .models import Factura, DetalleFactura, Obra, Proveedor, Rubro
 
 
 def listadofactura(request):
@@ -73,7 +73,8 @@ def factura_edit(request, pk):
             {
                 "form": form,
                 "formdetallefactura": formdetallefactura,
-                "detallefactura": detallefactura
+                "detallefactura": detallefactura,
+                "pk": pk
             }
         )
 
@@ -210,14 +211,31 @@ def proveedor_edit(request, pk):
         return render(
             request,
             'pagos/proveedor_edit.html',
-            {"form": form}
+            {
+                "form": form
+            }
         )
 
 
-def ajaxdetallefactura(request, pk):
+def ajaxcargardetallefactura(request, pk):
     facturadetalle = DetalleFactura.objects.get(pk=pk)
     form = DetalleFacturaForm(instance=facturadetalle)
     form_html = form.as_p()  # or form.as_table() for table representation
     return JsonResponse({'form_html': form_html})
+
+
+def ajaxmostrarformdetallefactura(request):
+    form = DetalleFacturaForm()
+    form_html = form.as_p()  # or form.as_table() for table representation
+    return JsonResponse({'form_html': form_html})
+
+
+def ajaxcargarselectrubro(request, pk):
+    proveedor = Proveedor.objects.get(pk=pk)
+    rubros = Rubro.objects.filter(proveedor=proveedor)
+
+    data = [{'id': rubro.pk, 'text': rubro.descripcion} for rubro in rubros]
+    return JsonResponse(data, safe=False)
+
 
 # Create your views here.

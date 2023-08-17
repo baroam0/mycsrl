@@ -34,7 +34,17 @@
                             </button>
                         </div>
 
-                        <div class="col-8">
+                        <div class="col-3">
+                        </div>
+
+                        <div class="col-2">    
+                            <button type="button" class="btn btn-secondary" id="btn-agregar" onclick="LoadEmptyDetailBillForm()">
+                                <i class="fa fa-plus"></i>
+                                Agregar
+                            </button>
+                        </div>
+
+                        <div class="col-3">
                         </div>
 
                         <div class="col-2">    
@@ -44,7 +54,7 @@
                             </button>
                         </div>                        
                     </div>
-                    <hr>
+                    <br>
                 </form>
             </div>            
         </div>
@@ -70,14 +80,14 @@
                         {% for detalle in detallefactura %}
                         <tr>
        
-                            <td>{{detalle.proveedor.descripcion }}</td>
-                            <td>{{detalle.rubro.descripcion }}</td>
-                            <td>{{detalle.unidad }}</td>
+                            <td>{{detalle.proveedor.descripcion.upper }}</td>
+                            <td>{{detalle.rubro.descripcion.upper }}</td>
+                            <td>{{detalle.unidad.upper }}</td>
                             <td>{{detalle.cantidad }}</td>
                             <td>{{detalle.preciounitario }}</td>
                             <td>{{detalle.preciototal }}</td>
-                            <td>{{detalle.estadopago }}</td>
-                            <td>{{detalle.usuario}} </td>
+                            <td>{{detalle.estadopago.upper }}</td>
+                            <td>{{detalle.usuario.username.upper}} </td>
     
                             <td>
                                 <button type="button" class="btn btn-link btn-sm" onclick="LoadDetailBillForm({{detalle.pk}})">
@@ -91,10 +101,6 @@
             </div>
         {% endif %}
 
-        
-
-        
-        
     </div>
 
 {% endblock %}
@@ -103,13 +109,12 @@
 
     <script>
 
-        function ShowDetailBillForm() {
-            $("#detallefacturaformulario").show();
-        }
+        var id_factura = {{pk}};
 
         function HideDetailBillForm() {
             $("#detallefacturaformulario").hide();
         }
+
 
         function ClearHideForm() {
             $('#form-container').html('');
@@ -117,23 +122,57 @@
 
 
         function LoadDetailBillForm(pk){
-
             ClearHideForm();
-
             $.ajax({
                 url: '/pagos/factura/ajaxfacturadetalle/' + pk,
                 type: 'GET',
                 success: function(response){
                     $('#form-container').html(response.form_html);
+                    $('#id_proveedor').select2();
+                    $('#id_rubro').select2();
                 },
                 error: function(error){
                     console.log(error);
-
                 }
-
-            })
-
+            })            
         }
+
+
+        function LoadEmptyDetailBillForm(){
+            ClearHideForm();
+            $.ajax({
+                url: '/pagos/factura/ajaxloadformfacturadetalle/',
+                type: 'GET',
+                success: function(response){
+                    $('#form-container').html(response.form_html);
+                    $('#id_proveedor').select2();
+                    $('#id_rubro').select2();
+                },
+                error: function(error){
+                    console.log(error);
+                }
+            })
+        }
+
+
+        function CargarRubro(){
+            var value_select_proveerdor = $('#id_proveedor').select2('data'); 
+            var proveedor = value_select_proveerdor[0].id;
+
+            console.log(proveedor);
+
+            $("#id_rubro").empty();
+
+            var urlajaxrubro = '/pagos/factura/ajaxcargarselectrubro/' + proveedor;
+
+            $.getJSON(urlajaxrubro, function(response) {
+                console.log(response);
+                $('#id_rubro').select2({
+                    data: response
+                });
+             });
+        }
+
 
         $(document).ready(function () {
             HideDetailBillForm();
@@ -141,12 +180,10 @@
         });
 
 
-
-    
-   
         function IrListadoFactura() {
             window.location.replace("/pagos/factura/listado");
         }
+        
     </script>
 
 {% endblock %}

@@ -19,14 +19,17 @@ from django.contrib import admin
 from django.urls import include, path
 
 from .views import (listadofactura, obra_new, listadoobra,
-                    factura_new, factura_edit, ajaxdetallefactura, obra_edit, 
-                    listadoproveedor, proveedor_edit, proveedor_new)
+                    factura_new, factura_edit, ajaxcargardetallefactura, 
+                    ajaxmostrarformdetallefactura, ajaxcargarselectrubro,
+                    obra_edit, listadoproveedor, proveedor_edit, proveedor_new)
 
 urlpatterns = [
     path('factura/listado/', listadofactura, name='facturalistado'),
     path('factura/new/', factura_new, name='facturanew'),
     path('factura/edit/<int:pk>', factura_edit, name='facturaedit'),
-    path('factura/ajaxfacturadetalle/<int:pk>', ajaxdetallefactura, name='ajaxdetallefactura'),
+    path('factura/ajaxfacturadetalle/<int:pk>', ajaxcargardetallefactura, name='ajaxcargardetallefactura'),
+    path('factura/ajaxloadformfacturadetalle/', ajaxmostrarformdetallefactura, name='ajaxmostrarformdetallefactura'),
+    path('factura/ajaxcargarselectrubro/<int:pk>', ajaxcargarselectrubro, name='ajaxcargarselectrubro'),
     path('obra/listado/', listadoobra, name='obralistado'),
     path('obra/obranew/', obra_new, name='obranew'),
     path('obra/obraedit/<int:pk>', obra_edit, name='obraedit'),
