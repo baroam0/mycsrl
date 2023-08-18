@@ -42,14 +42,19 @@ def ajax_save_factura(request):
         
         modelo_obra = Obra.objects.get(pk=obra)
         modelo_proveedor = Proveedor.objects.get(pk=proveedor)
-         
+        modelo_rubro = Rubro.objects.get(pk=rubro)
+
 
         print("///////////////////////////")
         print(obra)
         
         # Process and save data to your model or database
         
-        return JsonResponse({'message': 'Data saved successfully.'}, status=200)
+        return JsonResponse(
+            {
+                'message': 'Datos Guardados.',
+                'status': 200
+            })
     
     return JsonResponse({'message': 'Invalid request.'}, status=400)
 

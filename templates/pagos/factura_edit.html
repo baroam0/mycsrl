@@ -178,25 +178,26 @@
 
 
             $("#btn-guardar").click(function () {
-            var formData = $("#data-obra-form").serialize();
 
-            console.log(formData);
+                if(id_obra==0){
+
+                }else{
+                    var formData = $("#data-obra-form").serialize();
             
-            $.ajax({
-                    type: "POST",
-                    url: "/pagos/factura/ajaxgrabarfactura/",
-                    data: formData,
-                    success: function (response) {
-                        console.log(response)
-                        // Handle the response from the server
-                    },
-                    error: function (xhr, errmsg, err) {
-                        console.log(xhr.status + ": " + xhr.responseText);
-                    }
-                });
+                    $.ajax({
+                        type: "POST",
+                        url: "/pagos/factura/ajaxgrabarfactura/",
+                        data: formData,
+                        success: function (response) {
+                            console.log(response.status)
+                        },
+                        error: function (xhr, errmsg, err) {
+                            console.log(xhr.status + ": " + xhr.responseText);
+                        }
+                    });
+                }
+
             });
-
-
         });
 
 
