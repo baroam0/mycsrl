@@ -24,8 +24,6 @@
 
                 </div>
 
-                <form method="POST">{% csrf_token %}
-                    
                     <div class="row">
                         <div class="col-2">
                             <button class="btn btn-primary" id="btn-guardar" type="submit">
@@ -55,7 +53,7 @@
                         </div>                        
                     </div>
                     <br>
-                </form>
+                
             </div>            
         </div>
 
@@ -158,8 +156,6 @@
         function CargarRubro(){
             var value_select_proveerdor = $('#id_proveedor').select2('data'); 
             var proveedor = value_select_proveerdor[0].id;
-
-            console.log(proveedor);
 
             $("#id_rubro").empty();
 
