@@ -18,12 +18,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-from .views import (listadofactura, obra_new, listadoobra,
+from .views import (ajax_save_factura, listadofactura, obra_new, listadoobra,
                     factura_new, factura_edit, ajaxcargardetallefactura, 
                     ajaxmostrarformdetallefactura, ajaxcargarselectrubro,
                     obra_edit, listadoproveedor, proveedor_edit, proveedor_new)
 
 urlpatterns = [
+    path('factura/ajaxgrabarfactura/', ajax_save_factura, name='ajaxgrabarfactura'),
     path('factura/listado/', listadofactura, name='facturalistado'),
     path('factura/new/', factura_new, name='facturanew'),
     path('factura/edit/<int:pk>', factura_edit, name='facturaedit'),

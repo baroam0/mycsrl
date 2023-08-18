@@ -29,6 +29,48 @@ def listadofactura(request):
         })
 
 
+def ajax_save_factura(request):
+    if request.method == "POST" and request.is_ajax():
+
+        obra = request.POST.get('obra')
+        proveedor = request.POST.get('proveedor')
+        rubro = request.POST.get('rubro')
+        unidad = request.POST.get('unidad')
+        cantidad = request.POST.get('cantidad')
+        preciounitario = request.POST.get('preciounitario')
+        estadopago = request.POST.get('estadopago')
+        
+        modelo_obra = Obra.objects.get(pk=obra)
+        modelo_proveedor = Proveedor.objects.get(pk=proveedor)
+         
+
+        print("///////////////////////////")
+        print(obra)
+        
+        # Process and save data to your model or database
+        
+        return JsonResponse({'message': 'Data saved successfully.'}, status=200)
+    
+    return JsonResponse({'message': 'Invalid request.'}, status=400)
+
+
+
+def ajax_update_factura(request):
+    if request.method == "POST" and request.is_ajax():
+
+        preciounitario = request.POST.get('preciounitario')
+
+        print("///////////////////////////")
+        print(preciounitario)
+        
+        # Process and save data to your model or database
+        
+        return JsonResponse({'message': 'Data saved successfully.'}, status=200)
+    
+    return JsonResponse({'message': 'Invalid request.'}, status=400)
+
+
+
 def factura_new(request):
     if request.POST:
         usuario = request.user
@@ -42,10 +84,14 @@ def factura_new(request):
             return redirect('/pagos/factura/edit/' + str(ultima_factura.pk))
     else:
         form = FacturaForm()
+        
         return render(
             request,
             'pagos/factura_edit.html',
-            {"form": form}
+            {
+                "form": form,
+                "pk": 0
+            }
         )
 
 

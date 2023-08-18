@@ -16,17 +16,17 @@
         <div class="row">
             <div class="col-12">
                 <hr>
-                <form  method="POST">{% csrf_token %}
+                <form id="data-obra-form" method="POST">{% csrf_token %}
                     {{ form.as_p }}
-                </form>
+                
 
-                <div id="form-container">
+                    <div id="form-container">
 
-                </div>
+                    </div>
 
                     <div class="row">
                         <div class="col-2">
-                            <button class="btn btn-primary" id="btn-guardar" type="submit">
+                            <button class="btn btn-primary" id="btn-guardar" type="button">
                                 <i class="fas fa-save"></i>
                                 Guardar
                             </button>
@@ -53,7 +53,8 @@
                         </div>                        
                     </div>
                     <br>
-                
+                </form>
+
             </div>            
         </div>
 
@@ -107,7 +108,7 @@
 
     <script>
 
-        var id_factura = {{pk}};
+        var id_factura = {{pk}};        
 
         function HideDetailBillForm() {
             $("#detallefacturaformulario").hide();
@@ -171,8 +172,31 @@
 
 
         $(document).ready(function () {
+
             HideDetailBillForm();
             $('#id_obra').select2();
+
+
+            $("#btn-guardar").click(function () {
+            var formData = $("#data-obra-form").serialize();
+
+            console.log(formData);
+            
+            $.ajax({
+                    type: "POST",
+                    url: "/pagos/factura/ajaxgrabarfactura/",
+                    data: formData,
+                    success: function (response) {
+                        console.log(response)
+                        // Handle the response from the server
+                    },
+                    error: function (xhr, errmsg, err) {
+                        console.log(xhr.status + ": " + xhr.responseText);
+                    }
+                });
+            });
+
+
         });
 
 
