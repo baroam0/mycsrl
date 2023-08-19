@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-sm-4"></div>
             <div class="col-sm-4">
-                <h2>Datos de Factura.</h2>
+                <h2>Detalles de Pago.</h2>
             </div>
             <div class="col-sm-4"></div>
         </div>
@@ -108,7 +108,11 @@
 
     <script>
 
-        var id_factura = {{pk}};        
+        var id_factura = {{pk}};
+
+        var id_detalle_factura = 0;
+
+        var id_obra = 0;
 
         function HideDetailBillForm() {
             $("#detallefacturaformulario").hide();
@@ -117,6 +121,8 @@
 
         function ClearHideForm() {
             $('#form-container').html('');
+            id_detalle_factura = 0;
+            id_obra = 0;
         }
 
 
@@ -133,7 +139,9 @@
                 error: function(error){
                     console.log(error);
                 }
-            })            
+            })
+            
+            id_detalle_factura = pk;
         }
 
 
@@ -151,6 +159,11 @@
                     console.log(error);
                 }
             })
+
+            id_obra = $('#id_obra').select2('data')[0].id;
+            
+            //console.log(id_obra[0].id);
+            console.log(id_obra);
         }
 
 
@@ -182,14 +195,18 @@
                 if(id_obra==0){
 
                 }else{
-                    var formData = $("#data-obra-form").serialize();
+
+                    var formData = $("#data-obra-form").serializeArray();
+
+                    formData.push({name: "id_detalle_factura", value: id_detalle_factura});
             
                     $.ajax({
                         type: "POST",
                         url: "/pagos/factura/ajaxgrabarfactura/",
                         data: formData,
                         success: function (response) {
-                            console.log(response.status)
+                            console.log(response.status);
+                            location.reload();
                         },
                         error: function (xhr, errmsg, err) {
                             console.log(xhr.status + ": " + xhr.responseText);

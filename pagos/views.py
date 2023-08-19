@@ -32,24 +32,33 @@ def listadofactura(request):
 def ajax_save_factura(request):
     if request.method == "POST" and request.is_ajax():
 
+        usuario = request.user
+
         obra = request.POST.get('obra')
-        proveedor = request.POST.get('proveedor')
-        rubro = request.POST.get('rubro')
+        id_proveedor = request.POST.get('proveedor')
+        proveedor = Proveedor.objects.get(pk=id_proveedor)
+        
+        id_rubro = request.POST.get('rubro')
+        rubro = Rubro.objects.get(pk=id_rubro)
+
         unidad = request.POST.get('unidad')
         cantidad = request.POST.get('cantidad')
         preciounitario = request.POST.get('preciounitario')
         estadopago = request.POST.get('estadopago')
-        
-        modelo_obra = Obra.objects.get(pk=obra)
-        modelo_proveedor = Proveedor.objects.get(pk=proveedor)
-        modelo_rubro = Rubro.objects.get(pk=rubro)
 
+        id_detalle_factura = request.POST.get('id_detalle_factura')
 
-        print("///////////////////////////")
-        print(obra)
-        
-        # Process and save data to your model or database
-        
+        detalle_factura = DetalleFactura.objects.get(pk=id_detalle_factura)
+        detalle_factura.obra = obra
+        detalle_factura.proveedor = proveedor
+        detalle_factura.rubro = rubro
+        detalle_factura.unidad = unidad
+        detalle_factura.cantidad = cantidad
+        detalle_factura.preciounitario = preciounitario
+        detalle_factura.estadopago = estadopago
+        detalle_factura.usuario = usuario
+        detalle_factura.save()
+
         return JsonResponse(
             {
                 'message': 'Datos Guardados.',
@@ -67,8 +76,6 @@ def ajax_update_factura(request):
 
         print("///////////////////////////")
         print(preciounitario)
-        
-        # Process and save data to your model or database
         
         return JsonResponse({'message': 'Data saved successfully.'}, status=200)
     
