@@ -32,32 +32,64 @@ def listadofactura(request):
 def ajax_save_factura(request):
     if request.method == "POST" and request.is_ajax():
 
-        usuario = request.user
+        id_detalle_factura = int(request.POST.get('id_detalle_factura'))
 
-        obra = request.POST.get('obra')
-        id_proveedor = request.POST.get('proveedor')
-        proveedor = Proveedor.objects.get(pk=id_proveedor)
+        id_factura = int(request.POST.get('id_factura'))
+
+        factura = Factura.objects.get(pk=id_factura)
+
+        if id_detalle_factura == 0:
+            usuario = request.user
+            obra = request.POST.get('obra')
+            id_proveedor = request.POST.get('proveedor')
+            proveedor = Proveedor.objects.get(pk=id_proveedor)
+            
+            id_rubro = request.POST.get('rubro')
+            rubro = Rubro.objects.get(pk=id_rubro)
+
+            unidad = request.POST.get('unidad')
+            cantidad = request.POST.get('cantidad')
+            preciounitario = request.POST.get('preciounitario')
+            estadopago = request.POST.get('estadopago')
+
+            detalle_factura = DetalleFactura.objects.create(
+                usuario = usuario, 
+                factura = factura,
+                proveedor=proveedor,
+                rubro=rubro,
+                unidad=unidad,
+                cantidad=cantidad,
+                preciounitario=preciounitario,
+                estadopago=estadopago
+            )
+
+            detalle_factura.save()
         
-        id_rubro = request.POST.get('rubro')
-        rubro = Rubro.objects.get(pk=id_rubro)
+        else:
+            usuario = request.user
+            obra = request.POST.get('obra')
+            id_proveedor = request.POST.get('proveedor')
+            proveedor = Proveedor.objects.get(pk=id_proveedor)
+            
+            id_rubro = request.POST.get('rubro')
+            rubro = Rubro.objects.get(pk=id_rubro)
 
-        unidad = request.POST.get('unidad')
-        cantidad = request.POST.get('cantidad')
-        preciounitario = request.POST.get('preciounitario')
-        estadopago = request.POST.get('estadopago')
+            unidad = request.POST.get('unidad')
+            cantidad = request.POST.get('cantidad')
+            preciounitario = request.POST.get('preciounitario')
+            estadopago = request.POST.get('estadopago')
 
-        id_detalle_factura = request.POST.get('id_detalle_factura')
+            detalle_factura = DetalleFactura.objects.get(pk=id_detalle_factura)
+            detalle_factura.obra = obra
+            detalle_factura.proveedor = proveedor
+            detalle_factura.rubro = rubro
+            detalle_factura.unidad = unidad
+            detalle_factura.cantidad = cantidad
+            detalle_factura.preciounitario = preciounitario
+            detalle_factura.estadopago = estadopago
+            detalle_factura.usuario = usuario
+            detalle_factura.save()
 
-        detalle_factura = DetalleFactura.objects.get(pk=id_detalle_factura)
-        detalle_factura.obra = obra
-        detalle_factura.proveedor = proveedor
-        detalle_factura.rubro = rubro
-        detalle_factura.unidad = unidad
-        detalle_factura.cantidad = cantidad
-        detalle_factura.preciounitario = preciounitario
-        detalle_factura.estadopago = estadopago
-        detalle_factura.usuario = usuario
-        detalle_factura.save()
 
         return JsonResponse(
             {

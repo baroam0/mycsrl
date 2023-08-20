@@ -15,7 +15,6 @@ class Obra(models.Model):
         verbose_name_plural = "Obras"
 
 
-
 class Proveedor(models.Model):
     descripcion = models.CharField(max_length=200, unique=True)
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
@@ -25,7 +24,6 @@ class Proveedor(models.Model):
 
     class Meta:
         verbose_name_plural = "Proveedores"
-
 
 
 class Rubro(models.Model):
