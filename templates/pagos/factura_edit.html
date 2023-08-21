@@ -198,6 +198,7 @@
 
                 }else{
 
+
                     var formData = $("#data-obra-form").serializeArray();
 
                     formData.push({name: "id_detalle_factura", value: id_detalle_factura});
@@ -209,7 +210,9 @@
                         data: formData,
                         success: function (response) {
                             console.log(response.status);
-                            location.reload();
+                            console.log(response.pk);
+                            //location.reload();
+                            window.location.replace("/pagos/factura/edit/" + response.pk);
                         },
                         error: function (xhr, errmsg, err) {
                             console.log(xhr.status + ": " + xhr.responseText);

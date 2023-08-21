@@ -31,16 +31,23 @@ def listadofactura(request):
 
 def ajax_save_factura(request):
     if request.method == "POST" and request.is_ajax():
-
         id_detalle_factura = int(request.POST.get('id_detalle_factura'))
-
         id_factura = int(request.POST.get('id_factura'))
+        usuario = request.user
+        id_obra = request.POST.get('obra')
+        obra = Obra.objects.get(pk=id_obra)
 
-        factura = Factura.objects.get(pk=id_factura)
+        if id_factura == 0:
+            factura = Factura.objects.create(
+                usuario = usuario, obra=obra,
+            )
+            factura.save()
+            factura = Factura.objects.latest('pk')
+        else:
+            factura = Factura.objects.get(pk=id_factura)
 
         if id_detalle_factura == 0:
-            usuario = request.user
-            obra = request.POST.get('obra')
+            
             id_proveedor = request.POST.get('proveedor')
             proveedor = Proveedor.objects.get(pk=id_proveedor)
             
@@ -66,8 +73,6 @@ def ajax_save_factura(request):
             detalle_factura.save()
         
         else:
-            usuario = request.user
-            obra = request.POST.get('obra')
             id_proveedor = request.POST.get('proveedor')
             proveedor = Proveedor.objects.get(pk=id_proveedor)
             
@@ -94,7 +99,8 @@ def ajax_save_factura(request):
         return JsonResponse(
             {
                 'message': 'Datos Guardados.',
-                'status': 200
+                'status': 200,
+                'pk': factura.pk
             })
     
     return JsonResponse({'message': 'Invalid request.'}, status=400)
