@@ -111,9 +111,6 @@ def ajax_update_factura(request):
     if request.method == "POST" and request.is_ajax():
 
         preciounitario = request.POST.get('preciounitario')
-
-        print("///////////////////////////")
-        print(preciounitario)
         
         return JsonResponse({'message': 'Data saved successfully.'}, status=200)
     
