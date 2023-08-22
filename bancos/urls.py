@@ -22,6 +22,6 @@ from .views import banco_edit, banco_new, listadobanco
 
 urlpatterns = [
     path('listado/', listadobanco, name='bancolistado'),
-    path('banco/new/', banco_new, name='banconew'),
-    path('banco/edit/<int:pk>', banco_edit, name='bancoedit'),
+    path('new/', banco_new, name='banconew'),
+    path('edit/<int:pk>', banco_edit, name='bancoedit'),
 ]
