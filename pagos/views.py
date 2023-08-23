@@ -202,7 +202,7 @@ def listadoobra(request):
         obras = Obra.objects.filter(descripcion__contains=parametro)
     else:
         obras =  Obra.objects.all()
-    paginador = Paginator(obras, 1)
+    paginador = Paginator(obras, 20)
 
     if "page" in request.GET:
         page = request.GET.get('page')
