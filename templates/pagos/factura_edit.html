@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-sm-3"></div>
             <div class="col-sm-6">
-                <h2>Detalle de Pago por Obra - Código {{pk}}</h2>
+                <h3>Detalle de Pago por Obra - Nro. Orden {{pk}}</h3>
             </div>
             <div class="col-sm-3"></div>
         </div>
@@ -68,9 +68,9 @@
                             <th>Unidad</th>
                             <th>Cantidad</th>
                             <th>Precio Unitario</th>
-                            <th>Precio Total</th>
+                            <th>Total</th>
                             <th>Estado</th>
-                            <th>Cargador por...</th>
+                            <th>Cargador por...</th-->
                             <th>Accion</th>
                         </tr>
                     </thead>
@@ -86,11 +86,15 @@
                             <td>{{detalle.preciounitario }}</td>
                             <td>{{detalle.preciototal }}</td>
                             <td>{{detalle.estadopago.upper }}</td>
-                            <td>{{detalle.usuario.username.upper}} </td>
+                            <td>{{detalle.usuario.username.upper}} </td-->
     
                             <td>
                                 <button type="button" class="btn btn-link btn-sm" onclick="LoadDetailBillForm({{detalle.pk}})">
                                     <i class="fas fa-pencil-alt"></i>
+                                </button>
+
+                                <button type="button" class="btn btn-link btn-sm" onclick="IrOrdenPago({{detalle.pk}})">
+                                    <i class="fas fa-money-bill-wave"></i>
                                 </button>
                             </td>
                         </tr>
@@ -225,6 +229,11 @@
 
 
         function IrListadoFactura() {
+            window.location.replace("/pagos/factura/listado");
+        }
+
+
+        function IrOrdenPago(id) {
             window.location.replace("/pagos/factura/listado");
         }
         

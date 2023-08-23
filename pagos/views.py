@@ -9,7 +9,7 @@ from django.http import JsonResponse
 from django.db.models import F
 
 from .forms import DetalleFacturaForm, FacturaForm, ObraForm, ProveedorForm, RubroForm
-from .models import Factura, DetalleFactura, Obra, Proveedor, Rubro
+from .models import Factura, DetalleFactura, Obra, Proveedor, Rubro, OrdenPago
 
 
 def listadofactura(request):
@@ -194,9 +194,15 @@ def facturadetalle_edit(request, pk):
         )
 
 
+########################### SECCION OBRA ##############################
+
 def listadoobra(request):
-    obras = Obra.objects.all()
-    paginador = Paginator(obras, 20)
+    if "txtBuscar" in request.GET:
+        parametro = request.GET.get('txtBuscar')
+        obras = Obra.objects.filter(descripcion__contains=parametro)
+    else:
+        obras =  Obra.objects.all()
+    paginador = Paginator(obras, 1)
 
     if "page" in request.GET:
         page = request.GET.get('page')
@@ -331,6 +337,8 @@ def ajaxcargarselectrubro(request, pk):
     return JsonResponse(data, safe=False)
 
 
+######################### SECCION DE RUBRO ########################
+
 def listadorubro(request):
     if "txtBuscar" in request.GET:
         parametro = request.GET.get('txtBuscar')
@@ -390,5 +398,72 @@ def rubro_edit(request, pk):
             'pagos/rubro_edit.html',
             {"form": form}
         )
+
+
+####################### SECCION DE ORDENES DE PAGO ######################
+
+
+def listadoordenpago(request):
+    if "txtBuscar" in request.GET:
+        parametro = request.GET.get('txtBuscar')
+        rubros = Rubro.objects.filter(descripcion__contains=parametro)
+    else:
+        rubros =  Rubro.objects.all()
+    paginador = Paginator(rubros, 20)
+
+    if "page" in request.GET:
+        page = request.GET.get('page')
+    else:
+        page = 1
+    resultados = paginador.get_page(page)
+    return render(
+        request,
+        'pagos/rubro_list.html',
+        {
+            'resultados': resultados
+        })
+
+
+def ordenpago_new(request):
+    if request.POST:
+        usuario = request.user
+        form = RubroForm(request.POST)
+        if form.is_valid():
+            rubro = form.save(commit=False)
+            rubro.usuario = usuario
+            rubro.save()
+            messages.success(request, "SE HA GRABADO LOS DATOS DEL RUBRO")
+            return redirect('/pagos/rubros/listado')
+    else:
+        form = RubroForm()
+        return render(
+            request,
+            'pagos/rubro_edit.html',
+            {"form": form}
+        )
+
+
+def ordenpago_edit(request, pk):
+    consulta = Rubro.objects.get(pk=pk)
+   
+    if request.POST:
+        form = RubroForm(request.POST, instance=consulta)
+        if form.is_valid():
+            rubro = form.save(commit=False)
+            usuario = request.user
+            rubro.usuario = usuario
+            rubro.save()
+            messages.success(request, "SE HA GRABADO LOS DATOS DEL RUBRO")
+            return redirect('/pagos/rubros/listado')
+    else:
+        form = RubroForm(instance=consulta)
+        return render(
+            request,
+            'pagos/rubro_edit.html',
+            {"form": form}
+        )
+
+
+
 
 # Create your views here.
