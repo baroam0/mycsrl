@@ -1,8 +1,8 @@
 
 from django.db import models
 
+from bancos.models import Banco
 from usuariosadm.models import UserAdm
-
 
 class Obra(models.Model):
     descripcion = models.CharField(max_length=200, unique=True)
@@ -89,5 +89,41 @@ class DetalleFactura(models.Model):
     class Meta:
         verbose_name_plural = "Detalles Pagos"
 
+
+class Cheque(models.Model):
+    fecha = models.DateField(blank=False, null=False)
+    banco = models.ForeignKey(Banco, on_delete=models.CASCADE)
+    numerocheque = models.IntegerField()
+    monto = models.DecimalField(max_digits=10, decimal_places=2)
+
+    class Meta:
+        verbose_name_plural = "Cheques"
+
+
+class OrdenPago(models.Model):
+    detallefactura = models.ForeignKey(
+        DetalleFactura, on_delete=models.CASCADE)
+
+    fecha = models.DateField(null=False, blank=False)
+
+    CHOICESMODOPAGO = [
+        ("Efectivo", "Efectivo"),
+        ("Transferencia", "Transferencia"),
+        ("Cheque", "Cheque"),
+    ]
+
+    modopago = models.CharField(
+        max_length=20,
+        choices=CHOICESMODOPAGO,
+        default="Unidad",
+    )
+
+    cheque = models.ForeignKey(
+        Cheque, on_delete=models.CASCADE, null=True, blank=True)
+    monto = models.DecimalField(max_digits=10, decimal_places=2)
+
+    class Meta:
+        verbose_name_plural = "Ordenes de Pagos"
+    
 
 # Create your models here.
