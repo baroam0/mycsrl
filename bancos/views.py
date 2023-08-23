@@ -9,7 +9,11 @@ from .models import Banco
 
 
 def listadobanco(request):
-    bancos = Banco.objects.all()
+    if "txtBuscar" in request.GET:
+        parametro = request.GET.get('txtBuscar')
+        bancos = Banco.objects.filter(descripcion__contains=parametro)
+    else:
+        bancos = Banco.objects.all()
     paginador = Paginator(bancos, 20)
 
     if "page" in request.GET:
