@@ -21,7 +21,8 @@ from django.urls import include, path
 from .views import (ajax_save_factura, listadofactura, obra_new, listadoobra,
                     factura_new, factura_edit, ajaxcargardetallefactura, 
                     ajaxmostrarformdetallefactura, ajaxcargarselectrubro,
-                    obra_edit, listadoproveedor, proveedor_edit, proveedor_new)
+                    obra_edit, listadoproveedor, proveedor_edit, proveedor_new,
+                    listadorubro, rubro_new, rubro_edit)
 
 urlpatterns = [
     path('factura/ajaxgrabarfactura/', ajax_save_factura, name='ajaxgrabarfactura'),
@@ -37,4 +38,7 @@ urlpatterns = [
     path('proveedor/listado/', listadoproveedor, name='proveedorlistado'),
     path('proveedor/proveedornew/', proveedor_new, name='proveedornew'),
     path('proveedor/proveedoredit/<int:pk>', proveedor_edit, name='proveedoredit'),
+    path('rubros/listado/', listadorubro, name='rubrolistado'),
+    path('rubros/new/', rubro_new, name='rubronew'),
+    path('rubros/edit/<int:pk>', rubro_edit, name='rubroedit'),
 ]
