@@ -63,6 +63,9 @@ def banco_edit(request, pk):
             banco.save()
             messages.success(request, "Se ha modificado los datos del banco")
             return redirect('/bancos/listado')
+        else:
+            messages.warning(request, form.errors)
+            return redirect('/bancos/listado')
     else:
         form = BancoForm(instance=consulta)
         return render(

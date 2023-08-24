@@ -251,6 +251,9 @@ def obra_edit(request, pk):
             obra.save()
             messages.success(request, "SE HA GRABADO LOS DATOS DE OBRA")
             return redirect('/pagos/obra/listado')
+        else:
+            messages.warning(request, form.errors)
+            return redirect('/pagos/obra/listado')
     else:
         form = ObraForm(instance=consulta)
         return render(
