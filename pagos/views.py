@@ -385,7 +385,10 @@ def rubro_new(request):
             rubro = form.save(commit=False)
             rubro.usuario = usuario
             rubro.save()
-            messages.success(request, "SE HA GRABADO LOS DATOS DEL RUBRO")
+            messages.success(request, "Se ha grabado los datos del rubro.")
+            return redirect('/pagos/rubros/listado')
+        else:
+            messages.warning(request, form.errors)
             return redirect('/pagos/rubros/listado')
     else:
         form = RubroForm()
@@ -406,7 +409,10 @@ def rubro_edit(request, pk):
             usuario = request.user
             rubro.usuario = usuario
             rubro.save()
-            messages.success(request, "SE HA GRABADO LOS DATOS DEL RUBRO")
+            messages.success(request, "Se ha modificado el rubro.")
+            return redirect('/pagos/rubros/listado')
+        else:
+            messages.warning(request, form.errors)
             return redirect('/pagos/rubros/listado')
     else:
         form = RubroForm(instance=consulta)
