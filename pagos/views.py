@@ -258,7 +258,12 @@ def obra_edit(request, pk):
 
 
 def listadoproveedor(request):
-    proveedores = Proveedor.objects.all()
+
+    if "txtBuscar" in request.GET:
+        parametro = request.GET.get('txtBuscar')
+        proveedores = Proveedor.objects.filter(descripcion__contains=parametro)
+    else:
+        proveedores = Proveedor.objects.all()
     paginador = Paginator(proveedores, 20)
 
     if "page" in request.GET:
@@ -283,6 +288,9 @@ def proveedor_new(request):
             proveedor.usuario = usuario
             proveedor.save()
             messages.success(request, "SE HA GRABADO LOS DATOS DEL PROVEEDOR")
+            return redirect('/pagos/proveedor/listado')
+        else:
+            messages.warning(request, form.errors)
             return redirect('/pagos/proveedor/listado')
     else:
         form = ProveedorForm()

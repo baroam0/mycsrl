@@ -39,6 +39,9 @@ def banco_new(request):
             banco.save()
             messages.success(request, "SE HA GRABADO LOS DATOS DEL BANCO")
             return redirect('/bancos/listado')
+        else:
+            messages.warning(request, form.errors)
+            return redirect('/bancos/listado')
     else:
         form = BancoForm()
         return render(

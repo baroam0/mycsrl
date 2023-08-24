@@ -20,14 +20,14 @@
 
         {% if messages %}
             {% for message in messages %}
-                <div class="alert alert-success" role="alert">
+                <div class="alert alert-{{message.tags}}" role="alert">
                     {{message}}
                 </div>
             {% endfor %}
         {% endif %}
 
 
-        <form action="/datosbancarioslistado" method="GET">
+        <form action="/pagos/proveedor/listado" method="GET">
             <div class="form-inline">
                 <div class="col-2">
                 </div>
@@ -78,12 +78,12 @@
                     {% if resultados.has_previous %}
                         <li class="page-item">
                             <a class="page-link" href="?page=1">
-                                <i data-feather="chevrons-left"></i>
+                                <i class="fas fa-angle-double-left"></i>
                             </a>
                         </li>
                         <li class="page-item">
                             <a class="page-link" href="?page={{ resultados.previous_page_number }}">
-                                <i data-feather="chevron-left"></i>
+                                <i class="fas fa-angle-left"></i>
                             </a>
                         </li>
 
@@ -98,12 +98,12 @@
                     {% if resultados.has_next %}
                         <li class="page-item">
                             <a class="page-link" href="?page={{ resultados.next_page_number }}">
-                                <i data-feather="chevron-right"></i>
+                                <i class="fas fa-angle-right"></i>
                             </a>
                         </li>
                         <li class="page-item">
                             <a class="page-link" href="?page={{ resultados.paginator.num_pages }}">
-                                <i data-feather="chevrons-right"></i>
+                                <i class="fas fa-angle-double-right"></i>
                             </a>
                         </li>
                     {% endif %}
