@@ -227,6 +227,9 @@ def obra_new(request):
             obra.save()
             messages.success(request, "SE HA GRABADO LOS DATOS DE OBRAS")
             return redirect('/pagos/obra/listado')
+        else:
+            messages.warning(request, form.errors)
+            return redirect('/pagos/obra/listado')
     else:
         form = ObraForm()
         return render(

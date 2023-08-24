@@ -37,7 +37,7 @@ def banco_new(request):
             banco = form.save(commit=False)
             banco.usuario = usuario
             banco.save()
-            messages.success(request, "SE HA GRABADO LOS DATOS DEL BANCO")
+            messages.success(request, "Se ha grabado los datos del banco.")
             return redirect('/bancos/listado')
         else:
             messages.warning(request, form.errors)
@@ -61,7 +61,7 @@ def banco_edit(request, pk):
             usuario = request.user
             banco.usuario = usuario
             banco.save()
-            messages.success(request, "SE HA GRABADO LOS DATOS DEL BANCO")
+            messages.success(request, "Se ha modificado los datos del banco")
             return redirect('/bancos/listado')
     else:
         form = BancoForm(instance=consulta)
