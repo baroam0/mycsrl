@@ -293,7 +293,7 @@ def proveedor_new(request):
             proveedor = form.save(commit=False)
             proveedor.usuario = usuario
             proveedor.save()
-            messages.success(request, "SE HA GRABADO LOS DATOS DEL PROVEEDOR")
+            messages.success(request, "Se ha grabado de los datos del proveedor.")
             return redirect('/pagos/proveedor/listado')
         else:
             messages.warning(request, form.errors)
@@ -317,7 +317,10 @@ def proveedor_edit(request, pk):
             usuario = request.user
             proveedor.usuario = usuario
             proveedor.save()
-            messages.success(request, "SE HA GRABADO LOS DATOS DEL PROVEEDOR")
+            messages.success(request, "Se ha grabado de los datos del proveedor.")
+            return redirect('/pagos/proveedor/listado')
+        else:
+            messages.warning(request, form.errors)
             return redirect('/pagos/proveedor/listado')
     else:
         form = ProveedorForm(instance=consulta)
