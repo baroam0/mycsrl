@@ -66,28 +66,27 @@
                             <th>Proveedor</th>
                             <th>Rubro</th>
                             <th>Unidad</th>
-                            <th>Cantidad</th>
-                            <th>Precio Unitario</th>
+                            <th>Cant,</th>
+                            <th>P. U.</th>
                             <th>Total</th>
                             <th>Estado</th>
-                            <th>Cargador por...</th-->
+                            <th>Cargó...</th-->
                             <th>Accion</th>
                         </tr>
                     </thead>
-    
+
                     <tbody>
                         {% for detalle in detallefactura %}
-                        <tr>
-       
+                        <tr>       
                             <td>{{detalle.proveedor.descripcion.upper }}</td>
                             <td>{{detalle.rubro.descripcion.upper }}</td>
                             <td>{{detalle.unidad.upper }}</td>
                             <td>{{detalle.cantidad }}</td>
                             <td>{{detalle.preciounitario }}</td>
-                            <td>{{detalle.preciototal }}</td>
+                            <td>{{detalle.preciototal|floatformat:2 }}</td>
                             <td>{{detalle.estadopago.upper }}</td>
                             <td>{{detalle.usuario.username.upper}} </td-->
-    
+
                             <td>
                                 <button type="button" class="btn btn-link btn-sm" onclick="LoadDetailBillForm({{detalle.pk}})">
                                     <i class="fas fa-pencil-alt"></i>
@@ -123,10 +122,18 @@
         }
 
 
+        function EnableButton(){
+            if(!$('#id_cantidad').val()){
+                alert("Noooo")
+            }
+        }
+
+
         function ClearHideForm() {
             $('#form-container').html('');
             id_detalle_factura = 0;
             id_obra = 0;
+            $('#btn-guardar').prop('disabled', true);
         }
 
 
@@ -145,6 +152,8 @@
                 }
             })
             
+            $('#btn-guardar').prop('disabled', false);
+    
             id_detalle_factura = pk;
         }
 
@@ -165,6 +174,8 @@
             })
 
             id_detalle_factura = 0;
+
+            $('#btn-guardar').prop('disabled', false);
 
             id_obra = $('#id_obra').select2('data')[0].id;
         }
@@ -189,41 +200,60 @@
 
         $(document).ready(function () {
 
+            $('#btn-guardar').prop('disabled', true);
+
             HideDetailBillForm();
             $('#id_obra').select2();
 
 
             $("#btn-guardar").click(function () {
-                
-                
                 id_obra = $('#id_obra').select2('data')[0].id;
-                
-                if(id_obra==0){
 
-                }else{
+                id_proveedor = $('#id_proveedor').select2('data')[0].id;
 
+                id_rubro = $('#id_rubro').select2('data')[0].id;
 
-                    var formData = $("#data-obra-form").serializeArray();
+                id_unidad = $('#id_unidad').val();
 
-                    formData.push({name: "id_detalle_factura", value: id_detalle_factura});
-                    formData.push({name: "id_factura", value: id_factura});
+                id_cantidad = $('#id_cantidad').val();
+
+                id_preciounitario = $('#id_preciounitario').val();
+
+                id_estadopago = $("#id_estadopago" ).val();
+
+                var elementos = [
+                    id_obra, 
+                    id_proveedor, 
+                    id_rubro, 
+                    id_unidad, 
+                    id_cantidad, 
+                    id_preciounitario, 
+                    id_estadopago
+                ];
+
+                $.each(elementos, function (indexInArray, valueOfElement) {
+                    if(valueOfElement==""){
+                        alert("Por favor completar todos datos.")
+                        return false;
+                    }
+                });
+
+                var formData = $("#data-obra-form").serializeArray();
+
+                formData.push({name: "id_detalle_factura", value: id_detalle_factura});
+                formData.push({name: "id_factura", value: id_factura});
             
-                    $.ajax({
-                        type: "POST",
-                        url: "/pagos/factura/ajaxgrabarfactura/",
-                        data: formData,
-                        success: function (response) {
-                            console.log(response.status);
-                            console.log(response.pk);
-                            //location.reload();
-                            window.location.replace("/pagos/factura/edit/" + response.pk);
-                        },
-                        error: function (xhr, errmsg, err) {
-                            console.log(xhr.status + ": " + xhr.responseText);
-                        }
-                    });
-                }
-
+                $.ajax({
+                    type: "POST",
+                    url: "/pagos/factura/ajaxgrabarfactura/",
+                    data: formData,
+                    success: function (response) {
+                        window.location.replace("/pagos/factura/edit/" + response.pk);
+                    },
+                    error: function (xhr, errmsg, err) {
+                        console.log(xhr.status + ": " + xhr.responseText);
+                    }
+                });
             });
         });
 

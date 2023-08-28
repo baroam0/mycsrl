@@ -145,7 +145,7 @@ def factura_new(request):
 def factura_edit(request, pk):
     factura = Factura.objects.get(pk=pk)
     detallefactura = DetalleFactura.objects.filter(
-        factura=factura).annotate(preciototal=F('cantidad') * F('preciounitario'))
+        factura=factura).annotate(preciototal= F('cantidad') * F('preciounitario'))
    
 
     if request.POST:
