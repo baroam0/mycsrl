@@ -8,12 +8,15 @@
         <br>
         
         <div class="row">
-            <div class="col-sm-4"></div>
-            <div class="col-sm-4">
-                <h3> DATOS BANCARIOS. </h3>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-8">
+                <h3> Listado Ordenes del Rubro </h3>
+                <h3> Obra: {{ obra }} </h3>
+                <h3> Proveedor: {{ proveedor }} </h3>
+                <h3> Rubro: {{ rubro }} </h3>
                 <!--h3> DATOS BANCARIOS - {{usuario.last_name}}, {{usuario.first_name}} </h3-->
             </div>
-            <div class="col-sm-4"></div>
+            <div class="col-sm-2"></div>
         </div>
         
         <hr>
@@ -27,19 +30,19 @@
         {% endif %}
 
 
-        <form action="/datosbancarioslistado" method="GET">
+        <form action="/pagos/ordenpago/listado" method="GET">
             <div class="form-inline">
                 <div class="col-2">
                 </div>
                 <div class="col-2">
                 </div>
                 <div class="col-8">
-                    <input class="form-control" id="txtBuscar" name="txtBuscar" placeholder="Buscar....">
+                    <!--input class="form-control" id="txtBuscar" name="txtBuscar" placeholder="Buscar....">
                     <button type="submit" class="btn btn-default" title="Buscar!">
                         <i class="fas fa-search"></i>
-                    </button>
+                    </button-->
 
-                    <button type="button" class="btn btn-default" title="Nuevo Paciente!" onclick="location.href='/datobancarionuevo'">
+                    <button type="button" class="btn btn-default" title="Nueva Orden de Pago!" onclick="location.href='/pagos/ordenpago/new/' +{{pk}} ">
                         <i class="fas fa-plus"></i>
                     </button>
                 </div>
@@ -50,7 +53,7 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>Titular</th>
+                        <th>Fecha</th>
                         <th>Banco</th>
                         <th>Tipo de Cuenta</th>
                         <th>CBU</th>
@@ -82,12 +85,12 @@
                     {% if resultados.has_previous %}
                         <li class="page-item">
                             <a class="page-link" href="?page=1">
-                                <i data-feather="chevrons-left"></i>
+                                <i class="fas fa-angle-double-left"></i>
                             </a>
                         </li>
                         <li class="page-item">
                             <a class="page-link" href="?page={{ resultados.previous_page_number }}">
-                                <i data-feather="chevron-left"></i>
+                                <i class="fas fa-angle-left"></i>
                             </a>
                         </li>
 
@@ -102,12 +105,12 @@
                     {% if resultados.has_next %}
                         <li class="page-item">
                             <a class="page-link" href="?page={{ resultados.next_page_number }}">
-                                <i data-feather="chevron-right"></i>
+                                <i class="fas fa-angle-right"></i>
                             </a>
                         </li>
                         <li class="page-item">
                             <a class="page-link" href="?page={{ resultados.paginator.num_pages }}">
-                                <i data-feather="chevrons-right"></i>
+                                <i class="fas fa-angle-double-right"></i>
                             </a>
                         </li>
                     {% endif %}

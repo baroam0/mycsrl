@@ -8,7 +8,7 @@ from django.http import JsonResponse
 
 from django.db.models import F
 
-from .forms import DetalleFacturaForm, FacturaForm, ObraForm, ProveedorForm, RubroForm
+from .forms import DetalleFacturaForm, FacturaForm, ObraForm, ProveedorForm, RubroForm, OrdenPagoForm
 from .models import Factura, DetalleFactura, Obra, Proveedor, Rubro, OrdenPago
 
 
@@ -426,42 +426,40 @@ def rubro_edit(request, pk):
 ####################### SECCION DE ORDENES DE PAGO ######################
 
 
-def listadoordenpago(request):
-    if "txtBuscar" in request.GET:
-        parametro = request.GET.get('txtBuscar')
-        rubros = Rubro.objects.filter(descripcion__contains=parametro)
-    else:
-        rubros =  Rubro.objects.all()
-    paginador = Paginator(rubros, 20)
+def listadoordenpago(request, pk):
+    detallefactura = DetalleFactura.objects.get(pk=pk)
+    ordenespagos = OrdenPago.objects.filter(detallefactura=detallefactura)
 
-    if "page" in request.GET:
-        page = request.GET.get('page')
-    else:
-        page = 1
-    resultados = paginador.get_page(page)
     return render(
         request,
-        'pagos/rubro_list.html',
+        'pagos/ordenpago_list.html',
         {
-            'resultados': resultados
+            'resultados': ordenespagos,
+            'obra': detallefactura.factura.obra,
+            'proveedor': detallefactura.proveedor,
+            'rubro': detallefactura.rubro,
+            'pk': pk
         })
 
 
-def ordenpago_new(request):
+def ordenpago_new(request, pk):
     if request.POST:
         usuario = request.user
-        form = RubroForm(request.POST)
+        form = OrdenPagoForm(request.POST)
         if form.is_valid():
-            rubro = form.save(commit=False)
-            rubro.usuario = usuario
-            rubro.save()
-            messages.success(request, "SE HA GRABADO LOS DATOS DEL RUBRO")
-            return redirect('/pagos/rubros/listado')
+            ordenpago = form.save(commit=False)
+            ordenpago.usuario = usuario
+            ordenpago.save()
+            messages.success(request, "Se ha grabado los datos de la orden de pago.")
+            return redirect('/pagos/ordenpago')
+        else:
+            messages.warning(request, form.errors)
+            return redirect('/pagos/ordenpago/listado')
     else:
-        form = RubroForm()
+        form = OrdenPagoForm()
         return render(
             request,
-            'pagos/rubro_edit.html',
+            'pagos/ordenpago_edit.html',
             {"form": form}
         )
 
@@ -476,7 +474,10 @@ def ordenpago_edit(request, pk):
             usuario = request.user
             rubro.usuario = usuario
             rubro.save()
-            messages.success(request, "SE HA GRABADO LOS DATOS DEL RUBRO")
+            messages.success(request, "Se ha modificado el rubro.")
+            return redirect('/pagos/rubros/listado')
+        else:
+            messages.warning(request, form.errors)
             return redirect('/pagos/rubros/listado')
     else:
         form = RubroForm(instance=consulta)
@@ -485,8 +486,5 @@ def ordenpago_edit(request, pk):
             'pagos/rubro_edit.html',
             {"form": form}
         )
-
-
-
 
 # Create your views here.

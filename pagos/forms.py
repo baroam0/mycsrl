@@ -3,7 +3,8 @@
 from django import forms
 from django.contrib.auth.models import User
 
-from .models import DetalleFactura, Obra, Factura, Proveedor, Rubro
+from .models import DetalleFactura, Obra, Factura, Proveedor, Rubro, OrdenPago
+from bancos.models import Banco
 
 
 class DetalleFacturaForm(forms.ModelForm):
@@ -130,3 +131,35 @@ class RubroForm(forms.ModelForm):
     class Meta:
         model = Rubro
         fields = ["descripcion"]
+
+
+class OrdenPagoForm(forms.ModelForm):
+
+    fecha = forms.DateField(label="Fecha", required=True)
+
+    CHOICESMODOPAGO = [
+        ("Efectivo", "Efectivo"),
+        ("Transferencia", "Transferencia"),
+        ("Cheque", "Cheque"),
+    ]
+
+    modopago = forms.ChoiceField(
+        choices=CHOICESMODOPAGO,
+        label="Estado de Pago",
+    )
+
+    fechacheque = forms.DateField(label="Fecha Cheque", required=True) 
+    banco = forms.ModelChoiceField(queryset=Banco.objects.all(), label="Banco")
+    numerocheque = forms.IntegerField(label="Numero de Cheque") 
+    monto = forms.DecimalField(label="Monto", required=True)
+
+    def __init__(self, *args, **kwargs):
+        super(OrdenPagoForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+
+    class Meta:
+        model = OrdenPago
+        fields = ["banco"]

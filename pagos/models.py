@@ -9,7 +9,7 @@ class Obra(models.Model):
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.descripcion
+        return self.descripcion.upper()
 
     class Meta:
         verbose_name_plural = "Obras"
@@ -20,7 +20,7 @@ class Proveedor(models.Model):
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.descripcion
+        return self.descripcion.upper()
 
     class Meta:
         verbose_name_plural = "Proveedores"
@@ -32,7 +32,7 @@ class Rubro(models.Model):
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.descripcion
+        return self.descripcion.upper()
 
     class Meta:
         verbose_name_plural = "Rubros"
@@ -90,15 +90,6 @@ class DetalleFactura(models.Model):
         verbose_name_plural = "Detalles Pagos"
 
 
-class Cheque(models.Model):
-    fecha = models.DateField(blank=False, null=False)
-    banco = models.ForeignKey(Banco, on_delete=models.CASCADE)
-    numerocheque = models.IntegerField()
-    monto = models.DecimalField(max_digits=10, decimal_places=2)
-
-    class Meta:
-        verbose_name_plural = "Cheques"
-
 
 class OrdenPago(models.Model):
     detallefactura = models.ForeignKey(
@@ -118,9 +109,12 @@ class OrdenPago(models.Model):
         default="Unidad",
     )
 
-    cheque = models.ForeignKey(
-        Cheque, on_delete=models.CASCADE, null=True, blank=True)
+    fechacheque = models.DateField(blank=False, null=False)
+    banco = models.ForeignKey(Banco, on_delete=models.CASCADE)
+    numerocheque = models.IntegerField()
     monto = models.DecimalField(max_digits=10, decimal_places=2)
+    usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
+
 
     class Meta:
         verbose_name_plural = "Ordenes de Pagos"
