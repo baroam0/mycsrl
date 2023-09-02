@@ -6,11 +6,11 @@
 
         <br>
         <div class="row">
-            <div class="col-sm-3"></div>
-            <div class="col-sm-6">
-                <h3>Detalle de Pago por Obra - Nro. Orden {{pk}}</h3>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-8">
+                <h3>Detalle de pago - {{obra}} - {{rubro}}</h3>
             </div>
-            <div class="col-sm-3"></div>
+            <div class="col-sm-2"></div>
         </div>
 
         <div class="row">
@@ -32,17 +32,7 @@
                             </button>
                         </div>
 
-                        <div class="col-3">
-                        </div>
-
-                        <div class="col-2">    
-                            <button type="button" class="btn btn-secondary" id="btn-agregar" onclick="LoadEmptyDetailBillForm()">
-                                <i class="fa fa-plus"></i>
-                                Agregar
-                            </button>
-                        </div>
-
-                        <div class="col-3">
+                        <div class="col-8">
                         </div>
 
                         <div class="col-2">    
@@ -58,51 +48,6 @@
             </div>            
         </div>
 
-        {%if detallefactura %}
-            <div class="row">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Proveedor</th>
-                            <th>Rubro</th>
-                            <th>Unidad</th>
-                            <th>Cant.</th>
-                            <th>P. U.</th>
-                            <th>Total</th>
-                            <th>Estado</th>
-                            <th>Cargó...</th-->
-                            <th>Accion</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {% for detalle in detallefactura %}
-                        <tr>       
-                            <td>{{detalle.proveedor.descripcion.upper }}</td>
-                            <td>{{detalle.rubro.descripcion.upper }}</td>
-                            <td>{{detalle.unidad.upper }}</td>
-                            <td>{{detalle.cantidad }}</td>
-                            <td>{{detalle.preciounitario }}</td>
-                            <td>{{detalle.preciototal|floatformat:2 }}</td>
-                            <td>{{detalle.estadopago.upper }}</td>
-                            <td>{{detalle.usuario.username.upper}} </td-->
-
-                            <td>
-                                <button type="button" class="btn btn-link btn-sm" onclick="LoadDetailBillForm({{detalle.pk}})">
-                                    <i class="fas fa-pencil-alt"></i>
-                                </button>
-
-                                <button type="button" class="btn btn-link btn-sm" onclick="IrOrdenPago({{detalle.pk}})">
-                                    <i class="fas fa-money-bill-wave"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        {% endif %}
-
     </div>
 
 {% endblock %}
@@ -111,90 +56,9 @@
 
     <script>
 
-        var id_factura = {{pk}};
-
-        var id_detalle_factura = 0;
-
-        var id_obra = 0;
 
         function HideDetailBillForm() {
             $("#detallefacturaformulario").hide();
-        }
-
-
-        function EnableButton(){
-            if(!$('#id_cantidad').val()){
-                alert("Noooo")
-            }
-        }
-
-
-        function ClearHideForm() {
-            $('#form-container').html('');
-            id_detalle_factura = 0;
-            id_obra = 0;
-            $('#btn-guardar').prop('disabled', true);
-        }
-
-
-        function LoadDetailBillForm(pk){
-            ClearHideForm();
-            $.ajax({
-                url: '/pagos/factura/ajaxfacturadetalle/' + pk,
-                type: 'GET',
-                success: function(response){
-                    $('#form-container').html(response.form_html);
-                    $('#id_proveedor').select2();
-                    $('#id_rubro').select2();
-                },
-                error: function(error){
-                    console.log(error);
-                }
-            })
-            
-            $('#btn-guardar').prop('disabled', false);
-    
-            id_detalle_factura = pk;
-        }
-
-
-        function LoadEmptyDetailBillForm(){
-            ClearHideForm();
-            $.ajax({
-                url: '/pagos/factura/ajaxloadformfacturadetalle/',
-                type: 'GET',
-                success: function(response){
-                    $('#form-container').html(response.form_html);
-                    $('#id_proveedor').select2();
-                    $('#id_rubro').select2();
-                },
-                error: function(error){
-                    console.log(error);
-                }
-            })
-
-            id_detalle_factura = 0;
-
-            $('#btn-guardar').prop('disabled', false);
-
-            id_obra = $('#id_obra').select2('data')[0].id;
-        }
-
-
-        function CargarRubro(){
-            var value_select_proveerdor = $('#id_proveedor').select2('data'); 
-            var proveedor = value_select_proveerdor[0].id;
-
-            $("#id_rubro").empty();
-
-            var urlajaxrubro = '/pagos/factura/ajaxcargarselectrubro/' + proveedor;
-
-            $.getJSON(urlajaxrubro, function(response) {
-                console.log(response);
-                $('#id_rubro').select2({
-                    data: response
-                });
-             });
         }
 
 

@@ -443,15 +443,19 @@ def listadoordenpago(request, pk):
 
 
 def ordenpago_new(request, pk):
+
+    detallefactura = DetalleFactura.objects.get(pk=pk)
+
     if request.POST:
         usuario = request.user
         form = OrdenPagoForm(request.POST)
         if form.is_valid():
             ordenpago = form.save(commit=False)
+            ordenpago.detallefactura = detallefactura
             ordenpago.usuario = usuario
             ordenpago.save()
             messages.success(request, "Se ha grabado los datos de la orden de pago.")
-            return redirect('/pagos/ordenpago')
+            return redirect('/pagos/ordenpago/listado')
         else:
             messages.warning(request, form.errors)
             return redirect('/pagos/ordenpago/listado')
@@ -460,7 +464,11 @@ def ordenpago_new(request, pk):
         return render(
             request,
             'pagos/ordenpago_edit.html',
-            {"form": form}
+            {
+                "form": form, 
+                "rubro": detallefactura.rubro,
+                "obra": detallefactura.factura.obra
+            }
         )
 
 

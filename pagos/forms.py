@@ -145,11 +145,13 @@ class OrdenPagoForm(forms.ModelForm):
 
     modopago = forms.ChoiceField(
         choices=CHOICESMODOPAGO,
-        label="Estado de Pago",
+        label="Modo de Pago",
     )
 
     fechacheque = forms.DateField(label="Fecha Cheque", required=True) 
-    banco = forms.ModelChoiceField(queryset=Banco.objects.all(), label="Banco")
+    banco = forms.ModelChoiceField(
+        queryset=Banco.objects.all(), label="Banco", required=False)
+
     numerocheque = forms.IntegerField(label="Numero de Cheque") 
     monto = forms.DecimalField(label="Monto", required=True)
 
@@ -162,4 +164,4 @@ class OrdenPagoForm(forms.ModelForm):
 
     class Meta:
         model = OrdenPago
-        fields = ["banco"]
+        fields = ["fecha", "modopago", "banco", "fechacheque", "numerocheque", "monto"]

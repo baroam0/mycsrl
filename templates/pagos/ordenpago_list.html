@@ -29,22 +29,19 @@
             {% endfor %}
         {% endif %}
 
-
         <form action="/pagos/ordenpago/listado" method="GET">
             <div class="form-inline">
-                <div class="col-2">
+                <div class="col-4">
                 </div>
-                <div class="col-2">
-                </div>
-                <div class="col-8">
-                    <!--input class="form-control" id="txtBuscar" name="txtBuscar" placeholder="Buscar....">
-                    <button type="submit" class="btn btn-default" title="Buscar!">
-                        <i class="fas fa-search"></i>
-                    </button-->
-
-                    <button type="button" class="btn btn-default" title="Nueva Orden de Pago!" onclick="location.href='/pagos/ordenpago/new/' +{{pk}} ">
-                        <i class="fas fa-plus"></i>
+                
+                <div class="col-4">
+                    <button type="button" class="btn btn-secondary" id="btn-agregar" onclick="location.href='/pagos/ordenpago/new/' +{{pk}} ">
+                        <i class="fa fa-plus"></i>
+                        Agregar
                     </button>
+                </div>
+
+                <div class="col-4">
                 </div>
             </div>
 
@@ -64,7 +61,6 @@
                 <tbody>
                     {% for resultado in resultados %}
                     <tr>
-                        <!--td>{{resultado.usuario.last_name.upper}}, {{resultado.usuario.first_name.upper}} </td-->
                         <td>{{ resultado.titular.last_name }}, {{ resultado.titular.first_name }}  </td>
                         <td>{{resultado.banco }}</td>
                         <td>{{resultado.tipocuenta}}</td>
