@@ -459,7 +459,7 @@ def ordenpago_new(request, pk):
             return redirect('/pagos/ordenpago/listado/' + str(pk) )
         else:
             messages.warning(request, form.errors)
-            return redirect('/pagos/ordenpago/listado')
+            return redirect('/pagos/ordenpago/listado/' + str(pk))
     else:
         form = OrdenPagoForm()
         return render(
