@@ -23,7 +23,7 @@ from .views import (ajax_save_factura, listadofactura, obra_new, listadoobra,
                     ajaxmostrarformdetallefactura, ajaxcargarselectrubro,
                     obra_edit, listadoproveedor, proveedor_edit, proveedor_new,
                     listadorubro, rubro_new, rubro_edit, 
-                    listadoordenpago, ordenpago_new)
+                    listadoordenpago, ordenpago_new, ordenpago_edit)
 
 urlpatterns = [
     path('factura/ajaxgrabarfactura/', ajax_save_factura, name='ajaxgrabarfactura'),
@@ -43,5 +43,6 @@ urlpatterns = [
     path('rubros/new/', rubro_new, name='rubronew'),
     path('rubros/edit/<int:pk>', rubro_edit, name='rubroedit'),
     path('ordenpago/listado/<int:pk>', listadoordenpago, name='ordenpagolistado'),
-    path('ordenpago/new/<int:pk>', ordenpago_new, name='ordenpagonew')
+    path('ordenpago/new/<int:pk>', ordenpago_new, name='ordenpagonew'),
+    path('ordenpago/edit/<int:pk>', ordenpago_edit, name='ordenpagoedit')
 ]

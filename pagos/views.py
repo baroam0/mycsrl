@@ -443,9 +443,7 @@ def listadoordenpago(request, pk):
 
 
 def ordenpago_new(request, pk):
-
     detallefactura = DetalleFactura.objects.get(pk=pk)
-
     if request.POST:
         usuario = request.user
         form = OrdenPagoForm(request.POST)
@@ -474,26 +472,30 @@ def ordenpago_new(request, pk):
 
 
 def ordenpago_edit(request, pk):
-    consulta = Rubro.objects.get(pk=pk)
+    ordenpago = OrdenPago.objects.get(pk=pk)
    
     if request.POST:
-        form = RubroForm(request.POST, instance=consulta)
+        form = OrdenPagoForm(request.POST, instance=ordenpago)
         if form.is_valid():
-            rubro = form.save(commit=False)
+            ordenpago = form.save(commit=False)
             usuario = request.user
-            rubro.usuario = usuario
-            rubro.save()
+            ordenpago.usuario = usuario
+            ordenpago.save()
             messages.success(request, "Se ha modificado el rubro.")
-            return redirect('/pagos/rubros/listado')
+            return redirect('/pagos/ordenpago/listado/' + str(ordenpago.detallefactura.pk))
         else:
             messages.warning(request, form.errors)
-            return redirect('/pagos/rubros/listado')
+            return redirect('/pagos/ordenpago/listado/' + str(ordenpago.detallefactura.pk))
     else:
-        form = RubroForm(instance=consulta)
+        form = OrdenPagoForm(instance=ordenpago)
         return render(
             request,
-            'pagos/rubro_edit.html',
-            {"form": form}
+            'pagos/ordenpago_edit.html',
+            {
+                "form": form,
+                "rubro": ordenpago.detallefactura.rubro,
+                "obra": ordenpago.detallefactura.factura.obra
+            } 
         )
 
 # Create your views here.

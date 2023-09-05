@@ -53,7 +53,8 @@
                         <th>Fecha</th>
                         <th>Modo Pago</th>
                         <th>Banco</th>
-                        <th>Monto </th>
+                        <th>Monto</th>
+                        <th>Usuario</th>
                         <th>Accion</th>
                     </tr>
                 </thead>
@@ -68,11 +69,11 @@
                         {% else %}
                             <td></td>
                         {% endif %}
-                        
+                        <td> {{resultado.usuario}}</td>
                         <td>$ {{resultado.monto}}</td>
 
                         <td>
-                            <button type="button" class="btn btn-link btn-sm" onclick="location.href='/pagos/ordendatobancarioeditar/' + {{ resultado.pk }}">
+                            <button type="button" class="btn btn-link btn-sm" onclick="location.href='/pagos/ordenpago/edit/' + {{ resultado.pk }}">
                                 <i class="fas fa-pencil-alt"></i>
                             </button>
                         </td>
