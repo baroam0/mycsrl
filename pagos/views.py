@@ -454,8 +454,9 @@ def ordenpago_new(request, pk):
             ordenpago.detallefactura = detallefactura
             ordenpago.usuario = usuario
             ordenpago.save()
+            ultimaordenpago = OrdenPago.objects.latest('pk')
             messages.success(request, "Se ha grabado los datos de la orden de pago.")
-            return redirect('/pagos/ordenpago/listado')
+            return redirect('/pagos/ordenpago/listado/' + str(pk) )
         else:
             messages.warning(request, form.errors)
             return redirect('/pagos/ordenpago/listado')

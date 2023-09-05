@@ -51,9 +51,9 @@
                 <thead>
                     <tr>
                         <th>Fecha</th>
+                        <th>Modo Pago</th>
                         <th>Banco</th>
-                        <th>Tipo de Cuenta</th>
-                        <th>CBU</th>
+                        <th>Monto </th>
                         <th>Accion</th>
                     </tr>
                 </thead>
@@ -61,13 +61,18 @@
                 <tbody>
                     {% for resultado in resultados %}
                     <tr>
-                        <td>{{ resultado.titular.last_name }}, {{ resultado.titular.first_name }}  </td>
-                        <td>{{resultado.banco }}</td>
-                        <td>{{resultado.tipocuenta}}</td>
-                        <td>{{resultado.cbu}}</td>
+                        <td>{{ resultado.fecha }}  </td>
+                        <td>{{ resultado.modopago }}</td>
+                        {% if resultado.banco%}
+                            <td>{{resultado.banco}}</td>
+                        {% else %}
+                            <td></td>
+                        {% endif %}
+                        
+                        <td>$ {{resultado.monto}}</td>
 
                         <td>
-                            <button type="button" class="btn btn-link btn-sm" onclick="location.href='/datobancarioeditar/' + {{ resultado.pk }}">
+                            <button type="button" class="btn btn-link btn-sm" onclick="location.href='/pagos/ordendatobancarioeditar/' + {{ resultado.pk }}">
                                 <i class="fas fa-pencil-alt"></i>
                             </button>
                         </td>

@@ -138,9 +138,9 @@ class OrdenPagoForm(forms.ModelForm):
     fecha = forms.DateField(label="Fecha", required=True)
 
     CHOICESMODOPAGO = [
-        ("Efectivo", "Efectivo"),
-        ("Transferencia", "Transferencia"),
         ("Cheque", "Cheque"),
+        ("Efectivo", "Efectivo"),
+        ("Transferencia", "Transferencia")
     ]
 
     modopago = forms.ChoiceField(
@@ -148,11 +148,11 @@ class OrdenPagoForm(forms.ModelForm):
         label="Modo de Pago",
     )
 
-    fechacheque = forms.DateField(label="Fecha Cheque", required=True) 
+    fechacheque = forms.DateField(label="Fecha Cheque", required=False) 
     banco = forms.ModelChoiceField(
         queryset=Banco.objects.all(), label="Banco", required=False)
 
-    numerocheque = forms.IntegerField(label="Numero de Cheque") 
+    numerocheque = forms.IntegerField(label="Numero de Cheque", required=False) 
     monto = forms.DecimalField(label="Monto", required=True)
 
     def __init__(self, *args, **kwargs):

@@ -8,7 +8,9 @@
         <div class="row">
             <div class="col-sm-2"></div>
             <div class="col-sm-8">
-                <h3>Detalle de pago - {{obra}} - {{rubro}}</h3>
+                <h3>Detalle de pago. </h3>
+                <h3>Obra: {{obra}} </h3>
+                <h3>Rubro: {{rubro}}</h3>
             </div>
             <div class="col-sm-2"></div>
         </div>
@@ -26,7 +28,7 @@
 
                     <div class="row">
                         <div class="col-2">
-                            <button class="btn btn-primary" id="btn-guardar" type="button">
+                            <button class="btn btn-primary" id="btn-guardar" type="submit">
                                 <i class="fas fa-save"></i>
                                 Guardar
                             </button>
@@ -56,69 +58,69 @@
 
     <script>
 
-
-        function HideDetailBillForm() {
-            $("#detallefacturaformulario").hide();
+        function TranslateDatepickerToEs(){
+            $.datepicker.regional['es'] = {
+                closeText: 'Cerrar',
+                prevText: '< Ant',
+                nextText: 'Sig >',
+                currentText: 'Hoy',
+                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+                dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+                dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+                weekHeader: 'Sm',
+                dateFormat: 'dd/mm/yy',
+                firstDay: 1,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: ''
+            };
+            $.datepicker.setDefaults($.datepicker.regional['es']);
+            $(function () {
+                $("#id_fecha").datepicker();
+                $("#id_fechacheque").datepicker();
+            });
         }
 
 
-        $(document).ready(function () {
-
-            $('#btn-guardar').prop('disabled', true);
-
-            HideDetailBillForm();
-            $('#id_obra').select2();
-
-
-            $("#btn-guardar").click(function () {
-                id_obra = $('#id_obra').select2('data')[0].id;
-
-                id_proveedor = $('#id_proveedor').select2('data')[0].id;
-
-                id_rubro = $('#id_rubro').select2('data')[0].id;
-
-                id_unidad = $('#id_unidad').val();
-
-                id_cantidad = $('#id_cantidad').val();
-
-                id_preciounitario = $('#id_preciounitario').val();
-
-                id_estadopago = $("#id_estadopago" ).val();
-
-                var elementos = [
-                    id_obra, 
-                    id_proveedor, 
-                    id_rubro, 
-                    id_unidad, 
-                    id_cantidad, 
-                    id_preciounitario, 
-                    id_estadopago
-                ];
-
-                $.each(elementos, function (indexInArray, valueOfElement) {
-                    if(valueOfElement==""){
-                        alert("Por favor completar todos datos.")
-                        return false;
-                    }
-                });
-
-                var formData = $("#data-obra-form").serializeArray();
-
-                formData.push({name: "id_detalle_factura", value: id_detalle_factura});
-                formData.push({name: "id_factura", value: id_factura});
-            
-                $.ajax({
-                    type: "POST",
-                    url: "/pagos/factura/ajaxgrabarfactura/",
-                    data: formData,
-                    success: function (response) {
-                        window.location.replace("/pagos/factura/edit/" + response.pk);
-                    },
-                    error: function (xhr, errmsg, err) {
-                        console.log(xhr.status + ": " + xhr.responseText);
-                    }
-                });
+        function ChangeModoPago(){
+            $('#id_modopago').on('change', function() {
+                if(this.value == "Cheque"){
+                    $("#id_fechacheque").datepicker('enable');
+                    $('#id_numerocheque').prop('disabled', false);
+                    $('#id_banco').prop('disabled', false);
+                }else{
+                    $("#id_fechacheque").datepicker('disable');
+                    $('#id_numerocheque').prop('disabled', true);
+                    $('#id_banco').prop('disabled', true);
+                }
             });
+        }
+
+        function ChangeModoPagoOnload(){
+
+            let valormodopago = $('#id_modopago').val();
+
+            console.log(valormodopago);
+
+            if(valormodopago=='Cheque'){
+                $('#id_fechacheque').datepicker('enable');
+                $('#id_numerocheque').prop('disabled', false);
+                $('#id_banco').prop('disabled', false);
+            }else{
+                $('#id_fechacheque').datepicker('disable');
+                $('#id_numerocheque').prop('disabled', true);
+                $('#id_banco').prop('disabled', true);
+            }
+        }
+
+        $(document).ready(function () {
+            ChangeModoPagoOnload();
+            TranslateDatepickerToEs();
+            ChangeModoPago();
+            //$('#btn-guardar').prop('disabled', true);
+            $('#id_obra').select2();
         });
 
 

@@ -98,9 +98,9 @@ class OrdenPago(models.Model):
     fecha = models.DateField(null=False, blank=False)
 
     CHOICESMODOPAGO = [
-        ("Efectivo", "Efectivo"),
-        ("Transferencia", "Transferencia"),
         ("Cheque", "Cheque"),
+        ("Efectivo", "Efectivo"),
+        ("Transferencia", "Transferencia")
     ]
 
     modopago = models.CharField(
@@ -109,9 +109,9 @@ class OrdenPago(models.Model):
         default="Unidad",
     )
 
-    fechacheque = models.DateField(blank=False, null=False)
-    banco = models.ForeignKey(Banco, on_delete=models.CASCADE)
-    numerocheque = models.IntegerField()
+    fechacheque = models.DateField(blank=False, null=True)
+    banco = models.ForeignKey(Banco, on_delete=models.CASCADE, null=True, blank=True)
+    numerocheque = models.IntegerField(null=True, blank=True)
     monto = models.DecimalField(max_digits=10, decimal_places=2)
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
 
