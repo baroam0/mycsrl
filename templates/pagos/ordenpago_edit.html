@@ -38,7 +38,7 @@
                         </div>
 
                         <div class="col-2">    
-                            <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="ClearHideForm()">
+                            <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="IrOrdenPago()">
                                 <i class="far fa-times-circle"></i>
                                 Cancelar
                             </button>
@@ -124,13 +124,9 @@
         });
 
 
-        function IrListadoFactura() {
-            window.location.replace("/pagos/factura/listado");
-        }
 
-
-        function IrOrdenPago(id) {
-            window.location.replace("/pagos/factura/listado");
+        function IrOrdenPago() {
+            window.location.replace("/pagos/ordenpago/listado/" + {{pk}});
         }
         
     </script>

@@ -466,7 +466,8 @@ def ordenpago_new(request, pk):
             {
                 "form": form, 
                 "rubro": detallefactura.rubro,
-                "obra": detallefactura.factura.obra
+                "obra": detallefactura.factura.obra,
+                "pk": detallefactura.pk
             }
         )
 
@@ -481,7 +482,7 @@ def ordenpago_edit(request, pk):
             usuario = request.user
             ordenpago.usuario = usuario
             ordenpago.save()
-            messages.success(request, "Se ha modificado el rubro.")
+            messages.success(request, "Se ha modificado los datos de la orden de pago.")
             return redirect('/pagos/ordenpago/listado/' + str(ordenpago.detallefactura.pk))
         else:
             messages.warning(request, form.errors)
@@ -494,7 +495,8 @@ def ordenpago_edit(request, pk):
             {
                 "form": form,
                 "rubro": ordenpago.detallefactura.rubro,
-                "obra": ordenpago.detallefactura.factura.obra
+                "obra": ordenpago.detallefactura.factura.obra,
+                "pk": ordenpago.detallefactura.pk
             } 
         )
 
