@@ -248,7 +248,11 @@
                     url: "/pagos/factura/ajaxgrabarfactura/",
                     data: formData,
                     success: function (response) {
-                        window.location.replace("/pagos/factura/edit/" + response.pk);
+                        if(response.status == 200){
+                            window.location.replace("/pagos/factura/edit/" + response.pk);
+                        }else{
+                            alert(response.message)
+                        }
                     },
                     error: function (xhr, errmsg, err) {
                         console.log(xhr.status + ": " + xhr.responseText);

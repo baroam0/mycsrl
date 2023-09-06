@@ -39,11 +39,20 @@ def ajax_save_factura(request):
         obra = Obra.objects.get(pk=id_obra)
 
         if id_factura == 0:
-            factura = Factura.objects.create(
-                usuario = usuario, obra=obra,
-            )
-            factura.save()
-            factura = Factura.objects.latest('pk')
+            try:
+                factura = Factura.objects.create(
+                    usuario = usuario, obra=obra,
+                )
+                factura.save()
+                factura = Factura.objects.latest('pk')
+            except:
+                return JsonResponse(
+                    {
+                        'message': 'Ya existe orden para esa obra.',
+                        'status': 500,
+                    }
+                )
+
         else:
             factura = Factura.objects.get(pk=id_factura)
 
@@ -60,19 +69,33 @@ def ajax_save_factura(request):
             preciounitario = request.POST.get('preciounitario')
             estadopago = request.POST.get('estadopago')
 
-            detalle_factura = DetalleFactura.objects.create(
-                usuario = usuario, 
-                factura = factura,
-                proveedor=proveedor,
-                rubro=rubro,
-                unidad=unidad,
-                cantidad=cantidad,
-                preciounitario=preciounitario,
-                estadopago=estadopago
-            )
-
-            detalle_factura.save()
-        
+            try:
+                detalle_factura = DetalleFactura.objects.create(
+                    usuario = usuario, 
+                    factura = factura,
+                    proveedor=proveedor,
+                    rubro=rubro,
+                    unidad=unidad,
+                    cantidad=cantidad,
+                    preciounitario=preciounitario,
+                    estadopago=estadopago
+                )
+                detalle_factura.save()
+                return JsonResponse(
+                    {
+                        'message': 'Datos Guardados.',
+                        'status': 200,
+                        'pk': factura.pk
+                    }
+                )
+            except:
+                return JsonResponse(
+                    {
+                        'message': 'Ha ocurrido un error.',
+                        'status': 500,
+                        'pk': factura.pk
+                    }
+                )
         else:
             id_proveedor = request.POST.get('proveedor')
             proveedor = Proveedor.objects.get(pk=id_proveedor)
@@ -85,38 +108,35 @@ def ajax_save_factura(request):
             preciounitario = request.POST.get('preciounitario')
             estadopago = request.POST.get('estadopago')
 
-            detalle_factura = DetalleFactura.objects.get(pk=id_detalle_factura)
-            detalle_factura.obra = obra
-            detalle_factura.proveedor = proveedor
-            detalle_factura.rubro = rubro
-            detalle_factura.unidad = unidad
-            detalle_factura.cantidad = cantidad
-            detalle_factura.preciounitario = preciounitario
-            detalle_factura.estadopago = estadopago
-            detalle_factura.usuario = usuario
-            detalle_factura.save()
+            try:
+                detalle_factura = DetalleFactura.objects.get(pk=id_detalle_factura)
+                detalle_factura.obra = obra
+                detalle_factura.proveedor = proveedor
+                detalle_factura.rubro = rubro
+                detalle_factura.unidad = unidad
+                detalle_factura.cantidad = cantidad
+                detalle_factura.preciounitario = preciounitario
+                detalle_factura.estadopago = estadopago
+                detalle_factura.usuario = usuario
+                detalle_factura.save()
+                
+                return JsonResponse(
+                    {
+                        'message': 'Datos Guardados.',
+                        'status': 200,
+                        'pk': factura.pk
+                    })
 
+            except:
+                return JsonResponse(
+                    {
+                        'message': 'Ha ocurrido un error.',
+                        'status': 500,
+                        'pk': factura.pk
+                    }
+                )
 
-        return JsonResponse(
-            {
-                'message': 'Datos Guardados.',
-                'status': 200,
-                'pk': factura.pk
-            })
-    
     return JsonResponse({'message': 'Invalid request.'}, status=400)
-
-
-
-def ajax_update_factura(request):
-    if request.method == "POST" and request.is_ajax():
-
-        preciounitario = request.POST.get('preciounitario')
-        
-        return JsonResponse({'message': 'Data saved successfully.'}, status=200)
-    
-    return JsonResponse({'message': 'Invalid request.'}, status=400)
-
 
 
 def factura_new(request):

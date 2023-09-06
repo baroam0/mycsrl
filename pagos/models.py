@@ -41,8 +41,7 @@ class Rubro(models.Model):
 class Factura(models.Model):
     fecha = models.DateField(auto_now=True)
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
-    obra = models.ForeignKey(Obra, on_delete=models.CASCADE)
-
+    obra = models.OneToOneField(Obra, on_delete=models.CASCADE, unique=True)
 
     def __str__(self):
         return str(self.pk)
