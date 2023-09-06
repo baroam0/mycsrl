@@ -31,7 +31,7 @@ def listadofactura(request):
 
 
 def ajax_save_factura(request):
-    if request.method == "POST" and request.is_ajax():
+    if request.method == "POST":
         id_detalle_factura = int(request.POST.get('id_detalle_factura'))
         id_factura = int(request.POST.get('id_factura'))
         usuario = request.user
