@@ -6,7 +6,8 @@ from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 
-from django.db.models import F
+from django.db.models import F, Sum
+
 
 from .forms import DetalleFacturaForm, FacturaForm, ObraForm, ProveedorForm, RubroForm, OrdenPagoForm
 from .models import Factura, DetalleFactura, Obra, Proveedor, Rubro, OrdenPago
@@ -146,7 +147,6 @@ def factura_edit(request, pk):
     factura = Factura.objects.get(pk=pk)
     detallefactura = DetalleFactura.objects.filter(
         factura=factura).annotate(preciototal= F('cantidad') * F('preciounitario'))
-   
 
     if request.POST:
         form = FacturaForm(request.POST, instance=factura)
@@ -430,6 +430,11 @@ def listadoordenpago(request, pk):
     detallefactura = DetalleFactura.objects.get(pk=pk)
     ordenespagos = OrdenPago.objects.filter(detallefactura=detallefactura)
 
+    total = 0
+
+    for op in ordenespagos:
+        total = total + op.monto
+    
     return render(
         request,
         'pagos/ordenpago_list.html',
@@ -438,7 +443,8 @@ def listadoordenpago(request, pk):
             'obra': detallefactura.factura.obra,
             'proveedor': detallefactura.proveedor,
             'rubro': detallefactura.rubro,
-            'pk': pk
+            'pk': pk,
+            'total': total
         })
 
 
