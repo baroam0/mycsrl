@@ -18,16 +18,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-from .views import home, loginusuario, salir
-
+from .views import banco_edit, banco_new, listadobanco
 
 urlpatterns = [
-    path('', home, name="home"),
-    path('salir/', salir),
-    path('login/', loginusuario, name="login"),
-    path('admin/', admin.site.urls),
-    path('user/', include("usuariosadm.urls")),
-    path('pagos/', include("pagos.urls")),
-    path('bancos/', include("bancos.urls")),
-    path('facturas/', include("facturas.urls")),
+    path('listado/', listadobanco, name='bancolistado'),
+    path('new/', banco_new, name='banconew'),
+    path('edit/<int:pk>', banco_edit, name='bancoedit'),
 ]
