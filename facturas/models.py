@@ -2,10 +2,14 @@
 from django.db import models
 
 from pagos.models import Obra, Proveedor, Rubro
+from usuariosadm.models import UserAdm
 
 
 class IngresoBruto(models.Model):
     retencion = models.DecimalField(decimal_places=2, max_digits=5)
+    usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
+
     def __str__(self):
         return str(self.retencion)
     class Meta:
@@ -14,6 +18,9 @@ class IngresoBruto(models.Model):
 
 class Iva(models.Model):
     retencion = models.DecimalField(decimal_places=2, max_digits=5)
+    usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
+
     def __str__(self):
         return str(self.retencion)
     class Meta:
@@ -22,6 +29,9 @@ class Iva(models.Model):
 
 class Unidad(models.Model):
     descripcion = models.CharField(max_length=100, unique=True)
+    usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
+    
     def __str__(self):
         return self.descripcion
     class Meta:
@@ -32,6 +42,8 @@ class FacturaProveedor(models.Model):
     comprobante = models.CharField(max_length=50, blank=False, null=False)
     fecha = models.DateField()
     proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
+
     def __str__(self):
         return str(self.fecha)
     class Meta:
@@ -55,6 +67,7 @@ class DetalleFacturaProveedor(models.Model):
     
     descuento = models.DecimalField(decimal_places=4,max_digits=20)
     descuentoporcentaje = models.DecimalField(decimal_places=4,max_digits=20)
+    usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
 
     def __str__(self):
         return str(self.factura) + ' - ' + self.rubro
