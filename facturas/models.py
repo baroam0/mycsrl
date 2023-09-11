@@ -28,7 +28,7 @@ class Unidad(models.Model):
         verbose_name_plural = "Unidades"
 
 
-class Factura(models.Model):
+class FacturaProveedor(models.Model):
     comprobante = models.CharField(max_length=50, blank=False, null=False)
     fecha = models.DateField()
     proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
@@ -38,8 +38,8 @@ class Factura(models.Model):
         verbose_name_plural = "Facturas"
 
 
-class DetalleFactura(models.Model):
-    factura = models.ForeignKey(Factura)
+class DetalleFacturaProveedor(models.Model):
+    factura = models.ForeignKey(FacturaProveedor, on_delete=models.CASCADE)
     obra = models.ForeignKey(Obra, on_delete=models.CASCADE)
     rubro = models.ForeignKey(Rubro, on_delete=models.CASCADE)
     unidad = models.ForeignKey(
