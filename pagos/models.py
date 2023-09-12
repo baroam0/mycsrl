@@ -27,7 +27,6 @@ class Proveedor(models.Model):
 
 
 class Rubro(models.Model):
-    #proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
     descripcion = models.CharField(max_length=200, unique=True)
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
 

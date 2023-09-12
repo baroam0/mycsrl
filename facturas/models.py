@@ -7,7 +7,6 @@ from usuariosadm.models import UserAdm
 
 class IngresoBruto(models.Model):
     retencion = models.DecimalField(decimal_places=2, max_digits=5)
-    usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
 
     def __str__(self):
@@ -18,7 +17,6 @@ class IngresoBruto(models.Model):
 
 class Iva(models.Model):
     retencion = models.DecimalField(decimal_places=2, max_digits=5)
-    usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
 
     def __str__(self):
@@ -29,7 +27,6 @@ class Iva(models.Model):
 
 class Unidad(models.Model):
     descripcion = models.CharField(max_length=100, unique=True)
-    usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
     
     def __str__(self):
@@ -40,8 +37,9 @@ class Unidad(models.Model):
 
 class FacturaProveedor(models.Model):
     comprobante = models.CharField(max_length=50, blank=False, null=False)
-    fecha = models.DateField()
-    proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
+    fecha = models.DateField(null=True, blank=False)
+    proveedor = models.ForeignKey(
+        Proveedor, on_delete=models.CASCADE, null=True, blank=False)
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
 
     def __str__(self):
@@ -70,7 +68,7 @@ class DetalleFacturaProveedor(models.Model):
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
 
     def __str__(self):
-        return str(self.factura) + ' - ' + self.rubro
+        return str(self.factura) + ' - ' + self.rubro.descripcion
 
     class Meta:
         verbose_name_plural = "Detalles Facturas"

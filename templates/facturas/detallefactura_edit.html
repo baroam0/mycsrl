@@ -1,14 +1,14 @@
-{% extends 'base.html' %}
+
+{% extends 'base_nomenu.html' %}
 
 {% block content %}
-
     <div class="container">
 
         <br>
         <div class="row">
             <div class="col-sm-3"></div>
             <div class="col-sm-6">
-                <h3>Datos Factura - Nro Orden de Pago {{pk}} </h3>
+                <h3>Detalle Factura </h3>
             </div>
             <div class="col-sm-3"></div>
         </div>
@@ -17,32 +17,24 @@
             
             <div class="col-12">
                 <hr>
-                <form  method="POST">{% csrf_token %}
+                <form  method="POST" onsubmit="return xSubmit(this);">{% csrf_token %}
                     {{ form.as_p }}
 
                     <hr>
 
                     <div class="row">
-                        <div class="col-3">
+                        <div class="col-2">
                             <button class="btn btn-primary" id="btn-guardar" type="submit">
                                 <i class="fas fa-check"></i>
                                 Aceptar
                             </button>
                         </div>
 
-                        <div class="col-3">
-                            <button class="btn btn-secondary" id="btn-nuevo" type="button" onclick="NUevoDetalleFactura({{pk}})">
-                                <i class="fas fa-plus"></i>
-                                Agregar
-                            </button>
+                        <div class="col-8">
                         </div>
 
-                        <div class="col-3">
-
-                        </div>
-
-                        <div class="col-3">    
-                            <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="IrListadoBanco()">
+                        <div class="col-2">    
+                            <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="BotonCancelar()">
                                 <i class="far fa-times-circle"></i>
                                 Cancelar
                             </button>
@@ -51,40 +43,9 @@
                     <hr>
                 </form>
             </div>
-
-
-            <table class="table table-hover">
-                <thead>
-                    <tr>   
-                       
-                        <th>Obra</th>
-                        <th>Rubro</th>
-                        <th>Monto</th>
-                        <th>Usuario</th>
-                        <th>Accion</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {% for detallefactura in detallesfactura %}
-                    <tr>
-                        
-                        <td>{{ detallefactura.obra }} </td>
-                        <td>{{ detallefactura.rubro }} </td>
-                        <td>{{ detallefactura.preciototal }} </td>
-                        <td>{{ detallefactura.usuario }}</td>
-
-                        <td>
-                            <button type="button" class="btn btn-link btn-sm" onclick="VentanaDetalleFactura({{detallefactura.pk}})">
-                                <i class="fas fa-pencil-alt"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-
+            
         </div>
+        
     </div>
 
 {% endblock %}
@@ -118,24 +79,30 @@
             });
         }
 
+        function BotonCancelar(){
+            window.close();
+        }
+
+        function xSubmit (frm) {
+            alert("Se ha grabado los datos.");
+            frm.submit();
+            window.close();
+            return false;
+        } 
+
 
         $(document).ready(function () {
-            TranslateDatepickerToEs();       
+            TranslateDatepickerToEs();
         });
 
     
+    </script>
+    
+    
+    <script>
         function IrListadoBanco() {
             window.location.replace("/bancos/listado");
         }
-
-        function NUevoDetalleFactura(id){
-            window.open("/facturas/detalle/nuevo/" + id, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=700,height=700"); 
-        }
-
-        function VentanaDetalleFactura(id){
-            window.open("/facturas/detalle/editar/" + id, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=700,height=700"); 
-        }
-
     </script>
 
 {% endblock %}
