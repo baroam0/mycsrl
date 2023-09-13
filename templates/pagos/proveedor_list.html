@@ -50,7 +50,9 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>Descripcion</th>
+                        <th>Razon Social</th>
+                        <th>Nombre Fantasia</th>
+                        <th>CUIT</th>
                         <th>Usuario</th>
                         <th>Accion</th>
                     </tr>
@@ -60,7 +62,9 @@
                     {% for resultado in resultados %}
                     <tr>
    
-                        <td>{{resultado.descripcion.upper }}</td>
+                        <td>{{resultado.razonsocial.upper }}</td>
+                        <td>{{resultado.nombrefantasia.upper }}</td>
+                        <td>{{resultado.cuit}} </td>
                         <td>{{resultado.usuario}} </td>
 
                         <td>

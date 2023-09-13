@@ -98,11 +98,37 @@ class ObraForm(forms.ModelForm):
 
 
 class ProveedorForm(forms.ModelForm):
-   
-    descripcion = forms.CharField(
-        label="Descripcion"
+
+    nombrefantasia = forms.CharField(
+        label="Nombre Fantasia",
+        required = True
     )
-    
+
+    razonsocial = forms.CharField(
+        label="Razon Social",
+        required = True
+    )
+
+    cuit = forms.CharField(
+        label="CUIT",
+        required = False
+    )
+
+    domicilio = forms.CharField(
+        label="Domicilio",
+        required = False
+    )
+
+    banco = forms.ModelChoiceField(
+        queryset = Banco.objects.all(),
+        required = False
+    )
+
+    cbu = forms.CharField(
+        label="CBU", 
+        required = False
+    )
+
     def __init__(self, *args, **kwargs):
         super(ProveedorForm, self).__init__(*args, **kwargs)
         for field in iter(self.fields):
@@ -112,7 +138,9 @@ class ProveedorForm(forms.ModelForm):
 
     class Meta:
         model = Proveedor
-        fields = ["descripcion"]
+        fields = [
+            "nombrefantasia", "razonsocial", "cuit",  "domicilio", "banco", "cbu"
+        ]
 
 
 class RubroForm(forms.ModelForm):

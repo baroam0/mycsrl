@@ -6,8 +6,7 @@ from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 
-from django.db.models import F, Sum
-
+from django.db.models import F, Sum, Q
 
 from .forms import DetalleFacturaForm, FacturaForm, ObraForm, ProveedorForm, RubroForm, OrdenPagoForm
 from .models import Factura, DetalleFactura, Obra, Proveedor, Rubro, OrdenPago
@@ -287,7 +286,10 @@ def listadoproveedor(request):
 
     if "txtBuscar" in request.GET:
         parametro = request.GET.get('txtBuscar')
-        proveedores = Proveedor.objects.filter(descripcion__contains=parametro)
+        proveedores = Proveedor.objects.filter(
+                    Q(razonsocial__icontains=parametro) |
+                    Q(nombrefantasia__contains=parametro)
+                ).order_by('pk')
     else:
         proveedores = Proveedor.objects.all()
     paginador = Paginator(proveedores, 20)

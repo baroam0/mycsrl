@@ -16,7 +16,15 @@ class Obra(models.Model):
 
 
 class Proveedor(models.Model):
-    descripcion = models.CharField(max_length=200, unique=True)
+    nombrefantasia = models.CharField(max_length=200, unique=True, null=True, blank=True)
+    razonsocial = models.CharField(max_length=200, unique=True, null=True, blank=True)
+    domicilio = models.CharField(max_length=200, null=True, blank=True)
+    cuit = models.CharField(max_length=20, null=True, blank=True, unique=True)
+    banco = models.ForeignKey(
+        Banco, on_delete=models.CASCADE, null=True, blank=True)
+    
+    cbu = models.CharField(max_length=200, null=True, blank=True)
+
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
 
     def __str__(self):
