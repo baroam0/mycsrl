@@ -52,6 +52,7 @@ class DetalleFacturaProveedor(models.Model):
     factura = models.ForeignKey(FacturaProveedor, on_delete=models.CASCADE)
     obra = models.ForeignKey(Obra, on_delete=models.CASCADE)
     rubro = models.ForeignKey(Rubro, on_delete=models.CASCADE)
+    descripcion = models.CharField(max_length=250, null=True, blank=True)
     unidad = models.ForeignKey(
         Unidad, on_delete=models.CASCADE)
     cantidad = models.DecimalField(

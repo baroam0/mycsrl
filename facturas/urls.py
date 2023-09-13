@@ -22,7 +22,9 @@ from django.urls import include, path
 from .views import (
     listadounidad, nuevaunidad, editarunidad,
     listadofactura, nuevafactura, editarfactura,
-    editardetallefactura, nuevodetallefactura
+    editardetallefactura, nuevodetallefactura,
+    ajaxnuevafacturadetalle, ajaxmostrarformdetallefactura,
+    ajaxloaddetallefactura
     )
 
 
@@ -35,5 +37,8 @@ urlpatterns = [
     path('editar/<int:pk>', editarfactura, name='facturaeditar'),
     path('detalle/editar/<int:pk>', editardetallefactura, name='detallefacturaeditar'),
     path('detalle/nuevo/<int:pk>', nuevodetallefactura, name='detallefacturanuevo'),
+    path('ajax/savenewdetail/', ajaxnuevafacturadetalle, name='ajaxfacturadetailnew'),
+    path('ajax/showdetailform/', ajaxmostrarformdetallefactura, name='ajaxshowdetailform'),
+    path('ajax/cargarfacturadetail/<int:pk>', ajaxloaddetallefactura, name='ajaxcargardetallefactura')
 ]
 

@@ -68,4 +68,4 @@ class DetalleFacturaProveedorForm(forms.ModelForm):
 
     class Meta:
         model = DetalleFacturaProveedor 
-        fields = ["obra", "rubro", "unidad", "cantidad", "preciounitario", "iva", "ingresosbrutos", "descuento", "descuentoporcentaje" ]
+        fields = ["obra", "rubro", "descripcion" ,"unidad", "cantidad", "preciounitario", "iva", "ingresosbrutos", "descuento", "descuentoporcentaje" ]

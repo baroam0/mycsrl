@@ -8,10 +8,19 @@
         <div class="row">
             <div class="col-sm-3"></div>
             <div class="col-sm-6">
-                <h3>Datos Factura - Nro Orden de Pago {{pk}} </h3>
+                <h3>Datos Factura - Nro Orden de Pago {{pk}}. </h3>
             </div>
             <div class="col-sm-3"></div>
         </div>
+
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{message.tags}}" role="alert">
+                    {{message}}
+                </div>
+            {% endfor %}
+        {% endif %}
 
         <div class="row">
             
@@ -23,7 +32,7 @@
                     <hr>
 
                     <div class="row">
-                        <div class="col-3">
+                        <div class="col-2">
                             <button class="btn btn-primary" id="btn-guardar" type="submit">
                                 <i class="fas fa-check"></i>
                                 Aceptar
@@ -31,17 +40,19 @@
                         </div>
 
                         <div class="col-3">
-                            <button class="btn btn-secondary" id="btn-nuevo" type="button" onclick="NUevoDetalleFactura({{pk}})">
+                        </div>
+                        
+                        <div class="col-2">
+                            <button class="btn btn-secondary" id="btn-nuevo" type="button" onclick="OpenModalNew({{pk}});">
                                 <i class="fas fa-plus"></i>
                                 Agregar
                             </button>
                         </div>
 
                         <div class="col-3">
-
                         </div>
 
-                        <div class="col-3">    
+                        <div class="col-2">    
                             <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="IrListadoBanco()">
                                 <i class="far fa-times-circle"></i>
                                 Cancelar
@@ -55,8 +66,7 @@
 
             <table class="table table-hover">
                 <thead>
-                    <tr>   
-                       
+                    <tr>
                         <th>Obra</th>
                         <th>Rubro</th>
                         <th>Monto</th>
@@ -75,7 +85,7 @@
                         <td>{{ detallefactura.usuario }}</td>
 
                         <td>
-                            <button type="button" class="btn btn-link btn-sm" onclick="VentanaDetalleFactura({{detallefactura.pk}})">
+                            <button type="button" class="btn btn-link btn-sm" onclick="OpenDataModal({{detallefactura.pk}})">
                                 <i class="fas fa-pencil-alt"></i>
                             </button>
                         </td>
@@ -85,6 +95,35 @@
             </table>
 
         </div>
+
+        <div class="modal fade" id="modal-default">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">Items de Factura</h4>
+                  <!--button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button-->
+                </div>
+
+                <div class="modal-body">
+                    <div id="form-new-detail">
+                        <form  method="POST">
+                        </form>
+                    </div>
+                </div>
+
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-primary" onclick="SaveDataModal();">Guardar</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                </div>
+              </div>
+              <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+          </div>
+          <!-- /.modal -->
+
     </div>
 
 {% endblock %}
@@ -119,18 +158,126 @@
         }
 
 
+        function LoadEmptyDetailForm(){
+            $.ajax({
+                url: '/facturas/ajax/showdetailform/',
+                type: 'GET',
+                success: function(response){
+                    $('#form-new-detail').html(response.form_html);
+                    //$('#id_obra').select2();
+                    //$('#id_rubro').select2();
+                },
+                error: function(error){
+                    console.log(error);
+                }
+            })
+        }
+
+        function LoadDetailForm(pk){
+            $.ajax({
+                url: '/facturas/ajax/cargarfacturadetail/' + pk,
+                type: 'GET',
+                success: function(response){
+                    $('#form-new-detail').html(response.form_html);
+                },
+                error: function(error){
+                    console.log(error);
+                }
+            })
+
+        }
+
         $(document).ready(function () {
-            TranslateDatepickerToEs();       
+            TranslateDatepickerToEs();
+            $("#id_proveedor").select2();
         });
 
-    
+
+        function OpenModalNew(){
+            $('#form-new-detail').html('');
+            LoadEmptyDetailForm();
+            $('#modal-default').modal('show');
+        }
+
+
+        function OpenDataModal(pk){
+            $('#form-new-detail').html('');
+            LoadEmptyDetailForm();
+            LoadDetailForm(pk);
+
+            $('#modal-default').modal('show');
+        }
+
+
+        function SaveDataModal(){
+            //var formData = $("#form-new-detail").serializeArray();
+
+            var id_facturaproveedor = {{pk}};
+            var id_fecha = $("#id_fecha").val();
+            var id_proveedor = $("#id_proveedor").val();
+            var comprobante = $("#id_comprobante").val();
+
+            var id_obra = $("#id_obra").val();
+            var id_rubro = $("#id_rubro").val();
+            var id_unidad = $("#id_unidad").val();
+            var id_cantidad = $("#id_cantidad").val();
+            var id_preciounitario = $("#id_preciounitario").val();
+            var id_iva = $("#id_iva").val();
+            var id_ingresosbrutos = $("#id_ingresosbrutos").val(); 
+            var id_descuento = $("#id_descuento").val();
+            var id_descuentoporcentaje = $("#id_descuentoporcentaje").val();
+
+            var data = {
+                "id_factura": id_facturaproveedor,
+                "fecha": id_fecha,
+                "id_proveedor": id_proveedor , 
+                "comprobante": comprobante, 
+                "id_obra": id_obra, 
+                "id_rubro": id_rubro, 
+                "id_unidad": id_unidad,
+                "cantidad": id_cantidad, 
+                "preciounitario": id_preciounitario,
+                "iva": id_iva, 
+                "ingresosbrutos": id_ingresosbrutos, 
+                "descuento": id_descuento, 
+                "descuentoporcentaje": id_descuentoporcentaje,
+            }
+
+            var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+
+            $.ajax({
+                type: "POST",
+                url: "/facturas/ajax/savenewdetail/",
+                dataType: 'json',
+                //data: JSON.stringify(data),
+                data: data,
+                beforeSend: function (xhr){
+                    xhr.setRequestHeader('X-CSRFToken', csrftoken);
+                },
+                success: function (response) {
+                    if(response.status == 200){
+                        window.location.replace("/facturas/editar/" + response.pk);
+                    }else{
+                        alert(response.message)
+                    }
+                },
+                error: function (xhr, errmsg, err) {
+                    console.log(xhr.status + ": " + xhr.responseText);
+                }
+            });
+
+        }
+
+
         function IrListadoBanco() {
             window.location.replace("/bancos/listado");
         }
 
+
         function NUevoDetalleFactura(id){
             window.open("/facturas/detalle/nuevo/" + id, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=700,height=700"); 
         }
+
 
         function VentanaDetalleFactura(id){
             window.open("/facturas/detalle/editar/" + id, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=700,height=700"); 

@@ -1,13 +1,16 @@
 
 from django.contrib import messages
+from django.core import serializers
 
 from django.core.paginator import Paginator
 from django.db.models import F
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 
 from .forms import UnidadForm, FacturaProveedorForm, DetalleFacturaProveedorForm
 
-from .models import Unidad, FacturaProveedor, DetalleFacturaProveedor
+from .models import Unidad, FacturaProveedor, DetalleFacturaProveedor, IngresoBruto, Iva
+from pagos.models import Proveedor, Obra, Rubro
 
 
 def listadounidad(request):
@@ -112,7 +115,6 @@ def editarfactura(request, pk):
     factura = FacturaProveedor.objects.get(pk=pk)
     detallesfactura = DetalleFacturaProveedor.objects.filter(factura=factura).annotate(preciototal= F('cantidad') * F('preciounitario'))
 
-
     if request.POST:
         form = FacturaProveedorForm(request.POST, instance=factura)
         if form.is_valid():
@@ -121,18 +123,21 @@ def editarfactura(request, pk):
             factura.usuario = usuario
             factura.save()
             messages.success(request, "Se ha modificado los datos.")
-            return redirect('/facturas/listado')
+
+            return redirect('/facturas/editar/' + str(pk))
         else:
             messages.warning(request, form.errors)
-            return redirect('/facturas/listado')
+            return redirect('/facturas/editar/' + str(pk))
     else:
         form = FacturaProveedorForm(instance=factura)
+        formdetallefactura = DetalleFacturaProveedorForm()
         return render(
             request,
             'facturas/factura_edit.html',
             {
                 "form": form,
                 "detallesfactura": detallesfactura,
+                "formdetallefactura": formdetallefactura,
                 "pk": pk
             }
         )
@@ -141,7 +146,6 @@ def editarfactura(request, pk):
 
 def nuevodetallefactura(request,pk):
     factura = FacturaProveedor.objects.get(pk=pk)
-    print(request.POST)
     if request.POST:
         usuario = request.user
         form =  DetalleFacturaProveedorForm(request.POST)
@@ -170,7 +174,6 @@ def editardetallefactura(request, pk):
     if request.POST:
         form = DetalleFacturaProveedorForm(request.POST, instance=detallefactura)
         if form.is_valid():
-            print("///////////////////")   
             detallefactura = form.save(commit=False)
             usuario = request.user
             detallefactura.usuario = usuario
@@ -193,5 +196,123 @@ def editardetallefactura(request, pk):
         )
 
 
+def ajaxmostrarformdetallefactura(request):
+    form = DetalleFacturaProveedorForm()
+    form_html = form.as_p()  # or form.as_table() for table representation
+    return JsonResponse({'form_html': form_html})
 
+
+def ajaxnuevafacturadetalle(request):
+
+    if request.method == "POST":
+        factura = FacturaProveedor.objects.get(pk=request.POST.get("id_factura"))
+        fecha = request.POST.get("id_fecha")
+        proveedor = Proveedor.objects.get(pk=request.POST.get("id_proveedor"))  
+        comprobante = request.POST.get("comprobante")
+        obra = Obra.objects.get(pk=request.POST.get("id_obra"))
+        rubro = Rubro.objects.get(pk=request.POST.get("id_rubro")) 
+        cantidad = request.POST.get("cantidad")
+        unidad = Unidad.objects.get(pk=request.POST.get("id_unidad"))
+        preciounitario = request.POST.get("preciounitario")
+        iva = Iva.objects.get(pk=request.POST.get("iva"))
+        ingresosbrutos = IngresoBruto.objects.get(pk=request.POST.get("ingresosbrutos")) 
+        descuento = request.POST.get("descuento")
+        descuentoporcentaje = request.POST.get("descuentoporcentaje")
+
+        try:
+            detallefacturaproveedor = DetalleFacturaProveedor(
+                factura = factura,
+                obra = obra,
+                rubro = rubro,
+                unidad = unidad,
+                cantidad = cantidad,
+                preciounitario = preciounitario,
+                iva = iva,
+                ingresosbrutos = ingresosbrutos,
+                descuento = descuento,
+                descuentoporcentaje = descuentoporcentaje,
+                usuario = request.user 
+            )
+
+            detallefacturaproveedor.save()
+
+            ultimo_detallefactura = DetalleFacturaProveedor.objects.latest("pk")
+
+            return JsonResponse(
+                        {
+                            'message': 'Ok.',
+                            'status': 200,
+                            'pk': ultimo_detallefactura.factura.pk
+                        }
+                    )
+        except Exception as e:
+            return JsonResponse(
+                        {
+                            'message': str(e),
+                            'status': 500
+                        }
+                    )
+
+
+def ajaxeditarfacturadetalle(request):
+
+    if request.method == "POST":
+        factura = FacturaProveedor.objects.get(pk=request.POST.get("id_factura"))
+        fecha = request.POST.get("id_fecha")
+        proveedor = Proveedor.objects.get(pk=request.POST.get("id_proveedor"))  
+        comprobante = request.POST.get("comprobante")
+        obra = Obra.objects.get(pk=request.POST.get("id_obra"))
+        rubro = Rubro.objects.get(pk=request.POST.get("id_rubro")) 
+        cantidad = request.POST.get("cantidad")
+        unidad = Unidad.objects.get(pk=request.POST.get("id_unidad"))
+        preciounitario = request.POST.get("preciounitario")
+        iva = Iva.objects.get(pk=request.POST.get("iva"))
+        ingresosbrutos = IngresoBruto.objects.get(pk=request.POST.get("ingresosbrutos")) 
+        descuento = request.POST.get("descuento")
+        descuentoporcentaje = request.POST.get("descuentoporcentaje")
+
+        try:
+            detallefacturaproveedor = DetalleFacturaProveedor(
+                factura = factura,
+                obra = obra,
+                rubro = rubro,
+                unidad = unidad,
+                cantidad = cantidad,
+                preciounitario = preciounitario,
+                iva = iva,
+                ingresosbrutos = ingresosbrutos,
+                descuento = descuento,
+                descuentoporcentaje = descuentoporcentaje,
+                usuario = request.user 
+            )
+
+            detallefacturaproveedor.save()
+
+            ultimo_detallefactura = DetalleFacturaProveedor.objects.latest("pk")
+
+            return JsonResponse(
+                        {
+                            'message': 'Ok.',
+                            'status': 200,
+                            'pk': ultimo_detallefactura.factura.pk
+                        }
+                    )
+        except Exception as e:
+            return JsonResponse(
+                        {
+                            'message': str(e),
+                            'status': 500
+                        }
+                    )
+
+
+def ajaxloaddetallefactura(request, pk):
+    if request.method == "GET":
+        detallefactura = DetalleFacturaProveedor.objects.get(pk=pk)
+        form = DetalleFacturaProveedorForm(instance=detallefactura)
+        form_html = form.as_p()
+        return JsonResponse({'form_html': form_html})
+
+
+        
 # Create your views here.
