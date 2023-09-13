@@ -7,10 +7,82 @@ from django.db.models import F
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 
-from .forms import UnidadForm, FacturaProveedorForm, DetalleFacturaProveedorForm
+from .forms import UnidadForm, FacturaProveedorForm, DetalleFacturaProveedorForm, IvaForm
 
 from .models import Unidad, FacturaProveedor, DetalleFacturaProveedor, IngresoBruto, Iva
 from pagos.models import Proveedor, Obra, Rubro
+
+
+def listadoiva(request):
+    if "txtBuscar" in request.GET:
+        parametro = request.GET.get('txtBuscar')
+        ivas = Iva.objects.filter(descripcion__contains=parametro)
+    else:
+        ivas = Iva.objects.all()
+    paginador = Paginator(ivas, 20)
+
+    if "page" in request.GET:
+        page = request.GET.get('page')
+    else:
+        page = 1
+    resultados = paginador.get_page(page)
+    return render(
+        request,
+        'facturas/iva_list.html',
+        {
+            'resultados': resultados
+        })
+
+
+def nuevoiva(request):
+    if request.POST:
+        usuario = request.user
+        form = IvaForm(request.POST)
+        if form.is_valid():
+            iva = form.save(commit=False)
+            iva.usuario = usuario
+            iva.save()
+            messages.success(request, "Se ha grabado los datos.")
+            return redirect('/facturas/iva/listado')
+        else:
+            messages.warning(request, form.errors)
+            return redirect('/facturas/iva/listado')
+    else:
+        form = IvaForm()
+        return render(
+            request,
+            'facturas/iva_edit.html',
+            {"form": form}
+        )
+
+
+def editariva(request, pk):
+    consulta = Iva.objects.get(pk=pk)
+
+    if request.POST:
+        form = IvaForm(request.POST, instance=consulta)
+        if form.is_valid():
+            iva = form.save(commit=False)
+            usuario = request.user
+            iva.usuario = usuario
+            iva.save()
+            messages.success(request, "Se ha modificado los datos.")
+            return redirect('/facturas/iva/listado')
+        else:
+            messages.warning(request, form.errors)
+            return redirect('/facturas/iva/listado')
+    else:
+        form = IvaForm(instance=consulta)
+        return render(
+            request,
+            'facturas/iva_edit.html',
+            {"form": form}
+        )
+
+
+###############################################################
+################### UNIDAD ###################################
+###############################################################
 
 
 def listadounidad(request):
