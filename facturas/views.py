@@ -7,11 +7,86 @@ from django.db.models import F
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 
-from .forms import UnidadForm, FacturaProveedorForm, DetalleFacturaProveedorForm, IvaForm
+from .forms import UnidadForm, FacturaProveedorForm, DetalleFacturaProveedorForm, IvaForm, IngresoBrutoForm
 
 from .models import Unidad, FacturaProveedor, DetalleFacturaProveedor, IngresoBruto, Iva
 from pagos.models import Proveedor, Obra, Rubro
 
+
+###############################################################
+################### INGRESOS BRUTOS ###########################
+###############################################################
+
+def listadoingresobruto(request):
+    if "txtBuscar" in request.GET:
+        parametro = request.GET.get('txtBuscar')
+        ingresobruto = IngresoBruto.objects.filter(descripcion__contains=parametro)
+    else:
+        ingresobruto = IngresoBruto.objects.all()
+    paginador = Paginator(ingresobruto, 20)
+
+    if "page" in request.GET:
+        page = request.GET.get('page')
+    else:
+        page = 1
+    resultados = paginador.get_page(page)
+    return render(
+        request,
+        'facturas/ingresobruto_list.html',
+        {
+            'resultados': resultados
+        })
+
+
+def nuevoingresobruto(request):
+    if request.POST:
+        usuario = request.user
+        form = IngresoBrutoForm(request.POST)
+        if form.is_valid():
+            ingresobruto = form.save(commit=False)
+            ingresobruto.usuario = usuario
+            ingresobruto.save()
+            messages.success(request, "Se ha grabado los datos.")
+            return redirect('/facturas/ingresobruto/listado')
+        else:
+            messages.warning(request, form.errors)
+            return redirect('/facturas/ingresobruto/listado')
+    else:
+        form = IngresoBrutoForm()
+        return render(
+            request,
+            'facturas/ingresobruto_edit.html',
+            {"form": form}
+        )
+
+
+def editaringresobruto(request, pk):
+    consulta = IngresoBruto.objects.get(pk=pk)
+
+    if request.POST:
+        form = IngresoBrutoForm(request.POST, instance=consulta)
+        if form.is_valid():
+            ingresobruto = form.save(commit=False)
+            usuario = request.user
+            ingresobruto.usuario = usuario
+            ingresobruto.save()
+            messages.success(request, "Se ha modificado los datos.")
+            return redirect('/facturas/ingresobruto/listado')
+        else:
+            messages.warning(request, form.errors)
+            return redirect('/facturas/ingresobruto/listado')
+    else:
+        form = IngresoBrutoForm(instance=consulta)
+        return render(
+            request,
+            'facturas/ingresobruto_edit.html',
+            {"form": form}
+        )
+
+
+###############################################################
+################### IVA ###################################
+###############################################################
 
 def listadoiva(request):
     if "txtBuscar" in request.GET:

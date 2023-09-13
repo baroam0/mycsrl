@@ -6,6 +6,24 @@ from .models import Unidad, FacturaProveedor, DetalleFacturaProveedor, Iva, Ingr
 from pagos.models import Proveedor, Obra, Rubro
 
 
+class IngresoBrutoForm(forms.ModelForm):
+
+    retencion = forms.DecimalField(
+        label="Valor Retencion Ingreso Bruto"
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(IngresoBrutoForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+
+    class Meta:
+        model = IngresoBruto
+        fields = ["retencion"]
+
+
 class IvaForm(forms.ModelForm):
 
     retencion = forms.DecimalField(

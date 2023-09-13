@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-sm-4"></div>
             <div class="col-sm-4">
-                <h2>Datos del Banco.</h2>
+                <h2>Valor Ingreso Bruto.</h2>
             </div>
             <div class="col-sm-4"></div>
         </div>
@@ -34,22 +34,17 @@
                         </div>
 
                         <div class="col-2">    
-                            <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="IrListadoBanco()">
+                            <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="Volver()">
                                 <i class="far fa-times-circle"></i>
                                 Cancelar
                             </button>
-                        </div>                        
+                        </div>
                     </div>
                     <hr>
                 </form>
-            </div>
-            
+            </div>    
         </div>
-        
     </div>
-
-
-    
 
 {% endblock %}
 
@@ -57,17 +52,11 @@
 {% block js_extra %}
 
     <script>
-        $(document).ready(function () {
-            $('#id_banco').select2();
+        $(document).ready(function () {            
         });
 
-    
-    </script>
-    
-    
-    <script>
-        function IrListadoBanco() {
-            window.location.replace("/bancos/listado");
+        function Volver() {
+            window.location.replace("/facturas/ingresobruto/listado");
         }
     </script>
 
