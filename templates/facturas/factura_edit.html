@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-sm-3"></div>
             <div class="col-sm-6">
-                <h3>Datos Factura - Nro Orden de Pago {{pk}}. </h3>
+                <h3>Datos Factura - Nro de Orden {{pk}}. </h3>
             </div>
             <div class="col-sm-3"></div>
         </div>
@@ -63,6 +63,8 @@
                 </form>
             </div>
 
+            <h4>Total Factura: {{ totalfactura | floatformat:4 }}</h4>
+
 
             <table class="table table-hover">
                 <thead>
@@ -81,7 +83,7 @@
                         
                         <td>{{ detallefactura.obra }} </td>
                         <td>{{ detallefactura.rubro }} </td>
-                        <td>{{ detallefactura.preciototal }} </td>
+                        <td>$ {{ detallefactura.gettotal |floatformat:4 }} </td>
                         <td>{{ detallefactura.usuario }}</td>
 
                         <td>
@@ -163,6 +165,7 @@
                 url: '/facturas/ajax/showdetailform/',
                 type: 'GET',
                 success: function(response){
+                    $('#form-new-detail').html('');
                     $('#form-new-detail').html(response.form_html);
                     //$('#id_obra').select2();
                     //$('#id_rubro').select2();
@@ -178,7 +181,9 @@
                 url: '/facturas/ajax/cargarfacturadetail/' + pk,
                 type: 'GET',
                 success: function(response){
+                    $('#form-new-detail').html('');
                     $('#form-new-detail').html(response.form_html);
+                    //$('#id_obra').select2();
                 },
                 error: function(error){
                     console.log(error);
@@ -194,18 +199,15 @@
 
 
         function OpenModalNew(){
-            $('#form-new-detail').html('');
-            LoadEmptyDetailForm();
             $('#modal-default').modal('show');
+            LoadEmptyDetailForm();
         }
 
 
         function OpenDataModal(pk){
-            $('#form-new-detail').html('');
+            $('#modal-default').modal('show');   
             LoadEmptyDetailForm();
             LoadDetailForm(pk);
-
-            $('#modal-default').modal('show');
         }
 
 
@@ -216,6 +218,8 @@
             var id_fecha = $("#id_fecha").val();
             var id_proveedor = $("#id_proveedor").val();
             var comprobante = $("#id_comprobante").val();
+
+            var descripcion = $("#id_descripcion").val();
 
             var id_obra = $("#id_obra").val();
             var id_rubro = $("#id_rubro").val();
@@ -234,6 +238,7 @@
                 "comprobante": comprobante, 
                 "id_obra": id_obra, 
                 "id_rubro": id_rubro, 
+                "descripcion": descripcion,
                 "id_unidad": id_unidad,
                 "cantidad": id_cantidad, 
                 "preciounitario": id_preciounitario,
@@ -242,6 +247,10 @@
                 "descuento": id_descuento, 
                 "descuentoporcentaje": id_descuentoporcentaje,
             }
+
+            console.log(data);
+
+            alert("peraaaa");
 
             var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
 

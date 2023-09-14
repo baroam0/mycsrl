@@ -257,10 +257,17 @@ def nuevafactura(request):
     return redirect('/facturas/editar/' + str(ultimafactura.pk))
 
 
+#preciototal= F('cantidad') * F('preciounitario') + ( F('cantidad') * F('preciounitario') * F('iva') / 100 ) 
 
 def editarfactura(request, pk):
     factura = FacturaProveedor.objects.get(pk=pk)
-    detallesfactura = DetalleFacturaProveedor.objects.filter(factura=factura).annotate(preciototal= F('cantidad') * F('preciounitario'))
+    detallesfactura = DetalleFacturaProveedor.objects.filter(
+        factura=factura
+    )
+
+    totalfactura = 0
+    for i in detallesfactura:
+        totalfactura = totalfactura + i.gettotal()
 
     if request.POST:
         form = FacturaProveedorForm(request.POST, instance=factura)
@@ -285,7 +292,8 @@ def editarfactura(request, pk):
                 "form": form,
                 "detallesfactura": detallesfactura,
                 "formdetallefactura": formdetallefactura,
-                "pk": pk
+                "pk": pk,
+                "totalfactura": totalfactura 
             }
         )
 
@@ -357,7 +365,8 @@ def ajaxnuevafacturadetalle(request):
         proveedor = Proveedor.objects.get(pk=request.POST.get("id_proveedor"))  
         comprobante = request.POST.get("comprobante")
         obra = Obra.objects.get(pk=request.POST.get("id_obra"))
-        rubro = Rubro.objects.get(pk=request.POST.get("id_rubro")) 
+        rubro = Rubro.objects.get(pk=request.POST.get("id_rubro"))
+        descripcion = request.POST.get("descripcion")
         cantidad = request.POST.get("cantidad")
         unidad = Unidad.objects.get(pk=request.POST.get("id_unidad"))
         preciounitario = request.POST.get("preciounitario")
@@ -366,11 +375,15 @@ def ajaxnuevafacturadetalle(request):
         descuento = request.POST.get("descuento")
         descuentoporcentaje = request.POST.get("descuentoporcentaje")
 
+        print("qqqqqqqqqqqqqqqqqqqqqqq")
+        print(descripcion)
+
         try:
             detallefacturaproveedor = DetalleFacturaProveedor(
                 factura = factura,
                 obra = obra,
                 rubro = rubro,
+                descripcion = descripcion,
                 unidad = unidad,
                 cantidad = cantidad,
                 preciounitario = preciounitario,

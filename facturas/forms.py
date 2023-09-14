@@ -81,8 +81,8 @@ class FacturaProveedorForm(forms.ModelForm):
 
 class DetalleFacturaProveedorForm(forms.ModelForm):
 
-    obra = forms.ModelChoiceField(label="Obra", queryset=Obra.objects.all())
-    rubro = forms.ModelChoiceField(label="Rubro", queryset=Rubro.objects.all())
+    obra = forms.ModelChoiceField(label="Obra", queryset=Obra.objects.all().order_by('descripcion'))
+    rubro = forms.ModelChoiceField(label="Rubro", queryset=Rubro.objects.all().order_by('descripcion'))
     unidad = forms.ModelChoiceField(label="Unidad", queryset=Unidad.objects.all())
     cantidad = forms.DecimalField(label="Cantidad")
     preciounitario = forms.DecimalField(label="Precio Unitario")

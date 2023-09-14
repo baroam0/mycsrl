@@ -28,7 +28,7 @@ class Proveedor(models.Model):
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.descripcion.upper()
+        return self.nombrefantasia.upper() + " - " + self.razonsocial.upper() 
 
     class Meta:
         verbose_name_plural = "Proveedores"

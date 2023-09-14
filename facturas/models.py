@@ -68,6 +68,14 @@ class DetalleFacturaProveedor(models.Model):
     descuentoporcentaje = models.DecimalField(decimal_places=4,max_digits=20)
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
 
+
+    def gettotal(self):
+        totalbruto = self.cantidad * self.preciounitario
+        totaldescuento = totalbruto - self.descuento - (totalbruto * self.descuentoporcentaje / 100 )
+        ivared = self.iva.retencion / 100
+        totaliva = totaldescuento + (totaldescuento * ivared)
+        return totaliva
+
     def __str__(self):
         return str(self.factura) + ' - ' + self.rubro.descripcion
 
