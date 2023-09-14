@@ -43,7 +43,7 @@
                         </div>
                         
                         <div class="col-2">
-                            <button class="btn btn-secondary" id="btn-nuevo" type="button" onclick="OpenModalNew({{pk}});">
+                            <button class="btn btn-secondary" id="btn-nuevo" type="button" onclick="AbrirVentana({{pk}})">
                                 <i class="fas fa-plus"></i>
                                 Agregar
                             </button>
@@ -89,7 +89,7 @@
                         <td>{{ detallefactura.usuario }}</td>
 
                         <td>
-                            <button type="button" class="btn btn-link btn-sm" onclick="OpenDataModal({{detallefactura.pk}})">
+                            <button type="button" class="btn btn-link btn-sm" onclick="AbrirVentana({{detallefactura.pk}})">
                                 <i class="fas fa-pencil-alt"></i>
                             </button>
                         </td>
@@ -355,6 +355,13 @@
 
         function Volver() {
             window.location.replace("/facturas/listado");
+        }
+
+
+        function AbrirVentana(pk){
+            var urldetallefactura = "/facturas/detalle/nuevo/" + pk;
+            window.open(urldetallefactura,"Ratting","width=650,height=650,left=150,top=200,toolbar=0,status=0,");
+
         }
 
     </script>

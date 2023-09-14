@@ -93,6 +93,10 @@
 
         $(document).ready(function () {
             TranslateDatepickerToEs();
+            window.onunload = function(){
+                window.opener.location.reload();
+                window.close(); 
+            };
         });
 
     

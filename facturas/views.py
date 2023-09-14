@@ -310,7 +310,6 @@ def editarfactura(request, pk):
             factura.usuario = usuario
             factura.save()
             messages.success(request, "Se ha modificado los datos.")
-
             return redirect('/facturas/editar/' + str(pk))
         else:
             messages.warning(request, form.errors)
@@ -511,5 +510,4 @@ def ajaxloaddetallefactura(request, pk):
         return JsonResponse({'form_html': form_html})
 
 
-        
 # Create your views here.
