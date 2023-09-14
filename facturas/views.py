@@ -241,11 +241,19 @@ def listadofactura(request):
             obra__descripcion__icontains=parametro
         ).values_list('factura_id')
 
+        consultadescripciondetalle = DetalleFacturaProveedor.objects.filter(
+            descripcion__icontains=parametro
+        ).values_list('factura_id')
+
         consultafacturaobras = FacturaProveedor.objects.filter(
             pk__in=consultaobra
         )
+
+        consultafacturadescripcion = FacturaProveedor.objects.filter(
+            pk__in=consultadescripciondetalle
+        )
         
-        facturas = consulta | consultafacturaobras
+        facturas = consulta | consultafacturaobras | consultafacturadescripcion
 
         """
         facturas = FacturaProveedor.objects.filter(
