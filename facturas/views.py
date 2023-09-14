@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.core import serializers
 
 from django.core.paginator import Paginator
-from django.db.models import F
+from django.db.models import F, Q
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 
@@ -230,7 +230,32 @@ def editarunidad(request, pk):
 def listadofactura(request):
     if "txtBuscar" in request.GET:
         parametro = request.GET.get('txtBuscar')
-        facturas = FacturaProveedor.objects.filter(descripcion__contains=parametro)
+        
+        consulta = FacturaProveedor.objects.filter(
+            Q(proveedor__nombrefantasia__icontains=parametro) |
+            Q(proveedor__razonsocial__icontains=parametro) |
+            Q(comprobante__contains=parametro)
+        ).order_by('fecha')
+
+        consultaobra = DetalleFacturaProveedor.objects.filter(
+            obra__descripcion__icontains=parametro
+        ).values_list('factura_id')
+
+        consultafacturaobras = FacturaProveedor.objects.filter(
+            pk__in=consultaobra
+        )
+        
+        facturas = consulta | consultafacturaobras
+
+        """
+        facturas = FacturaProveedor.objects.filter(
+            Q(proveedor__nombrefantasia__icontains=parametro) |
+            Q(proveedor__razonsocial__icontains=parametro) |
+            Q(proveedor__razonsocial__icontains=parametro) |
+            Q(comprobante__contains=parametro)
+        ).order_by('fecha')
+        """
+
     else:
         facturas = FacturaProveedor.objects.all()
     paginador = Paginator(facturas, 20)
@@ -375,9 +400,6 @@ def ajaxnuevafacturadetalle(request):
         descuento = request.POST.get("descuento")
         descuentoporcentaje = request.POST.get("descuentoporcentaje")
 
-        print("qqqqqqqqqqqqqqqqqqqqqqq")
-        print(descripcion)
-
         try:
             detallefacturaproveedor = DetalleFacturaProveedor(
                 factura = factura,
@@ -422,6 +444,7 @@ def ajaxeditarfacturadetalle(request):
         proveedor = Proveedor.objects.get(pk=request.POST.get("id_proveedor"))  
         comprobante = request.POST.get("comprobante")
         obra = Obra.objects.get(pk=request.POST.get("id_obra"))
+        descripcion = request.POST.get("descripcion")
         rubro = Rubro.objects.get(pk=request.POST.get("id_rubro")) 
         cantidad = request.POST.get("cantidad")
         unidad = Unidad.objects.get(pk=request.POST.get("id_unidad"))
@@ -431,21 +454,27 @@ def ajaxeditarfacturadetalle(request):
         descuento = request.POST.get("descuento")
         descuentoporcentaje = request.POST.get("descuentoporcentaje")
 
+        id_detallefactura = request.POST.get("id_detallefactura")
+
         try:
-            detallefacturaproveedor = DetalleFacturaProveedor(
-                factura = factura,
-                obra = obra,
-                rubro = rubro,
-                unidad = unidad,
-                cantidad = cantidad,
-                preciounitario = preciounitario,
-                iva = iva,
-                ingresosbrutos = ingresosbrutos,
-                descuento = descuento,
-                descuentoporcentaje = descuentoporcentaje,
-                usuario = request.user 
+            
+            detallefacturaproveedor = DetalleFacturaProveedor.objects.get(
+                pk=id_detallefactura
             )
 
+            detallefacturaproveedor.factura = factura
+            detallefacturaproveedor.obra = obra
+            detallefacturaproveedor.rubro = rubro
+            detallefacturaproveedor.descripcion = descripcion
+            detallefacturaproveedor.unidad = unidad
+            detallefacturaproveedor.cantidad = cantidad
+            detallefacturaproveedor.preciounitario = preciounitario
+            detallefacturaproveedor.iva = iva
+            detallefacturaproveedor.ingresosbrutos = ingresosbrutos
+            detallefacturaproveedor.descuento = descuento
+            detallefacturaproveedor.descuentoporcentaje = descuentoporcentaje
+            detallefacturaproveedor.usuario = request.user 
+            
             detallefacturaproveedor.save()
 
             ultimo_detallefactura = DetalleFacturaProveedor.objects.latest("pk")

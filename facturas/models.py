@@ -72,9 +72,10 @@ class DetalleFacturaProveedor(models.Model):
     def gettotal(self):
         totalbruto = self.cantidad * self.preciounitario
         totaldescuento = totalbruto - self.descuento - (totalbruto * self.descuentoporcentaje / 100 )
+        ingresobrutored = self.ingresosbrutos.retencion / 100
         ivared = self.iva.retencion / 100
-        totaliva = totaldescuento + (totaldescuento * ivared)
-        return totaliva
+        totaliva = totaldescuento + (totaldescuento * ivared) + (totaldescuento * ingresobrutored)
+        return (totaldescuento + (totaldescuento * ivared) + (totaldescuento * ingresobrutored))
 
     def __str__(self):
         return str(self.factura) + ' - ' + self.rubro.descripcion
