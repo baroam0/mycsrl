@@ -491,7 +491,7 @@ def ajaxeditarfacturadetalle(request):
                         {
                             'message': 'Ok.',
                             'status': 200,
-                            'pk': ultimo_detallefactura.factura.pk
+                            'pk': factura.pk
                         }
                     )
         except Exception as e:
