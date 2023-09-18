@@ -5,10 +5,11 @@ from django.contrib.auth.models import User
 
 from .models import (
     DetalleFactura, Factura, Obra, OrdenPago, Proveedor, ProveedorBanco,
-    Rubro, TipoCuenta 
+    Rubro, TipoCuenta
 )
 
 from bancos.models import Banco
+from rodados.models import Rodado
 
 
 class DetalleFacturaForm(forms.ModelForm):
