@@ -7,9 +7,16 @@ from django.db.models import F, Q
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 
-from .forms import UnidadForm, FacturaProveedorForm, DetalleFacturaProveedorForm, IvaForm, IngresoBrutoForm
+from .forms import (
+    UnidadForm, FacturaProveedorForm, DetalleFacturaProveedorForm, 
+    IvaForm, IngresoBrutoForm, DescripcionDetalleForm
+)
 
-from .models import Unidad, FacturaProveedor, DetalleFacturaProveedor, IngresoBruto, Iva
+from .models import (
+    Unidad, FacturaProveedor, DetalleFacturaProveedor, 
+    IngresoBruto, Iva, Descripciondetalle
+)
+
 from pagos.models import Proveedor, Obra, Rubro
 
 
@@ -155,6 +162,77 @@ def editariva(request, pk):
         )
 
 
+##############################################################
+################### DESCRIPCION DETALLE ######################
+###############################################################
+
+
+def listadodescripciondetalle(request):
+    if "txtBuscar" in request.GET:
+        parametro = request.GET.get('txtBuscar')
+        unidades =  Descripciondetalle.objects.filter(descripciondetalle__contains=parametro)
+    else:
+        unidades = Descripciondetalle.objects.all()
+    paginador = Paginator(unidades, 20)
+
+    if "page" in request.GET:
+        page = request.GET.get('page')
+    else:
+        page = 1
+    resultados = paginador.get_page(page)
+    return render(
+        request,
+        'facturas/descripciondetalle_list.html',
+        {
+            'resultados': resultados
+        })
+
+
+def nuevadescripciondetalle(request):
+    if request.POST:
+        usuario = request.user
+        form = DescripcionDetalleForm(request.POST)
+        if form.is_valid():
+            descripciondetalle = form.save(commit=False)
+            descripciondetalle.usuario = usuario
+            descripciondetalle.save()
+            messages.success(request, "Se ha grabado los datos.")
+            return redirect('/facturas/descripciondetalle/listado')
+        else:
+            messages.warning(request, form.errors)
+            return redirect('/facturas/descripciondetalle/listado')
+    else:
+        form = DescripcionDetalleForm()
+        return render(
+            request,
+            'facturas/descripciondetalle_edit.html',
+            {"form": form}
+        )
+
+
+def editardescripciondetalle(request, pk):
+    consulta = Descripciondetalle.objects.get(pk=pk)
+
+    if request.POST:
+        form = DescripcionDetalleForm(request.POST, instance=consulta)
+        if form.is_valid():
+            unidad = form.save(commit=False)
+            usuario = request.user
+            unidad.usuario = usuario
+            unidad.save()
+            messages.success(request, "Se ha modificado los datos.")
+            return redirect('/facturas/descripciondetalle/listado')
+        else:
+            messages.warning(request, form.errors)
+            return redirect('/facturas/descripciondetalle/listado')
+    else:
+        form = DescripcionDetalleForm(instance=consulta)
+        return render(
+            request,
+            'facturas/descripciondetalle_edit.html',
+            {"form": form}
+        )
+
 ###############################################################
 ################### UNIDAD ###################################
 ###############################################################
@@ -232,6 +310,7 @@ def listadofactura(request):
         parametro = request.GET.get('txtBuscar')
         
         consulta = FacturaProveedor.objects.filter(
+            Q(pk__icontains=parametro) |
             Q(proveedor__nombrefantasia__icontains=parametro) |
             Q(proveedor__razonsocial__icontains=parametro) |
             Q(comprobante__contains=parametro)
@@ -242,7 +321,12 @@ def listadofactura(request):
         ).values_list('factura_id')
 
         consultadescripciondetalle = DetalleFacturaProveedor.objects.filter(
-            descripcion__icontains=parametro
+            descripciondetalle__descripciondetalle__icontains=parametro
+        ).values_list('factura_id')
+
+
+        consultadrubro = DetalleFacturaProveedor.objects.filter(
+            rubro__descripcion__icontains=parametro
         ).values_list('factura_id')
 
         consultafacturaobras = FacturaProveedor.objects.filter(
@@ -252,8 +336,12 @@ def listadofactura(request):
         consultafacturadescripcion = FacturaProveedor.objects.filter(
             pk__in=consultadescripciondetalle
         )
+
+        consultafacturarubro = FacturaProveedor.objects.filter(
+            pk__in=consultadrubro
+        )
         
-        facturas = consulta | consultafacturaobras | consultafacturadescripcion
+        facturas = consulta | consultafacturaobras | consultafacturadescripcion | consultafacturarubro
 
         """
         facturas = FacturaProveedor.objects.filter(
@@ -341,6 +429,7 @@ def nuevodetallefactura(request,pk):
             detallefactura.factura = factura
             detallefactura.usuario = usuario
             detallefactura.save()
+            print("qqqqqqqq")
             messages.success(request, "Se ha grabado los datos.")
             return redirect('/facturas/unidades/listado')
         else:

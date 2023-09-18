@@ -2,7 +2,7 @@
 from django import forms
 from django.contrib.auth.models import User
 
-from .models import Unidad, FacturaProveedor, DetalleFacturaProveedor, Iva, IngresoBruto
+from .models import Unidad, FacturaProveedor, DetalleFacturaProveedor, Iva, IngresoBruto, Descripciondetalle
 from pagos.models import Proveedor, Obra, Rubro
 
 
@@ -43,7 +43,6 @@ class IvaForm(forms.ModelForm):
 
 
 class UnidadForm(forms.ModelForm):
-   
     descripcion = forms.CharField(
         label="Descripcion"
     )
@@ -58,6 +57,28 @@ class UnidadForm(forms.ModelForm):
     class Meta:
         model = Unidad
         fields = ["descripcion"]
+
+
+class DescripcionDetalleForm(forms.ModelForm):
+    descripciondetalle = forms.CharField(
+        label="Descripcion"
+    )
+
+    unidad = forms.ModelChoiceField(
+        label="Unidad",
+        queryset=Unidad.objects.all()
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(DescripcionDetalleForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+
+    class Meta:
+        model = Descripciondetalle
+        fields = ["descripciondetalle", "unidad"]
 
 
 class FacturaProveedorForm(forms.ModelForm):
@@ -87,6 +108,8 @@ class DetalleFacturaProveedorForm(forms.ModelForm):
     cantidad = forms.DecimalField(label="Cantidad")
     preciounitario = forms.DecimalField(label="Precio Unitario")
 
+    descripciondetalle = forms.ModelChoiceField(label="Detalle", queryset=Descripciondetalle.objects.all())
+
     iva = forms.ModelChoiceField(label="Iva", queryset=Iva.objects.all())
 
     ingresosbrutos = forms.ModelChoiceField(
@@ -104,4 +127,9 @@ class DetalleFacturaProveedorForm(forms.ModelForm):
 
     class Meta:
         model = DetalleFacturaProveedor 
-        fields = ["obra", "rubro", "descripcion" ,"unidad", "cantidad", "preciounitario", "iva", "ingresosbrutos", "descuento", "descuentoporcentaje" ]
+        fields = [
+            "obra", "rubro", "descripciondetalle",
+            "unidad", "cantidad", "preciounitario", 
+            "iva", "ingresosbrutos", "descuento", 
+            "descuentoporcentaje"
+        ]

@@ -63,7 +63,7 @@
                 </form>
             </div>
 
-            <h4>Total Factura: $ {{ totalfactura | floatformat:4 }}</h4>
+            <h4>Total Factura: $ {{ totalfactura | floatformat:2 }}</h4>
 
 
             <table class="table table-hover">
@@ -84,12 +84,12 @@
                         
                         <td>{{ detallefactura.obra }} </td>
                         <td>{{ detallefactura.rubro }} </td>
-                        <td>{{ detallefactura.descripcion.upper}} </td>
-                        <td>$ {{ detallefactura.gettotal |floatformat:4 }} </td>
+                        <td>{{ detallefactura.descripciondetalle.descripciondetalle.upper }} </td>
+                        <td>$ {{ detallefactura.gettotal |floatformat:2 }} </td>
                         <td>{{ detallefactura.usuario }}</td>
 
                         <td>
-                            <button type="button" class="btn btn-link btn-sm" onclick="AbrirVentana({{detallefactura.pk}})">
+                            <button type="button" class="btn btn-link btn-sm" onclick="AbrirVentanaEditar({{detallefactura.pk}})">
                                 <i class="fas fa-pencil-alt"></i>
                             </button>
                         </td>
@@ -360,8 +360,13 @@
 
         function AbrirVentana(pk){
             var urldetallefactura = "/facturas/detalle/nuevo/" + pk;
-            window.open(urldetallefactura,"Ratting","width=650,height=650,left=150,top=200,toolbar=0,status=0,");
+            window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
+        }
 
+
+        function AbrirVentanaEditar(pk){
+            var urldetallefactura = "/facturas/detalle/editar/" + pk;
+            window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
         }
 
     </script>

@@ -8,8 +8,11 @@ from django.http import JsonResponse
 
 from django.db.models import F, Sum, Q
 
-from .forms import DetalleFacturaForm, FacturaForm, ObraForm, ProveedorForm, RubroForm, OrdenPagoForm
-from .models import Factura, DetalleFactura, Obra, Proveedor, Rubro, OrdenPago
+from .forms import (
+    DetalleFacturaForm, FacturaForm, ObraForm, ProveedorForm, 
+    ProveedorBancoForm, RubroForm, OrdenPagoForm, TipoCuentaForm)
+
+from .models import (Factura, DetalleFactura, Obra, Proveedor, ProveedorBanco, Rubro, OrdenPago, TipoCuenta)
 
 
 def listadofactura(request):
@@ -212,9 +215,9 @@ def facturadetalle_edit(request, pk):
             {"form": form}
         )
 
-
-########################### SECCION OBRA ##############################
-
+######################################################################
+########################### SECCION OBRA #############################
+######################################################################
 def listadoobra(request):
     if "txtBuscar" in request.GET:
         parametro = request.GET.get('txtBuscar')
@@ -282,6 +285,11 @@ def obra_edit(request, pk):
         )
 
 
+######################################################################
+########################### SECCION PROVEEDOR ########################
+######################################################################
+
+
 def listadoproveedor(request):
 
     if "txtBuscar" in request.GET:
@@ -331,6 +339,7 @@ def proveedor_new(request):
 
 def proveedor_edit(request, pk):
     consulta = Proveedor.objects.get(pk=pk)
+    bancosproveedor = ProveedorBanco.objects.filter(proveedor=consulta.pk)
    
     if request.POST:
         form = ProveedorForm(request.POST, instance=consulta)
@@ -350,9 +359,166 @@ def proveedor_edit(request, pk):
             request,
             'pagos/proveedor_edit.html',
             {
-                "form": form
+                "form": form,
+                "bancosproveedor": bancosproveedor,
+                "pk": pk
             }
         )
+
+
+######################################################################
+########################### SECCION PROVEEDORBANCO ##################
+######################################################################
+"""
+def listadoobra(request):
+    if "txtBuscar" in request.GET:
+        parametro = request.GET.get('txtBuscar')
+        obras = Obra.objects.filter(descripcion__contains=parametro)
+    else:
+        obras =  Obra.objects.all()
+    paginador = Paginator(obras, 20)
+
+    if "page" in request.GET:
+        page = request.GET.get('page')
+    else:
+        page = 1
+    resultados = paginador.get_page(page)
+    return render(
+        request,
+        'pagos/obra_list.html',
+        {
+            'resultados': resultados
+        })
+"""
+
+def proveedorbanco_new(request, pk):
+
+    proveedor = Proveedor.objects.get(pk=pk)
+    proveedoresbanco = ProveedorBanco.objects.filter(proveedor=proveedor.pk)
+
+    if request.POST:
+        usuario = request.user
+        form = ProveedorBancoForm(request.POST)
+        if form.is_valid():
+            proveedorbanco = form.save(commit=False)
+            proveedorbanco.usuario = usuario
+            proveedorbanco.proveedor = proveedor
+            proveedorbanco.save()
+            messages.success(request, "Se ha grabado los datos.")
+            return redirect('/pagos/obra/listado')
+        else:
+            messages.warning(request, form.errors)
+            return redirect('/pagos/obra/listado')
+    else:
+        form = ProveedorBancoForm()
+        return render(
+            request,
+            'facturas/proveedorbanco_edit.html',
+            {
+                "form": form,
+                "resultados": proveedoresbanco
+            }
+        )
+
+
+def proveedorbanco_edit(request, pk):
+    consulta = ProveedorBanco.objects.get(pk=pk)
+   
+    if request.POST:
+        form = ProveedorBancoForm(request.POST, instance=consulta)
+        if form.is_valid():
+            proveedorbanco = form.save(commit=False)
+            usuario = request.user
+            proveedorbanco.usuario = usuario
+            proveedorbanco.save()
+            messages.success(request, "SE HA GRABADO LOS DATOS DE OBRA")
+            return redirect('/pagos/obra/listado')
+        else:
+            messages.warning(request, form.errors)
+            return redirect('/pagos/obra/listado')
+    else:
+        form = ProveedorBancoForm(instance=consulta)
+        return render(
+            request,
+            'facturas/proveedorbanco_edit.html',
+            {"form": form}
+        )
+
+
+#######################################################################
+######################### SECCION DE TIPOS CUENTAS BANCARIAS ##########
+#######################################################################
+
+def listadotipocuentabancaria(request):
+    if "txtBuscar" in request.GET:
+        parametro = request.GET.get('txtBuscar')
+        tiposcuentasbancarias = TipoCuenta.objects.filter(descripcion__contains=parametro)
+    else:
+        tiposcuentasbancarias = TipoCuenta.objects.all()
+    paginador = Paginator(tiposcuentasbancarias, 20)
+
+    if "page" in request.GET:
+        page = request.GET.get('page')
+    else:
+        page = 1
+    resultados = paginador.get_page(page)
+    return render(
+        request,
+        'pagos/tipocuenta_list.html',
+        {
+            'resultados': resultados
+        })
+
+
+def tipocuentabancaria_new(request):
+    if request.POST:
+        usuario = request.user
+        form = TipoCuentaForm(request.POST)
+        if form.is_valid():
+            tipocuentabancaria = form.save(commit=False)
+            tipocuentabancaria.usuario = usuario
+            tipocuentabancaria.save()
+            messages.success(request, "Se ha grabado los datos del rubro.")
+            return redirect('/pagos/tiposcuentasbancarias/listado/')
+        else:
+            messages.warning(request, form.errors)
+            return redirect('/pagos/tiposcuentasbancarias/listado/')
+    else:
+        form = TipoCuentaForm()
+        return render(
+            request,
+            'pagos/tipocuenta_edit.html',
+            {"form": form}
+        )
+
+
+def tipocuentabancaria_edit(request, pk):
+    consulta = TipoCuenta.objects.get(pk=pk)
+   
+    if request.POST:
+        form = TipoCuentaForm(request.POST, instance=consulta)
+        if form.is_valid():
+            rubro = form.save(commit=False)
+            usuario = request.user
+            rubro.usuario = usuario
+            rubro.save()
+            messages.success(request, "Se ha modificado el rubro.")
+            return redirect('/pagos/tiposcuentasbancarias/listado/')
+        else:
+            messages.warning(request, form.errors)
+            return redirect('/pagos/tiposcuentasbancarias/listado/')
+    else:
+        form = TipoCuentaForm(instance=consulta)
+        return render(
+            request,
+            'pagos/tipocuenta_edit.html',
+            {"form": form}
+        )
+
+
+#######################################################################
+######################### SECCION AJAX ################################
+#######################################################################
 
 
 def ajaxcargardetallefactura(request, pk):
@@ -376,7 +542,10 @@ def ajaxcargarselectrubro(request, pk):
     return JsonResponse(data, safe=False)
 
 
+
+#######################################################################
 ######################### SECCION DE RUBRO ########################
+#######################################################################
 
 def listadorubro(request):
     if "txtBuscar" in request.GET:

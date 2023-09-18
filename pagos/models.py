@@ -19,19 +19,41 @@ class Proveedor(models.Model):
     nombrefantasia = models.CharField(max_length=200, unique=True, null=True, blank=True)
     razonsocial = models.CharField(max_length=200, unique=True, null=True, blank=True)
     domicilio = models.CharField(max_length=200, null=True, blank=True)
-    cuit = models.CharField(max_length=20, null=True, blank=True, unique=True)
-    banco = models.ForeignKey(
-        Banco, on_delete=models.CASCADE, null=True, blank=True)
-    
-    cbu = models.CharField(max_length=200, null=True, blank=True)
-
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
+    cuit = models.CharField(max_length=15, null=True, blank=True)
 
     def __str__(self):
         return self.nombrefantasia.upper() + " - " + self.razonsocial.upper() 
 
     class Meta:
         verbose_name_plural = "Proveedores"
+
+
+class TipoCuenta(models.Model):
+    descripcion = models.CharField(
+        max_length=200, unique=True, null=True, blank=True)
+    usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.descripcion
+    
+    class Meta:
+        verbose_name_plural = "Tipos de Cuenta"
+
+
+class ProveedorBanco(models.Model):
+    proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
+    descripcionbanco = models.CharField(max_length=100, null=True, blank=True)
+    cbu = models.CharField(max_length=200, unique=True)
+    alias = models.CharField(max_length=200, unique=True)
+    tipocuenta = models.ForeignKey(TipoCuenta, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.descripcionbanco
+
+    class Meta:
+        verbose_name_plural = "Proveedores Bancos"
 
 
 class Rubro(models.Model):

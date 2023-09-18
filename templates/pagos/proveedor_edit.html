@@ -22,25 +22,75 @@
                     <hr>
 
                     <div class="row">
-                        <div class="col-2">
+                        <div class="col-4">
                             <button class="btn btn-primary" id="btn-guardar" type="submit">
                                 <i class="fas fa-check"></i>
                                 Aceptar
                             </button>
                         </div>
 
-                        <div class="col-8">
+                        <div class="col-4">
+
+                            {% if pk %}
+                                <button class="btn btn-secondary" id="btn-guardar" type="button" onclick="NuevoDatosBancarios({{pk}});">
+                                    <i class="fas fa-plus"></i>
+                                    Datos Bancarios
+                                </button>
+                            {% else%}
+                                <button class="btn btn-secondary" id="btn-guardar" type="button" onclick="NuevoDatosBancarios();" disabled>
+                                    <i class="fas fa-plus"></i>
+                                    Datos Bancarios
+                                </button>
+
+                            {% endif %}
+                            
                         </div>
 
-                        <div class="col-2">    
-                            <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="IrListadoProveedores()">
+                        <div class="col-4">    
+                            <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="IrListadoProveedores();">
                                 <i class="far fa-times-circle"></i>
                                 Cancelar
                             </button>
                         </div>                        
                     </div>
-                    <hr>
+                
                 </form>
+
+                <br>
+
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Banco</th>
+                            <th>CBU</th>
+                            <th>Alias</th>
+                            <th>Tipo de Cuenta</th>
+                            <th>Usuario</th>
+                            <th>Accion</th>
+                        </tr>
+                    </thead>
+    
+                    <tbody>
+                        {% for resultado in bancosproveedor %}
+                        <tr>
+                            <td>{{ resultado.descripcionbanco.upper }}  </td>
+                            <td>{{ resultado.cbu }}</td>
+                            <td>{{ resultado.alias.upper }}</td>
+                            <td>{{ resultado.tipocuenta.descripcion.upper }}</td>
+
+                            <td> {{resultado.usuario}}</td>
+                            <td>
+                                <button type="button" class="btn btn-link btn-sm" onclick=" EditarDatosBancarios({{ resultado.pk }})">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+
             </div>
         </div>
     </div>
@@ -52,16 +102,24 @@
 
     <script>
         $(document).ready(function () {
-            $('#id_banco').select2();
+            window.onunload = function(){
+                window.opener.location.reload();
+                window.close(); 
+            };
         });
 
-    
-    </script>
-    
-    
-    <script>
         function IrListadoProveedores() {
             window.location.replace("/pagos/proveedor/listado");
+        }
+
+        function NuevoDatosBancarios(pk){
+            var urldetallefactura = "/pagos/proveedorbanco/nuevo/" + pk;
+            window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
+        }
+
+        function EditarDatosBancarios(pk){
+            var urldetallefactura = "/pagos/proveedorbanco/editar/" + pk;
+            window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
         }
     </script>
 

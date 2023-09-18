@@ -26,11 +26,16 @@ from .views import (
     ajaxnuevafacturadetalle, ajaxeditarfacturadetalle, ajaxmostrarformdetallefactura,
     ajaxloaddetallefactura,
     listadoiva, nuevoiva, editariva,
-    listadoingresobruto, nuevoingresobruto, editaringresobruto
+    listadoingresobruto, nuevoingresobruto, editaringresobruto,
+    listadodescripciondetalle, nuevadescripciondetalle, editardescripciondetalle
     )
 
 
 urlpatterns = [
+
+    path('descripciondetalle/listado/', listadodescripciondetalle, name='listadodescripciondetalle'),
+    path('descripciondetalle/nuevo/', nuevadescripciondetalle, name='nuevadescripciondetalle'),
+    path('descripciondetalle/editar/<int:pk>', editardescripciondetalle, name='editardescripciondetalle'),
 
     path('ingresobruto/listado/', listadoingresobruto, name='listadoiva'),
     path('ingresobruto/nuevo/', nuevoingresobruto, name='nuevoingresobruto'),

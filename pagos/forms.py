@@ -3,7 +3,11 @@
 from django import forms
 from django.contrib.auth.models import User
 
-from .models import DetalleFactura, Obra, Factura, Proveedor, Rubro, OrdenPago
+from .models import (
+    DetalleFactura, Factura, Obra, OrdenPago, Proveedor, ProveedorBanco,
+    Rubro, TipoCuenta 
+)
+
 from bancos.models import Banco
 
 
@@ -119,16 +123,6 @@ class ProveedorForm(forms.ModelForm):
         required = False
     )
 
-    banco = forms.ModelChoiceField(
-        queryset = Banco.objects.all(),
-        required = False
-    )
-
-    cbu = forms.CharField(
-        label="CBU", 
-        required = False
-    )
-
     def __init__(self, *args, **kwargs):
         super(ProveedorForm, self).__init__(*args, **kwargs)
         for field in iter(self.fields):
@@ -139,8 +133,52 @@ class ProveedorForm(forms.ModelForm):
     class Meta:
         model = Proveedor
         fields = [
-            "nombrefantasia", "razonsocial", "cuit",  "domicilio", "banco", "cbu"
+            "nombrefantasia", "razonsocial", "cuit",  "domicilio"
         ]
+
+
+class TipoCuentaForm(forms.ModelForm):
+
+    descripcion = forms.CharField(
+        label = "Descripcion"
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(TipoCuentaForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+
+    class Meta:
+        model = TipoCuenta
+        fields = [
+            "descripcion"
+        ]
+
+
+class ProveedorBancoForm(forms.ModelForm):
+    
+    descripcionbanco = forms.CharField(
+        label="Banco", required=True)
+
+    cbu = forms.CharField(label="CBU", required=True)
+
+    alias = forms.CharField(label="Alias", required=True)
+
+    tipocuenta = forms.ModelChoiceField(
+        label="Tipo de Cuenta", queryset=TipoCuenta.objects.all())
+
+    def __init__(self, *args, **kwargs):
+        super(ProveedorBancoForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+
+    class Meta:
+        model = ProveedorBanco
+        fields = ["descripcionbanco", "cbu", "alias", "tipocuenta"]
 
 
 class RubroForm(forms.ModelForm):
