@@ -117,6 +117,7 @@ class DetalleFacturaProveedorForm(forms.ModelForm):
 
     descuento = forms.DecimalField(label="Descuento", required=False)
     descuentoporcentaje = forms.DecimalField(label="Descuento con Porcentaje")
+    ajuste = forms.DecimalField(label="Ajuste", required=True)
 
     def __init__(self, *args, **kwargs):
         super(DetalleFacturaProveedorForm, self).__init__(*args, **kwargs)
@@ -131,5 +132,5 @@ class DetalleFacturaProveedorForm(forms.ModelForm):
             "obra", "rubro", "descripciondetalle",
             "unidad", "cantidad", "preciounitario", 
             "iva", "ingresosbrutos", "descuento", 
-            "descuentoporcentaje"
+            "descuentoporcentaje", "ajuste"
         ]
