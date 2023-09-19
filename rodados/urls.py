@@ -18,17 +18,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-from .views import home, loginusuario, salir
+
+from .views import listadorodado, rodado_edit, rodado_new
 
 
 urlpatterns = [
-    path('', home, name="home"),
-    path('salir/', salir),
-    path('login/', loginusuario, name="login"),
-    path('admin/', admin.site.urls),
-    path('user/', include("usuariosadm.urls")),
-    path('pagos/', include("pagos.urls")),
-    path('bancos/', include("bancos.urls")),
-    path('facturas/', include("facturas.urls")),
-    path('rodados/', include("rodados.urls")),
+    path('listado/', listadorodado, name='listadorodado'),
+    path('new/', rodado_new, name='rodadonew'),
+    path('edit/<int:pk>', rodado_edit, name='rodadoedit'),
 ]
+

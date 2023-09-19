@@ -599,4 +599,16 @@ def ajaxloaddetallefactura(request, pk):
         return JsonResponse({'form_html': form_html})
 
 
+def ajaxloadunidad(request, pk):
+    descripciondetalle = Descripciondetalle.objects.get(pk=pk)
+    unidad = Unidad.objects.get(pk=descripciondetalle.pk)
+    
+    return JsonResponse({
+        "data": unidad.pk
+    })
+
+
+
+
+
 # Create your views here.

@@ -5,6 +5,9 @@ from pagos.models import Obra, Proveedor, Rubro
 from usuariosadm.models import UserAdm
 
 
+from rodados.models import Rodado
+
+
 class IngresoBruto(models.Model):
     retencion = models.DecimalField(decimal_places=2, max_digits=5)
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
@@ -80,6 +83,11 @@ class DetalleFacturaProveedor(models.Model):
     
     descuento = models.DecimalField(decimal_places=4,max_digits=20, default=0)
     descuentoporcentaje = models.DecimalField(decimal_places=4,max_digits=20, default=0)
+
+    rodado = models.ForeignKey(
+        Rodado, on_delete=models.CASCADE, blank=True, null=True
+    )
+
     ajuste = models.DecimalField(decimal_places=4,max_digits=20, default=0)
      
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
@@ -90,7 +98,7 @@ class DetalleFacturaProveedor(models.Model):
         ingresobrutored = self.ingresosbrutos.retencion / 100
         ivared = self.iva.retencion / 100
         totaliva = totaldescuento + (totaldescuento * ivared) + (totaldescuento * ingresobrutored)
-        return (totaldescuento + (totaldescuento * ivared) + (totaldescuento * ingresobrutored)  + self.ajustes )
+        return (totaldescuento + (totaldescuento * ivared) + (totaldescuento * ingresobrutored)  + self.ajuste )
 
     def __str__(self):
         return str(self.factura) + ' - ' + self.rubro.descripcion

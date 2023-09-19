@@ -6,8 +6,6 @@ from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 
-from django.db.models import F, Sum, Q
-
 from .forms import RodadoForm
 
 from .models import Rodado
@@ -34,7 +32,7 @@ def listadorodado(request):
         })
 
 
-def obra_new(request):
+def rodado_new(request):
     if request.POST:
         usuario = request.user
         form = RodadoForm(request.POST)
@@ -42,11 +40,11 @@ def obra_new(request):
             obra = form.save(commit=False)
             obra.usuario = usuario
             obra.save()
-            messages.success(request, "SE HA GRABADO LOS DATOS DE OBRAS")
-            return redirect('/pagos/obra/listado')
+            messages.success(request, "Se ha grado los datos.")
+            return redirect('/rodados/listado')
         else:
             messages.warning(request, form.errors)
-            return redirect('/pagos/obra/listado')
+            return redirect('/rodados/listado')
     else:
         form = RodadoForm()
         return render(
@@ -60,17 +58,17 @@ def rodado_edit(request, pk):
     consulta = Rodado.objects.get(pk=pk)
    
     if request.POST:
-        form = ObraForm(request.POST, instance=consulta)
+        form = RodadoForm(request.POST, instance=consulta)
         if form.is_valid():
             obra = form.save(commit=False)
             usuario = request.user
             obra.usuario = usuario
             obra.save()
             messages.success(request, "SE HA GRABADO LOS DATOS DE OBRA")
-            return redirect('/pagos/obra/listado')
+            return redirect('/rodados/listado')
         else:
             messages.warning(request, form.errors)
-            return redirect('/pagos/obra/listado')
+            return redirect('/rodados/listado')
     else:
         form = RodadoForm(instance=consulta)
         return render(
@@ -78,10 +76,6 @@ def rodado_edit(request, pk):
             'pagos/obra_edit.html',
             {"form": form}
         )
-
-
-
-
 
 
 # Create your views here.

@@ -11,7 +11,7 @@ class RodadoForm(forms.ModelForm):
         label="Dominio", required=True)
     
     descripcion = forms.CharField(
-        lable="Descripcion", required=True)
+        label="Descripcion", required=True)
     
     def __init__(self, *args, **kwargs):
         super(RodadoForm, self).__init__(*args, **kwargs)
@@ -22,5 +22,5 @@ class RodadoForm(forms.ModelForm):
 
     class Meta:
         model = Rodado
-        fields = ["descripcion"]
+        fields = ["dominio", "descripcion"]
 

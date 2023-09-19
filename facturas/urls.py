@@ -27,7 +27,8 @@ from .views import (
     ajaxloaddetallefactura,
     listadoiva, nuevoiva, editariva,
     listadoingresobruto, nuevoingresobruto, editaringresobruto,
-    listadodescripciondetalle, nuevadescripciondetalle, editardescripciondetalle
+    listadodescripciondetalle, nuevadescripciondetalle, editardescripciondetalle,
+    ajaxloadunidad
     )
 
 
@@ -56,6 +57,7 @@ urlpatterns = [
     path('ajax/savenewdetail/', ajaxnuevafacturadetalle, name='ajaxfacturadetailnew'),
     path('ajax/updatedetail/', ajaxeditarfacturadetalle, name='ajaxeditarfacturadetalle'),
     path('ajax/showdetailform/', ajaxmostrarformdetallefactura, name='ajaxshowdetailform'),
-    path('ajax/cargarfacturadetail/<int:pk>', ajaxloaddetallefactura, name='ajaxcargardetallefactura')
+    path('ajax/cargarfacturadetail/<int:pk>', ajaxloaddetallefactura, name='ajaxcargardetallefactura'),
+    path('ajax/loadunidad/<int:pk>', ajaxloadunidad, name='ajaxloadunidad')
 ]
 

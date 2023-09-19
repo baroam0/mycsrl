@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-sm-4"></div>
             <div class="col-sm-4">
-                <h3> Listado de Bancos. </h3>
+                <h3> Listado de Rodados. </h3>
             </div>
             <div class="col-sm-4"></div>
         </div>
@@ -38,7 +38,7 @@
                         <i class="fas fa-search"></i>
                     </button>
 
-                    <button type="button" class="btn btn-default" title="Nuevo Banco!" onclick="location.href='/bancos/new'">
+                    <button type="button" class="btn btn-default" title="Nuevo Rodado!" onclick="location.href='/rodados/new'">
                         <i class="fas fa-plus"></i>
                     </button>
                 </div>
@@ -49,6 +49,7 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
+                        <th>Dominio</th>
                         <th>Descripcion</th>
                         <th>Usuario</th>
                         <th>Accion</th>
@@ -58,11 +59,12 @@
                 <tbody>
                     {% for resultado in resultados %}
                     <tr>
+                        <td>{{ resultado.dominio.upper }}  </td>
                         <td>{{ resultado.descripcion.upper }}  </td>
                         <td>{{ resultado.usuario }}</td>
 
                         <td>
-                            <button type="button" class="btn btn-link btn-sm" onclick="location.href='/bancos/edit/' + {{ resultado.pk }}">
+                            <button type="button" class="btn btn-link btn-sm" onclick="location.href='/rodados/edit/' + {{ resultado.pk }}">
                                 <i class="fas fa-pencil-alt"></i>
                             </button>
                         </td>

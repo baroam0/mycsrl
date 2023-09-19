@@ -11,6 +11,12 @@ class Obra(models.Model):
     def __str__(self):
         return self.descripcion.upper()
 
+    """
+    def save(self):
+        self.descripcion = self.descripcion.upper()
+        super(Obra, self).save()
+    """
+    
     class Meta:
         verbose_name_plural = "Obras"
 

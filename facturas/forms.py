@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from .models import Unidad, FacturaProveedor, DetalleFacturaProveedor, Iva, IngresoBruto, Descripciondetalle
 from pagos.models import Proveedor, Obra, Rubro
 
+from rodados.models import Rodado
 
 class IngresoBrutoForm(forms.ModelForm):
 
@@ -108,7 +109,9 @@ class DetalleFacturaProveedorForm(forms.ModelForm):
     cantidad = forms.DecimalField(label="Cantidad")
     preciounitario = forms.DecimalField(label="Precio Unitario")
 
-    descripciondetalle = forms.ModelChoiceField(label="Detalle", queryset=Descripciondetalle.objects.all())
+    descripciondetalle = forms.ModelChoiceField(
+        label="Detalle", queryset=Descripciondetalle.objects.all(),
+    )
 
     iva = forms.ModelChoiceField(label="Iva", queryset=Iva.objects.all())
 
@@ -117,6 +120,11 @@ class DetalleFacturaProveedorForm(forms.ModelForm):
 
     descuento = forms.DecimalField(label="Descuento", required=False)
     descuentoporcentaje = forms.DecimalField(label="Descuento con Porcentaje")
+
+    rodado = forms.ModelChoiceField(
+        label="Rodado", queryset=Rodado.objects.all(), required=False
+    )
+
     ajuste = forms.DecimalField(label="Ajuste", required=True)
 
     def __init__(self, *args, **kwargs):
@@ -132,5 +140,5 @@ class DetalleFacturaProveedorForm(forms.ModelForm):
             "obra", "rubro", "descripciondetalle",
             "unidad", "cantidad", "preciounitario", 
             "iva", "ingresosbrutos", "descuento", 
-            "descuentoporcentaje", "ajuste"
+            "descuentoporcentaje", "ajuste", "rodado"
         ]

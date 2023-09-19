@@ -83,12 +83,29 @@
             window.close();
         }
 
-        function xSubmit (frm) {
-            alert("Se ha grabado los datos.");
-            frm.submit();
-            window.close();
-            return false;
-        } 
+        function LoadDetailUnit(pk){
+            $.ajax({
+                url: '/facturas/ajax/loadunidad/' + pk,
+                type: 'GET',
+                success: function(response){
+                    console.log(response.data);
+                    $('#id_unidad').val(response.data);
+                },
+                error: function(error){
+                    console.log(error);
+                }
+            })
+        }
+
+
+        function val() {
+            d = document.getElementById("id_descripciondetalle").value;
+        }
+
+        $('#id_descripciondetalle').change(function(){
+            LoadDetailUnit($(this).val());
+        })
+
 
 
         $(document).ready(function () {
