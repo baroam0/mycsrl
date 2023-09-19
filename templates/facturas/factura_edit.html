@@ -72,6 +72,7 @@
                         <th>Obra</th>
                         <th>Rubro</th>
                         <th>Descripcion</th>
+       		        <th>Cantidad</th>
                         <th>Unidad</th>
                         <th>Monto</th>
                         <th>Usuario</th>
@@ -87,6 +88,7 @@
                         <td>{{ detallefactura.rubro }} </td>
                         <td>{{ detallefactura.descripciondetalle.descripciondetalle.upper }} </td>
                         <td>{{ detallefactura.unidad.descripcion }} </td>
+			<td>{{ detallefactura.cantidad}}</td>
                         <td>$ {{ detallefactura.gettotal |floatformat:2 }} </td>
                         <td>{{ detallefactura.usuario }}</td>
 
