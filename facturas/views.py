@@ -604,7 +604,7 @@ def ajaxloadunidad(request, pk):
     unidad = Unidad.objects.get(pk=descripciondetalle.pk)
     
     return JsonResponse({
-        "data": unidad.pk
+        "data": descripciondetalle.unidad.pk
     })
 
 
