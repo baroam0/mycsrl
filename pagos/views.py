@@ -324,7 +324,8 @@ def proveedor_new(request):
             proveedor.usuario = usuario
             proveedor.save()
             messages.success(request, "Se ha grabado de los datos del proveedor.")
-            return redirect('/pagos/proveedor/listado')
+            ultimoproveedor = Proveedor.objects.latest("pk")
+            return redirect('/pagos/proveedor/proveedoredit/' + str(ultimoproveedor.pk))
         else:
             messages.warning(request, form.errors)
             return redirect('/pagos/proveedor/listado')
@@ -696,5 +697,18 @@ def ordenpago_edit(request, pk):
                 "pk": ordenpago.detallefactura.pk
             } 
         )
+
+
+def impresiondatobancario(request, pk):
+
+    consulta = ProveedorBanco.objects.get(pk=pk)
+   
+    return render(
+        request,
+        'pagos/impresion.html',
+        {
+            "resultados": consulta
+        } 
+    )
 
 # Create your views here.

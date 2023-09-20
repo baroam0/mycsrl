@@ -13,6 +13,14 @@
             <div class="col-sm-4"></div>
         </div>
 
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{message.tags}}" role="alert">
+                    {{message}}
+                </div>
+            {% endfor %}
+        {% endif %}
+
         <div class="row">
             <div class="col-12">
                 <hr>
@@ -75,13 +83,17 @@
                         <tr>
                             <td>{{ resultado.descripcionbanco.upper }}  </td>
                             <td>{{ resultado.cbu }}</td>
-                            <td>{{ resultado.alias.upper }}</td>
+                            <td>{{ resultado.alias }}</td>
                             <td>{{ resultado.tipocuenta.descripcion.upper }}</td>
 
                             <td> {{resultado.usuario}}</td>
                             <td>
                                 <button type="button" class="btn btn-link btn-sm" onclick=" EditarDatosBancarios({{ resultado.pk }})">
                                     <i class="fas fa-pencil-alt"></i>
+                                </button>
+
+                                <button type="button" class="btn btn-link btn-sm" onclick="ImprimirDatosBancarios({{ resultado.pk }})">
+                                    <i class="fas fa-print"></i>
                                 </button>
                             </td>
                         </tr>
@@ -121,6 +133,12 @@
             var urldetallefactura = "/pagos/proveedorbanco/editar/" + pk;
             window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
         }
+
+        function ImprimirDatosBancarios(pk){
+            var urldetallefactura = "/pagos/impresion/" + pk;
+            window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
+        }
+
     </script>
 
 {% endblock %}
