@@ -32,17 +32,14 @@
                     <hr>
 
                     <div class="row">
-                        <div class="col-2">
+                        <div class="col-3">
                             <button class="btn btn-primary" id="btn-guardar" type="submit">
                                 <i class="fas fa-check"></i>
                                 Aceptar
                             </button>
                         </div>
-
-                        <div class="col-3">
-                        </div>
                         
-                        <div class="col-2">
+                        <div class="col-3">
                             <button class="btn btn-secondary" id="btn-nuevo" type="button" onclick="AbrirVentana({{pk}})">
                                 <i class="fas fa-plus"></i>
                                 Agregar
@@ -50,9 +47,13 @@
                         </div>
 
                         <div class="col-3">
+                            <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="Volver()">
+                                <i class="far fa-times-circle"></i>
+                                Pagos
+                            </button>
                         </div>
 
-                        <div class="col-2">    
+                        <div class="col-3">    
                             <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="Volver()">
                                 <i class="far fa-times-circle"></i>
                                 Cancelar
@@ -96,6 +97,11 @@
                             <button type="button" class="btn btn-link btn-sm" onclick="AbrirVentanaEditar({{detallefactura.pk}})">
                                 <i class="fas fa-pencil-alt"></i>
                             </button>
+
+                            <button type="button" class="btn btn-link btn-sm" onclick="BorrarDetalle({{detallefactura.pk}})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+
                         </td>
                     </tr>
                     {% endfor %}
@@ -367,9 +373,15 @@
             window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
         }
 
-
+        
         function AbrirVentanaEditar(pk){
             var urldetallefactura = "/facturas/detalle/editar/" + pk;
+            window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
+        }
+
+
+        function BorrarDetalle(pk){
+            var urldetallefactura = "/facturas/delete/" + pk;
             window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
         }
 
