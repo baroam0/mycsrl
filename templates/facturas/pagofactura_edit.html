@@ -1,7 +1,6 @@
 
 {% extends 'base_nomenu.html' %}
 
-
 {% block content %}
     <div class="container">
 
@@ -9,8 +8,7 @@
         <div class="row">
             <div class="col-sm-3"></div>
             <div class="col-sm-6">
-                <h4>Esta seguro que desea borrar el detalle:  </h4>
-                <h4> {{detalle.descripciondetalle}} </h4>
+                <h3>Detalle Factura </h3>
             </div>
             <div class="col-sm-3"></div>
         </div>
@@ -18,7 +16,10 @@
         <div class="row">
             
             <div class="col-12">
+                <hr>
                 <form  method="POST" id="myform" >{% csrf_token %}
+                    {{ form.as_p }}
+
                     <hr>
 
                     <div class="row">
@@ -42,7 +43,9 @@
                     <hr>
                 </form>
             </div>
+            
         </div>
+        
     </div>
 
 {% endblock %}

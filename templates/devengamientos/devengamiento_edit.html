@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="container">
+
+        <br>
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-10">
+                <h4>Datos del Pago - {{ pk.proveedor }} - Comprobante {{pk.comprobante}} </h4>
+            </div>
+            <div class="col-sm-1"></div>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{message.tags}}" role="alert">
+                    {{message}}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="row">
+            
+            <div class="col-12">
+                <hr>
+                <form  method="POST">{% csrf_token %}
+                    {{ form.as_p }}
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-2">
+                            <button class="btn btn-primary" id="btn-guardar" type="submit">
+                                <i class="fas fa-check"></i>
+                                Aceptar
+                            </button>
+                        </div>
+
+                        <div class="col-8">
+                        </div>
+
+                        <div class="col-2">    
+                            <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="Volver()">
+                                <i class="far fa-times-circle"></i>
+                                Cancelar
+                            </button>
+                        </div>                        
+                    </div>
+                    <hr>
+                </form>
+
+                <div class="row">
+                
+                    <div class="col-4">
+                        <h4>Total Factura: $ {{ totalfactura | floatformat:2 }}</h4>
+                    </div>
+                    
+                    <div class="col-4">
+                    </div>
+                    
+                    <div class="col-4">
+                        <h4>Total Devengado: $ {{ totaldevengado | floatformat:2 }}</h4>
+                    </div>
+    
+                </div>
+
+                
+                
+                <table class="table table-hover">
+                    <thead>
+                        <tr>   
+                            <th>Fecha</th>
+                            <th>Proveedor</th>
+                            <th>Comprobante</th>
+                            <th>Medio Pago</th>
+                            <th>Monto</th>
+                            <th>Usuario</th>
+                            <th>Accion</th>
+                        </tr>
+                    </thead>
+    
+                    <tbody>
+                        {% for devengamiento in devengamientos %}
+                        <tr>
+                            <td>{{ devengamiento.fecha }}  </td>
+                            <td>{{ devengamiento.factura.proveedor }}  </td>
+                            <td>{{ devengamiento.factura.comprobante }} </td>
+                            <td>{{ devengamiento.mediopago.descripcion }} </td>
+                            <td>$ {{ devengamiento.monto }} </td>
+                            <td>{{ devengamiento.usuario }} </td>
+
+                            <td>
+                                <button type="button" class="btn btn-link btn-sm" onclick="location.href='/devengamiento/editar/' + {{ devengamiento.pk }}">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </button>                                
+                            </td>
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+
+            </div>
+            
+        </div>
+        
+    </div>
+
+
+    
+
+{% endblock %}
+
+
+{% block js_extra %}
+
+    <script>
+
+        function TranslateDatepickerToEs(){
+            $.datepicker.regional['es'] = {
+                closeText: 'Cerrar',
+                prevText: '< Ant',
+                nextText: 'Sig >',
+                currentText: 'Hoy',
+                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+                dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+                dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+                weekHeader: 'Sm',
+                dateFormat: 'dd/mm/yy',
+                firstDay: 1,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: ''
+            };
+            $.datepicker.setDefaults($.datepicker.regional['es']);
+            $(function () {
+                $("#id_fecha").datepicker();
+            });
+        }
+
+        
+        
+        $(document).ready(function () {
+            TranslateDatepickerToEs();
+        });
+
+
+
+    
+    </script>
+    
+    
+    <script>
+        function Volver() {
+            window.location.replace("/facturas/listado");
+        }
+    </script>
+
+{% endblock %}
