@@ -36,9 +36,13 @@ def banco_new(request):
         if form.is_valid():
             banco = form.save(commit=False)
             banco.usuario = usuario
-            banco.save()
-            messages.success(request, "Se ha grabado los datos del banco.")
-            return redirect('/bancos/listado')
+            try:
+                banco.save()
+                messages.success(request, "Se ha grabado los datos del banco.")
+                return redirect('/bancos/listado')
+            except Exception as e:
+                messages.warning(request, "Ha ocurrido un error.")
+                return redirect('/bancos/listado')
         else:
             messages.warning(request, form.errors)
             return redirect('/bancos/listado')

@@ -11,6 +11,10 @@ class Banco(models.Model):
 
     def __str__(self):
         return self.descripcion.upper()
+    
+    def save(self, *args, **kwargs):
+        self.descripcion = self.descripcion.upper()
+        super(Banco, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name_plural = "Bancos"

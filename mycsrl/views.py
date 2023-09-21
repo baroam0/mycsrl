@@ -5,6 +5,10 @@ from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 
 
+
+from pagos.models import Obra
+
+
 @login_required(login_url='/login')
 def home(request):
     return render(request, 'base.html')
@@ -35,3 +39,5 @@ def loginusuario(request):
 def salir(request):
     logout(request)
     return redirect('/login')
+
+

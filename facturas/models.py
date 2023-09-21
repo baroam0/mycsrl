@@ -55,6 +55,7 @@ class FacturaProveedor(models.Model):
     proveedor = models.ForeignKey(
         Proveedor, on_delete=models.CASCADE, null=True, blank=False)
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
+    pagado = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.fecha)

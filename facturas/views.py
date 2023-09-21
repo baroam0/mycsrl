@@ -626,4 +626,68 @@ def detallefacturaproveedor_delete(request, pk):
 
 
 
+
+
+#####################################################################
+#################SECCION PAGO FACTURA ###############################
+#####################################################################
+
+
+"""
+
+def nuevodetallefactura(request,pk):
+    factura = FacturaProveedor.objects.get(pk=pk)
+    if request.POST:
+        usuario = request.user
+        form =  DetalleFacturaProveedorForm(request.POST)
+        if form.is_valid():
+            detallefactura = form.save(commit=False)
+            detallefactura.factura = factura
+            detallefactura.usuario = usuario
+            detallefactura.save()
+            messages.success(request, "Se ha grabado los datos.")
+            return redirect('/facturas/unidades/listado')
+        else:
+            messages.warning(request, form.errors)
+            return redirect('/facturas/unidades/listado')
+    else:
+        form = DetalleFacturaProveedorForm()
+        return render(
+            request,
+            'facturas/detallefactura_edit.html',
+            {"form": form}
+        )
+
+
+def editardetallefactura(request, pk):
+    detallefactura = DetalleFacturaProveedor.objects.get(pk=pk)
+
+    if request.POST:
+        form = DetalleFacturaProveedorForm(request.POST, instance=detallefactura)
+        if form.is_valid():
+            detallefactura = form.save(commit=False)
+            usuario = request.user
+            detallefactura.usuario = usuario
+            print(detallefactura.cantidad)
+            detallefactura.save()
+            messages.success(request, "Se ha modificado los datos.")
+            return redirect('/facturas/listado')
+        else:
+            messages.warning(request, form.errors)
+            return redirect('/facturas/listado')
+    else:
+        form = DetalleFacturaProveedorForm(instance=detallefactura)
+        return render(
+            request,
+            'facturas/detallefactura_edit.html',
+            {
+                "form": form,
+                "pk": pk
+            }
+        )
+
+
+"""
+
+
 # Create your views here.

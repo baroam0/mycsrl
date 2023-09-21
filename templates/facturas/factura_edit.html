@@ -42,13 +42,13 @@
                         <div class="col-3">
                             <button class="btn btn-secondary" id="btn-nuevo" type="button" onclick="AbrirVentana({{pk}})">
                                 <i class="fas fa-plus"></i>
-                                Agregar
+                                Agregar Item
                             </button>
                         </div>
 
                         <div class="col-3">
-                            <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="Volver()">
-                                <i class="far fa-times-circle"></i>
+                            <button type="button" class="btn btn-secondary" id="btn-cancelar" onclick="AbrirVentanaPagos({{pk}})">
+                                <i class="fas fa-dollar-sign"></i>
                                 Pagos
                             </button>
                         </div>
@@ -89,7 +89,7 @@
                         <td>{{ detallefactura.rubro }} </td>
                         <td>{{ detallefactura.descripciondetalle.descripciondetalle.upper }} </td>
                         <td>{{ detallefactura.cantidad }} </td>
-			<td>{{ detallefactura.unidad.descripcion }}</td>
+			            <td>{{ detallefactura.unidad.descripcion }}</td>
                         <td>$ {{ detallefactura.gettotal |floatformat:2 }} </td>
                         <td>{{ detallefactura.usuario }}</td>
 
@@ -380,9 +380,15 @@
         }
 
 
+        function AbrirVentanaPagos(pk){
+            var urldetallefactura = "/facturas/detalle/editar/" + pk;
+            window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
+        }
+
+
         function BorrarDetalle(pk){
             var urldetallefactura = "/facturas/delete/" + pk;
-            window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
+            window.open(urldetallefactura,"Ratting","width=700,height=400,left=100,top=100,toolbar=0,status=0,");
         }
 
     </script>

@@ -18,18 +18,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-from .views import home, loginusuario, salir
-
+from .views import listadodevengamiento, devengamiento_new, devengamiento_edit
 
 urlpatterns = [
-    path('', home, name="home"),
-    path('salir/', salir),
-    path('login/', loginusuario, name="login"),
-    path('admin/', admin.site.urls),
-    path('user/', include("usuariosadm.urls")),
-    path('pagos/', include("pagos.urls")),
-    path('bancos/', include("bancos.urls")),
-    path('facturas/', include("facturas.urls")),
-    path('rodados/', include("rodados.urls")),
-    path('devengamiento/', include("devengamientos.urls")),
+    path('listado/<int:pk>', listadodevengamiento, name='bancolistado'),
+    path('nuevo/<int:pk>', devengamiento_new, name='devengamiento_new'),
+    path('editar/<int:pk>', devengamiento_edit, name='devengamiento_edit'),
 ]
