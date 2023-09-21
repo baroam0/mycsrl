@@ -5,8 +5,10 @@ from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 
 
+from devengamientos.models import Devengamiento
+from pagos.models import Obra, Proveedor
+from facturas.models import FacturaProveedor, DetalleFacturaProveedor
 
-from pagos.models import Obra
 
 
 @login_required(login_url='/login')
@@ -40,4 +42,46 @@ def salir(request):
     logout(request)
     return redirect('/login')
 
+
+def reporte(request):
+    
+    obras = Obra.objects.all()
+    proveedores = Proveedor.objects.all()
+    facturaspagadas = FacturaProveedor.objects.filter(pagado=True)
+    facturasimpagas = FacturaProveedor.objects.filter(pagado=False)
+
+    return render(
+        request, 
+        'reporte.html',
+        {
+            "obras": obras,
+            "proveedores": proveedores,
+            "facturaspagadas": facturaspagadas,
+            "facturasimpagas": facturasimpagas,
+        }
+    )
+
+
+
+def helperpagado(factura_id):
+    factura = FacturaProveedor.objects.get(pk=factura_id)
+    devengamientos = Devengamiento.objects.filter(factura=factura)
+    detallefacturas = DetalleFacturaProveedor.objects.filter(factura=factura)
+    devengamientos = Devengamiento.objects.filter(factura=factura)
+
+    totaldevengado = 0
+    for i in devengamientos:
+        totaldevengado = totaldevengado + i.monto
+
+    totalfactura = 0
+    for i in detallefacturas:
+        totalfactura = totalfactura + i.gettotal()
+    
+    if totalfactura == totaldevengado:
+        factura.pagado = True
+        factura.save()
+    else:
+        factura.pagado = False
+        factura.save()
+    return True
 

@@ -32,28 +32,21 @@
                     <hr>
 
                     <div class="row">
-                        <div class="col-3">
+                        <div class="col-4">
                             <button class="btn btn-primary" id="btn-guardar" type="submit">
                                 <i class="fas fa-check"></i>
                                 Aceptar
                             </button>
                         </div>
                         
-                        <div class="col-3">
+                        <div class="col-4">
                             <button class="btn btn-secondary" id="btn-nuevo" type="button" onclick="AbrirVentana({{pk}})">
                                 <i class="fas fa-plus"></i>
                                 Agregar Item
                             </button>
                         </div>
 
-                        <div class="col-3">
-                            <button type="button" class="btn btn-secondary" id="btn-cancelar" onclick="AbrirVentanaPagos({{pk}})">
-                                <i class="fas fa-dollar-sign"></i>
-                                Pagos
-                            </button>
-                        </div>
-
-                        <div class="col-3">    
+                        <div class="col-4">    
                             <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="Volver()">
                                 <i class="far fa-times-circle"></i>
                                 Cancelar
@@ -73,7 +66,7 @@
                         <th>Obra</th>
                         <th>Rubro</th>
                         <th>Descripcion</th>
-       		        <th>Cantidad</th>
+       		            <th>Cantidad</th>
                         <th>Unidad</th>
                         <th>Monto</th>
                         <th>Usuario</th>
@@ -83,27 +76,26 @@
 
                 <tbody>
                     {% for detallefactura in detallesfactura %}
-                    <tr>
-                        
-                        <td>{{ detallefactura.obra }} </td>
-                        <td>{{ detallefactura.rubro }} </td>
-                        <td>{{ detallefactura.descripciondetalle.descripciondetalle.upper }} </td>
-                        <td>{{ detallefactura.cantidad }} </td>
-			            <td>{{ detallefactura.unidad.descripcion }}</td>
-                        <td>$ {{ detallefactura.gettotal |floatformat:2 }} </td>
-                        <td>{{ detallefactura.usuario }}</td>
+                        <tr>                        
+                            <td>{{ detallefactura.obra }} </td>
+                            <td>{{ detallefactura.rubro }} </td>
+                            <td>{{ detallefactura.descripciondetalle.descripciondetalle.upper }} </td>
+                            <td>{{ detallefactura.cantidad }} </td>
+                            <td>{{ detallefactura.unidad.descripcion }}</td>
+                            <td>$ {{ detallefactura.gettotal |floatformat:2 }} </td>
+                            <td>{{ detallefactura.usuario }}</td>
 
-                        <td>
-                            <button type="button" class="btn btn-link btn-sm" onclick="AbrirVentanaEditar({{detallefactura.pk}})">
-                                <i class="fas fa-pencil-alt"></i>
-                            </button>
+                            <td>
+                                <button type="button" class="btn btn-link btn-sm" onclick="AbrirVentanaEditar({{detallefactura.pk}})">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </button>
 
-                            <button type="button" class="btn btn-link btn-sm" onclick="BorrarDetalle({{detallefactura.pk}})">
-                                <i class="fas fa-trash"></i>
-                            </button>
+                                <button type="button" class="btn btn-link btn-sm" onclick="BorrarDetalle({{detallefactura.pk}})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
 
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
                     {% endfor %}
                 </tbody>
             </table>

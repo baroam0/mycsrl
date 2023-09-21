@@ -60,7 +60,13 @@
 
                 <tbody>
                     {% for resultado in resultados %}
-                    <tr>
+
+                    {% if resultado.pagado%}
+                        <tr style="background-color:#00FFFF">
+                    {% else %}
+                        <tr>
+                    {% endif %}
+                    
                         <td>{{ resultado.pk }}  </td>
                         <td>{{ resultado.fecha }}  </td>
                         <td>{{ resultado.proveedor }} </td>

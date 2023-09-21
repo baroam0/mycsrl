@@ -10,14 +10,12 @@ from .forms import DevengamientoForm
 from .models import Devengamiento
 
 from facturas.models import FacturaProveedor, DetalleFacturaProveedor
+from mycsrl.views import helperpagado
 
 
-def listadodevengamiento(request, pk):
-    
+def listadodevengamiento(request, pk):    
     factura = FacturaProveedor.objects.get(pk=pk)
     devengamiento = Devengamiento.objects.filter(factura=factura)
-
-    
     paginador = Paginator(devengamiento, 20)
 
     if "page" in request.GET:
@@ -36,16 +34,15 @@ def listadodevengamiento(request, pk):
 def devengamiento_new(request, pk):
     factura = FacturaProveedor.objects.get(pk=pk)
     detallefacturas = DetalleFacturaProveedor.objects.filter(factura=factura)
-
     devengamientos = Devengamiento.objects.filter(factura=factura)
-
-    totaldevengado = 0
-    for i in devengamientos:
-        totaldevengado = totaldevengado + i.monto
 
     totalfactura = 0
     for i in detallefacturas:
         totalfactura = totalfactura + i.gettotal()
+
+    totaldevengado = 0
+    for i in devengamientos:
+        totaldevengado = totaldevengado + i.monto
 
     if request.POST:
         usuario = request.user
@@ -55,6 +52,9 @@ def devengamiento_new(request, pk):
             devengamiento.usuario = usuario
             devengamiento.factura = factura
             devengamiento.save()
+
+            helperpagado(factura.pk)
+            
             messages.success(request, "Se han grabado los datos.")
             return redirect('/devengamiento/nuevo/' + str(pk))
         else:
@@ -77,30 +77,27 @@ def devengamiento_new(request, pk):
 
 def devengamiento_edit(request, pk):
     consulta = Devengamiento.objects.get(pk=pk)
-
-    factura = FacturaProveedor.objects.get(pk=consulta.factura.pk)
-    detallefacturas = DetalleFacturaProveedor.objects.filter(factura=factura)
-
-    devengamientos = Devengamiento.objects.filter(factura=factura)
-
-    totaldevengado = 0
-    for i in devengamientos:
-        totaldevengado = totaldevengado + i.monto
+    detallefacturas = DetalleFacturaProveedor.objects.filter(factura=consulta.factura.pk)
+    devengamientos = Devengamiento.objects.filter(factura=consulta.factura.pk)
 
     totalfactura = 0
     for i in detallefacturas:
         totalfactura = totalfactura + i.gettotal()
 
+    totaldevengado = 0
+    for i in devengamientos:
+        totaldevengado = totaldevengado + i.monto
 
     if request.POST:
         form = DevengamientoForm(request.POST, instance=consulta)
         if form.is_valid():
-            banco = form.save(commit=False)
+            devengamiento = form.save(commit=False)
             usuario = request.user
-            banco.usuario = usuario
-            banco.save()
+            devengamiento.usuario = usuario
+            devengamiento.save()
+            helperpagado(consulta.factura.pk)
             messages.success(request, "Se han grabado los datos.")
-            return redirect('/devengamiento/nuevo/' + str(pk))
+            return redirect('/devengamiento/editar/' + str(pk))
         else:
             messages.warning(request, form.errors)
             return redirect('/devengamiento/editar/' + str(pk))
@@ -111,11 +108,12 @@ def devengamiento_edit(request, pk):
             'devengamientos/devengamiento_edit.html',
             {
                 "form": form,
-                "pk": factura,
+                "pk": consulta.factura.pk,
                 "devengamientos": devengamientos,
                 "totalfactura": totalfactura,
                 "totaldevengado": totaldevengado
             }
         )
+
 
 # Create your views here.

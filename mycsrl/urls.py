@@ -18,7 +18,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-from .views import home, loginusuario, salir
+from .views import home, loginusuario, salir, reporte
 
 
 urlpatterns = [
@@ -32,4 +32,5 @@ urlpatterns = [
     path('facturas/', include("facturas.urls")),
     path('rodados/', include("rodados.urls")),
     path('devengamiento/', include("devengamientos.urls")),
+    path('reporte/', reporte)
 ]
