@@ -601,7 +601,7 @@ def ajaxloaddetallefactura(request, pk):
 
 def ajaxloadunidad(request, pk):
     descripciondetalle = Descripciondetalle.objects.get(pk=pk)
-    unidad = Unidad.objects.get(pk=descripciondetalle.pk)
+    #unidad = Unidad.objects.get(pk=descripciondetalle.pk)
     
     return JsonResponse({
         "data": descripciondetalle.unidad.pk
