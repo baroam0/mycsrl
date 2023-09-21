@@ -4,7 +4,7 @@ from django.core import serializers
 
 from django.core.paginator import Paginator
 from django.db.models import F, Q
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 
 from .forms import (
@@ -378,8 +378,6 @@ def nuevafactura(request):
     return redirect('/facturas/editar/' + str(ultimafactura.pk))
 
 
-#preciototal= F('cantidad') * F('preciounitario') + ( F('cantidad') * F('preciounitario') * F('iva') / 100 ) 
-
 def editarfactura(request, pk):
     factura = FacturaProveedor.objects.get(pk=pk)
     detallesfactura = DetalleFacturaProveedor.objects.filter(
@@ -608,6 +606,23 @@ def ajaxloadunidad(request, pk):
     })
 
 
+def detallefacturaproveedor_delete(request, pk):
+    detallefacturaproveedor = DetalleFacturaProveedor.objects.get(pk=pk)
+    facturaproveedor = FacturaProveedor.objects.get(
+        pk=detallefacturaproveedor.factura.pk)
+    
+    if request.method =="POST":
+        detallefacturaproveedor.delete()
+        return HttpResponseRedirect("/facturas/editar/" + str(facturaproveedor.pk))
+ 
+    return render(
+            request,
+            'facturas/detallefacturaproveedor_delete.html',
+            {
+                "detalle": detallefacturaproveedor
+            }
+        )
+    
 
 
 

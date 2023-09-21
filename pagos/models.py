@@ -4,6 +4,18 @@ from django.db import models
 from bancos.models import Banco
 from usuariosadm.models import UserAdm
 
+
+class MedioPago(models.Model):
+    descripcion = models.CharField(max_length=200, unique=True)
+    usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.descripcion.upper()
+
+    class Meta:
+        verbose_name_plural = "Medios de Pago"
+
+
 class Obra(models.Model):
     descripcion = models.CharField(max_length=200, unique=True)
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)

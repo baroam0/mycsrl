@@ -25,7 +25,8 @@ from .views import (ajax_save_factura, listadofactura, obra_new, listadoobra,
                     listadorubro, rubro_new, rubro_edit, 
                     listadoordenpago, ordenpago_new, ordenpago_edit,
                     proveedorbanco_new, proveedorbanco_edit,
-                    listadotipocuentabancaria, tipocuentabancaria_new, tipocuentabancaria_edit)
+                    listadotipocuentabancaria, tipocuentabancaria_new, tipocuentabancaria_edit,
+                    impresiondatobancario, listadomediopago, mediopago_new, mediopago_edit)
 
 urlpatterns = [
     path('factura/ajaxgrabarfactura/', ajax_save_factura, name='ajaxgrabarfactura'),
@@ -51,7 +52,13 @@ urlpatterns = [
     path('proveedorbanco/nuevo/<int:pk>', proveedorbanco_new, name='proveedorbanco_new'),
     path('proveedorbanco/editar/<int:pk>', proveedorbanco_edit, name='proveedorbanco_edit'),
 
+    path('mediopago/listado/', listadomediopago, name='listadomediopago'),
+    path('mediopago/nuevo/', mediopago_new, name='mediopago_new'),
+    path('mediopago/editar/<int:pk>', mediopago_edit, name='mediopago_edit'),
+
+
     path('tiposcuentasbancarias/listado/', listadotipocuentabancaria, name='listadotipocuentabancaria'),
     path('tiposcuentasbancarias/nuevo/', tipocuentabancaria_new, name='tipocuentabancaria_new'),
     path('tiposcuentasbancarias/editar/<int:pk>', tipocuentabancaria_edit, name='tipocuentabancaria_edit'),
+    path('impresion/<int:pk>', impresiondatobancario, name='tipocuentabancaria_edit'),
 ]

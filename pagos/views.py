@@ -9,10 +9,109 @@ from django.http import JsonResponse
 from django.db.models import F, Sum, Q
 
 from .forms import (
-    DetalleFacturaForm, FacturaForm, ObraForm, ProveedorForm, 
+    DetalleFacturaForm, FacturaForm, MedioPagoForm, ObraForm, ProveedorForm, 
     ProveedorBancoForm, RubroForm, OrdenPagoForm, TipoCuentaForm)
 
-from .models import (Factura, DetalleFactura, Obra, Proveedor, ProveedorBanco, Rubro, OrdenPago, TipoCuenta)
+from .models import (Factura, DetalleFactura, MedioPago, 
+                     Obra, Proveedor, ProveedorBanco, Rubro, OrdenPago, TipoCuenta)
+
+
+
+
+#######################################################################
+######################### SECCION MEDIOS DE PAGO ######################
+#######################################################################
+
+def listadomediopago(request):
+    if "txtBuscar" in request.GET:
+        parametro = request.GET.get('txtBuscar')
+        mediospagos = MedioPago.objects.filter(descripcion__contains=parametro)
+    else:
+        mediospagos = MedioPago.objects.all()
+    paginador = Paginator(mediospagos, 20)
+
+    if "page" in request.GET:
+        page = request.GET.get('page')
+    else:
+        page = 1
+    resultados = paginador.get_page(page)
+    return render(
+        request,
+        'pagos/mediopago_list.html',
+        {
+            'resultados': resultados
+        })
+
+
+def mediopago_new(request):
+    if request.POST:
+        usuario = request.user
+        form = MedioPagoForm(request.POST)
+        if form.is_valid():
+            mediopago = form.save(commit=False)
+            mediopago.usuario = usuario
+            mediopago.save()
+            messages.success(request, "Se ha grabado los datos.")
+            return redirect('/pagos/mediopago/listado/')
+        else:
+            messages.warning(request, form.errors)
+            return redirect('/pagos/mediopago/listado/')
+    else:
+        form = MedioPagoForm()
+        return render(
+            request,
+            'pagos/mediopago_edit.html',
+            {"form": form}
+        )
+
+
+def mediopago_edit(request, pk):
+    consulta = MedioPago.objects.get(pk=pk)
+   
+    if request.POST:
+        form = MedioPagoForm(request.POST, instance=consulta)
+        if form.is_valid():
+            mediopago = form.save(commit=False)
+            usuario = request.user
+            mediopago.usuario = usuario
+            mediopago.save()
+            messages.success(request, "Se ha modificado el rubro.")
+            return redirect('/pagos/mediopago/listado/')
+        else:
+            messages.warning(request, form.errors)
+            return redirect('/pagos/mediopago/listado/')
+    else:
+        form = MedioPagoForm(instance=consulta)
+        return render(
+            request,
+            'pagos/mediopago_edit.html',
+            {"form": form}
+        )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def listadofactura(request):
@@ -324,7 +423,8 @@ def proveedor_new(request):
             proveedor.usuario = usuario
             proveedor.save()
             messages.success(request, "Se ha grabado de los datos del proveedor.")
-            return redirect('/pagos/proveedor/listado')
+            ultimoproveedor = Proveedor.objects.latest("pk")
+            return redirect('/pagos/proveedor/proveedoredit/' + str(ultimoproveedor.pk))
         else:
             messages.warning(request, form.errors)
             return redirect('/pagos/proveedor/listado')
@@ -696,5 +796,18 @@ def ordenpago_edit(request, pk):
                 "pk": ordenpago.detallefactura.pk
             } 
         )
+
+
+def impresiondatobancario(request, pk):
+
+    consulta = ProveedorBanco.objects.get(pk=pk)
+   
+    return render(
+        request,
+        'pagos/impresion.html',
+        {
+            "resultados": consulta
+        } 
+    )
 
 # Create your views here.
