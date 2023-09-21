@@ -41,7 +41,8 @@ class Proveedor(models.Model):
     cuit = models.CharField(max_length=15, null=True, blank=True)
 
     def __str__(self):
-        return self.nombrefantasia.upper() + " - " + self.razonsocial.upper() 
+        #return self.nombrefantasia.upper() + " - " + self.razonsocial.upper() 
+        return self.razonsocial.upper() 
 
     class Meta:
         verbose_name_plural = "Proveedores"
