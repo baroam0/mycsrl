@@ -28,7 +28,7 @@
 
         <form action="/reportes/" method="GET">
             <div class="form-inline">
-                <div class="col-3">
+                <div class="col-4">
                     <label>Obra</label>
                     <select id="id_obra">
                         <option value=0>------ </option>
@@ -38,7 +38,7 @@
                     </select>
                 </div>
 
-                <div class="col-3">
+                <div class="col-4">
                     <label>Proveedores</label>
                     <select id="id_proveedor">
                         <option value=0>------ </option>
@@ -48,7 +48,7 @@
                     </select>
                 </div>
 
-                <div class="col-3">
+                <div class="col-4">
                     <label>Facturas Pagadas </label>
                     <select id="id_facturaspagadas">
                         <option value=0>------ </option>
@@ -62,7 +62,7 @@
             <hr>
 
             <div class="form-inline">
-                <div class="col-3">
+                <div class="col-4">
                     <label>Facturas Impagas </label>
                     <select id="id_facturasimpagas">
                         <option value=0>------ </option>
@@ -93,5 +93,18 @@
 
         </form>
     </div>
+
+{% endblock %}
+
+
+{% block js_extra %}
+
+    <script>
+        $(document).ready(function () {
+            $('#id_proveedor').select2();
+        });
+
+    
+    </script>
 
 {% endblock %}
