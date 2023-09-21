@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 from .models import (
     DetalleFactura, Factura, Obra, OrdenPago, Proveedor, ProveedorBanco,
-    Rubro, TipoCuenta
+    Rubro, TipoCuenta, MedioPago
 )
 
 from bancos.models import Banco
@@ -81,6 +81,24 @@ class FacturaForm(forms.ModelForm):
     class Meta:
         model = Factura
         fields = ["obra"]
+
+
+class MedioPagoForm(forms.ModelForm):
+   
+    descripcion = forms.CharField(
+        label="Descripcion"
+    )
+    
+    def __init__(self, *args, **kwargs):
+        super(MedioPagoForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+
+    class Meta:
+        model = MedioPago
+        fields = ["descripcion"]
 
 
 class ObraForm(forms.ModelForm):
