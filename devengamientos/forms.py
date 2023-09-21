@@ -19,12 +19,12 @@ class DevengamientoForm(forms.ModelForm):
         label="Medio de Pago"
     )
 
-    numerocheque = forms.CharField(label="Numero de Cheque")
+    numerocheque = forms.CharField(label="Numero de Cheque", required=False)
     
     monto = forms.DecimalField(label="Monto")
 
     banco = forms.ModelChoiceField(
-        label="Banco", queryset=Banco.objects.all())
+        label="Banco", queryset=Banco.objects.all(), required=False)
 
     def __init__(self, *args, **kwargs):
         super(DevengamientoForm, self).__init__(*args, **kwargs)

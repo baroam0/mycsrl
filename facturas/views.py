@@ -17,6 +17,10 @@ from .models import (
     IngresoBruto, Iva, Descripciondetalle
 )
 
+from mycsrl.views import helperpagado
+
+from devengamientos.models import Devengamiento
+
 from pagos.models import Proveedor, Obra, Rubro
 
 
@@ -608,10 +612,12 @@ def ajaxloadunidad(request, pk):
 
 def detallefacturaproveedor_delete(request, pk):
     detallefacturaproveedor = DetalleFacturaProveedor.objects.get(pk=pk)
+    
     facturaproveedor = FacturaProveedor.objects.get(
         pk=detallefacturaproveedor.factura.pk)
     
     if request.method =="POST":
+        helperpagado(facturaproveedor.pk)
         detallefacturaproveedor.delete()
         return HttpResponseRedirect("/facturas/editar/" + str(facturaproveedor.pk))
  
@@ -622,10 +628,6 @@ def detallefacturaproveedor_delete(request, pk):
                 "detalle": detallefacturaproveedor
             }
         )
-    
-
-
-
 
 
 #####################################################################
