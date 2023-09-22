@@ -61,11 +61,24 @@
                 <tbody>
                     {% for resultado in resultados %}
 
-                    {% if resultado.pagado%}
-                        <tr style="background-color:#00FFFF">
+                    {{resultado.pagoparcial}}
+                    {{resultado.pagado}}
+
+                    {% if resultado.pagoparcial %}
+                        {% if resultado.pagado %}
+                            <tr style="background-color:#f1bef1">
+                        {%else %}
+                            <tr style="background-color:#dbd80f">
+                        {% endif %}
                     {% else %}
                         <tr>
                     {% endif %}
+                    
+                    
+                        
+                    
+                        
+                    
                     
                         <td>{{ resultado.pk }}  </td>
                         <td>{{ resultado.fecha }}  </td>

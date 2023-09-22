@@ -1,9 +1,9 @@
 
+from django.apps import apps
 from django.db import models
 
 from pagos.models import Obra, Proveedor, Rubro
 from usuariosadm.models import UserAdm
-
 
 from rodados.models import Rodado
 
@@ -56,9 +56,11 @@ class FacturaProveedor(models.Model):
         Proveedor, on_delete=models.CASCADE, null=True, blank=False)
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
     pagado = models.BooleanField(default=False)
+    pagoparcial = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.fecha)
+
     class Meta:
         verbose_name_plural = "Facturas"
 

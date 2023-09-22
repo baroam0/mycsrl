@@ -53,7 +53,7 @@ def devengamiento_new(request, pk):
             devengamiento.usuario = usuario
             devengamiento.factura = factura
             devengamiento.save()
-            helperpagado(factura.pk)
+            helperpagado(factura.pk, usuario)
             messages.success(request, "Se han grabado los datos.")
             return redirect('/devengamiento/nuevo/' + str(pk))
         else:
@@ -95,9 +95,9 @@ def devengamiento_edit(request, pk):
             usuario = request.user
             devengamiento.usuario = usuario
             devengamiento.save()
-            helperpagado(consulta.factura.pk)
+            helperpagado(consulta.factura.pk, usuario)
             messages.success(request, "Se han grabado los datos.")
-            return redirect('/devengamiento/editar/' + str(pk))
+            return redirect('/devengamiento/nuevo/' + str(consulta.factura.pk))
         else:
             messages.warning(request, form.errors)
             return redirect('/devengamiento/editar/' + str(pk))
@@ -125,7 +125,8 @@ def devengamiento_delete(request, pk):
 
     if request.method =="POST":
         devengamiento.delete()
-        helperpagado(facturaproveedor.pk)
+        usuario = request.user
+        helperpagado(facturaproveedor.pk, usuario)
         return redirect('/devengamiento/listado/')
         
     return render(

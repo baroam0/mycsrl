@@ -447,7 +447,6 @@ def editardetallefactura(request, pk):
             detallefactura = form.save(commit=False)
             usuario = request.user
             detallefactura.usuario = usuario
-            print(detallefactura.cantidad)
             detallefactura.save()
             messages.success(request, "Se ha modificado los datos.")
             return redirect('/facturas/listado')
