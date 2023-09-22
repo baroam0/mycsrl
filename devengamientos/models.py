@@ -22,6 +22,6 @@ class Devengamiento(models.Model):
     
     class Meta:
         verbose_name_plural = "Devengamientos"
-
+        unique_together = ('numerocheque', 'banco')
 
 # Create your models here.
