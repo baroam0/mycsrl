@@ -54,20 +54,20 @@
                 <div class="row">
                 
                     <div class="col-4">
-                        <h4>Total Factura: $ {{ totalfactura | floatformat:2 }}</h4>
+                        <h5>Total Factura: $ {{ totalfactura | floatformat:2 }}</h5>
                     </div>
-                    
+
                     <div class="col-4">
+                        <h5>Total Devengado: $ {{ totaldevengado | floatformat:2 }}</h5>
                     </div>
-                    
+
                     <div class="col-4">
-                        <h4>Total Devengado: $ {{ totaldevengado | floatformat:2 }}</h4>
+                        <h5>Total Saldo: $ {{ saldo | floatformat:2 }}</h5>
                     </div>
     
                 </div>
 
-                
-                
+
                 <table class="table table-hover">
                     <thead>
                         <tr>   
@@ -95,6 +95,10 @@
                                 <button type="button" class="btn btn-link btn-sm" onclick="location.href='/devengamiento/editar/' + {{ devengamiento.pk }}">
                                     <i class="fas fa-pencil-alt"></i>
                                 </button>                                
+
+                                <button type="button" class="btn btn-link btn-sm" onclick="BorrarDetalle({{devengamiento.pk}})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </td>
 
                         </tr>
@@ -151,11 +155,12 @@
 
 
 
+        function BorrarDetalle(pk){
+            var urldetallefactura = "/devengamiento/delete/" + pk;
+            window.open(urldetallefactura,"Ratting","width=700,height=400,left=100,top=100,toolbar=0,status=0,");
+        }
     
-    </script>
-    
-    
-    <script>
+
         function Volver() {
             window.location.replace("/facturas/listado");
         }

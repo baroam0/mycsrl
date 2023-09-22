@@ -77,10 +77,15 @@ def helperpagado(factura_id):
     for i in detallefacturas:
         totalfactura = totalfactura + i.gettotal()
     
+    totaldevengado = round(totaldevengado, 2)
+    totalfactura = round(totalfactura, 2)
+
     if totalfactura == totaldevengado:
+        print("pasa por el true")
         factura.pagado = True
         factura.save()
     else:
+        print("pasa por el false")
         factura.pagado = False
         factura.save()
     return True

@@ -19,8 +19,9 @@ class DevengamientoForm(forms.ModelForm):
         label="Medio de Pago"
     )
 
-    numerocheque = forms.CharField(label="Numero de Cheque", required=False)
-    
+    numerocheque = forms.CharField(
+        label="Numero de Cheque", required=False)
+
     monto = forms.DecimalField(label="Monto")
 
     banco = forms.ModelChoiceField(

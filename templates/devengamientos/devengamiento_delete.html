@@ -1,0 +1,82 @@
+
+{% extends 'base_nomenu.html' %}
+
+
+{% block content %}
+    <div class="container">
+
+        <br>
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-10">
+                <h5>Esta seguro que desea borrar el pago:  </h5>
+                <h5> {{detalle.fecha}} - {{detalle.mediopago}} - $ {{detalle.monto}}  </h5>
+            </div>
+            <div class="col-sm-1"></div>
+        </div>
+
+        <div class="row">
+            
+            <div class="col-12">
+                <form  method="POST" id="myform" >{% csrf_token %}
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-2">
+                            <button class="btn btn-primary" id="btn-guardar" type="submit">
+                                <i class="fas fa-check"></i>
+                                Aceptar
+                            </button>
+                        </div>
+
+                        <div class="col-8">
+                        </div>
+
+                        <div class="col-2">    
+                            <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="BotonCancelar()">
+                                <i class="far fa-times-circle"></i>
+                                Cancelar
+                            </button>
+                        </div>                        
+                    </div>
+                    <hr>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block js_extra %}
+
+    <script>
+
+
+        function BotonCancelar(){
+            window.close();
+        }
+        
+
+        function BorrarDetalle(pk){
+            var urldetallefactura = "/facturas/delete/" + pk;
+            window.open(urldetallefactura,"Ratting","width=700,height=400,left=100,top=100,toolbar=0,status=0,");
+        }
+
+
+
+        $(document).ready(function () {
+            
+            window.onunload = function(){
+                window.opener.location.reload();
+                window.close(); 
+            };
+            
+            $( "#myform" ).on( "submit", function( event ) {   
+
+            });
+        });
+
+    </script>
+
+{% endblock %}

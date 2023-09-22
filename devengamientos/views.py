@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.contrib import messages
 
 from django.core.paginator import Paginator
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 
 from .forms import DevengamientoForm
@@ -52,9 +53,7 @@ def devengamiento_new(request, pk):
             devengamiento.usuario = usuario
             devengamiento.factura = factura
             devengamiento.save()
-
             helperpagado(factura.pk)
-            
             messages.success(request, "Se han grabado los datos.")
             return redirect('/devengamiento/nuevo/' + str(pk))
         else:
@@ -70,7 +69,8 @@ def devengamiento_new(request, pk):
                 "pk": factura,
                 "devengamientos": devengamientos,
                 "totalfactura": totalfactura,
-                "totaldevengado": totaldevengado
+                "totaldevengado": totaldevengado,
+                "saldo": (totalfactura - totaldevengado)   
             }
         )
 
@@ -111,9 +111,31 @@ def devengamiento_edit(request, pk):
                 "pk": consulta.factura.pk,
                 "devengamientos": devengamientos,
                 "totalfactura": totalfactura,
-                "totaldevengado": totaldevengado
+                "totaldevengado": totaldevengado,
+                "saldo": (totalfactura - totaldevengado)
             }
         )
+
+
+
+def devengamiento_delete(request, pk):
+    devengamiento = Devengamiento.objects.get(pk=pk)
+
+    facturaproveedor = FacturaProveedor.objects.get(pk=devengamiento.factura.pk)
+
+    if request.method =="POST":
+        devengamiento.delete()
+        helperpagado(facturaproveedor.pk)
+        return redirect('/devengamiento/listado/')
+        
+    return render(
+            request,
+            'devengamientos/devengamiento_delete.html',
+            {
+                "detalle": devengamiento
+            }
+        )
+
 
 
 # Create your views here.

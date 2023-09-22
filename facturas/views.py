@@ -347,15 +347,6 @@ def listadofactura(request):
         
         facturas = consulta | consultafacturaobras | consultafacturadescripcion | consultafacturarubro
 
-        """
-        facturas = FacturaProveedor.objects.filter(
-            Q(proveedor__nombrefantasia__icontains=parametro) |
-            Q(proveedor__razonsocial__icontains=parametro) |
-            Q(proveedor__razonsocial__icontains=parametro) |
-            Q(comprobante__contains=parametro)
-        ).order_by('fecha')
-        """
-
     else:
         facturas = FacturaProveedor.objects.all()
     paginador = Paginator(facturas, 20)
@@ -365,6 +356,7 @@ def listadofactura(request):
     else:
         page = 1
     resultados = paginador.get_page(page)
+
     return render(
         request,
         'facturas/factura_list.html',

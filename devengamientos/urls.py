@@ -18,10 +18,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-from .views import listadodevengamiento, devengamiento_new, devengamiento_edit
+from .views import listadodevengamiento, devengamiento_new, devengamiento_edit, devengamiento_delete
 
 urlpatterns = [
     path('listado/<int:pk>', listadodevengamiento, name='bancolistado'),
     path('nuevo/<int:pk>', devengamiento_new, name='devengamiento_new'),
     path('editar/<int:pk>', devengamiento_edit, name='devengamiento_edit'),
+    path('delete/<int:pk>', devengamiento_delete, name='devengamiento_delete'),
 ]
