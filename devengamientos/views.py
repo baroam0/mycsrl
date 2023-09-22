@@ -70,7 +70,8 @@ def devengamiento_new(request, pk):
                 "pk": factura,
                 "devengamientos": devengamientos,
                 "totalfactura": totalfactura,
-                "totaldevengado": totaldevengado
+                "totaldevengado": totaldevengado,
+                "saldo": (totalfactura - totaldevengado)   
             }
         )
 
@@ -111,7 +112,8 @@ def devengamiento_edit(request, pk):
                 "pk": consulta.factura.pk,
                 "devengamientos": devengamientos,
                 "totalfactura": totalfactura,
-                "totaldevengado": totaldevengado
+                "totaldevengado": totaldevengado,
+                "saldo": (totalfactura - totaldevengado)
             }
         )
 
