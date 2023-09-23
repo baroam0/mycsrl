@@ -30,6 +30,9 @@ class Personal(models.Model):
     numerodocumento = models.IntegerField(null=False, blank=False)
     categoria = models.ForeignKey(
         Categoria, on_delete=models.CASCADE, null=True, blank=True)
+    
+    fechaingreso = models.DateField(null=True, blank=True)
+    fechabaja = models.DateField(null=True, blank=True)
 
     obra = models.ForeignKey(Obra, null=True, blank=True, on_delete=models.CASCADE)
 
@@ -45,7 +48,6 @@ class Personal(models.Model):
 
     class Meta:
         verbose_name_plural = "Personal"
-
 
 
 # Create your models here.

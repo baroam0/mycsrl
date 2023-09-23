@@ -36,6 +36,9 @@ class PersonalForm(forms.ModelForm):
         queryset=Categoria.objects.all()
     )
 
+    fechaingreso = forms.DateField(label="Fecha Ingreso", required=True)
+    fechabaja = forms.DateField(label="Fecha Egreso", required=False) 
+
     obra = forms.ModelChoiceField(
         label="Obra", queryset=Obra.objects.all())
 
@@ -48,5 +51,5 @@ class PersonalForm(forms.ModelForm):
 
     class Meta:
         model = Personal
-        fields = ["apellido", "nombre", "numerodocumento", "categoria", "obra"]
+        fields = ["apellido", "nombre", "numerodocumento", "categoria", "fechaingreso", "fechabaja", "obra"]
 
