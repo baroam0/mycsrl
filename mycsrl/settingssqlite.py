@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'facturas',
     'usuariosadm',
     'pagos',
+    'personal',
     'rodados'
 ]
 
