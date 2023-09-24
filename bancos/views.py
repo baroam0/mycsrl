@@ -1,6 +1,7 @@
 
 from django.contrib import messages
 
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 
@@ -8,6 +9,7 @@ from .forms import BancoForm
 from .models import Banco
 
 
+@login_required(login_url='/login')
 def listadobanco(request):
     if "txtBuscar" in request.GET:
         parametro = request.GET.get('txtBuscar')
@@ -29,6 +31,7 @@ def listadobanco(request):
         })
 
 
+@login_required(login_url='/login')
 def banco_new(request):
     if request.POST:
         usuario = request.user
@@ -55,6 +58,7 @@ def banco_new(request):
         )
 
 
+@login_required(login_url='/login')
 def banco_edit(request, pk):
     consulta = Banco.objects.get(pk=pk)
    

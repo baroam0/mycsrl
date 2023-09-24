@@ -1,5 +1,8 @@
 
 from django.contrib import messages
+
+from django.contrib.auth.decorators import login_required
+
 from django.core import serializers
 
 from django.core.paginator import Paginator
@@ -28,6 +31,7 @@ from pagos.models import Proveedor, Obra, Rubro
 ################### INGRESOS BRUTOS ###########################
 ###############################################################
 
+@login_required(login_url='/login')
 def listadoingresobruto(request):
     if "txtBuscar" in request.GET:
         parametro = request.GET.get('txtBuscar')
@@ -49,6 +53,7 @@ def listadoingresobruto(request):
         })
 
 
+@login_required(login_url='/login')
 def nuevoingresobruto(request):
     if request.POST:
         usuario = request.user
@@ -71,6 +76,7 @@ def nuevoingresobruto(request):
         )
 
 
+@login_required(login_url='/login')
 def editaringresobruto(request, pk):
     consulta = IngresoBruto.objects.get(pk=pk)
 
@@ -99,6 +105,8 @@ def editaringresobruto(request, pk):
 ################### IVA ###################################
 ###############################################################
 
+
+@login_required(login_url='/login')
 def listadoiva(request):
     if "txtBuscar" in request.GET:
         parametro = request.GET.get('txtBuscar')
@@ -120,6 +128,7 @@ def listadoiva(request):
         })
 
 
+@login_required(login_url='/login')
 def nuevoiva(request):
     if request.POST:
         usuario = request.user
@@ -142,6 +151,7 @@ def nuevoiva(request):
         )
 
 
+@login_required(login_url='/login')
 def editariva(request, pk):
     consulta = Iva.objects.get(pk=pk)
 
@@ -171,6 +181,7 @@ def editariva(request, pk):
 ###############################################################
 
 
+@login_required(login_url='/login')
 def listadodescripciondetalle(request):
     if "txtBuscar" in request.GET:
         parametro = request.GET.get('txtBuscar')
@@ -192,6 +203,7 @@ def listadodescripciondetalle(request):
         })
 
 
+@login_required(login_url='/login')
 def nuevadescripciondetalle(request):
     if request.POST:
         usuario = request.user
@@ -214,6 +226,7 @@ def nuevadescripciondetalle(request):
         )
 
 
+@login_required(login_url='/login')
 def editardescripciondetalle(request, pk):
     consulta = Descripciondetalle.objects.get(pk=pk)
 
@@ -242,6 +255,7 @@ def editardescripciondetalle(request, pk):
 ###############################################################
 
 
+@login_required(login_url='/login')
 def listadounidad(request):
     if "txtBuscar" in request.GET:
         parametro = request.GET.get('txtBuscar')
@@ -263,6 +277,7 @@ def listadounidad(request):
         })
 
 
+@login_required(login_url='/login')
 def nuevaunidad(request):
     if request.POST:
         usuario = request.user
@@ -285,6 +300,7 @@ def nuevaunidad(request):
         )
 
 
+@login_required(login_url='/login')
 def editarunidad(request, pk):
     consulta = Unidad.objects.get(pk=pk)
 
@@ -309,6 +325,7 @@ def editarunidad(request, pk):
         )
 
 
+@login_required(login_url='/login')
 def listadofactura(request):
     if "txtBuscar" in request.GET:
         parametro = request.GET.get('txtBuscar')
@@ -365,6 +382,7 @@ def listadofactura(request):
         })
 
 
+@login_required(login_url='/login')
 def nuevafactura(request):
     usuario = request.user
     factura = FacturaProveedor.objects.create(
@@ -374,6 +392,7 @@ def nuevafactura(request):
     return redirect('/facturas/editar/' + str(ultimafactura.pk))
 
 
+@login_required(login_url='/login')
 def editarfactura(request, pk):
     factura = FacturaProveedor.objects.get(pk=pk)
     detallesfactura = DetalleFacturaProveedor.objects.filter(
@@ -412,7 +431,7 @@ def editarfactura(request, pk):
         )
 
 
-
+@login_required(login_url='/login')
 def nuevodetallefactura(request,pk):
     factura = FacturaProveedor.objects.get(pk=pk)
     if request.POST:
@@ -438,6 +457,7 @@ def nuevodetallefactura(request,pk):
         )
 
 
+@login_required(login_url='/login')
 def editardetallefactura(request, pk):
     detallefactura = DetalleFacturaProveedor.objects.get(pk=pk)
 
@@ -601,6 +621,7 @@ def ajaxloadunidad(request, pk):
     })
 
 
+@login_required(login_url='/login')
 def detallefacturaproveedor_delete(request, pk):
     detallefacturaproveedor = DetalleFacturaProveedor.objects.get(pk=pk)
     
@@ -620,67 +641,6 @@ def detallefacturaproveedor_delete(request, pk):
             }
         )
 
-
-#####################################################################
-#################SECCION PAGO FACTURA ###############################
-#####################################################################
-
-
-"""
-
-def nuevodetallefactura(request,pk):
-    factura = FacturaProveedor.objects.get(pk=pk)
-    if request.POST:
-        usuario = request.user
-        form =  DetalleFacturaProveedorForm(request.POST)
-        if form.is_valid():
-            detallefactura = form.save(commit=False)
-            detallefactura.factura = factura
-            detallefactura.usuario = usuario
-            detallefactura.save()
-            messages.success(request, "Se ha grabado los datos.")
-            return redirect('/facturas/unidades/listado')
-        else:
-            messages.warning(request, form.errors)
-            return redirect('/facturas/unidades/listado')
-    else:
-        form = DetalleFacturaProveedorForm()
-        return render(
-            request,
-            'facturas/detallefactura_edit.html',
-            {"form": form}
-        )
-
-
-def editardetallefactura(request, pk):
-    detallefactura = DetalleFacturaProveedor.objects.get(pk=pk)
-
-    if request.POST:
-        form = DetalleFacturaProveedorForm(request.POST, instance=detallefactura)
-        if form.is_valid():
-            detallefactura = form.save(commit=False)
-            usuario = request.user
-            detallefactura.usuario = usuario
-            print(detallefactura.cantidad)
-            detallefactura.save()
-            messages.success(request, "Se ha modificado los datos.")
-            return redirect('/facturas/listado')
-        else:
-            messages.warning(request, form.errors)
-            return redirect('/facturas/listado')
-    else:
-        form = DetalleFacturaProveedorForm(instance=detallefactura)
-        return render(
-            request,
-            'facturas/detallefactura_edit.html',
-            {
-                "form": form,
-                "pk": pk
-            }
-        )
-
-
-"""
 
 
 # Create your views here.

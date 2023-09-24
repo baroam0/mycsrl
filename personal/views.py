@@ -1,5 +1,6 @@
 
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
@@ -14,6 +15,7 @@ from .models import Categoria, Personal
 ###########################################################
 
 
+@login_required(login_url='/login')
 def listadocagetoria(request):
     if "txtBuscar" in request.GET:
         parametro = request.GET.get('txtBuscar')
@@ -35,6 +37,7 @@ def listadocagetoria(request):
         })
 
 
+@login_required(login_url='/login')
 def categoria_new(request):
     if request.POST:
         usuario = request.user
@@ -62,6 +65,7 @@ def categoria_new(request):
         )
 
 
+@login_required(login_url='/login')
 def categoria_edit(request, pk):
     consulta = Categoria.objects.get(pk=pk)
    
@@ -91,6 +95,7 @@ def categoria_edit(request, pk):
 ###########################################################
 
 
+@login_required(login_url='/login')
 def listadopersonal(request):
     if "txtBuscar" in request.GET:
         parametro = request.GET.get('txtBuscar')
@@ -116,7 +121,7 @@ def listadopersonal(request):
         })
 
 
-
+@login_required(login_url='/login')
 def personal_new(request):
     if request.POST:
         usuario = request.user
@@ -144,6 +149,7 @@ def personal_new(request):
         )
 
 
+@login_required(login_url='/login')
 def personal_edit(request, pk):
     consulta = Personal.objects.get(pk=pk)
 

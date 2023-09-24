@@ -1,5 +1,6 @@
 
 
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import render, redirect
 
@@ -11,6 +12,7 @@ from .forms import RodadoForm
 from .models import Rodado
 
 
+@login_required(login_url='/login')
 def listadorodado(request):
     if "txtBuscar" in request.GET:
         parametro = request.GET.get('txtBuscar')
@@ -32,6 +34,7 @@ def listadorodado(request):
         })
 
 
+@login_required(login_url='/login')
 def rodado_new(request):
     if request.POST:
         usuario = request.user
@@ -54,6 +57,7 @@ def rodado_new(request):
         )
 
 
+@login_required(login_url='/login')
 def rodado_edit(request, pk):
     consulta = Rodado.objects.get(pk=pk)
    

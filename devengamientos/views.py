@@ -3,6 +3,7 @@ from django.shortcuts import render
 
 from django.contrib import messages
 
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
@@ -14,6 +15,7 @@ from facturas.models import FacturaProveedor, DetalleFacturaProveedor
 from mycsrl.views import helperpagado
 
 
+@login_required(login_url='/login')
 def listadodevengamiento(request, pk):    
     factura = FacturaProveedor.objects.get(pk=pk)
     devengamiento = Devengamiento.objects.filter(factura=factura)
@@ -32,6 +34,7 @@ def listadodevengamiento(request, pk):
         })
 
 
+@login_required(login_url='/login')
 def devengamiento_new(request, pk):
     factura = FacturaProveedor.objects.get(pk=pk)
     detallefacturas = DetalleFacturaProveedor.objects.filter(factura=factura)
@@ -75,6 +78,7 @@ def devengamiento_new(request, pk):
         )
 
 
+@login_required(login_url='/login')
 def devengamiento_edit(request, pk):
     consulta = Devengamiento.objects.get(pk=pk)
     detallefacturas = DetalleFacturaProveedor.objects.filter(factura=consulta.factura.pk)
@@ -117,7 +121,7 @@ def devengamiento_edit(request, pk):
         )
 
 
-
+@login_required(login_url='/login')
 def devengamiento_delete(request, pk):
     devengamiento = Devengamiento.objects.get(pk=pk)
 
