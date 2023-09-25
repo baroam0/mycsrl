@@ -43,12 +43,9 @@ def salir(request):
     return redirect('/login')
 
 
-def reporte(request):
-    
+def reporte(request):    
     obras = Obra.objects.all()
     proveedores = Proveedor.objects.all()
-    facturaspagadas = FacturaProveedor.objects.filter(pagado=True)
-    facturasimpagas = FacturaProveedor.objects.filter(pagado=False)
 
     return render(
         request, 
@@ -56,10 +53,47 @@ def reporte(request):
         {
             "obras": obras,
             "proveedores": proveedores,
-            "facturaspagadas": facturaspagadas,
-            "facturasimpagas": facturasimpagas,
         }
     )
+
+
+def detallereporte(request):
+
+    id_factura = int(request.GET.get("id_factura"))
+    
+    if id_factura == 1:
+        pagado = True
+        pagoparcial = True
+
+    if id_factura == 2:
+        pagado = False
+        pagoparcial = True
+
+    if id_factura == 3:
+        pagado = False
+        pagoparcial = False
+
+
+    obra = Obra.objects.get(pk=request.GET.get("id_obra"))
+    proveedor = Proveedor.objects.filter(pk=request.GET.get("id_proveedor"))
+    facturaproveedor = FacturaProveedor.objects.filter(proveedor__in=proveedor,pagado=pagado, pagoparcial=pagoparcial)
+
+    detallefacturaproveedor = DetalleFacturaProveedor.objects.filter(
+        obra=obra,
+        factura__in=facturaproveedor
+    )
+        
+    return render(
+        request, 
+        'detallereporte.html',
+        {
+            "obras": obra,
+            "proveedores": proveedor,
+            "facturasproveedores": facturaproveedor,
+            "detallesfacturaproveedores":detallefacturaproveedor
+        }
+    )   
+
 
 
 
@@ -88,18 +122,18 @@ def helperpagado(factura_id, usuario):
         factura.save()
 
     if totalfactura > totaldevengado:
-        print("*****************************")
-        factura.pagoparcial = True
-        factura.pagado = False
-        factura.usuario
-        factura.save()
-    
-    if totaldevengado == 0:
-        print("-------------------------------")
-        factura.pagoparcial = False
-        factura.pagado = False
-        factura.usuario
-        factura.save()
-
+        if totaldevengado == 0:
+            print("-------------------------------")
+            factura.pagoparcial = False
+            factura.pagado = False
+            factura.usuario
+            factura.save()
+        else:
+            print("*****************************")
+            factura.pagoparcial = True
+            factura.pagado = False
+            factura.usuario
+            factura.save()
+        
     return True
 

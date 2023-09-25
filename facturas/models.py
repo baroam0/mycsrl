@@ -44,7 +44,7 @@ class Descripciondetalle(models.Model):
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
     
     def __str__(self):
-        return self.descripciondetalle
+        return self.descripciondetalle.upper()
     class Meta:
         verbose_name_plural = "Descripcion Detalle"
 

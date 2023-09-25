@@ -1,0 +1,80 @@
+
+{% extends 'base_nomenu.html' %}
+
+{% block content %}
+
+    <div class="container">
+
+        <br>
+        
+        <div class="row">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4">
+                <h3> Reportes. </h3>
+            </div>
+            <div class="col-sm-4"></div>
+        </div>
+
+
+        <h4> {{obras}} </h4>
+
+        {% for proveedor in proveedores %}
+
+            
+                <h5>{{proveedor}}</h5> 
+            
+
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Comprobante</th>
+                            <th>Descripcion</th>
+                            <th>Cantidad</th>
+                            <th>Monto Factura</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for detalle in detallesfacturaproveedores%}
+                        <tr>
+                            <td>{{ detalle.factura.comprobante }}  </td>
+                            <td>{{ detalle.descripciondetalle }}  </td>
+                            <td>{{ detalle.cantidad }}  </td>
+                            <td>$ {{ detalle.gettotal | floatformat:2 }}</td>
+                            
+                            {% if detalle.factura.pagado %}
+                                <td>Pagado</td>
+                            {%else%}
+                                {% if detalle.factura.pagoparcial %}
+                                    <td> Pago Parcial </td>
+                                {% else %}
+                                    <td> No Pagada </td>
+                                {%endif%}
+
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+        
+        {% endfor %}
+       
+
+        <hr>
+
+    </div>
+
+
+
+{% endblock %}
+
+
+    <script>
+        $(document).ready(function () {
+            
+        });
+
+    
+    </script>
+

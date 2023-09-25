@@ -31,7 +31,6 @@
                 <div class="col-6">
                     <label>Obra</label>
                     <select id="id_obra">
-                        <option value=0>------ </option>
                         {% for obra in obras %}
                             <option value={{obra.pk}}> {{obra.descripcion.upper }} </option>
                         {% endfor %}
@@ -41,7 +40,6 @@
                 <div class="col-6">
                     <label>Proveedores</label>
                     <select id="id_proveedor">
-                        <option value=0>------ </option>
                         {% for proveedor in proveedores %}
                             <option value={{proveedor.pk}}> {{proveedor.razonsocial.upper }} </option>
                         {% endfor %}
@@ -56,24 +54,15 @@
             <div class="form-inline">
 
                 <div class="col-6">
-                    <label>Facturas Pagadas </label>
-                    <select id="id_facturaspagadas">
-                        <option value=0>------ </option>
-                        {% for facturapagada in facturaspagadas %}
-                            <option value={{facturapagada.pk}}> {{facturapagada.comprobante }} -  {{facturapagada.proveedor }}   </option>
-                        {% endfor %}
+                    <label>Facturas </label>
+                    
+                    <select id="id_facturas" class="form-control">
+                        <option value=1>PAGADAS </option>
+                        <option value=2>PAGADAS PARCIALEMENTE </option>
+                        <option value=2>IMPAGAS </option>
                     </select>
                 </div>
-                
-                <div class="col-6">
-                    <label>Facturas Impagas </label>
-                    <select id="id_facturasimpagas">
-                        <option value=0>------ </option>
-                        {% for facturaimpaga in facturasimpagas %}
-                            <option value={{facturaimpaga.pk}}> {{facturaimpaga.comprobante }} -  {{facturaimpaga.proveedor }}   </option>
-                        {% endfor %}
-                    </select>
-                </div>
+
             </div>
 
             <hr>
@@ -83,7 +72,7 @@
                 </div>
 
                 <div class="col-4">
-                    <button type="button" class="btn btn-default" title="Generar" onclick="Consultar()">
+                    <button type="button" class="btn btn-default" title="Generar" onclick="AbrirVentanaReporte()">
                         <i class="fas fa-play"></i>
                     </button>
                 </div>
@@ -106,9 +95,15 @@
         $(document).ready(function () {
             $('#id_obra').select2();
             $('#id_proveedor').select2();
-            $('#id_facturaspagadas').select2();
-            $('#id_facturasimpagas').select2();
         });
+
+        function AbrirVentanaReporte(){
+            var id_obra = $("#id_obra").val();
+            var id_proveedor = $("#id_proveedor").val();
+            var id_factura = $("#id_facturas").val();
+            var urldetallefactura = "/detallereporte/?id_obra=" + id_obra + "&id_proveedor=" + id_proveedor + "&id_factura=" + id_factura;
+            window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
+        }
 
     
     </script>
