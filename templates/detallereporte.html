@@ -27,10 +27,12 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
+                            <th>Fecha</th>
                             <th>Comprobante</th>
                             <th>Descripcion</th>
                             <th>Cantidad</th>
                             <th>Monto Factura</th>
+                            <th>Monto Pagado</th>
                             <th>Estado</th>
                         </tr>
                     </thead>
@@ -38,6 +40,7 @@
                     <tbody>
                         {% for detalle in detallesfacturaproveedores%}
                         <tr>
+                            <td>{{ detalle.factura.fecha }}  </td>
                             <td>{{ detalle.factura.comprobante }}  </td>
                             <td>{{ detalle.descripciondetalle }}  </td>
                             <td>{{ detalle.cantidad }}  </td>
