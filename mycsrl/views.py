@@ -111,8 +111,16 @@ def helperpagado(factura_id, usuario):
     for i in detallefacturas:
         totalfactura = totalfactura + i.gettotal()
     
+    totalfactura = totalfactura - factura.descuentoglobal
+    totaliva = (totalfactura * 21 / 100 )
+    totalfactura = totalfactura + totaliva + factura.preciocepcionglobal + factura.ajusteglobal
+
     totaldevengado = round(totaldevengado, 2)
     totalfactura = round(totalfactura, 2)
+
+    print(totalfactura)
+    print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
+    print(totaldevengado)
 
     if totalfactura == totaldevengado:
         print("//////////////////////////////")

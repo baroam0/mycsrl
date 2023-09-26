@@ -58,6 +58,15 @@ class FacturaProveedor(models.Model):
     pagado = models.BooleanField(default=False)
     pagoparcial = models.BooleanField(default=False)
 
+    descuentoglobal = models.DecimalField(
+        decimal_places=4, max_digits=20, null=False, blank=False, default=0)
+    
+    preciocepcionglobal = models.DecimalField(
+        decimal_places=4, max_digits=20, null=False, blank=False, default=0)
+    
+    ajusteglobal = models.DecimalField(
+        decimal_places=4, max_digits=20, null=False, blank=False, default=0)
+
     def __str__(self):
         return str(self.fecha)
 
@@ -102,6 +111,7 @@ class DetalleFacturaProveedor(models.Model):
         ivared = self.iva.retencion / 100
         totaliva = totaldescuento + (totaldescuento * ivared) + (totaldescuento * ingresobrutored)
         return (totaldescuento + (totaldescuento * ivared) + (totaldescuento * ingresobrutored)  + self.ajuste )
+
 
     def __str__(self):
         return str(self.factura) + ' - ' + self.rubro.descripcion

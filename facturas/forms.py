@@ -89,6 +89,11 @@ class FacturaProveedorForm(forms.ModelForm):
     proveedor = forms.ModelChoiceField(
         queryset=Proveedor.objects.all(), label="Proveedor") 
     
+    descuentoglobal = forms.DecimalField(label="Descuento Global")
+    preciocepcionglobal = forms.DecimalField(label="Percepcion Global")
+    ajusteglobal = forms.DecimalField(label="Ajuste Global")
+    
+
     def __init__(self, *args, **kwargs):
         super(FacturaProveedorForm, self).__init__(*args, **kwargs)
         for field in iter(self.fields):
@@ -98,7 +103,7 @@ class FacturaProveedorForm(forms.ModelForm):
 
     class Meta:
         model = FacturaProveedor
-        fields = ["fecha", "proveedor", "comprobante"]
+        fields = ["fecha", "proveedor", "comprobante", "descuentoglobal", "preciocepcionglobal", "ajusteglobal"]
 
 
 class DetalleFacturaProveedorForm(forms.ModelForm):

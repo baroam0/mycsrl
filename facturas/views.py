@@ -402,6 +402,11 @@ def editarfactura(request, pk):
     totalfactura = 0
     for i in detallesfactura:
         totalfactura = totalfactura + i.gettotal()
+    
+    totalfactura = totalfactura - factura.descuentoglobal
+    totaliva = (totalfactura * 21 / 100 )
+    
+    totalfactura = totalfactura + totaliva + factura.preciocepcionglobal + factura.ajusteglobal
 
     if request.POST:
         form = FacturaProveedorForm(request.POST, instance=factura)
