@@ -43,11 +43,12 @@ def devengamiento_new(request, pk):
     totalfactura = 0
     for i in detallefacturas:
         totalfactura = totalfactura + i.gettotal()
-
-    totalfactura = totalfactura - factura.descuentoglobal
-    totaliva = (totalfactura * 21 / 100 )
     
-    totalfactura = totalfactura + totaliva + factura.preciocepcionglobal + factura.ajusteglobal
+    totalfactura = totalfactura - factura.descuentoglobal
+    totaliva = (totalfactura * factura.iva.retencion / 100 )
+    totalingresosbrutos = (totalfactura * factura.ingresosbrutos.retencion / 100 )
+    
+    totalfactura = totalfactura + totaliva + factura.preciocepcionglobal + factura.ajusteglobal + totalingresosbrutos
 
     totaldevengado = 0
     for i in devengamientos:
