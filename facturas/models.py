@@ -66,7 +66,13 @@ class FacturaProveedor(models.Model):
     
     ajusteglobal = models.DecimalField(
         decimal_places=4, max_digits=20, null=False, blank=False, default=0)
+    
+    iva = models.ForeignKey(
+        Iva, on_delete=models.CASCADE, null=True)
 
+    ingresosbrutos = models.ForeignKey(
+        IngresoBruto, on_delete=models.CASCADE, null=True)
+    
     def __str__(self):
         return str(self.fecha)
 
@@ -88,10 +94,6 @@ class DetalleFacturaProveedor(models.Model):
         decimal_places=2, max_digits=20, null=False, blank=False)
     preciounitario = models.DecimalField(
         decimal_places=4, max_digits=20, null=False, blank=False)
-    iva = models.ForeignKey(
-        Iva, on_delete=models.CASCADE)
-    ingresosbrutos = models.ForeignKey(
-        IngresoBruto, on_delete=models.CASCADE)
     
     descuento = models.DecimalField(decimal_places=4,max_digits=20, default=0)
     descuentoporcentaje = models.DecimalField(decimal_places=4,max_digits=20, default=0)
@@ -104,13 +106,11 @@ class DetalleFacturaProveedor(models.Model):
      
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
 
+
     def gettotal(self):
         totalbruto = self.cantidad * self.preciounitario
-        totaldescuento = totalbruto - self.descuento - (totalbruto * self.descuentoporcentaje / 100 )
-        ingresobrutored = self.ingresosbrutos.retencion / 100
-        ivared = self.iva.retencion / 100
-        totaliva = totaldescuento + (totaldescuento * ivared) + (totaldescuento * ingresobrutored)
-        return (totaldescuento + (totaldescuento * ivared) + (totaldescuento * ingresobrutored)  + self.ajuste )
+        totaldescuento = totalbruto - self.descuento - (totalbruto * self.descuentoporcentaje / 100 ) + self.ajuste
+        return totaldescuento
 
 
     def __str__(self):

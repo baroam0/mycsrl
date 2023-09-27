@@ -92,6 +92,11 @@ class FacturaProveedorForm(forms.ModelForm):
     descuentoglobal = forms.DecimalField(label="Descuento Global")
     preciocepcionglobal = forms.DecimalField(label="Percepcion Global")
     ajusteglobal = forms.DecimalField(label="Ajuste Global")
+
+    iva = forms.ModelChoiceField(label="Iva", queryset=Iva.objects.all())
+
+    ingresosbrutos = forms.ModelChoiceField(
+        label="Ingresos Brutos", queryset=IngresoBruto.objects.all()) 
     
 
     def __init__(self, *args, **kwargs):
@@ -103,7 +108,9 @@ class FacturaProveedorForm(forms.ModelForm):
 
     class Meta:
         model = FacturaProveedor
-        fields = ["fecha", "proveedor", "comprobante", "descuentoglobal", "preciocepcionglobal", "ajusteglobal"]
+        fields = ["fecha", "proveedor", "comprobante", 
+                  "descuentoglobal", "preciocepcionglobal", 
+                  "ajusteglobal", "iva", "ingresosbrutos"]
 
 
 class DetalleFacturaProveedorForm(forms.ModelForm):
@@ -117,11 +124,6 @@ class DetalleFacturaProveedorForm(forms.ModelForm):
     descripciondetalle = forms.ModelChoiceField(
         label="Detalle", queryset=Descripciondetalle.objects.all(),
     )
-
-    iva = forms.ModelChoiceField(label="Iva", queryset=Iva.objects.all())
-
-    ingresosbrutos = forms.ModelChoiceField(
-        label="Ingresos Brutos", queryset=IngresoBruto.objects.all()) 
 
     descuento = forms.DecimalField(label="Descuento", required=False)
     descuentoporcentaje = forms.DecimalField(label="Descuento con Porcentaje")
@@ -144,6 +146,5 @@ class DetalleFacturaProveedorForm(forms.ModelForm):
         fields = [
             "obra", "rubro", "descripciondetalle",
             "unidad", "cantidad", "preciounitario", 
-            "iva", "ingresosbrutos", "descuento", 
-            "descuentoporcentaje", "ajuste", "rodado"
+            "descuento", "descuentoporcentaje", "ajuste", "rodado"
         ]

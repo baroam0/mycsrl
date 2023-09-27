@@ -95,8 +95,6 @@ def detallereporte(request):
     )   
 
 
-
-
 def helperpagado(factura_id, usuario):
     factura = FacturaProveedor.objects.get(pk=factura_id)
     devengamientos = Devengamiento.objects.filter(factura=factura)
@@ -118,12 +116,8 @@ def helperpagado(factura_id, usuario):
     totaldevengado = round(totaldevengado, 2)
     totalfactura = round(totalfactura, 2)
 
-    print(totalfactura)
-    print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
-    print(totaldevengado)
 
     if totalfactura == totaldevengado:
-        print("//////////////////////////////")
         factura.pagado = True
         factura.pagoparcial = True
         factura.usuario
@@ -131,13 +125,11 @@ def helperpagado(factura_id, usuario):
 
     if totalfactura > totaldevengado:
         if totaldevengado == 0:
-            print("-------------------------------")
             factura.pagoparcial = False
             factura.pagado = False
             factura.usuario
             factura.save()
         else:
-            print("*****************************")
             factura.pagoparcial = True
             factura.pagado = False
             factura.usuario
