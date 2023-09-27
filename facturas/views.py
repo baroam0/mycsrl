@@ -404,9 +404,10 @@ def editarfactura(request, pk):
         totalfactura = totalfactura + i.gettotal()
     
     totalfactura = totalfactura - factura.descuentoglobal
-    totaliva = (totalfactura * 21 / 100 )
+    totaliva = (totalfactura * factura.iva.retencion / 100 )
+    totalingresosbrutos = (totalfactura * factura.ingresosbrutos.retencion / 100 )
     
-    totalfactura = totalfactura + totaliva + factura.preciocepcionglobal + factura.ajusteglobal
+    totalfactura = totalfactura + totaliva + factura.preciocepcionglobal + factura.ajusteglobal + totalingresosbrutos
 
     if request.POST:
         form = FacturaProveedorForm(request.POST, instance=factura)
@@ -634,7 +635,8 @@ def detallefacturaproveedor_delete(request, pk):
         pk=detallefacturaproveedor.factura.pk)
     
     if request.method =="POST":
-        helperpagado(facturaproveedor.pk)
+        usuario = request.user
+        helperpagado(facturaproveedor.pk, usuario)
         detallefacturaproveedor.delete()
         return HttpResponseRedirect("/facturas/editar/" + str(facturaproveedor.pk))
  
