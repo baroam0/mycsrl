@@ -1,5 +1,6 @@
 from django.db import models
 
+from contratistas.models import Contratista
 from pagos.models import Obra
 from usuariosadm.models import UserAdm
 
@@ -35,6 +36,9 @@ class Personal(models.Model):
     fechabaja = models.DateField(null=True, blank=True)
 
     obra = models.ForeignKey(Obra, null=True, blank=True, on_delete=models.CASCADE)
+
+    contratista = models.ForeignKey(
+        Contratista, on_delete=models.CASCADE, null=True, blank=True)
 
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
 

@@ -3,7 +3,9 @@
 from django import forms
 from django.contrib.auth.models import User
 
+
 from .models import Categoria, Personal
+from contratistas.models import Contratista
 from pagos.models import Obra
 
 
@@ -42,6 +44,11 @@ class PersonalForm(forms.ModelForm):
     obra = forms.ModelChoiceField(
         label="Obra", queryset=Obra.objects.all())
 
+    contratista = forms.ModelChoiceField(
+        label="Contratista", 
+        queryset=Contratista.objects.all()
+    )
+
     def __init__(self, *args, **kwargs):
         super(PersonalForm, self).__init__(*args, **kwargs)
         for field in iter(self.fields):
@@ -51,5 +58,5 @@ class PersonalForm(forms.ModelForm):
 
     class Meta:
         model = Personal
-        fields = ["apellido", "nombre", "numerodocumento", "categoria", "fechaingreso", "fechabaja", "obra"]
+        fields = ["apellido", "nombre", "numerodocumento", "categoria", "fechaingreso", "fechabaja", "contratista", "obra"]
 
