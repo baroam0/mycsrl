@@ -40,7 +40,6 @@ class DetalleFacturacion(models.Model):
     monto = models.DecimalField(max_digits=10, decimal_places=2)
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
     
-    
     def __str__(self):
         return str(self.facturacion)
     

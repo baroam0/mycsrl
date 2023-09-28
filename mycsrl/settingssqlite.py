@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'bancos',
     'contratistas',
     'devengamientos',
+    'facturacion',
     'facturas',
     'usuariosadm',
     'pagos',
