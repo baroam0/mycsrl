@@ -29,7 +29,7 @@ def listadoconcepto(request):
     resultados = paginador.get_page(page)
     return render(
         request,
-        'facturacion/concepto_list.html',
+        'facturacion/conceptos_list.html',
         {
             'resultados': resultados
         })
@@ -148,6 +148,7 @@ def facturacion_new(request):
 @login_required(login_url='/login')
 def facturacion_edit(request, pk):
     consulta = Facturacion.objects.get(pk=pk)
+    detallesfacturaciones = DetalleFacturacion.objects.filter(facturacion=consulta)
    
     if request.POST:
         form = FacturacionForm(request.POST, instance=consulta)
@@ -168,6 +169,78 @@ def facturacion_edit(request, pk):
             'facturacion/facturacion_edit.html',
             {
                 "form": form,
-                "pk":pk
+                "pk":pk,
+                "resultados":detallesfacturaciones,
+                "facturacion": consulta
             }
         )
+
+
+###########################################################
+#############SECCION DETALLE FACTURACION ##################
+###########################################################
+
+
+@login_required(login_url='/login')
+def detallefacturacion_new(request, pk):
+    facturacion = Facturacion.objects.get(pk=pk)
+    if request.POST:
+        usuario = request.user
+        form = DetalleFacturacionForm(request.POST)
+        if form.is_valid():
+            facturaciondetalle = form.save(commit=False)
+            facturaciondetalle.facturacion = facturacion
+            facturaciondetalle.usuario = usuario
+            try:
+                facturaciondetalle.save()
+                messages.success(request, "Se ha grabado los datos.")
+                return redirect('/facturacion/editar/' + str(facturacion.pk))
+            except Exception as e:
+                messages.warning(request, "Ha ocurrido un error.")
+                return redirect('/facturacion/listado')
+        else:
+            messages.warning(request, form.errors)
+            return redirect('/facturacion/listado')
+    else:
+        form = DetalleFacturacionForm()
+        return render(
+            request,
+            'facturacion/detallefacturacion_edit.html',
+            {
+                "form": form,
+                "pk": None,
+                "facturacion": facturacion
+            }
+        )
+
+
+@login_required(login_url='/login')
+def detallefacturacion_edit(request, pk):
+    consulta = Facturacion.objects.get(pk=pk)
+    detallesfacturacion = DetalleFacturacion.objects.filter(facturacion=consulta)
+   
+    if request.POST:
+        form = FacturacionForm(request.POST, instance=consulta)
+        if form.is_valid():
+            facturacion = form.save(commit=False)
+            usuario = request.user
+            facturacion.usuario = usuario
+            facturacion.save()
+            messages.success(request, "Se ha modificado los datos.")
+            return redirect('/facturacion/listado')
+        else:
+            messages.warning(request, form.errors)
+            return redirect('/bancos/listado')
+    else:
+        form = FacturacionForm(instance=consulta)
+        return render(
+            request,
+            'facturacion/facturacion_edit.html',
+            {
+                "form": form,
+                "pk":pk,
+                "resultados": detallesfacturacion,
+                "facturacion": consulta
+            }
+        )
+

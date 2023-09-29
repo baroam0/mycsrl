@@ -19,7 +19,8 @@ from django.contrib import admin
 from django.urls import include, path
 
 from .views import (listadofacturacion, facturacion_new, facturacion_edit,
-                    listadoconcepto, concepto_new, concepto_edit)
+                    listadoconcepto, concepto_new, concepto_edit,
+                    detallefacturacion_new)
 
 urlpatterns = [
     path('listado/', listadofacturacion, name='listadofacturacion'),
@@ -29,4 +30,6 @@ urlpatterns = [
     path('conceptos/listado/', listadoconcepto, name='listadofacturacion'),
     path('conceptos/nuevo/', concepto_new, name='concepto_new'),
     path('conceptos/editar/<int:pk>', concepto_edit, name='concepto_edit'),
+
+    path('detalle/nuevo/<int:pk>', detallefacturacion_new, name='detallefacturacion_new'),
 ]

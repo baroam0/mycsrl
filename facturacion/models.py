@@ -30,6 +30,13 @@ class Facturacion(models.Model):
     def __str__(self):
         return str(self.pk) + " - " + str(self.fecha) 
 
+    def totalfacturacion(self):
+        detallesfacturaciones = DetalleFacturacion.objects.filter(facturacion=self.pk)
+        total = 0
+        for i in detallesfacturaciones:
+            total = total + i.monto
+        return total
+
     class Meta:
         verbose_name_plural = "Facturaciones"
 
@@ -45,7 +52,6 @@ class DetalleFacturacion(models.Model):
     
     class Meta:
         verbose_name_plural = "Detalle Facturaciones"
-
 
 
 # Create your models here.

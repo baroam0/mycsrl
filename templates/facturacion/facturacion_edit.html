@@ -6,11 +6,11 @@
 
         <br>
         <div class="row">
-            <div class="col-sm-4"></div>
-            <div class="col-sm-4">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-10">
                 <h2>Datos de Facturacion.</h2>
             </div>
-            <div class="col-sm-4"></div>
+            <div class="col-sm-1"></div>
         </div>
 
         <div class="row">
@@ -45,8 +45,40 @@
                             </button>
                         </div>                        
                     </div>
-                    <hr>
                 </form>
+
+                <hr>
+
+                <h5>Total: $ {{facturacion.totalfacturacion}} </h5>
+
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Concepto</th>
+                            <th>Monto</th>
+                            <th>Usuario</th>
+                            <th>Accion</th>
+                        </tr>
+                    </thead>
+    
+                    <tbody>
+                        {% for resultado in resultados %}
+                        <tr>
+                            <td>{{ resultado.concepto}}  </td>
+                            <td>{{ resultado.monto}}  </td>
+                            <td>{{ resultado.usuario }}</td>
+    
+                            <td>
+                                <button type="button" class="btn btn-link btn-sm" onclick="location.href='/facturacion/editar/' + {{ resultado.pk }}">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+
             </div>
         </div>
 

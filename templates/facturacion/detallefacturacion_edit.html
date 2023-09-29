@@ -1,0 +1,129 @@
+
+{% extends 'base_nomenu.html' %}
+
+{% block content %}
+    <div class="container">
+
+        <br>
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-10">
+                <h3>Detalle Factura - {{facturacion.obra}} - {{facturacion.descripcion}} </h3>
+            </div>
+            <div class="col-sm-1"></div>
+        </div>
+
+        <div class="row">
+            
+            <div class="col-12">
+                <hr>
+                <form  method="POST" id="myform" >{% csrf_token %}
+                    {{ form.as_p }}
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-2">
+                            <button class="btn btn-primary" id="btn-guardar" type="submit">
+                                <i class="fas fa-check"></i>
+                                Aceptar
+                            </button>
+                        </div>
+
+                        <div class="col-8">
+                        </div>
+
+                        <div class="col-2">    
+                            <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="BotonCancelar()">
+                                <i class="far fa-times-circle"></i>
+                                Cancelar
+                            </button>
+                        </div>                        
+                    </div>
+                    <hr>
+                </form>
+            </div>
+            
+        </div>
+        
+    </div>
+
+{% endblock %}
+
+
+{% block js_extra %}
+
+    <script>
+
+        function TranslateDatepickerToEs(){
+            $.datepicker.regional['es'] = {
+                closeText: 'Cerrar',
+                prevText: '< Ant',
+                nextText: 'Sig >',
+                currentText: 'Hoy',
+                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+                dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+                dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+                weekHeader: 'Sm',
+                dateFormat: 'dd/mm/yy',
+                firstDay: 1,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: ''
+            };
+            $.datepicker.setDefaults($.datepicker.regional['es']);
+            $(function () {
+                $("#id_fecha").datepicker();
+            });
+        }
+
+        function BotonCancelar(){
+            window.close();
+        }
+
+        function LoadDetailUnit(pk){
+            $.ajax({
+                url: '/facturas/ajax/loadunidad/' + pk,
+                type: 'GET',
+                success: function(response){
+                    console.log(response.data);
+                    $('#id_unidad').val(response.data);
+                },
+                error: function(error){
+                    console.log(error);
+                }
+            })
+        }
+
+
+        function val() {
+            d = document.getElementById("id_descripciondetalle").value;
+        }
+
+        $('#id_descripciondetalle').change(function(){
+            LoadDetailUnit($(this).val());
+        })
+
+
+
+        $(document).ready(function () {
+            TranslateDatepickerToEs();
+            window.onunload = function(){
+                window.opener.location.reload();
+                window.close(); 
+            };
+            $("#id_obra").select2();
+            $("#id_rubro").select2();
+            $("#id_descripciondetalle").select2();
+
+            $( "#myform" ).on( "submit", function( event ) {
+               
+
+            });
+        });
+
+    </script>
+
+{% endblock %}
