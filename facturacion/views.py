@@ -125,19 +125,23 @@ def facturacion_new(request):
             try:
                 facturacion.save()
                 messages.success(request, "Se ha grabado los datos.")
-                return redirect('/facturacion/listado')
+                ultima_facturacion = Facturacion.objects.latest("pk")
+                return redirect('/facturacion/editar/' + str(ultima_facturacion.pk))
             except Exception as e:
                 messages.warning(request, "Ha ocurrido un error.")
                 return redirect('/facturacion/listado')
         else:
             messages.warning(request, form.errors)
-            return redirect('/bancos/listado')
+            return redirect('/facturacion/listado')
     else:
         form = FacturacionForm()
         return render(
             request,
             'facturacion/facturacion_edit.html',
-            {"form": form}
+            {
+                "form": form,
+                "pk": None
+            }
         )
 
 
@@ -161,6 +165,9 @@ def facturacion_edit(request, pk):
         form = FacturacionForm(instance=consulta)
         return render(
             request,
-            'facturacacion/facturacion_edit.html',
-            {"form": form}
+            'facturacion/facturacion_edit.html',
+            {
+                "form": form,
+                "pk":pk
+            }
         )

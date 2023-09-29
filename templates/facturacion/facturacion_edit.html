@@ -8,13 +8,12 @@
         <div class="row">
             <div class="col-sm-4"></div>
             <div class="col-sm-4">
-                <h2>Datos del Banco.</h2>
+                <h2>Datos de Facturacion.</h2>
             </div>
             <div class="col-sm-4"></div>
         </div>
 
         <div class="row">
-            
             <div class="col-12">
                 <hr>
                 <form  method="POST">{% csrf_token %}
@@ -23,18 +22,24 @@
                     <hr>
 
                     <div class="row">
-                        <div class="col-2">
+                        <div class="col-4">
                             <button class="btn btn-primary" id="btn-guardar" type="submit">
                                 <i class="fas fa-check"></i>
                                 Aceptar
                             </button>
                         </div>
 
-                        <div class="col-8">
+                        <div class="col-4">
+                            {% if pk %}
+                                <button class="btn btn-secondary" id="btn-nuevo" type="button" onclick="AbrirVentana({{pk}})">
+                                    <i class="fas fa-plus"></i>
+                                    Agregar Item
+                                </button>
+                            {% endif %}
                         </div>
 
-                        <div class="col-2">    
-                            <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="IrListadoBanco()">
+                        <div class="col-4">    
+                            <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="Volver()">
                                 <i class="far fa-times-circle"></i>
                                 Cancelar
                             </button>
@@ -43,7 +48,10 @@
                     <hr>
                 </form>
             </div>
-            
+        </div>
+
+
+        <div class="row">
         </div>
         
     </div>
@@ -57,18 +65,47 @@
 {% block js_extra %}
 
     <script>
+
+        function TranslateDatepickerToEs(){
+            $.datepicker.regional['es'] = {
+                closeText: 'Cerrar',
+                prevText: '< Ant',
+                nextText: 'Sig >',
+                currentText: 'Hoy',
+                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+                dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+                dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+                weekHeader: 'Sm',
+                dateFormat: 'dd/mm/yy',
+                firstDay: 1,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: ''
+            };
+            $.datepicker.setDefaults($.datepicker.regional['es']);
+            $(function () {
+                $("#id_fecha").datepicker();
+            });
+        }
+
         $(document).ready(function () {
-            $('#id_banco').select2();
+            $('#id_obra').select2();
+            TranslateDatepickerToEs();
         });
 
     
-    </script>
-    
-    
-    <script>
-        function IrListadoBanco() {
-            window.location.replace("/bancos/listado");
+   
+        function Volver() {
+            window.location.replace("/facturacion/listado");
         }
+
+        function AbrirVentana(pk){
+            var urldetallefactura = "/facturacion/detalle/nuevo/" + pk;
+            window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
+        }
+
     </script>
 
 {% endblock %}
