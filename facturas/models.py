@@ -68,7 +68,7 @@ class FacturaProveedor(models.Model):
         decimal_places=4, max_digits=20, null=False, blank=False, default=0)
     
     iva = models.ForeignKey(
-        Iva, on_delete=models.CASCADE, null=True)
+        Iva, on_delete=models.CASCADE, null=True, default=1)
 
     ingresosbrutos = models.ForeignKey(
         IngresoBruto, on_delete=models.CASCADE, null=True)

@@ -57,9 +57,36 @@
                 </form>
             </div>
 
-            <h4>Total Factura: $ {{ totalfactura | floatformat:2 }}</h4>
+
+            <table class="table ">
+                <thead>
+                    <tr>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td><h5>Subtotal: $ {{subtotal | floatformat:2}}</h5></td>
+                    </tr>
+                    <tr>
+                        <td><h5>Descuento: $ {{descuentoglobal | floatformat:2}}</h5></td>
+                    </tr>
+                    <tr>
+                        <td><h5>IVA: $ {{totaliva | floatformat:2}}</h5></td>
+                    </tr>
+                    <tr>
+                        <td><h5>Ingresos Brutos: $ {{ingresosbrutos | floatformat:2}}</h5></td>
+                    </tr>
+                    <tr>
+                        <td><h5>Total: $ {{ totalfactura | floatformat:2}}</h5></td>
+                    </tr>
+
+                </tbody>
+
+            </table>
 
 
+            
             <table class="table table-hover">
                 <thead>
                     <tr>
@@ -84,7 +111,6 @@
                             <td>{{ detallefactura.unidad.descripcion }}</td>
                             <td>$ {{ detallefactura.gettotal |floatformat:2 }} </td>
                             <td>{{ detallefactura.usuario }}</td>
-
                             <td>
                                 <button type="button" class="btn btn-link btn-sm" onclick="AbrirVentanaEditar({{detallefactura.pk}})">
                                     <i class="fas fa-pencil-alt"></i>

@@ -386,7 +386,8 @@ def listadofactura(request):
 def nuevafactura(request):
     usuario = request.user
     factura = FacturaProveedor.objects.create(
-        usuario=usuario)
+        usuario=usuario,
+        iva=None)
     factura.save()
     ultimafactura = FacturaProveedor.objects.latest('pk')
     return redirect('/facturas/editar/' + str(ultimafactura.pk))
@@ -403,9 +404,21 @@ def editarfactura(request, pk):
     for i in detallesfactura:
         totalfactura = totalfactura + i.gettotal()
     
-    totalfactura = totalfactura - factura.descuentoglobal
-    totaliva = (totalfactura * factura.iva.retencion / 100 )
-    totalingresosbrutos = (totalfactura * factura.ingresosbrutos.retencion / 100 )
+    subtotal = totalfactura
+    
+    totalfactura = round(totalfactura - factura.descuentoglobal,2)
+
+    
+    if factura.iva is None:
+        totaliva = (totalfactura * 0 / 100 )
+    else:    
+        totaliva = round((totalfactura * factura.iva.retencion / 100), 2) 
+    
+    if factura.ingresosbrutos is None:
+        totalingresosbrutos = (totalfactura * 0 / 100 )
+    else:
+        totalingresosbrutos = (totalfactura * factura.ingresosbrutos.retencion / 100 )
+
     
     totalfactura = totalfactura + totaliva + factura.preciocepcionglobal + factura.ajusteglobal + totalingresosbrutos
 
@@ -432,7 +445,11 @@ def editarfactura(request, pk):
                 "detallesfactura": detallesfactura,
                 "formdetallefactura": formdetallefactura,
                 "pk": pk,
-                "totalfactura": totalfactura 
+                "totalfactura": totalfactura,
+                "totaliva": totaliva,
+                "subtotal": subtotal,
+                "descuentoglobal": factura.descuentoglobal,
+                "ingresosbrutos": totalingresosbrutos
             }
         )
 
