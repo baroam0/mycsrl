@@ -11,6 +11,10 @@ class MedioPago(models.Model):
 
     def __str__(self):
         return self.descripcion.upper()
+    
+    def save(self, *args, **kwargs):
+        self.descripcion = self.descripcion.upper()
+        super(MedioPago, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name_plural = "Medios de Pago"
@@ -23,11 +27,9 @@ class Obra(models.Model):
     def __str__(self):
         return self.descripcion.upper()
 
-    """
-    def save(self):
+    def save(self, *args, **kwargs):
         self.descripcion = self.descripcion.upper()
-        super(Obra, self).save()
-    """
+        super(Obra, self).save(*args, **kwargs)
     
     class Meta:
         verbose_name_plural = "Obras"
@@ -55,6 +57,10 @@ class TipoCuenta(models.Model):
 
     def __str__(self):
         return self.descripcion
+
+    def save(self, *args, **kwargs):
+        self.descripcion = self.descripcion.upper()
+        super(TipoCuenta, self).save(*args, **kwargs)
     
     class Meta:
         verbose_name_plural = "Tipos de Cuenta"
