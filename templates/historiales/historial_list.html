@@ -54,6 +54,7 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
+                        <th>Obra</th>
                         <th>Descripcion</th>
                         <th>Proveedor</th>
                         <th>Precio</th>
@@ -64,6 +65,7 @@
                 <tbody>
                     {% for resultado in resultados %}
                     <tr>
+                        <td>{{ resultado.obra }}  </td>
                         <td>{{ resultado.descripciondetalle }}  </td>
                         <td>{{ resultado.factura.proveedor }}  </td>
                         <td>$ {{ resultado.preciounitario | floatformat:2 }}</td>
