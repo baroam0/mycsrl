@@ -53,6 +53,7 @@
                         <th>Apellido</th>
                         <th>Nombre</th>
                         <th>DNI</th>
+                        <th>Contratista</th>
                         <th>Obra</th>
                         <th>Usuario</th>
                         <th>Accion</th>
@@ -65,7 +66,18 @@
                         <td>{{ resultado.apellido.upper }}  </td>
                         <td>{{ resultado.nombre.upper }}  </td>
                         <td>{{ resultado.numerodocumento }}  </td>
-                        <td>{{ resultado.obra }}  </td>
+                        {% if resultado.contratista %}
+                            <td>{{ resultado.contratista }}  </td>
+                        {% else %}
+                            <td> - </td>
+                        {% endif %}
+
+                        {% if resultado.obra %}
+                            <td>{{ resultado.obra }}  </td>
+                        {% else %}
+                            <td> - </td>
+                        {% endif %}
+                        
                         <td>{{ resultado.usuario }}</td>
 
                         <td>

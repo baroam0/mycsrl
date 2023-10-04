@@ -42,11 +42,11 @@ class PersonalForm(forms.ModelForm):
     fechabaja = forms.DateField(label="Fecha Egreso", required=False) 
 
     obra = forms.ModelChoiceField(
-        label="Obra", queryset=Obra.objects.all())
+        label="Obra", queryset=Obra.objects.all(), required=False)
 
     contratista = forms.ModelChoiceField(
         label="Contratista", 
-        queryset=Contratista.objects.all()
+        queryset=Contratista.objects.all(), required=False
     )
 
     def __init__(self, *args, **kwargs):
