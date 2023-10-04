@@ -12,17 +12,19 @@ from facturas.models import Descripciondetalle, DetalleFacturaProveedor
 @login_required(login_url='/login')
 def listadohistorial(request):
 
-    descripciondetalle = Descripciondetalle.objects.all()
-    
+    descripcionesdetalles = Descripciondetalle.objects.all()
 
-    if "txtBuscar" in request.GET:
-        parametro = request.GET.get('txtBuscar')
+    if "id_descripciondetalle" in request.GET:
+        parametro = request.GET.get('id_descripciondetalle')
+        descripciondetalle = Descripciondetalle.objects.get(pk=parametro)
+
         consulta = DetalleFacturaProveedor.objects.filter(
             descripciondetalle=descripciondetalle.pk
-        )
+        ).order_by('-factura__fecha')
     else:
-        consulta = Descripciondetalle.objects.none()
-    paginador = Paginator(consulta, 20)
+        parametro = None
+        consulta = DetalleFacturaProveedor.objects.none()
+    paginador = Paginator(consulta, 50)
 
     if "page" in request.GET:
         page = request.GET.get('page')
@@ -34,8 +36,9 @@ def listadohistorial(request):
         request,
         'historiales/historial_list.html',
         {
-            'descripciondetalle': descripciondetalle,
-            'resultados': resultados
+            'descripcionesdetalles': descripcionesdetalles,
+            'resultados': resultados,
+            'parametro': parametro
         })
 
 
