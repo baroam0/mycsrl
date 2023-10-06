@@ -17,15 +17,6 @@
         
         <hr>
 
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{message.tags}}" role="alert">
-                    {{message}}
-                </div>
-            {% endfor %}
-        {% endif %}
-
-
         <form action="/personal/listado" method="GET">
             <div class="form-inline">
                 <div class="col-2">
@@ -33,24 +24,7 @@
                 <div class="col-2">
                 </div>
                 <div class="col-8">
-                    <input class="form-control" id="txtBuscar" name="txtBuscar" placeholder="Buscar....">
-                    <button type="submit" class="btn btn-default" title="Buscar!">
-                        <i class="fas fa-search"></i>
-                    </button>
-
-                    <button type="button" class="btn btn-default" title="Nuevo Personal" onclick="location.href='/personal/nuevo'">
-                        <i class="fas fa-plus"></i>
-                    </button>
-
-                    {% if parametro %}
-                        <button type="button" class="btn btn-default" title="Imprimir" onclick="location.href='/personal/imprimir/?parametro={{ parametro }}'">
-                            <i class="fas fa-print"></i>
-                        </button>
-                    {% else %}
-                        <button type="button" class="btn btn-default" title="Imprimir" onclick="location.href='/personal/imprimir/'">
-                            <i class="fas fa-print"></i>
-                        </button>
-                    {% endif %}
+                    
                     
                 </div>
             </div>
@@ -60,7 +34,6 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        
                         <th>Apellido</th>
                         <th>Nombre</th>
                         <th>DNI</th>

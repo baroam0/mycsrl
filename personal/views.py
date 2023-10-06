@@ -105,6 +105,7 @@ def listadopersonal(request):
             Q(numerodocumento__icontains=parametro)
         ).order_by('apellido')
     else:
+        parametro = None
         personal = Personal.objects.all().order_by('apellido')
     paginador = Paginator(personal, 10)
 
@@ -117,7 +118,30 @@ def listadopersonal(request):
         request,
         'personal/personal_list.html',
         {
-            'resultados': resultados
+            'resultados': resultados,
+            'parametro': parametro
+        })
+
+
+def printlistadopersonal(request):
+
+    parametro = request.GET.get('parametro')
+
+    if parametro:
+        personal = Personal.objects.filter(
+            Q(apellido__icontains=parametro) |
+            Q(nombre__icontains=parametro) |
+            Q(numerodocumento__icontains=parametro)
+        ).order_by('apellido')
+    else:
+        personal = Personal.objects.all()
+
+    return render(
+        request,
+        'personal/printpersonal_list.html',
+        {
+            'resultados': personal,
+            'parametro': parametro
         })
 
 
