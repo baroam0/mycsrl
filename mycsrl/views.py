@@ -8,7 +8,7 @@ from django.views.generic import TemplateView
 from devengamientos.models import Devengamiento
 from pagos.models import Obra, Proveedor
 from facturas.models import FacturaProveedor, DetalleFacturaProveedor
-
+from facturacion.models import Facturacion, DetalleFacturacion
 
 
 @login_required(login_url='/login')
@@ -57,6 +57,7 @@ def reporte(request):
     )
 
 
+
 def detallereporte(request):
 
     id_factura = int(request.GET.get("id_factura"))
@@ -91,6 +92,46 @@ def detallereporte(request):
             "proveedores": proveedor,
             "facturasproveedores": facturaproveedor,
             "detallesfacturaproveedores":detallefacturaproveedor
+        }
+    )   
+
+
+def reporteingresoegresoobra(request):    
+    obras = Obra.objects.all()
+
+    return render(
+        request, 
+        'reporteingresoegresoobra.html',
+        {
+            "obras": obras,
+        }
+    )
+
+
+
+def detallereporteingresoegresoobra(request):
+
+    obra = Obra.objects.get(pk=request.GET.get("id_obra"))
+
+    detallesfacturas = DetalleFacturaProveedor.objects.filter(obra=obra.pk)
+    factura = FacturaProveedor.objects.get(pk=detallesfacturas[0].factura.pk)
+
+    devengamientos = Devengamiento.objects.filter(factura=factura)
+    cobros = Facturacion.objects.filter(obra=obra.pk)
+
+    totalpagos = devengamientos[0].totalpagos()
+    totalcobros = cobros[0].totalfacturacion()
+
+    
+    return render(
+        request, 
+        'detallereporteingresoegresoobra.html',
+        {
+            "obras": obra,
+            "cobros": cobros,
+            "devengamientos": devengamientos,
+            "totalpagos": totalpagos,
+            "totalcobros": totalcobros
         }
     )   
 

@@ -17,6 +17,13 @@ class Devengamiento(models.Model):
     monto = models.DecimalField(max_digits=15, decimal_places=2, null=False, blank=False)
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
 
+    def totalpagos(self):
+        total = 0
+        devengamientos = Devengamiento.objects.filter(factura=self.factura)
+        for d in devengamientos:
+            total = total + d.monto
+        return total
+
     def __str__(self):
         return str(self.fecha)
     

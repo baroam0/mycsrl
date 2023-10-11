@@ -1,0 +1,83 @@
+
+{% extends 'base_nomenu.html' %}
+
+{% block content %}
+
+    <div class="container">
+
+        <br>
+        
+        <div class="row">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4">
+                <h3> Reportes. </h3>
+            </div>
+            <div class="col-sm-4"></div>
+        </div>
+
+
+        <h4> {{obras}} </h4>
+        <h5> Ingresos </h5>
+        
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Concepto</th>
+                            <th>Comprobante</th>
+                            <th>Monto</th>
+                        </tr>
+                    </thead>
+
+                        <tbody>
+                            {% for cobro in cobros  %}
+                                <tr>
+                                    <td>{{ cobro.fecha }}  </td>
+                                    <td>{{ cobro.descripcion }}  </td>
+                                    <td>{{ cobro.comprobante }}  </td>
+                                    <td>$ {{ cobro.totalfacturacion }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                </table>
+                <h5> Total Ingresos {{totalcobros}} </h5>
+        
+        <hr>
+
+        <h5> Egresos </h5>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Medio Pago</th>
+                        <th>Monto</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for devengamiento in devengamientos %}
+                        <tr>
+                            <td>{{ devengamiento.fecha }}  </td>
+                            <td>{{ devengamiento.mediopago }}  </td>
+                            <td>$ {{ devengamiento.monto }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <h5> Total Egresos {{totalpagos}} </h5>
+    </div>
+
+
+
+{% endblock %}
+
+
+    <script>
+        $(document).ready(function () {
+            
+        });
+
+    
+    </script>
+

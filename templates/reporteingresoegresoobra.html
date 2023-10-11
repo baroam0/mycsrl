@@ -1,0 +1,89 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="container">
+
+        <br>
+        
+        <div class="row">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4">
+                <h3> Reportes. </h3>
+            </div>
+            <div class="col-sm-4"></div>
+        </div>
+
+        <hr>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{message.tags}}" role="alert">
+                    {{message}}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+
+        <form action="/reportes/" method="GET">
+            <div class="form-inline">
+                <div class="col-6">
+                    <label>Obra</label>
+                    <select id="id_obra">
+                        {% for obra in obras %}
+                            <option value={{obra.pk}}> {{obra.descripcion.upper }} </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+            </div>
+
+            <div class="form-inline">
+
+                <div class="col-6">
+                </div>
+
+            </div>
+
+            <hr>
+
+            <div class="form-inline">
+                <div class="col-4">
+                </div>
+
+                <div class="col-4">
+                    <button type="button" class="btn btn-default" title="Generar" onclick="AbrirVentanaReporte()">
+                        <i class="fas fa-play"></i>
+                    </button>
+                </div>
+
+                <div class="col-4">
+                </div>
+            </div>
+
+            <br>
+
+        </form>
+    </div>
+
+{% endblock %}
+
+
+{% block js_extra %}
+
+    <script>
+        $(document).ready(function () {
+            $('#id_obra').select2();
+        });
+
+        function AbrirVentanaReporte(){
+            var id_obra = $("#id_obra").val();
+            var urldetallefactura = "/detallereporteingresoegresoobra/?id_obra=" + id_obra;
+            window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
+        }
+
+    
+    </script>
+
+{% endblock %}
