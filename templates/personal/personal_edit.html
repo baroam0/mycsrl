@@ -23,17 +23,23 @@
                     <hr>
 
                     <div class="row">
-                        <div class="col-2">
+                        <div class="col-4">
                             <button class="btn btn-primary" id="btn-guardar" type="submit">
                                 <i class="fas fa-check"></i>
                                 Aceptar
                             </button>
                         </div>
 
-                        <div class="col-8">
+                        <div class="col-4">
+                            {% if pk %}
+                                <button class="btn btn-secondary" id="btn-guardar" type="submit">
+                                    <i class="fas fa-check"></i>
+                                    Alta / Baja 
+                                </button>
+                            {% endif %}
                         </div>
 
-                        <div class="col-2">    
+                        <div class="col-4">    
                             <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="Volver()">
                                 <i class="far fa-times-circle"></i>
                                 Cancelar
@@ -91,6 +97,12 @@
 
         function Volver() {
             window.location.replace("/personal/listado");
+        }
+
+
+        function NuevoDatosBancarios(pk){
+            var urldetallefactura = "/pagos/proveedorbanco/nuevo/" + pk;
+            window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
         }
     </script>
 

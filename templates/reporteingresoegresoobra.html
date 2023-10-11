@@ -30,7 +30,7 @@
             <div class="form-inline">
                 <div class="col-6">
                     <label>Obra</label>
-                    <select id="id_obra">
+                    <select id="id_obra" class="form-control">
                         {% for obra in obras %}
                             <option value={{obra.pk}}> {{obra.descripcion.upper }} </option>
                         {% endfor %}

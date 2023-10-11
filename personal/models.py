@@ -32,8 +32,8 @@ class Personal(models.Model):
     categoria = models.ForeignKey(
         Categoria, on_delete=models.CASCADE, null=True, blank=True)
     
-    fechaingreso = models.DateField(null=True, blank=True)
-    fechabaja = models.DateField(null=True, blank=True)
+    #fechaingreso = models.DateField(null=True, blank=True)
+    #fechabaja = models.DateField(null=True, blank=True)
 
     obra = models.ForeignKey(Obra, null=True, blank=True, on_delete=models.CASCADE)
 
@@ -53,5 +53,16 @@ class Personal(models.Model):
     class Meta:
         verbose_name_plural = "Personal"
 
+
+class AltaBajaPersonal(models.Model):
+    personal = models.ForeignKey(Personal, on_delete=models.CASCADE)
+    alta = models.DateField(null=False, blank=False)
+    baja = models.DateField(null=True, blank=True)
+
+    def __str__(self):
+        return str(self.pk)
+
+    class Meta:
+        verbose_name_plural = "Altas Bajas Personal"
 
 # Create your models here.

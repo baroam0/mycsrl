@@ -194,8 +194,45 @@ def personal_edit(request, pk):
         return render(
             request,
             'personal/personal_edit.html',
-            {"form": form}
+            {
+                "form": form,
+                "pk": pk
+            }
         )
 
+
+
+
+###########################################################
+################SECCION ALTAS BAJS  PERSONAL ##############
+###########################################################
+
+
+@login_required(login_url='/login')
+def altabajapersonal_new(request):
+    if request.POST:
+        usuario = request.user
+        form =  CategoriaForm(request.POST)
+
+        if form.is_valid():
+            categoria = form.save(commit=False)
+            categoria.usuario = usuario
+            try:
+                categoria.save()
+                messages.success(request, "Se ha grabado los datos.")
+                return redirect('/personal/categoria/listado')
+            except Exception as e:
+                messages.warning(request, "Ha ocurrido un error.")
+                return redirect('/personal/categoria/listado')
+        else:
+            messages.warning(request, form.errors)
+            return redirect('/personal/categoria/listado')
+    else:
+        form = CategoriaForm()
+        return render(
+            request,
+            'personal/categoria_edit.html',
+            {"form": form}
+        )
 
 # Create your views here.
