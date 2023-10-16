@@ -38,14 +38,12 @@
                         <th>Nombre</th>
                         <th>DNI</th>
                         <th>Contratista</th>
-                        <th>Obra</th>
-                        <th>Usuario</th>
-                        <th>Accion</th>
+                        <th>Categoria </th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    {% for resultado in resultados %}
+                    {% for resultado in personales %}
                     <tr>
                         <td>{{ resultado.apellido.upper }}  </td>
                         <td>{{ resultado.nombre.upper }}  </td>
@@ -56,19 +54,8 @@
                             <td> - </td>
                         {% endif %}
 
-                        {% if resultado.obra %}
-                            <td>{{ resultado.obra }}  </td>
-                        {% else %}
-                            <td> - </td>
-                        {% endif %}
-                        
-                        <td>{{ resultado.usuario }}</td>
+                        <td>{{ resultado.categoria }}</td>
 
-                        <td>
-                            <button type="button" class="btn btn-link btn-sm" onclick="location.href='/personal/editar/' + {{ resultado.pk }}">
-                                <i class="fas fa-pencil-alt"></i>
-                            </button>
-                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -114,5 +101,25 @@
         </form>
 
     </div>
+
+{% endblock %}
+
+
+
+{% block js_extra %}
+
+    <script>
+
+
+        function Volver() {
+            window.location.replace("/personal/listado");
+        }
+
+        $(document).ready(function () {
+            window.print();
+            Volver();
+        });
+
+    </script>
 
 {% endblock %}

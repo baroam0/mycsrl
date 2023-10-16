@@ -127,23 +127,13 @@ def listadopersonal(request):
 
 def printlistadopersonal(request):
 
-    parametro = request.GET.get('parametro')
-
-    if parametro:
-        personal = Personal.objects.filter(
-            Q(apellido__icontains=parametro) |
-            Q(nombre__icontains=parametro) |
-            Q(numerodocumento__icontains=parametro)
-        ).order_by('apellido')
-    else:
-        personal = Personal.objects.all()
+    personales = Personal.objects.filter(activo=True).order_by('contratista')
 
     return render(
         request,
         'personal/printpersonal_list.html',
         {
-            'resultados': personal,
-            'parametro': parametro
+            'personales': personales
         })
 
 

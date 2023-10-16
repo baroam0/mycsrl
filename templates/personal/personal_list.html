@@ -42,15 +42,9 @@
                         <i class="fas fa-plus"></i>
                     </button>
 
-                    {% if parametro %}
-                        <button type="button" class="btn btn-default" title="Imprimir" onclick="location.href='/personal/imprimir/?parametro={{ parametro }}'">
-                            <i class="fas fa-print"></i>
-                        </button>
-                    {% else %}
-                        <button type="button" class="btn btn-default" title="Imprimir" onclick="location.href='/personal/imprimir/'">
-                            <i class="fas fa-print"></i>
-                        </button>
-                    {% endif %}
+                    <button type="button" class="btn btn-default" title="Imprimir" onclick="location.href='/personal/imprimir/'">
+                        <i class="fas fa-print"></i>
+                    </button>                    
                     
                 </div>
             </div>
