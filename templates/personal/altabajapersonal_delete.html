@@ -1,0 +1,67 @@
+
+{% extends 'base_nomenu.html' %}
+
+
+{% block content %}
+    <div class="container">
+
+        <br>
+        <div class="row">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-6">
+                <h4>Esta seguro que desea borrar el Alta/Baja:  </h4>
+                <h5> Personal: {{ detalle.personal }} </h5>
+                <h5> Alta: {{ detalle.alta }} </h5>
+                <h5> Baja: {{ detalle.baja }} </h5>
+            </div>
+            <div class="col-sm-3"></div>
+        </div>
+
+        <div class="row">
+            
+            <div class="col-12">
+                <form  method="POST" id="myform" >{% csrf_token %}
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-2">
+                            <button class="btn btn-primary" id="btn-guardar" type="submit">
+                                <i class="fas fa-check"></i>
+                                Aceptar
+                            </button>
+                        </div>
+
+                        <div class="col-8">
+                        </div>
+
+                        <div class="col-2">    
+                            <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="BotonCancelar()">
+                                <i class="far fa-times-circle"></i>
+                                Cancelar
+                            </button>
+                        </div>                        
+                    </div>
+                    <hr>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block js_extra %}
+
+    <script>
+
+        function BotonCancelar(){
+            var urldetalle = "/personal/editar/" + {{detalle.personal.pk}};
+            window.location.replace(urldetalle);
+        }
+
+        $(document).ready(function () {
+        });
+
+    </script>
+
+{% endblock %}

@@ -3,12 +3,14 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 from django.core.paginator import Paginator
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponseRedirect
 from django.db.models import Q
 
-from .forms import CategoriaForm, PersonalForm
-from .models import Categoria, Personal
+from .forms import AltaBajaPersonalForm, CategoriaForm, PersonalForm
+from .models import Categoria, Personal, AltaBajaPersonal
 
+
+from .helper import activapersonal
 
 ###########################################################
 ################SECCION CATEGORIA##########################
@@ -176,6 +178,7 @@ def personal_new(request):
 @login_required(login_url='/login')
 def personal_edit(request, pk):
     consulta = Personal.objects.get(pk=pk)
+    altabajas = AltaBajaPersonal.objects.filter(personal=consulta.pk)
 
     if request.POST:
         form = PersonalForm(request.POST, instance=consulta)
@@ -196,43 +199,103 @@ def personal_edit(request, pk):
             'personal/personal_edit.html',
             {
                 "form": form,
-                "pk": pk
+                "pk": pk,
+                "altasbajas": altabajas
+            }
+        )
+
+
+###########################################################
+################SECCION ALTAS BAJaS PERSONAL ##############
+###########################################################
+
+
+@login_required(login_url='/login')
+def altabajapersonal_new(request, pk):
+    personal = Personal.objects.get(pk=pk)
+
+    altasbajas = AltaBajaPersonal.objects.filter(personal=personal)
+
+    if request.POST:
+        usuario = request.user
+        form =  AltaBajaPersonalForm(request.POST)
+
+        if form.is_valid():
+            altabajapersonal = form.save(commit=False)
+            altabajapersonal.usuario = usuario 
+            altabajapersonal.personal = personal
+            altabajapersonal.save()
+            activapersonal(personal.pk, altabajapersonal.alta, altabajapersonal.baja)   
+            messages.success(request, "Se ha grabado los datos.")
+            return redirect('/personal/categoria/listado')
+            
+        else:
+            messages.warning(request, form.errors)
+            return redirect('/personal/categoria/listado')
+    else:
+        form = AltaBajaPersonalForm()
+        return render(
+            request,
+            'personal/altabajapersonal_edit.html',
+            {   
+                "form": form,
+                "pk": personal
             }
         )
 
 
 
-
-###########################################################
-################SECCION ALTAS BAJS  PERSONAL ##############
-###########################################################
-
-
 @login_required(login_url='/login')
-def altabajapersonal_new(request):
+def altabajapersonal_edit(request, pk):
+
+    altabaja = AltaBajaPersonal.objects.get(pk=pk)
+
+    personal = Personal.objects.get(pk=altabaja.personal.pk)
+
     if request.POST:
         usuario = request.user
-        form =  CategoriaForm(request.POST)
+        form =  AltaBajaPersonalForm(request.POST, instance=altabaja)
 
         if form.is_valid():
-            categoria = form.save(commit=False)
-            categoria.usuario = usuario
-            try:
-                categoria.save()
-                messages.success(request, "Se ha grabado los datos.")
-                return redirect('/personal/categoria/listado')
-            except Exception as e:
-                messages.warning(request, "Ha ocurrido un error.")
-                return redirect('/personal/categoria/listado')
+            altabajapersonal = form.save(commit=False)
+            altabajapersonal.usuario = usuario 
+            altabajapersonal.personal = personal
+            altabajapersonal.save()
+            activapersonal(personal.pk, altabajapersonal.alta, altabajapersonal.baja)   
+            messages.success(request, "Se ha grabado los datos.")
+            return redirect('/personal/categoria/listado')
+            
         else:
             messages.warning(request, form.errors)
             return redirect('/personal/categoria/listado')
     else:
-        form = CategoriaForm()
+        form = AltaBajaPersonalForm(instance=altabaja)
         return render(
             request,
-            'personal/categoria_edit.html',
-            {"form": form}
+            'personal/altabajapersonal_edit.html',
+            {   
+                "form": form,
+                "pk": personal
+            }
         )
+
+
+@login_required(login_url='/login')
+def altabajapersonal_delete(request, pk):
+    altabaja = AltaBajaPersonal.objects.get(pk=pk)
+    personal = Personal.objects.get(pk=altabaja.personal.pk)
+    
+    if request.method =="POST":
+        altabaja.delete()
+        return HttpResponseRedirect("/personal/editar/" + str(personal.pk))
+ 
+    return render(
+            request,
+            'personal/altabajapersonal_delete.html',
+            {
+                "detalle": altabaja
+            }
+        )
+
 
 # Create your views here.

@@ -22,6 +22,7 @@ from django.urls import include, path
 from .views import (
     listadopersonal, personal_new, personal_edit,
     listadocagetoria, categoria_new, categoria_edit,
+    altabajapersonal_new, altabajapersonal_edit, altabajapersonal_delete,
     printlistadopersonal
 )
 
@@ -34,7 +35,12 @@ urlpatterns = [
     path('categoria/listado/', listadocagetoria, name='listadocategoria'),
     path('categoria/nuevo/', categoria_new, name='categoria_new'),
     path('categoria/editar/<int:pk>', categoria_edit, name='categoria_edit'),
-    
+
     path('imprimir/', printlistadopersonal, name='printlistadopersonal'),
+
+    path('altabaja/<int:pk>', altabajapersonal_new, name='altabajapersonal_new'),
+    path('altabajaedit/<int:pk>', altabajapersonal_edit, name='altabajapersonal_edit'),
+    path('altabajadelete/<int:pk>', altabajapersonal_delete, name='altabajapersonal_delete'),
+    
 
 ]

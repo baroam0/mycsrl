@@ -39,13 +39,10 @@ class Personal(models.Model):
 
     contratista = models.ForeignKey(
         Contratista, on_delete=models.CASCADE, null=True, blank=True)
+    
+    activo = models.BooleanField(default=True)
 
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
-
-    def save(self, *args, **kwargs):
-        self.apellido = self.apellido.upper()
-        self.nombre = self.nombre.upper()
-        super(Personal, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.apellido + ", " + self.nombre
@@ -58,6 +55,7 @@ class AltaBajaPersonal(models.Model):
     personal = models.ForeignKey(Personal, on_delete=models.CASCADE)
     alta = models.DateField(null=False, blank=False)
     baja = models.DateField(null=True, blank=True)
+    usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
 
     def __str__(self):
         return str(self.pk)

@@ -4,7 +4,7 @@ from django import forms
 from django.contrib.auth.models import User
 
 
-from .models import Categoria, Personal
+from .models import Categoria, Personal, AltaBajaPersonal
 from contratistas.models import Contratista
 from pagos.models import Obra
 
@@ -49,14 +49,33 @@ class PersonalForm(forms.ModelForm):
         queryset=Contratista.objects.all(), required=False
     )
 
+    activo = forms.BooleanField(label="Activo", required=False)
+
     def __init__(self, *args, **kwargs):
         super(PersonalForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            if field != "activo":
+                self.fields[field].widget.attrs.update({
+                    'class': 'form-control'
+                })
+
+    class Meta:
+        model = Personal
+        fields = ["apellido", "nombre", "numerodocumento", "categoria", "activo", "contratista", "obra"]
+
+
+class AltaBajaPersonalForm(forms.ModelForm):
+    alta = forms.DateField(label="Fecha Alta", required=True)
+    baja = forms.DateField(label="Fecha Baja", required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(AltaBajaPersonalForm, self).__init__(*args, **kwargs)
         for field in iter(self.fields):
             self.fields[field].widget.attrs.update({
                 'class': 'form-control'
             })
 
     class Meta:
-        model = Personal
-        fields = ["apellido", "nombre", "numerodocumento", "categoria", "contratista", "obra"]
+        model = AltaBajaPersonal
+        fields = ["alta", "baja"]
 

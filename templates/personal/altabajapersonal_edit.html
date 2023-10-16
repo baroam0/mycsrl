@@ -1,40 +1,39 @@
-
 {% extends 'base_nomenu.html' %}
 
 {% block content %}
+
     <div class="container">
 
         <br>
         <div class="row">
             <div class="col-sm-1"></div>
             <div class="col-sm-10">
-                <h3>Detalle Proveedor Banco.  </h3>
+                <h2>Datos del Personal - {{ pk }}</h2>
             </div>
             <div class="col-sm-1"></div>
         </div>
 
         <div class="row">
-            
             <div class="col-12">
                 <hr>
-                <form  method="POST" id="myform" >{% csrf_token %}
+                <form  method="POST">{% csrf_token %}
                     {{ form.as_p }}
 
                     <hr>
 
                     <div class="row">
-                        <div class="col-2">
+                        <div class="col-4">
                             <button class="btn btn-primary" id="btn-guardar" type="submit">
                                 <i class="fas fa-check"></i>
                                 Aceptar
                             </button>
                         </div>
 
-                        <div class="col-8">
+                        <div class="col-4">
                         </div>
 
-                        <div class="col-2">    
-                            <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="BotonCancelar()">
+                        <div class="col-4">    
+                            <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="AltaBaja()">
                                 <i class="far fa-times-circle"></i>
                                 Cancelar
                             </button>
@@ -43,10 +42,11 @@
                     <hr>
                 </form>
             </div>
-            
         </div>
-        
+
+       
     </div>
+
 
 {% endblock %}
 
@@ -75,31 +75,31 @@
             };
             $.datepicker.setDefaults($.datepicker.regional['es']);
             $(function () {
-                $("#id_fecha").datepicker();
+                $("#id_alta").datepicker();
+                $("#id_baja").datepicker();
             });
-        }
-
-        function BotonCancelar(){
-            window.close();
         }
 
 
         $(document).ready(function () {
             TranslateDatepickerToEs();
+            $('#id_obra').select2();
+
             window.onunload = function(){
                 window.opener.location.reload();
                 window.close(); 
             };
-            $("#id_obra").select2();
-            $("#id_rubro").select2();
-            $("#id_descripciondetalle").select2();
-
-            $( "#myform" ).on( "submit", function( event ) {
-               
-
-            });
         });
 
+
+        function Volver() {
+            window.location.replace("/personal/listado");
+        }
+
+        function AltaBaja(pk){
+            var urldetallefactura = "/pagos/proveedorbanco/nuevo/" + pk;
+            window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
+        }
     </script>
 
 {% endblock %}
