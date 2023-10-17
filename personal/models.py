@@ -63,4 +63,28 @@ class AltaBajaPersonal(models.Model):
     class Meta:
         verbose_name_plural = "Altas Bajas Personal"
 
+
+class Quincena(models.Model):
+    fechainicio = models.DateField()
+    fechafin = models.DateField()
+
+    def __str__(self):
+        return str(self.fechainicio) + "-" + str(self.fechafin)
+
+    class Meta:
+        verbose_name_plural = "Quincenas"
+        unique_together = (('fechainicio', 'fechafin'),)
+
+
+class QuincenaDetalle(models.Model):
+    quincena = models.ForeignKey(Quincena, on_delete=models.CASCADE)
+    personal = models.ForeignKey(Personal, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.quincena) + "-" + str(self.personal)
+
+    class Meta:
+        verbose_name_plural = "Quincenas Detalles"
+
+    
 # Create your models here.

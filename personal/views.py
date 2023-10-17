@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect, HttpResponseRedirect
 from django.db.models import Q
 
 from .forms import AltaBajaPersonalForm, CategoriaForm, PersonalForm
-from .models import Categoria, Personal, AltaBajaPersonal
+from .models import Categoria, Personal, AltaBajaPersonal, Quincena, QuincenaDetalle
 
 
 from .helper import activapersonal
@@ -286,6 +286,85 @@ def altabajapersonal_delete(request, pk):
                 "detalle": altabaja
             }
         )
+
+
+
+###########################################################
+################SECCION QUINCENA ##########################
+###########################################################
+
+
+@login_required(login_url='/login')
+def quincena_list(request):
+    
+    quincenas = Quincena.objects.all()
+    paginador = Paginator(quincenas, 20)
+
+    if "page" in request.GET:
+        page = request.GET.get('page')
+    else:
+        page = 1
+    resultados = paginador.get_page(page)
+    return render(
+        request,
+        'personal/quincena_list.html',
+        {
+            'resultados': resultados
+        })
+
+
+@login_required(login_url='/login')
+def categoria_new(request):
+    if request.POST:
+        usuario = request.user
+        form =  CategoriaForm(request.POST)
+
+        if form.is_valid():
+            categoria = form.save(commit=False)
+            categoria.usuario = usuario
+            try:
+                categoria.save()
+                messages.success(request, "Se ha grabado los datos.")
+                return redirect('/personal/categoria/listado')
+            except Exception as e:
+                messages.warning(request, "Ha ocurrido un error.")
+                return redirect('/personal/categoria/listado')
+        else:
+            messages.warning(request, form.errors)
+            return redirect('/personal/categoria/listado')
+    else:
+        form = CategoriaForm()
+        return render(
+            request,
+            'personal/categoria_edit.html',
+            {"form": form}
+        )
+
+
+@login_required(login_url='/login')
+def categoria_edit(request, pk):
+    consulta = Categoria.objects.get(pk=pk)
+   
+    if request.POST:
+        form = CategoriaForm(request.POST, instance=consulta)
+        if form.is_valid():
+            categoria = form.save(commit=False)
+            usuario = request.user
+            categoria.usuario = usuario
+            categoria.save()
+            messages.success(request, "Se ha modificado los datos.")
+            return redirect('/personal/categoria/listado')
+        else:
+            messages.warning(request, form.errors)
+            return redirect('/personal/categoria/listado')
+    else:
+        form = CategoriaForm(instance=consulta)
+        return render(
+            request,
+            'personal/categoria_edit.html',
+            {"form": form}
+        )
+
 
 
 # Create your views here.
