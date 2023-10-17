@@ -6,7 +6,7 @@ from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, HttpResponseRedirect
 from django.db.models import Q
 
-from .forms import AltaBajaPersonalForm, CategoriaForm, PersonalForm
+from .forms import AltaBajaPersonalForm, CategoriaForm, PersonalForm, QuincenaForm
 from .models import Categoria, Personal, AltaBajaPersonal, Quincena, QuincenaDetalle
 
 
@@ -314,35 +314,32 @@ def quincena_list(request):
 
 
 @login_required(login_url='/login')
-def categoria_new(request):
+def quincena_new(request):
     if request.POST:
         usuario = request.user
-        form =  CategoriaForm(request.POST)
+        form = QuincenaForm(request.POST)
 
         if form.is_valid():
-            categoria = form.save(commit=False)
-            categoria.usuario = usuario
-            try:
-                categoria.save()
-                messages.success(request, "Se ha grabado los datos.")
-                return redirect('/personal/categoria/listado')
-            except Exception as e:
-                messages.warning(request, "Ha ocurrido un error.")
-                return redirect('/personal/categoria/listado')
+            quincena = form.save(commit=False)
+            quincena.usuario = usuario
+            quincena.save()
+            personales = Personal.objects.filter(activo=True)
+            messages.success(request, "Se ha grabado los datos.")
+            return redirect('/personal/quincena/listado')
         else:
             messages.warning(request, form.errors)
-            return redirect('/personal/categoria/listado')
+            return redirect('/personal/quincena/listado')
     else:
-        form = CategoriaForm()
+        form = QuincenaForm()
         return render(
             request,
-            'personal/categoria_edit.html',
+            'personal/quincena_edit.html',
             {"form": form}
         )
 
 
 @login_required(login_url='/login')
-def categoria_edit(request, pk):
+def quincena_edit(request, pk):
     consulta = Categoria.objects.get(pk=pk)
    
     if request.POST:

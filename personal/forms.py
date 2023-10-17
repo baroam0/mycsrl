@@ -4,7 +4,7 @@ from django import forms
 from django.contrib.auth.models import User
 
 
-from .models import Categoria, Personal, AltaBajaPersonal
+from .models import Categoria, Personal, AltaBajaPersonal, Quincena, QuincenaDetalle
 from contratistas.models import Contratista
 from pagos.models import Obra
 
@@ -78,4 +78,21 @@ class AltaBajaPersonalForm(forms.ModelForm):
     class Meta:
         model = AltaBajaPersonal
         fields = ["alta", "baja"]
+
+
+
+class QuincenaForm(forms.ModelForm):
+    fechainicio = forms.DateField(label="Fecha Inicio", required=True)
+    fechafin = forms.DateField(label="Fecha Fin", required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(QuincenaForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+
+    class Meta:
+        model = AltaBajaPersonal
+        fields = ["fechainicio", "fechafin"]
 

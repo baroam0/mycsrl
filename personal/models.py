@@ -67,6 +67,7 @@ class AltaBajaPersonal(models.Model):
 class Quincena(models.Model):
     fechainicio = models.DateField()
     fechafin = models.DateField()
+    usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
 
     def __str__(self):
         return str(self.fechainicio) + "-" + str(self.fechafin)
@@ -79,6 +80,7 @@ class Quincena(models.Model):
 class QuincenaDetalle(models.Model):
     quincena = models.ForeignKey(Quincena, on_delete=models.CASCADE)
     personal = models.ForeignKey(Personal, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
 
     def __str__(self):
         return str(self.quincena) + "-" + str(self.personal)
