@@ -6,7 +6,7 @@ from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, HttpResponseRedirect
 from django.db.models import Q
 
-from .forms import AltaBajaPersonalForm, CategoriaForm, PersonalForm, QuincenaForm
+from .forms import AltaBajaPersonalForm, CategoriaForm, PersonalForm, QuincenaForm, QuincenaDetalleForm
 from .models import Categoria, Personal, AltaBajaPersonal, Quincena, QuincenaDetalle
 
 
@@ -294,10 +294,24 @@ def altabajapersonal_delete(request, pk):
 ###########################################################
 
 
+def generadordetallequincena(id_quincena, personales, usuario):
+    for personal in personales:
+        try:
+            detallequincena = QuincenaDetalle(
+                quincena=id_quincena,
+                personal=personal,
+                usuario=usuario
+            )
+            detallequincena.save()
+        except Exception as e:
+            return str(e)
+    return True
+
+
 @login_required(login_url='/login')
 def quincena_list(request):
     
-    quincenas = Quincena.objects.all()
+    quincenas = Quincena.objects.all().order_by('fechainicio')
     paginador = Paginator(quincenas, 20)
 
     if "page" in request.GET:
@@ -316,14 +330,16 @@ def quincena_list(request):
 @login_required(login_url='/login')
 def quincena_new(request):
     if request.POST:
-        usuario = request.user
         form = QuincenaForm(request.POST)
 
         if form.is_valid():
+            usuario = request.user
             quincena = form.save(commit=False)
             quincena.usuario = usuario
             quincena.save()
             personales = Personal.objects.filter(activo=True)
+            id_ultimaquicena = Quincena.objects.latest('pk')
+            generadordetallequincena(id_ultimaquicena, personales, usuario)
             messages.success(request, "Se ha grabado los datos.")
             return redirect('/personal/quincena/listado')
         else:
@@ -340,10 +356,12 @@ def quincena_new(request):
 
 @login_required(login_url='/login')
 def quincena_edit(request, pk):
-    consulta = Categoria.objects.get(pk=pk)
-   
+    quincenadetalle = QuincenaDetalle.objects.get(pk=pk)
+    quincena = Quincena.objects.get(pk=quincenadetalle.quincena.pk)
+    quincenasdetalles = QuincenaDetalle.objects.filter(quincena=quincenadetalle.quincena)
+    
     if request.POST:
-        form = CategoriaForm(request.POST, instance=consulta)
+        form = QuincenaDetalleForm(request.POST, instance=quincenadetalle)
         if form.is_valid():
             categoria = form.save(commit=False)
             usuario = request.user
@@ -355,11 +373,15 @@ def quincena_edit(request, pk):
             messages.warning(request, form.errors)
             return redirect('/personal/categoria/listado')
     else:
-        form = CategoriaForm(instance=consulta)
+        form = QuincenaDetalleForm(instance=quincenadetalle)
         return render(
             request,
-            'personal/categoria_edit.html',
-            {"form": form}
+            'personal/quincenadetalle_edit.html',
+            {
+                "form": form,
+                "quincenasdetalles": quincenasdetalles,
+                "quincenadetalle": quincenadetalle
+            }
         )
 
 

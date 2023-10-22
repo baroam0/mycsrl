@@ -93,6 +93,21 @@ class QuincenaForm(forms.ModelForm):
             })
 
     class Meta:
-        model = AltaBajaPersonal
+        model = Quincena
         fields = ["fechainicio", "fechafin"]
 
+
+class QuincenaDetalleForm(forms.ModelForm):
+
+    personal = forms.ModelChoiceField(queryset=Personal.objects.all()) 
+
+    def __init__(self, *args, **kwargs):
+        super(QuincenaDetalleForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+
+    class Meta:
+        model = QuincenaDetalle
+        fields = ["personal"]
