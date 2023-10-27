@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'usuariosadm',
     'pagos',
     'personal',
+    'presupuestos',
     'rodados'
 ]
 
