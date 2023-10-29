@@ -61,7 +61,7 @@ def presupuesto_new(request):
 @login_required(login_url='/login')
 def presupuesto_edit(request, pk):
     consulta = Presupuesto.objects.get(pk=pk)
-    detallespresupuestos = DetallePresupuesto.objects.filter(prespuesto=consulta)
+    detallespresupuestos = DetallePresupuesto.objects.filter(presupuesto=consulta)
    
     if request.POST:
         form = PresupuestoForm(request.POST, instance=consulta)
@@ -79,8 +79,12 @@ def presupuesto_edit(request, pk):
         form = PresupuestoForm(instance=consulta)
         return render(
             request,
-            'bancos/banco_edit.html',
-            {"form": form}
+            'presupuestos/presupuesto_edit.html',
+            {
+                "detallespresupuestos": detallespresupuestos,
+                "form": form,
+                "pk": pk
+            }
         )
 
 
