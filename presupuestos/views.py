@@ -5,8 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 
-from .forms import BancoForm
-from .models import Presupuesto
+from .forms import PresupuestoForm
+from .models import Presupuesto, DetallePresupuesto
 
 
 @login_required(login_url='/login')
@@ -25,7 +25,7 @@ def listadopresupuesto(request):
     resultados = paginador.get_page(page)
     return render(
         request,
-        'presupuestos/presupupuesto_list.html',
+        'presupuestos/presupuesto_list.html',
         {
             'resultados': resultados
         })
@@ -35,47 +35,48 @@ def listadopresupuesto(request):
 def presupuesto_new(request):
     if request.POST:
         usuario = request.user
-        form =  BancoForm(request.POST)
+        form =  PresupuestoForm(request.POST)
         if form.is_valid():
-            banco = form.save(commit=False)
-            banco.usuario = usuario
+            presupuesto = form.save(commit=False)
+            presupuesto.usuario = usuario
             try:
-                banco.save()
-                messages.success(request, "Se ha grabado los datos del banco.")
-                return redirect('/bancos/listado')
+                presupuesto.save()
+                messages.success(request, "Se ha grabado los datos.")
+                return redirect('/presupuesto/listado')
             except Exception as e:
                 messages.warning(request, "Ha ocurrido un error.")
-                return redirect('/bancos/listado')
+                return redirect('/prespuesto/listado')
         else:
             messages.warning(request, form.errors)
             return redirect('/bancos/listado')
     else:
-        form = BancoForm()
+        form = PresupuestoForm()
         return render(
             request,
-            'bancos/banco_edit.html',
+            'presupuestos/presupuesto_edit.html',
             {"form": form}
         )
 
 
 @login_required(login_url='/login')
-def banco_edit(request, pk):
-    consulta = Banco.objects.get(pk=pk)
+def presupuesto_edit(request, pk):
+    consulta = Presupuesto.objects.get(pk=pk)
+    detallespresupuestos = DetallePresupuesto.objects.filter(prespuesto=consulta)
    
     if request.POST:
-        form = BancoForm(request.POST, instance=consulta)
+        form = PresupuestoForm(request.POST, instance=consulta)
         if form.is_valid():
-            banco = form.save(commit=False)
+            presupuesto = form.save(commit=False)
             usuario = request.user
-            banco.usuario = usuario
-            banco.save()
+            presupuesto.usuario = usuario
+            presupuesto.save()
             messages.success(request, "Se ha modificado los datos del banco")
-            return redirect('/bancos/listado')
+            return redirect('/prespuesto/listado')
         else:
             messages.warning(request, form.errors)
             return redirect('/bancos/listado')
     else:
-        form = BancoForm(instance=consulta)
+        form = PresupuestoForm(instance=consulta)
         return render(
             request,
             'bancos/banco_edit.html',

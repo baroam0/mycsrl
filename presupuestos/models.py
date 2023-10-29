@@ -4,10 +4,12 @@ from django.db import models
 from contratistas.models import Contratista
 from pagos.models import Obra
 
+from usuariosadm.models import UserAdm
 
 class Presupuesto(models.Model):
     obra = models.ForeignKey(Obra, on_delete=models.CASCADE)
     cerrado = models.BooleanField(default=False)
+    usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
 
     def __str__(self):
         return str(self.pk)
@@ -34,6 +36,7 @@ class DetallePresupuesto(models.Model):
     contratista = models.ForeignKey(Contratista, on_delete=models.CASCADE)
     importe = models.DecimalField(decimal_places=2, max_digits=10)
     entregado = models.DecimalField(decimal_places=2, max_digits=10)
+    usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
 
     def __str__(self):
         return str(self.pk)

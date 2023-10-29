@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-sm-4"></div>
             <div class="col-sm-4">
-                <h2>Datos del Banco.</h2>
+                <h2>Datos del Presupuesto.</h2>
             </div>
             <div class="col-sm-4"></div>
         </div>
@@ -42,6 +42,41 @@
                     </div>
                     <hr>
                 </form>
+
+                {% if detallespresupuestos %}
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Obra</th>
+                                <th>Estado</th>
+                                <th>Usuario </th>
+                                <th>Accion</th>
+                            </tr>
+                        </thead>
+        
+                        <tbody>
+                            {% for resultado in resultados %}
+                            <tr>
+                                <td>{{ resultado.obra }}  </td>
+                                {% if resultado.cerrado%}
+                                    <td>Abierto </td>
+                                {% else %}
+                                    <td>Cerrado </td>
+                                {% endif %}
+                                
+                                <td>{{ resultado.usuario }}</td>
+        
+                                <td>
+                                    <button type="button" class="btn btn-link btn-sm" onclick="location.href='/presupuesto/editar/' + {{ resultado.pk }}">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+    
+                {% endif %}
             </div>
             
         </div>
