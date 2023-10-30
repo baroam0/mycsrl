@@ -358,7 +358,8 @@ def quincena_new(request):
 def quincena_edit(request, pk):
     quincenadetalle = QuincenaDetalle.objects.get(pk=pk)
     quincena = Quincena.objects.get(pk=quincenadetalle.quincena.pk)
-    quincenasdetalles = QuincenaDetalle.objects.filter(quincena=quincenadetalle.quincena)
+    quincenasdetalles = QuincenaDetalle.objects.filter(
+        quincena=quincenadetalle.quincena).order_by('personal__contratista')
     
     if request.POST:
         form = QuincenaDetalleForm(request.POST, instance=quincenadetalle)
