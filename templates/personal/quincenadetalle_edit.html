@@ -51,6 +51,8 @@
                 <thead>
                     <tr>
                         <th>Apellido y Nombre</th>
+                        <th>Fecha Ingreso </th>
+                        <th>Horas </th>
                         <th>Categoria</th>
                         <th>Contratista / Obra</th>
                     </tr>
@@ -60,6 +62,8 @@
                     {% for quincenadetalle in quincenasdetalles %}
                     <tr>
                         <td>{{ quincenadetalle.personal.apellido }}, {{ quincenadetalle.personal.nombre }}  </td>
+                        <td> </td>
+                        <td style="outline: thin solid"> </td>
                         <td>{{ quincenadetalle.personal.categoria }}  </td>
                         {% if quincenadetalle.personal.contratista%}
                             <td>{{ quincenadetalle.personal.contratista }} / {{quincenadetalle.personal.obra}}  </td>
