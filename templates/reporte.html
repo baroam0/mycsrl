@@ -30,7 +30,7 @@
             <div class="form-inline">
                 <div class="col-6">
                     <label>Obra</label>
-                    <select id="id_obra">
+                    <select id="id_obra" class="form-control">
                         {% for obra in obras %}
                             <option value={{obra.pk}}> {{obra.descripcion.upper }} </option>
                         {% endfor %}
@@ -39,7 +39,7 @@
 
                 <div class="col-6">
                     <label>Proveedores</label>
-                    <select id="id_proveedor">
+                    <select id="id_proveedor" class="form-control">
                         {% for proveedor in proveedores %}
                             <option value={{proveedor.pk}}> {{proveedor.razonsocial.upper }} </option>
                         {% endfor %}
@@ -93,8 +93,8 @@
 
     <script>
         $(document).ready(function () {
-            $('#id_obra').select2();
-            $('#id_proveedor').select2();
+            //$('#id_obra').select2();
+            //$('#id_proveedor').select2();
         });
 
         function AbrirVentanaReporte(){
