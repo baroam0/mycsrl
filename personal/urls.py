@@ -24,7 +24,7 @@ from .views import (
     listadocagetoria, categoria_new, categoria_edit,
     altabajapersonal_new, altabajapersonal_edit, altabajapersonal_delete,
     quincena_list, quincena_new, quincena_edit,
-    printlistadopersonal
+    printlistadopersonal, printquincenalistado
 )
 
 
@@ -38,6 +38,7 @@ urlpatterns = [
     path('categoria/editar/<int:pk>', categoria_edit, name='categoria_edit'),
 
     path('imprimir/', printlistadopersonal, name='printlistadopersonal'),
+    path('imprimirquincena/<int:pk>', printquincenalistado, name='printquincenalistado'),
 
     path('altabaja/<int:pk>', altabajapersonal_new, name='altabajapersonal_new'),
     path('altabajaedit/<int:pk>', altabajapersonal_edit, name='altabajapersonal_edit'),
