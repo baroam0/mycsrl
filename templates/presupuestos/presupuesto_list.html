@@ -38,7 +38,7 @@
                         <i class="fas fa-search"></i>
                     </button>
 
-                    <button type="button" class="btn btn-default" title="Nuevo Banco!" onclick="location.href='/presupuesto/nuevo'">
+                    <button type="button" class="btn btn-default" title="Nuevo Prespuesto!" onclick="location.href='/presupuesto/nuevo'">
                         <i class="fas fa-plus"></i>
                     </button>
                 </div>
@@ -61,9 +61,9 @@
                     <tr>
                         <td>{{ resultado.obra }}  </td>
                         {% if resultado.cerrado%}
-                            <td>Abierto </td>
-                        {% else %}
                             <td>Cerrado </td>
+                        {% else %}
+                            <td>Abierto </td>
                         {% endif %}
                         
                         <td>{{ resultado.usuario }}</td>

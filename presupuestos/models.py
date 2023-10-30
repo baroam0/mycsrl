@@ -26,7 +26,7 @@ class Presupuesto(models.Model):
         saldo = totalimporte - totalentregado
         return saldo
     
-    class Meta:
+    class Meta: 
         verbose_name_plural = "Presupuestos"
         unique_together = ['id','obra']
 

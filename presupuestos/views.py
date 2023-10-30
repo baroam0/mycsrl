@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 
-from .forms import PresupuestoForm
+from .forms import PresupuestoForm, DetallePresupuestoForm
 from .models import Presupuesto, DetallePresupuesto
 
 
@@ -45,7 +45,7 @@ def presupuesto_new(request):
                 return redirect('/presupuesto/listado')
             except Exception as e:
                 messages.warning(request, "Ha ocurrido un error.")
-                return redirect('/prespuesto/listado')
+                return redirect('/presupuesto/listado')
         else:
             messages.warning(request, form.errors)
             return redirect('/bancos/listado')
@@ -71,7 +71,7 @@ def presupuesto_edit(request, pk):
             presupuesto.usuario = usuario
             presupuesto.save()
             messages.success(request, "Se ha modificado los datos del banco")
-            return redirect('/prespuesto/listado')
+            return redirect('/presupuesto/listado')
         else:
             messages.warning(request, form.errors)
             return redirect('/bancos/listado')
@@ -83,7 +83,73 @@ def presupuesto_edit(request, pk):
             {
                 "detallespresupuestos": detallespresupuestos,
                 "form": form,
-                "pk": pk
+                "pk": pk,
+                "presupuesto": consulta
+            }
+        )
+
+
+#####################################################################
+###################SECCION DETALLE PRESUPUESTO#######################
+#####################################################################
+
+
+@login_required(login_url='/login')
+def detallepresupuesto_new(request, pk):
+    presupuesto = Presupuesto.objects.get(pk=pk)
+    if request.POST:
+        usuario = request.user
+        form =  DetallePresupuestoForm(request.POST)
+        if form.is_valid():
+            detallepresupuesto = form.save(commit=False)
+            detallepresupuesto.usuario = usuario
+            detallepresupuesto.presupuesto = presupuesto
+            try:
+                detallepresupuesto.save()
+                messages.success(request, "Se ha grabado los datos.")
+                return redirect('/presupuesto/editar/' + str(pk))
+            except Exception as e:
+                messages.warning(request, "Ha ocurrido un error.")
+                return redirect('/presupuesto/editar/' + str(pk))
+        else:
+            messages.warning(request, form.errors)
+            return redirect('/bancos/listado')
+    else:
+        form = DetallePresupuestoForm()
+        return render(
+            request,
+            'presupuestos/detallepresupuesto_edit.html',
+            {"form": form}
+        )
+
+
+
+@login_required(login_url='/login')
+def detallepresupuesto_edit(request, pk):
+    consulta = DetallePresupuesto.objects.get(pk=pk)
+
+    prespuesto = Presupuesto.objects.get(pk=consulta.presupuesto.pk)
+   
+    if request.POST:
+        form = DetallePresupuestoForm(request.POST, instance=consulta)
+        if form.is_valid():
+            detallepresupuesto = form.save(commit=False)
+            usuario = request.user
+            detallepresupuesto.usuario = usuario
+            detallepresupuesto.save()
+            messages.success(request, "Se ha modificado los datos del banco")
+            return redirect('/presupuesto/editar/' + str(consulta.presupuesto.pk))
+        else:
+            messages.warning(request, form.errors)
+            return redirect('/prespupuesto/editar/' + str(consulta.presupuesto.pk))
+    else:
+        form = DetallePresupuestoForm(instance=consulta)
+        return render(
+            request,
+            'presupuestos/detallepresupuesto_edit.html',
+            {
+                "form": form,
+                "idpresupuesto": consulta.presupuesto.pk
             }
         )
 
