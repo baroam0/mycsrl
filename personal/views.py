@@ -1,4 +1,5 @@
 
+from itertools import chain
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
@@ -391,13 +392,16 @@ def printquincenalistado(request, pk):
     quincenadetalle = QuincenaDetalle.objects.get(pk=pk)
     quincena = Quincena.objects.get(pk=quincenadetalle.quincena.pk)
     quincenasdetalles = QuincenaDetalle.objects.filter(
-        quincena=quincenadetalle.quincena).order_by('personal__contratista')
+        quincena=quincenadetalle.quincena)
+    
+    altasbajas = AltaBajaPersonal.objects.filter(baja=None)
+    print(altasbajas)
     
     return render(
         request,
         'personal/printquincena_list.html',
         {
-            'personales': quincenasdetalles,
+            'personales': altasbajas,
             'quincena': quincena
         })
 
