@@ -393,6 +393,9 @@ def printquincenalistado(request, pk):
     quincenasdetalles = QuincenaDetalle.objects.filter(
         quincena=quincenadetalle.quincena).order_by('personal__contratista')
     
+    altasbajaspersonal = AltaBajaPersonal.objects.latest('fechainicio')
+
+    mm = quincenasdetalles.union(altasbajaspersonal, all=True)
     return render(
         request,
         'personal/printquincena_list.html',
