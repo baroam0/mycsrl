@@ -361,7 +361,15 @@ def quincena_edit(request, pk):
     quincena = Quincena.objects.get(pk=quincenadetalle.quincena.pk)
     quincenasdetalles = QuincenaDetalle.objects.filter(
         quincena=quincenadetalle.quincena).order_by('personal__contratista')
+
+    personalids=list()
+
+    for e in quincenasdetalles:
+        personalids.append(e.pk)
     
+    qq = AltaBajaPersonal.objects.filter(personal__in=personalids)
+
+
     if request.POST:
         form = QuincenaDetalleForm(request.POST, instance=quincenadetalle)
         if form.is_valid():
@@ -381,7 +389,7 @@ def quincena_edit(request, pk):
             'personal/quincenadetalle_edit.html',
             {
                 "form": form,
-                "quincenasdetalles": quincenasdetalles,
+                "quincenasdetalles": qq,
                 "quincenadetalle": quincenadetalle,
                 "pk": pk
             }
@@ -394,8 +402,12 @@ def printquincenalistado(request, pk):
     quincenasdetalles = QuincenaDetalle.objects.filter(
         quincena=quincenadetalle.quincena)
     
-    altasbajas = AltaBajaPersonal.objects.filter(baja=None)
-    print(altasbajas)
+    personalids=list()
+
+    for e in quincenasdetalles:
+        personalids.append(e.pk)
+    
+    altasbajas = AltaBajaPersonal.objects.filter(personal__in=personalids)
     
     return render(
         request,

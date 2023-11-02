@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
+from django.http import JsonResponse
 
 
 from devengamientos.models import Devengamiento
@@ -43,15 +44,20 @@ def salir(request):
     return redirect('/login')
 
 
+def ajaxcomprobanteproveedor(request, idproveedor):
+    proveedor = Proveedor.objects.get(pk=idproveedor)
+    comprobantes =FacturaProveedor.objects.filter(proveedor=proveedor)
+    data = [{"id": c.pk, "text": c.comprobante} for c in comprobantes]
+    return JsonResponse(data, safe=False)
+
+
 def reporte(request):    
-    obras = Obra.objects.all()
     proveedores = Proveedor.objects.all()
 
     return render(
         request, 
         'reporte.html',
         {
-            "obras": obras,
             "proveedores": proveedores,
         }
     )
