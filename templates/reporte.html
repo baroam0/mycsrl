@@ -32,7 +32,7 @@
                     <label>Proveedores</label>
                     <select id="id_proveedor" class="form-control">
                         {% for proveedor in proveedores %}
-                            <option value={{proveedor.pk}}> {{proveedor.razonsocial.upper }} </option>
+                            <option value={{proveedor.pk}}> {{proveedor.proveedor }} - {{proveedor.comprobante}} </option>
                         {% endfor %}
                     </select>
                 </div>
@@ -89,15 +89,21 @@
         });
 
         function CargarCombo(id){
-            
+            $.ajax({
+                type: "GET",
+                url: "url",
+                data: "data",
+                dataType: "dataType",
+                success: function (response) {
+                    
+                }
+            });
 
         }
 
         function AbrirVentanaReporte(){
-            var id_obra = $("#id_obra").val();
             var id_proveedor = $("#id_proveedor").val();
-            var id_factura = $("#id_facturas").val();
-            var urldetallefactura = "/detallereporte/?id_obra=" + id_obra + "&id_proveedor=" + id_proveedor + "&id_factura=" + id_factura;
+            var urldetallefactura = "/detallereporte/?id_proveedor=" + id_proveedor;
             window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
         }
 

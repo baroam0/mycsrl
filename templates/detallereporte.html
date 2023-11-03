@@ -8,62 +8,41 @@
         <br>
         
         <div class="row">
-            <div class="col-sm-4"></div>
-            <div class="col-sm-4">
-                <h3> Reportes. </h3>
+            <div class="col-sm-1"></div>
+            <div class="col-sm-10">
+                <h3> Reportes por Factura - {{facturaproveedor.proveedor}} </h3>
             </div>
-            <div class="col-sm-4"></div>
+            <div class="col-sm-1"></div>
         </div>
-
-
-        <h4> {{obras}} </h4>
-
-        {% for proveedor in proveedores %}
-
-            
-                <h5>{{proveedor}}</h5> 
-            
 
                 <table class="table table-bordered">
                     <thead>
                         <tr>
                             <th>Fecha</th>
                             <th>Comprobante</th>
+                            <th>Obra</th>
                             <th>Descripcion</th>
                             <th>Cantidad</th>
                             <th>Monto Factura</th>
-                            <th>Monto Pagado</th>
-                            <th>Estado</th>
                         </tr>
                     </thead>
 
                     <tbody>
-                        {% for detalle in detallesfacturaproveedores%}
+                        {% for detalle in detallefacturaproveedor%}
+
                         <tr>
                             <td>{{ detalle.factura.fecha }}  </td>
                             <td>{{ detalle.factura.comprobante }}  </td>
-                            <td>{{ detalle.descripciondetalle }}  </td>
+                            <td>{{ detalle.obra }} </td>
+                            <td>{{ detalle.descripciondetalle }} </td>
                             <td>{{ detalle.cantidad }}  </td>
                             <td>$ {{ detalle.gettotal | floatformat:2 }}</td>
                             
-                            {% if detalle.factura.pagado %}
-                                <td>Pagado</td>
-                            {%else%}
-                                {% if detalle.factura.pagoparcial %}
-                                    <td> Pago Parcial </td>
-                                {% else %}
-                                    <td> No Pagada </td>
-                                {%endif%}
-
-                            {% endif %}
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
-        
-        {% endfor %}
-       
-
+                <h5>Total: $ {{total | floatformat:2 }}</h5>
         <hr>
 
     </div>
