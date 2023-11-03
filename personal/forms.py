@@ -45,6 +45,8 @@ class PersonalForm(forms.ModelForm):
         label="Obra", queryset=Obra.objects.all(), required=False)
     
     cuil = forms.CharField(label="CUIL", required=False)
+    
+    domicilio = forms.CharField(label="Domicilio", required=False)
 
     telefono = forms.CharField(label="Telefono", required=False)
 
@@ -66,8 +68,9 @@ class PersonalForm(forms.ModelForm):
     class Meta:
         model = Personal
         fields = [
-            "apellido", "nombre", "numerodocumento", "cuil", "telefono",
-            "categoria", "activo", "contratista", "obra"]
+            "apellido", "nombre", "numerodocumento", "domicilio",
+            "cuil", "telefono", "categoria", "activo", "contratista", 
+            "obra"]
 
 
 class AltaBajaPersonalForm(forms.ModelForm):

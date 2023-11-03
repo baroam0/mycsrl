@@ -7,7 +7,7 @@ from django.http import JsonResponse
 
 
 from devengamientos.models import Devengamiento
-from pagos.models import Obra, Proveedor
+from pagos.models import Obra, Proveedor, ProveedorBanco
 from facturas.models import FacturaProveedor, DetalleFacturaProveedor
 from facturacion.models import Facturacion, DetalleFacturacion
 
@@ -68,10 +68,12 @@ def detallereporte(request):
 
     facturaproveedor = FacturaProveedor.objects.get(pk=request.GET.get("id_proveedor"))
     detallefacturaproveedor = DetalleFacturaProveedor.objects.filter(factura=facturaproveedor)
+    
+    proveedorbanco = ProveedorBanco.objects.filter(proveedor=facturaproveedor.proveedor)
 
     total = 0
     for d in detallefacturaproveedor:
-        total = total + d.gettotal()
+        total = total + d.getmontoporitem()
     
     return render(
         request, 
@@ -79,7 +81,8 @@ def detallereporte(request):
         {
             "facturaproveedor": facturaproveedor,
             "detallefacturaproveedor": detallefacturaproveedor,
-            "total": total
+            "total": total,
+            "banco": proveedorbanco
         }
     )   
 

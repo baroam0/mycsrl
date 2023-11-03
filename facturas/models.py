@@ -111,6 +111,19 @@ class DetalleFacturaProveedor(models.Model):
         totalbruto = self.cantidad * self.preciounitario
         totaldescuento = totalbruto - self.descuento - (totalbruto * self.descuentoporcentaje / 100 ) + self.ajuste
         return totaldescuento
+	
+    def getmontoporitem(self):
+        facturaproveedor = FacturaProveedor.objects.get(pk=self.factura.pk)
+        ivapreciounitario = self.preciounitario * facturaproveedor.iva.retencion / 100
+        monto = self.preciounitario + ivapreciounitario
+        return monto
+
+    def gettotalmontoporitem(self):
+        facturaproveedor = FacturaProveedor.objects.get(pk=self.factura.pk)
+        ivapreciounitario = self.preciounitario * facturaproveedor.iva.retencion / 100
+        monto = self.preciounitario + ivapreciounitario
+        monto = monto * self.cantidad
+        return monto
 
 
     def __str__(self):
