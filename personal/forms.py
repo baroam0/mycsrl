@@ -46,7 +46,7 @@ class PersonalForm(forms.ModelForm):
     
     cuil = forms.CharField(label="CUIL", required=False)
 
-    cuil = forms.CharField(label="Telefono", required=False)
+    telefono = forms.CharField(label="Telefono", required=False)
 
     contratista = forms.ModelChoiceField(
         label="Contratista", 
