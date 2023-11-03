@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-sm-1"></div>
             <div class="col-sm-10">
-                <h3> Reportes por Factura - {{facturaproveedor.proveedor}} </h3>
+                <h3> Reporte Factura - {{facturaproveedor.proveedor}} - {{facturaproveedor.fecha}} - {{facturaproveedor.comprobante}} </h3>
             </div>
             <div class="col-sm-1"></div>
         </div>
@@ -19,7 +19,6 @@
                     <thead>
                         <tr>
                             <th>Fecha</th>
-                            <th>Comprobante</th>
                             <th>Obra</th>
                             <th>Descripcion</th>
                             <th>Cantidad</th>
@@ -32,7 +31,6 @@
 
                         <tr>
                             <td>{{ detalle.factura.fecha }}  </td>
-                            <td>{{ detalle.factura.comprobante }}  </td>
                             <td>{{ detalle.obra }} </td>
                             <td>{{ detalle.descripciondetalle }} </td>
                             <td>{{ detalle.cantidad }}  </td>
