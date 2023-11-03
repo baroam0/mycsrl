@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
+from django.http import JsonResponse
 
 
 from devengamientos.models import Devengamiento
@@ -43,15 +44,20 @@ def salir(request):
     return redirect('/login')
 
 
+def ajaxcomprobanteproveedor(request, idproveedor):
+    proveedor = Proveedor.objects.get(pk=idproveedor)
+    comprobantes =FacturaProveedor.objects.filter(proveedor=proveedor)
+    data = [{"id": c.pk, "text": c.comprobante} for c in comprobantes]
+    return JsonResponse(data, safe=False)
+
+
 def reporte(request):    
-    obras = Obra.objects.all()
-    proveedores = Proveedor.objects.all()
+    proveedores = FacturaProveedor.objects.all()
 
     return render(
         request, 
         'reporte.html',
         {
-            "obras": obras,
             "proveedores": proveedores,
         }
     )
@@ -60,38 +66,20 @@ def reporte(request):
 
 def detallereporte(request):
 
-    id_factura = int(request.GET.get("id_factura"))
+    facturaproveedor = FacturaProveedor.objects.get(pk=request.GET.get("id_proveedor"))
+    detallefacturaproveedor = DetalleFacturaProveedor.objects.filter(factura=facturaproveedor)
+
+    total = 0
+    for d in detallefacturaproveedor:
+        total = total + d.gettotal()
     
-    if id_factura == 1:
-        pagado = True
-        pagoparcial = True
-
-    if id_factura == 2:
-        pagado = False
-        pagoparcial = True
-
-    if id_factura == 3:
-        pagado = False
-        pagoparcial = False
-
-
-    obra = Obra.objects.get(pk=request.GET.get("id_obra"))
-    proveedor = Proveedor.objects.filter(pk=request.GET.get("id_proveedor"))
-    facturaproveedor = FacturaProveedor.objects.filter(proveedor__in=proveedor,pagado=pagado, pagoparcial=pagoparcial)
-
-    detallefacturaproveedor = DetalleFacturaProveedor.objects.filter(
-        obra=obra,
-        factura__in=facturaproveedor
-    )
-        
     return render(
         request, 
         'detallereporte.html',
         {
-            "obras": obra,
-            "proveedores": proveedor,
-            "facturasproveedores": facturaproveedor,
-            "detallesfacturaproveedores":detallefacturaproveedor
+            "facturaproveedor": facturaproveedor,
+            "detallefacturaproveedor": detallefacturaproveedor,
+            "total": total
         }
     )   
 

@@ -29,40 +29,24 @@
         <form action="/reportes/" method="GET">
             <div class="form-inline">
                 <div class="col-6">
-                    <label>Obra</label>
-                    <select id="id_obra" class="form-control">
-                        {% for obra in obras %}
-                            <option value={{obra.pk}}> {{obra.descripcion.upper }} </option>
+                    <label>Proveedores</label>
+                    <select id="id_proveedor" class="form-control">
+                        {% for proveedor in proveedores %}
+                            <option value={{proveedor.pk}}> {{proveedor.proveedor }} - {{proveedor.comprobante}} </option>
                         {% endfor %}
                     </select>
                 </div>
 
                 <div class="col-6">
-                    <label>Proveedores</label>
-                    <select id="id_proveedor" class="form-control">
-                        {% for proveedor in proveedores %}
-                            <option value={{proveedor.pk}}> {{proveedor.razonsocial.upper }} </option>
-                        {% endfor %}
-                    </select>
                 </div>
-
                 
             </div>
 
             <hr>
 
             <div class="form-inline">
-
                 <div class="col-6">
-                    <label>Facturas </label>
-                    
-                    <select id="id_facturas" class="form-control">
-                        <option value=1>PAGADAS </option>
-                        <option value=2>PAGADAS PARCIALEMENTE </option>
-                        <option value=2>IMPAGAS </option>
-                    </select>
                 </div>
-
             </div>
 
             <hr>
@@ -94,16 +78,36 @@
     <script>
         $(document).ready(function () {
             //$('#id_obra').select2();
-            //$('#id_proveedor').select2();
+            $('#id_proveedor').select2();
+
+          
+
         });
 
+        $("#id_proveedor").on('change', function(e) {
+            console.log($(this).select2('data'));
+        });
+
+        function CargarCombo(id){
+            $.ajax({
+                type: "GET",
+                url: "url",
+                data: "data",
+                dataType: "dataType",
+                success: function (response) {
+                    
+                }
+            });
+
+        }
+
         function AbrirVentanaReporte(){
-            var id_obra = $("#id_obra").val();
             var id_proveedor = $("#id_proveedor").val();
-            var id_factura = $("#id_facturas").val();
-            var urldetallefactura = "/detallereporte/?id_obra=" + id_obra + "&id_proveedor=" + id_proveedor + "&id_factura=" + id_factura;
+            var urldetallefactura = "/detallereporte/?id_proveedor=" + id_proveedor;
             window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
         }
+
+
 
     
     </script>

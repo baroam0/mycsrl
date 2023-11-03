@@ -18,7 +18,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-from .views import home, loginusuario, salir, reporte, detallereporte, reporteingresoegresoobra, detallereporteingresoegresoobra
+from .views import home, loginusuario, salir, reporte, detallereporte, reporteingresoegresoobra, detallereporteingresoegresoobra, ajaxcomprobanteproveedor
 
 
 urlpatterns = [
@@ -41,4 +41,6 @@ urlpatterns = [
     path('reporteingresoegresoobra/',reporteingresoegresoobra),
     path('detallereporteingresoegresoobra/', detallereporteingresoegresoobra),
     path('historial/', include("historiales.urls")),
+    path('ajaxcomprobanteproveedor/', ajaxcomprobanteproveedor),
+
 ]
