@@ -82,6 +82,13 @@ class FacturaProveedor(models.Model):
         for detalle in detallesfacturas:
             monto = monto + detalle.gettotalmontoporitem()
         return monto
+    
+    def gettotalfacturaconivayiibb(self):
+        detallesfacturas = DetalleFacturaProveedor.objects.filter(factura=self.pk)
+        monto = 0
+        for detalle in detallesfacturas:
+            monto = monto + detalle.gettotalmontoporitemiibb()
+        return monto
 
     class Meta:
         verbose_name_plural = "Facturas"
@@ -124,11 +131,26 @@ class DetalleFacturaProveedor(models.Model):
         ivapreciounitario = self.preciounitario * facturaproveedor.iva.retencion / 100
         monto = self.preciounitario + ivapreciounitario
         return monto
+    
+    def getmontoitemconivaiibb(self):
+        facturaproveedor = FacturaProveedor.objects.get(pk=self.factura.pk)
+        ivapreciounitario = self.preciounitario * facturaproveedor.iva.retencion / 100
+        iibb = self.preciounitario * facturaproveedor.ingresosbrutos.retencion / 100
+        monto = self.preciounitario + ivapreciounitario + iibb
+        return monto
 
     def gettotalmontoporitem(self):
         facturaproveedor = FacturaProveedor.objects.get(pk=self.factura.pk)
         ivapreciounitario = self.preciounitario * facturaproveedor.iva.retencion / 100
         monto = self.preciounitario + ivapreciounitario
+        monto = monto * self.cantidad
+        return monto
+    
+    def gettotalmontoporitemiibb(self):
+        facturaproveedor = FacturaProveedor.objects.get(pk=self.factura.pk)
+        ivapreciounitario = self.preciounitario * facturaproveedor.iva.retencion / 100
+        iibbpreciounitario = self.preciounitario * facturaproveedor.ingresosbrutos.retencion / 100
+        monto = self.preciounitario + ivapreciounitario + iibbpreciounitario
         monto = monto * self.cantidad
         return monto
 

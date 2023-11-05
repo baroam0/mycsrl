@@ -71,7 +71,7 @@ def reporteporfactura(request):
 
 def detallereporteporfactura(request):
     facturaproveedor = FacturaProveedor.objects.get(pk=request.GET.get("id_proveedor"))
-    detallefacturaproveedor = DetalleFacturaProveedor.objects.filter(factura=facturaproveedor)
+    detallefacturaproveedor = DetalleFacturaProveedor.objects.filter(factura=facturaproveedor).order_by('-obra')
     proveedorbanco = ProveedorBanco.objects.filter(pk=request.GET.get("id_banco"))
    
     total = 0
