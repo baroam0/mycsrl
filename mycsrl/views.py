@@ -90,6 +90,18 @@ def detallereporteporfactura(request):
     )   
 
 
+def reportesfacturas(request):    
+    proveedores = FacturaProveedor.objects.all()
+    return render(
+        request, 
+        'reportes/reportefacturas.html',
+        {
+            "proveedores": proveedores,
+        }
+    )
+
+
+
 def reporteingresoegresoobra(request):    
     obras = Obra.objects.all()
 

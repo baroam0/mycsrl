@@ -1,0 +1,66 @@
+
+{% extends 'base_nomenu.html' %}
+
+{% block content %}
+
+    <div class="container">
+
+        <br>
+        
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-10">
+                <h3> Reporte Factura - {{facturaproveedor.proveedor}} - {{facturaproveedor.fecha}} - {{facturaproveedor.comprobante}} </h3>
+            </div>
+            <div class="col-sm-1"></div>
+        </div>
+
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Obra</th>
+                            <th>Descripcion</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario incl Impuestos</th>
+                            <th>Monto</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for detalle in detallefacturaproveedor%}
+
+                        <tr>
+                            <td>{{ detalle.factura.fecha }}  </td>
+                            <td>{{ detalle.obra }} </td>
+                            <td>{{ detalle.descripciondetalle }} </td>
+                            <td>{{ detalle.cantidad }} </td>
+                            <td>$ {{ detalle.getmontoitemconivaiibb | floatformat:2 }} </td>
+                            <td>$ {{ detalle.gettotalmontoporitemiibb | floatformat:2 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <h5>Total: $ {{ facturaproveedor.gettotalfacturaconivayiibb | floatformat:2 }}</h5>
+                {% for b in banco %}
+					<h6>Banco: {{b.descripcionbanco.upper}} </h6>
+					<h6>Alias: {{b.alias}} </h6>
+					<h6>CBU: {{b.cbu}} </h6>
+                {% endfor %}
+        <hr>
+
+    </div>
+
+
+
+{% endblock %}
+
+
+    <script>
+        $(document).ready(function () {
+            
+        });
+
+    
+    </script>
+
