@@ -34,17 +34,16 @@
                             <td>{{ detalle.factura.fecha }}  </td>
                             <td>{{ detalle.obra }} </td>
                             <td>{{ detalle.descripciondetalle }} </td>
-                            <td>{{ detalle.cantidad }}  </td>
-                            <td>{{ detalle.getmontoporitem | floatformat:2 }}  </td>
+                            <td>{{ detalle.cantidad }} </td>
+                            <td>$ {{ detalle.getmontoitemconiva | floatformat:2 }} </td>
                             <td>$ {{ detalle.gettotalmontoporitem | floatformat:2 }}</td>
-                            
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
-                <h5>Total: $ {{total | floatformat:2 }}</h5>
+                <h5>Total: $ {{ facturaproveedor.gettotalfacturaconiva | floatformat:2 }}</h5>
                 {% for b in banco %}
-					<h6>Alias: {{b.descripcionbanco}} </h6>
+					<h6>Banco: {{b.descripcionbanco.upper}} </h6>
 					<h6>Alias: {{b.alias}} </h6>
 					<h6>CBU: {{b.cbu}} </h6>
                 {% endfor %}

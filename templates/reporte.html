@@ -38,6 +38,9 @@
                 </div>
 
                 <div class="col-6">
+                    <label>Banco</label>
+                    <select id="id_banco" class="form-control">
+                    </select>
                 </div>
                 
             </div>
@@ -48,8 +51,6 @@
                 <div class="col-6">
                 </div>
             </div>
-
-            <hr>
 
             <div class="form-inline">
                 <div class="col-4">
@@ -77,33 +78,39 @@
 
     <script>
         $(document).ready(function () {
-            //$('#id_obra').select2();
             $('#id_proveedor').select2();
-
-          
-
         });
+
 
         $("#id_proveedor").on('change', function(e) {
-            console.log($(this).select2('data'));
+            var idproveedor = $(this).select2('data')[0].id;
+            CargarCombo($(this).select2('data')[0].id);
         });
+
 
         function CargarCombo(id){
             $.ajax({
                 type: "GET",
-                url: "url",
-                data: "data",
-                dataType: "dataType",
+                url: "/ajaxbancoproveedor/" + id,
+                dataType: "json",
                 success: function (response) {
-                    
+                    var select = $('#id_banco');
+                    select.empty();
+
+                    $.each(response, function(index, value) {
+                    select.append($('<option>', {
+                        value: value.id,
+                        text: value.text
+                    }));
+            });
                 }
             });
-
         }
 
         function AbrirVentanaReporte(){
             var id_proveedor = $("#id_proveedor").val();
-            var urldetallefactura = "/detallereporte/?id_proveedor=" + id_proveedor;
+            var id_banco = $("#id_banco").val();
+            var urldetallefactura = "/detallereporte/?id_proveedor=" + id_proveedor + "&id_banco=" + id_banco ;
             window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
         }
 

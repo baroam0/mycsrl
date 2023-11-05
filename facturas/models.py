@@ -76,6 +76,13 @@ class FacturaProveedor(models.Model):
     def __str__(self):
         return str(self.fecha)
 
+    def gettotalfacturaconiva(self):
+        detallesfacturas = DetalleFacturaProveedor.objects.filter(factura=self.pk)
+        monto = 0
+        for detalle in detallesfacturas:
+            monto = monto + detalle.gettotalmontoporitem()
+        return monto
+
     class Meta:
         verbose_name_plural = "Facturas"
 
@@ -112,7 +119,7 @@ class DetalleFacturaProveedor(models.Model):
         totaldescuento = totalbruto - self.descuento - (totalbruto * self.descuentoporcentaje / 100 ) + self.ajuste
         return totaldescuento
 	
-    def getmontoporitem(self):
+    def getmontoitemconiva(self):
         facturaproveedor = FacturaProveedor.objects.get(pk=self.factura.pk)
         ivapreciounitario = self.preciounitario * facturaproveedor.iva.retencion / 100
         monto = self.preciounitario + ivapreciounitario

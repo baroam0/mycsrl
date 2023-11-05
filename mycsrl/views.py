@@ -51,9 +51,15 @@ def ajaxcomprobanteproveedor(request, idproveedor):
     return JsonResponse(data, safe=False)
 
 
-def reporte(request):    
-    proveedores = FacturaProveedor.objects.all()
+def ajaxbancoproveedor(request, pk):
+    proveedor = FacturaProveedor.objects.get(pk=pk)
+    bancos = ProveedorBanco.objects.filter(proveedor=proveedor.proveedor)
+    data = [{"id": b.pk, "text": b.descripcionbanco} for b in bancos]
+    return JsonResponse(data, safe=False)
 
+
+def reporteporfactura(request):    
+    proveedores = FacturaProveedor.objects.all()
     return render(
         request, 
         'reporte.html',
@@ -63,17 +69,14 @@ def reporte(request):
     )
 
 
-
-def detallereporte(request):
-
+def detallereporteporfactura(request):
     facturaproveedor = FacturaProveedor.objects.get(pk=request.GET.get("id_proveedor"))
     detallefacturaproveedor = DetalleFacturaProveedor.objects.filter(factura=facturaproveedor)
-    
-    proveedorbanco = ProveedorBanco.objects.filter(proveedor=facturaproveedor.proveedor)
-
+    proveedorbanco = ProveedorBanco.objects.filter(pk=request.GET.get("id_banco"))
+   
     total = 0
     for d in detallefacturaproveedor:
-        total = total + d.getmontoporitem()
+        total = total + d.getmontoitemconiva()
     
     return render(
         request, 
