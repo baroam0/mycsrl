@@ -39,7 +39,7 @@ class Personal(models.Model):
 
     cuil = models.CharField(max_length=20, null=True, blank=True)
 
-    domicilio = models.CharField(max_length=20, null=True, blank=True)
+    domicilio = models.CharField(max_length=250, null=True, blank=True)
     
     telefono = models.CharField(max_length=30, null=True, blank=True)
 
