@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from django.http import JsonResponse
 
-
+from lib.funcionesfechas import formateafecha
 from devengamientos.models import Devengamiento
 from pagos.models import Obra, Proveedor, ProveedorBanco
 from facturas.models import FacturaProveedor, DetalleFacturaProveedor
@@ -58,6 +58,13 @@ def ajaxbancoproveedor(request, pk):
     return JsonResponse(data, safe=False)
 
 
+def ajaxproveedor(request, pk):
+    proveedor = Proveedor.objects.get(pk=pk)
+    bancos = ProveedorBanco.objects.filter(proveedor=proveedor)
+    data = [{"id": b.pk, "text": b.descripcionbanco} for b in bancos]
+    return JsonResponse(data, safe=False)
+
+
 def reporteporfactura(request):    
     proveedores = FacturaProveedor.objects.all()
     return render(
@@ -91,14 +98,44 @@ def detallereporteporfactura(request):
 
 
 def reportesfacturas(request):    
-    proveedores = FacturaProveedor.objects.all()
+    proveedores = Proveedor.objects.all()
     return render(
         request, 
-        'reportes/reportefacturas.html',
+        'reportes/reportesfacturas.html',
         {
             "proveedores": proveedores,
         }
     )
+
+
+def detallereportesporfacturas(request):
+    """Funcion para reporte de facturas por rango de fechas"""
+
+    fechadesde = formateafecha(request.GET.get("fechadesde"))
+    fechahasta = formateafecha(request.GET.get("fechahasta"))
+    proveedor =  Proveedor.objects.get(pk=request.GET.get("id_proveedor"))
+    facturaproveedor = FacturaProveedor.objects.filter(proveedor=proveedor,fecha__range=(fechadesde, fechahasta))
+    detallefacturaproveedor = DetalleFacturaProveedor.objects.filter(factura__in=facturaproveedor).order_by('-obra')
+    proveedorbanco = ProveedorBanco.objects.filter(pk=request.GET.get("id_banco"))
+
+    total = 0
+    for d in detallefacturaproveedor:
+        total = total + d.getmontoitemconiva()
+    
+    return render(
+        request, 
+        'reportes/detallereportesfacturas.html',
+        {
+            "fechadesde": fechadesde,
+            "fechahasta": fechahasta,
+            "proveedor": proveedor,
+            "facturaproveedor": facturaproveedor,
+            "detallefacturaproveedor": detallefacturaproveedor,
+            "total": total,
+            "banco": proveedorbanco
+        }
+    )   
+
 
 
 

@@ -33,7 +33,7 @@
                     <select id="id_proveedor" class="form-control">
                         <option value=0> SELECCIONA... </option>
                         {% for proveedor in proveedores %}
-                            <option value={{proveedor.pk}}> {{proveedor.proveedor }} - {{proveedor.comprobante}} </option>
+                            <option value={{proveedor.pk}}> {{proveedor }} </option>
                         {% endfor %}
                     </select>
                 </div>
@@ -101,7 +101,7 @@
         function CargarCombo(id){
             $.ajax({
                 type: "GET",
-                url: "/ajaxbancoproveedor/" + id,
+                url: "/ajaxproveedor/" + id,
                 dataType: "json",
                 success: function (response) {
                     var select = $('#id_banco');
@@ -125,7 +125,9 @@
         function AbrirVentanaReporte(){
             var id_proveedor = $("#id_proveedor").val();
             var id_banco = $("#id_banco").val();
-            
+            var fechadesde = $("#id_fechadesde").val();
+            var fechahasta = $("#id_fechahasta").val();
+
             if(id_proveedor==0){
                 Swal.fire(
                     'Por favor elige un Proveedor',
@@ -144,10 +146,26 @@
                 return false;
             }
 
+            if(fechadesde==""){
+                Swal.fire(
+                    'Por favor elige Fecha Desde',
+                    '',
+                    'warning'
+                )
+                return false;
+            }
+
+            if(fechahasta==""){
+                Swal.fire(
+                    'Por favor elige Fecha Hasta',
+                    '',
+                    'warning'
+                )
+                return false;
+            }
 
 
-            var id_banco = $("#id_banco").val();
-            var urldetallefactura = "/detallereporte/?id_proveedor=" + id_proveedor + "&id_banco=" + id_banco ;
+            var urldetallefactura = "/detallereportesfacturas/?id_proveedor=" + id_proveedor + "&id_banco=" + id_banco + "&fechadesde=" + fechadesde + "&fechahasta=" + fechahasta ;
             window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
             
         }

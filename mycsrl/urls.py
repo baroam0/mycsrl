@@ -21,7 +21,8 @@ from django.urls import include, path
 from .views import (home, loginusuario, salir, reporteporfactura, detallereporteporfactura, 
                     reporteingresoegresoobra, 
                     detallereporteingresoegresoobra, 
-                    ajaxcomprobanteproveedor, ajaxbancoproveedor, reportesfacturas)
+                    ajaxcomprobanteproveedor, ajaxbancoproveedor, ajaxproveedor,
+                    reportesfacturas, detallereportesporfacturas)
 
 
 urlpatterns = [
@@ -46,5 +47,7 @@ urlpatterns = [
     path('historial/', include("historiales.urls")),
     path('ajaxcomprobanteproveedor/', ajaxcomprobanteproveedor),
     path('ajaxbancoproveedor/<int:pk>', ajaxbancoproveedor),
+    path('ajaxproveedor/<int:pk>', ajaxproveedor),
     path('reportesfacturas/', reportesfacturas),
+    path('detallereportesfacturas/', detallereportesporfacturas),
 ]
