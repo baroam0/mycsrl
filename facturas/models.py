@@ -75,6 +75,14 @@ class FacturaProveedor(models.Model):
     
     def __str__(self):
         return str(self.fecha)
+    
+    def getsubtotalfactura(self):
+        detallesfacturas = DetalleFacturaProveedor.objects.filter(factura=self.pk)
+        monto = 0
+        for e in detallesfacturas:
+            monto = monto + e.gettotal()
+        return monto
+    
 
     def gettotalfacturaconiva(self):
         detallesfacturas = DetalleFacturaProveedor.objects.filter(factura=self.pk)

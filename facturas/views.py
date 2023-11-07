@@ -405,7 +405,6 @@ def editarfactura(request, pk):
         totalfactura = totalfactura + i.gettotal()
     
     subtotal = totalfactura
-    print(totalfactura)
     
     totalfactura = round(totalfactura - factura.descuentoglobal,2)
 
@@ -442,6 +441,7 @@ def editarfactura(request, pk):
             request,
             'facturas/factura_edit.html',
             {
+                "factura": factura,
                 "form": form,
                 "detallesfactura": detallesfactura,
                 "formdetallefactura": formdetallefactura,
@@ -449,7 +449,6 @@ def editarfactura(request, pk):
                 "totalfactura": totalfactura,
                 "totaliva": totaliva,
                 "subtotal": subtotal,
-                "descuentoglobal": factura.descuentoglobal,
                 "ingresosbrutos": totalingresosbrutos
             }
         )

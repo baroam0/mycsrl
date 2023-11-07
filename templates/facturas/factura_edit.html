@@ -66,10 +66,10 @@
 
                 <tbody>
                     <tr>
-                        <td><h5>Subtotal: $ {{subtotal | floatformat:2}}</h5></td>
+                        <td><h5>Subtotal: $ {{factura.getsubtotalfactura | floatformat:2}}</h5></td>
                     </tr>
                     <tr>
-                        <td><h5>Descuento: $ {{descuentoglobal | floatformat:2}}</h5></td>
+                        <td><h5>Descuento: $ {{factura.descuentoglobal | floatformat:2}}</h5></td>
                     </tr>
                     <tr>
                         <td><h5>IVA: $ {{totaliva | floatformat:2}}</h5></td>
