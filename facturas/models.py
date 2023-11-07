@@ -83,14 +83,23 @@ class FacturaProveedor(models.Model):
             monto = monto + e.gettotal()
         return monto
     
-
-    def gettotalfacturaconiva(self):
-        detallesfacturas = DetalleFacturaProveedor.objects.filter(factura=self.pk)
-        monto = 0
-        for detalle in detallesfacturas:
-            monto = monto + detalle.gettotalmontoporitem()
+    def getsubtotalfacturacondescuento(self):
+        monto = self.getsubtotalfactura() - self.descuentoglobal
         return monto
-    
+
+    def getiva(self):
+        monto = self.getsubtotalfacturacondescuento() * self.iva.retencion / 100
+        return monto
+
+    def getiibb(self):
+        monto = self.getsubtotalfacturacondescuento() * self.ingresosbrutos.retencion / 100
+        return monto
+
+    def gettotalfactura(self):
+        monto = 0
+        monto = self.getsubtotalfactura - self.getsubtotalfacturacondescuento + self.getiva + self.getiibb
+        return monto
+
     def gettotalfacturaconivayiibb(self):
         detallesfacturas = DetalleFacturaProveedor.objects.filter(factura=self.pk)
         monto = 0
