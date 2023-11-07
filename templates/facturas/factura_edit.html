@@ -72,13 +72,13 @@
                         <td><h5>Descuento: $ {{factura.descuentoglobal | floatformat:2}}</h5></td>
                     </tr>
                     <tr>
-                        <td><h5>IVA: $ {{totaliva | floatformat:2}}</h5></td>
+                        <td><h5>IVA: $ {{factura.getiva | floatformat:2}}</h5></td>
                     </tr>
                     <tr>
-                        <td><h5>Ingresos Brutos: $ {{ingresosbrutos | floatformat:2}}</h5></td>
+                        <td><h5>Ingresos Brutos: $ {{factura.getiibb | floatformat:2}}</h5></td>
                     </tr>
                     <tr>
-                        <td><h5>Total: $ {{ totalfactura | floatformat:2}}</h5></td>
+                        <td><h5>Total: $ {{ factura.gettotalfactura | floatformat:2}}</h5></td>
                     </tr>
 
                 </tbody>

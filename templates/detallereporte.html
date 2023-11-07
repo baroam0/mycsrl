@@ -22,7 +22,7 @@
                             <th>Obra</th>
                             <th>Descripcion</th>
                             <th>Cantidad</th>
-                            <th>Precio Unitario incl Impuestos</th>
+                            <th>Precio Final</th>
                             <th>Monto</th>
                         </tr>
                     </thead>
@@ -35,13 +35,14 @@
                             <td>{{ detalle.obra }} </td>
                             <td>{{ detalle.descripciondetalle }} </td>
                             <td>{{ detalle.cantidad }} </td>
-                            <td>$ {{ detalle.getmontoitemconivaiibb | floatformat:2 }} </td>
-                            <td>$ {{ detalle.gettotalmontoporitemiibb | floatformat:2 }}</td>
+                            <td>$ {{ detalle.getpreciounitarioiva | floatformat:2 }} </td>
+                            <td>$ {{ detalle.getpreciofinal | floatformat:2 }}</td>
                         </tr>
+
                         {% endfor %}
                     </tbody>
                 </table>
-                <h5>Total: $ {{ facturaproveedor.gettotalfacturaconivayiibb | floatformat:2 }}</h5>
+                <h5>Total: $ {{ facturaproveedor.gettotalfactura | floatformat:2  }}</h5>
                 {% for b in banco %}
 					<h6>Banco: {{b.descripcionbanco.upper}} </h6>
 					<h6>Alias: {{b.alias}} </h6>

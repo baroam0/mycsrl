@@ -80,10 +80,6 @@ def detallereporteporfactura(request):
     facturaproveedor = FacturaProveedor.objects.get(pk=request.GET.get("id_proveedor"))
     detallefacturaproveedor = DetalleFacturaProveedor.objects.filter(factura=facturaproveedor).order_by('-obra')
     proveedorbanco = ProveedorBanco.objects.filter(pk=request.GET.get("id_banco"))
-   
-    total = 0
-    for d in detallefacturaproveedor:
-        total = total + d.getmontoitemconiva()
     
     return render(
         request, 
@@ -91,7 +87,6 @@ def detallereporteporfactura(request):
         {
             "facturaproveedor": facturaproveedor,
             "detallefacturaproveedor": detallefacturaproveedor,
-            "total": total,
             "banco": proveedorbanco
         }
     )   

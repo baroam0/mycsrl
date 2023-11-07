@@ -400,28 +400,6 @@ def editarfactura(request, pk):
         factura=factura
     )
 
-    totalfactura = 0
-    for i in detallesfactura:
-        totalfactura = totalfactura + i.gettotal()
-    
-    subtotal = totalfactura
-    
-    totalfactura = round(totalfactura - factura.descuentoglobal,2)
-
-    
-    if factura.iva is None:
-        totaliva = (totalfactura * 0 / 100 )
-    else:    
-        totaliva = round((totalfactura * factura.iva.retencion / 100), 2) 
-    
-    if factura.ingresosbrutos is None:
-        totalingresosbrutos = (totalfactura * 0 / 100 )
-    else:
-        totalingresosbrutos = (totalfactura * factura.ingresosbrutos.retencion / 100 )
-
-    
-    totalfactura = totalfactura + totaliva + factura.preciocepcionglobal + factura.ajusteglobal + totalingresosbrutos
-
     if request.POST:
         form = FacturaProveedorForm(request.POST, instance=factura)
         if form.is_valid():
@@ -446,10 +424,6 @@ def editarfactura(request, pk):
                 "detallesfactura": detallesfactura,
                 "formdetallefactura": formdetallefactura,
                 "pk": pk,
-                "totalfactura": totalfactura,
-                "totaliva": totaliva,
-                "subtotal": subtotal,
-                "ingresosbrutos": totalingresosbrutos
             }
         )
 
