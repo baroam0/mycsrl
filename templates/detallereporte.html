@@ -22,6 +22,7 @@
                             <th>Obra</th>
                             <th>Descripcion</th>
                             <th>Cantidad</th>
+                            <th>Precio Unitario</th>
                             <th>Precio Final</th>
                             <th>Monto</th>
                         </tr>
@@ -35,6 +36,7 @@
                             <td>{{ detalle.obra }} </td>
                             <td>{{ detalle.descripciondetalle }} </td>
                             <td>{{ detalle.cantidad }} </td>
+                            <td>$ {{ detalle.preciounitario | floatformat:2 }} </td>
                             <td>$ {{ detalle.getpreciounitarioiva | floatformat:2 }} </td>
                             <td>$ {{ detalle.getpreciofinal | floatformat:2 }}</td>
                         </tr>
