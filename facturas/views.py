@@ -439,7 +439,6 @@ def nuevodetallefactura(request,pk):
             detallefactura.factura = factura
             detallefactura.usuario = usuario
             detallefactura.save()
-            print("qqqqqqqq")
             messages.success(request, "Se ha grabado los datos.")
             return redirect('/facturas/unidades/listado')
         else:

@@ -133,10 +133,9 @@ class DetalleFacturaProveedor(models.Model):
         iva = self.factura.iva.retencion / 100
         iibb = self.factura.ingresosbrutos.retencion / 100
         preciounitarioiva = self.preciounitario - self.descuento - (self.preciounitario * self.descuentoporcentaje / 100) * iva
-        print("PU " +  str(self.preciounitario))
-        print("PUI" + str(preciounitarioiva))
         preciounitarioibb = self.preciounitario - self.descuento - (self.preciounitario * self.descuentoporcentaje / 100) * iibb
         monto = self.preciounitario + preciounitarioiva + preciounitarioibb
+        print(monto)
         return monto
 
     def getpreciofinal(self):
