@@ -2,7 +2,7 @@
 
 {% block content %}
 
-    <div class="container">
+    <div >
 
         <br>
         <div class="row">
@@ -95,6 +95,7 @@
                         <th>Descripcion</th>
        		            <th>Cantidad</th>
                         <th>Unidad</th>
+                        <th>Precio Unitario</th>
                         <th>Monto</th>
                         <th>Usuario</th>
                         <th>Accion</th>
@@ -109,7 +110,8 @@
                             <td>{{ detallefactura.descripciondetalle.descripciondetalle.upper }} </td>
                             <td>{{ detallefactura.cantidad }} </td>
                             <td>{{ detallefactura.unidad.descripcion }}</td>
-                            <td>$ {{ detallefactura.getpreciofinal |floatformat:2 }} </td>
+                            <td>{{ detallefactura.preciounitario }}</td>
+                            <td>$ {{ detallefactura.getpreciounitariobruto |floatformat:2 }} </td>
                             <td>{{ detallefactura.usuario }}</td>
                             <td>
                                 <button type="button" class="btn btn-link btn-sm" onclick="AbrirVentanaEditar({{detallefactura.pk}})">

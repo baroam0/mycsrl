@@ -129,13 +129,18 @@ class DetalleFacturaProveedor(models.Model):
      
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
 
+    def getpreciounitariobruto(self):
+        preciounitario = self.preciounitario - self.descuento - (self.preciounitario * self.descuentoporcentaje / 100)
+        monto = self.cantidad * preciounitario
+        return monto
+
+
     def getpreciounitarioiva(self):
         iva = self.factura.iva.retencion / 100
         iibb = self.factura.ingresosbrutos.retencion / 100
         preciounitarioiva = self.preciounitario - self.descuento - (self.preciounitario * self.descuentoporcentaje / 100) * iva
         preciounitarioibb = self.preciounitario - self.descuento - (self.preciounitario * self.descuentoporcentaje / 100) * iibb
         monto = self.preciounitario + preciounitarioiva + preciounitarioibb
-        print(monto)
         return monto
 
     def getpreciofinal(self):
