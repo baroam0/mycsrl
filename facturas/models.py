@@ -80,23 +80,30 @@ class FacturaProveedor(models.Model):
         detallesfacturas = DetalleFacturaProveedor.objects.filter(factura=self.pk)
         monto = 0
         for e in detallesfacturas:
-            monto = monto + e.getpreciofinal()
+            monto = monto + e.getpreciounitariobruto()
         return monto
     
     def getsubtotalfacturacondescuento(self):
-        monto = self.getsubtotalfactura() - self.descuentoglobal
+        monto = float(self.getsubtotalfactura()) - float(self.descuentoglobal)
         return monto
 
     def getiva(self):
-        monto = self.getsubtotalfacturacondescuento() * self.iva.retencion / 100
+        
+        if self.iva:
+            monto = self.getsubtotalfacturacondescuento() * float(self.iva.retencion) / 100
+        else:
+            monto = self.getsubtotalfacturacondescuento() * 0 / 100
         return monto
 
     def getiibb(self):
-        monto = self.getsubtotalfacturacondescuento() * self.ingresosbrutos.retencion / 100
+        if self.ingresosbrutos:
+            monto = self.getsubtotalfacturacondescuento() * float(self.ingresosbrutos.retencion) / 100
+        else:
+            monto = self.getsubtotalfacturacondescuento() * 0 / 100
         return monto
 
     def gettotalfactura(self):
-        monto = self.getsubtotalfactura() - self.descuentoglobal + self.getiva() + self.getiibb() + self.ajusteglobal + self.preciocepcionglobal
+        monto = float(self.getsubtotalfactura()) - float(self.descuentoglobal) + float(self.getiva()) + float(self.getiibb()) + float(self.ajusteglobal) + float(self.preciocepcionglobal)
         return monto
 
     class Meta:
@@ -131,20 +138,28 @@ class DetalleFacturaProveedor(models.Model):
 
     def getpreciounitariobruto(self):
         preciounitario = self.preciounitario - self.descuento - (self.preciounitario * self.descuentoporcentaje / 100)
+        print(preciounitario)
         monto = self.cantidad * preciounitario
         return monto
 
-
     def getpreciounitarioiva(self):
-        iva = self.factura.iva.retencion / 100
-        iibb = self.factura.ingresosbrutos.retencion / 100
-        preciounitarioiva = self.preciounitario - self.descuento - (self.preciounitario * self.descuentoporcentaje / 100) * iva
-        preciounitarioibb = self.preciounitario - self.descuento - (self.preciounitario * self.descuentoporcentaje / 100) * iibb
-        monto = self.preciounitario + preciounitarioiva + preciounitarioibb
+        if self.factura.iva:
+            iva = self.factura.iva.retencion / 100
+        else:
+            iva = 0 / 100
+
+        if self.factura.ingresosbrutos:
+            iibb = self.factura.ingresosbrutos.retencion / 100
+        else:
+            iibb = 0 / 100
+
+        preciounitarioiva = float(self.preciounitario) - float(self.descuento) - (float(self.preciounitario) * float(self.descuentoporcentaje) / 100) * float(iva)
+        preciounitarioibb = float(self.preciounitario) - float(self.descuento) - (float(self.preciounitario) * float(self.descuentoporcentaje) / 100) * float(iibb)
+        monto = float(self.preciounitario) + float(preciounitarioiva) + float(preciounitarioibb)
         return monto
 
     def getpreciofinal(self):
-        monto = self.cantidad * self.getpreciounitarioiva()
+        monto = float(self.cantidad) * self.getpreciounitarioiva()
         return monto
 
     def __str__(self):
