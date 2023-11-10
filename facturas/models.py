@@ -75,6 +75,29 @@ class FacturaProveedor(models.Model):
     
     def __str__(self):
         return str(self.fecha)
+    
+    def getsubtotalfactura(self):
+        detallesfacturas = DetalleFacturaProveedor.objects.filter(factura=self.pk)
+        monto = 0
+        for e in detallesfacturas:
+            monto = monto + e.getpreciofinal()
+        return monto
+    
+    def getsubtotalfacturacondescuento(self):
+        monto = self.getsubtotalfactura() - self.descuentoglobal
+        return monto
+
+    def getiva(self):
+        monto = self.getsubtotalfacturacondescuento() * self.iva.retencion / 100
+        return monto
+
+    def getiibb(self):
+        monto = self.getsubtotalfacturacondescuento() * self.ingresosbrutos.retencion / 100
+        return monto
+
+    def gettotalfactura(self):
+        monto = self.getsubtotalfactura() - self.descuentoglobal + self.getiva() + self.getiibb() + self.ajusteglobal + self.preciocepcionglobal
+        return monto
 
     class Meta:
         verbose_name_plural = "Facturas"
@@ -106,12 +129,19 @@ class DetalleFacturaProveedor(models.Model):
      
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
 
+    def getpreciounitarioiva(self):
+        iva = self.factura.iva.retencion / 100
+        iibb = self.factura.ingresosbrutos.retencion / 100
+        preciounitarioiva = self.preciounitario - self.descuento - (self.preciounitario * self.descuentoporcentaje / 100) * iva
+        print("PU " +  str(self.preciounitario))
+        print("PUI" + str(preciounitarioiva))
+        preciounitarioibb = self.preciounitario - self.descuento - (self.preciounitario * self.descuentoporcentaje / 100) * iibb
+        monto = self.preciounitario + preciounitarioiva + preciounitarioibb
+        return monto
 
-    def gettotal(self):
-        totalbruto = self.cantidad * self.preciounitario
-        totaldescuento = totalbruto - self.descuento - (totalbruto * self.descuentoporcentaje / 100 ) + self.ajuste
-        return totaldescuento
-
+    def getpreciofinal(self):
+        monto = self.cantidad * self.getpreciounitarioiva()
+        return monto
 
     def __str__(self):
         return str(self.factura) + ' - ' + self.rubro.descripcion

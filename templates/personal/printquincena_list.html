@@ -46,7 +46,7 @@
                     {% for quincenadetalle in personales %}
                     <tr>
                         <td>{{ quincenadetalle.personal.apellido }}, {{ quincenadetalle.personal.nombre }}  </td>
-                        <td> </td>
+                        <td> {{ quincenadetalle.alta }} </td>
                         <td style="outline: thin solid"> </td>
                         <td>{{ quincenadetalle.personal.categoria }}  </td>
                         {% if quincenadetalle.personal.contratista%}
@@ -114,8 +114,8 @@
         }
 
         $(document).ready(function () {
-            window.print();
-            Volver();
+            //window.print();
+            //Volver();
         });
 
     </script>

@@ -43,6 +43,12 @@ class PersonalForm(forms.ModelForm):
 
     obra = forms.ModelChoiceField(
         label="Obra", queryset=Obra.objects.all(), required=False)
+    
+    cuil = forms.CharField(label="CUIL", required=False)
+    
+    domicilio = forms.CharField(label="Domicilio", required=False)
+
+    telefono = forms.CharField(label="Telefono", required=False)
 
     contratista = forms.ModelChoiceField(
         label="Contratista", 
@@ -61,7 +67,10 @@ class PersonalForm(forms.ModelForm):
 
     class Meta:
         model = Personal
-        fields = ["apellido", "nombre", "numerodocumento", "categoria", "activo", "contratista", "obra"]
+        fields = [
+            "apellido", "nombre", "numerodocumento", "domicilio",
+            "cuil", "telefono", "categoria", "activo", "contratista", 
+            "obra"]
 
 
 class AltaBajaPersonalForm(forms.ModelForm):

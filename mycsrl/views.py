@@ -3,10 +3,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
+from django.http import JsonResponse
 
-
+from lib.funcionesfechas import formateafecha
 from devengamientos.models import Devengamiento
-from pagos.models import Obra, Proveedor
+from pagos.models import Obra, Proveedor, ProveedorBanco
 from facturas.models import FacturaProveedor, DetalleFacturaProveedor
 from facturacion.models import Facturacion, DetalleFacturacion
 
@@ -43,57 +44,94 @@ def salir(request):
     return redirect('/login')
 
 
-def reporte(request):    
-    obras = Obra.objects.all()
-    proveedores = Proveedor.objects.all()
+def ajaxcomprobanteproveedor(request, idproveedor):
+    proveedor = Proveedor.objects.get(pk=idproveedor)
+    comprobantes =FacturaProveedor.objects.filter(proveedor=proveedor)
+    data = [{"id": c.pk, "text": c.comprobante} for c in comprobantes]
+    return JsonResponse(data, safe=False)
 
+
+def ajaxbancoproveedor(request, pk):
+    proveedor = FacturaProveedor.objects.get(pk=pk)
+    bancos = ProveedorBanco.objects.filter(proveedor=proveedor.proveedor)
+    data = [{"id": b.pk, "text": b.descripcionbanco} for b in bancos]
+    return JsonResponse(data, safe=False)
+
+
+def ajaxproveedor(request, pk):
+    proveedor = Proveedor.objects.get(pk=pk)
+    bancos = ProveedorBanco.objects.filter(proveedor=proveedor)
+    data = [{"id": b.pk, "text": b.descripcionbanco} for b in bancos]
+    return JsonResponse(data, safe=False)
+
+
+def reporteporfactura(request):    
+    proveedores = FacturaProveedor.objects.all()
     return render(
         request, 
         'reporte.html',
         {
-            "obras": obras,
             "proveedores": proveedores,
         }
     )
 
 
-
-def detallereporte(request):
-
-    id_factura = int(request.GET.get("id_factura"))
+def detallereporteporfactura(request):
+    facturaproveedor = FacturaProveedor.objects.get(pk=request.GET.get("id_proveedor"))
+    detallefacturaproveedor = DetalleFacturaProveedor.objects.filter(factura=facturaproveedor).order_by('-obra')
+    proveedorbanco = ProveedorBanco.objects.filter(pk=request.GET.get("id_banco"))
     
-    if id_factura == 1:
-        pagado = True
-        pagoparcial = True
-
-    if id_factura == 2:
-        pagado = False
-        pagoparcial = True
-
-    if id_factura == 3:
-        pagado = False
-        pagoparcial = False
-
-
-    obra = Obra.objects.get(pk=request.GET.get("id_obra"))
-    proveedor = Proveedor.objects.filter(pk=request.GET.get("id_proveedor"))
-    facturaproveedor = FacturaProveedor.objects.filter(proveedor__in=proveedor,pagado=pagado, pagoparcial=pagoparcial)
-
-    detallefacturaproveedor = DetalleFacturaProveedor.objects.filter(
-        obra=obra,
-        factura__in=facturaproveedor
-    )
-        
     return render(
         request, 
         'detallereporte.html',
         {
-            "obras": obra,
-            "proveedores": proveedor,
-            "facturasproveedores": facturaproveedor,
-            "detallesfacturaproveedores":detallefacturaproveedor
+            "facturaproveedor": facturaproveedor,
+            "detallefacturaproveedor": detallefacturaproveedor,
+            "banco": proveedorbanco
         }
     )   
+
+
+def reportesfacturas(request):    
+    proveedores = Proveedor.objects.all()
+    return render(
+        request, 
+        'reportes/reportesfacturas.html',
+        {
+            "proveedores": proveedores,
+        }
+    )
+
+
+def detallereportesporfacturas(request):
+    """Funcion para reporte de facturas por rango de fechas"""
+
+    fechadesde = formateafecha(request.GET.get("fechadesde"))
+    fechahasta = formateafecha(request.GET.get("fechahasta"))
+    proveedor =  Proveedor.objects.get(pk=request.GET.get("id_proveedor"))
+    facturaproveedor = FacturaProveedor.objects.filter(proveedor=proveedor,fecha__range=(fechadesde, fechahasta))
+    detallefacturaproveedor = DetalleFacturaProveedor.objects.filter(factura__in=facturaproveedor).order_by('-obra')
+    proveedorbanco = ProveedorBanco.objects.filter(pk=request.GET.get("id_banco"))
+
+    total = 0
+    for d in detallefacturaproveedor:
+        total = total + d.getmontoitemconiva()
+    
+    return render(
+        request, 
+        'reportes/detallereportesfacturas.html',
+        {
+            "fechadesde": fechadesde,
+            "fechahasta": fechahasta,
+            "proveedor": proveedor,
+            "facturaproveedor": facturaproveedor,
+            "detallefacturaproveedor": detallefacturaproveedor,
+            "total": total,
+            "banco": proveedorbanco
+        }
+    )   
+
+
 
 
 def reporteingresoegresoobra(request):    

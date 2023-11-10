@@ -31,8 +31,9 @@
                 <div class="col-6">
                     <label>Proveedores</label>
                     <select id="id_proveedor" class="form-control">
+                        <option value=0> SELECCIONA... </option>
                         {% for proveedor in proveedores %}
-                            <option value={{proveedor.pk}}> {{proveedor.proveedor }} - {{proveedor.comprobante}} </option>
+                            <option value={{proveedor.pk}}> {{proveedor }} </option>
                         {% endfor %}
                     </select>
                 </div>
@@ -45,12 +46,19 @@
                 
             </div>
 
-            <hr>
-
             <div class="form-inline">
                 <div class="col-6">
+                    <label for="id_fechadesde">Fecha Desde:</label> 
+                    <input type="text" name="id_fechadesde" class="form-control" required id="id_fechadesde">
+                </div>
+
+                <div class="col-6">
+                    <label for="id_fechahasta">Fecha Hasta:</label> 
+                    <input type="text" name="id_fechahasta" class="form-control" required id="id_fechahasta">
                 </div>
             </div>
+
+            <hr>
 
             <div class="form-inline">
                 <div class="col-4">
@@ -79,6 +87,8 @@
     <script>
         $(document).ready(function () {
             $('#id_proveedor').select2();
+            TranslateDatepickerToEs($("#id_fechadesde"));
+            TranslateDatepickerToEs($("#id_fechahasta"));
         });
 
 
@@ -91,11 +101,16 @@
         function CargarCombo(id){
             $.ajax({
                 type: "GET",
-                url: "/ajaxbancoproveedor/" + id,
+                url: "/ajaxproveedor/" + id,
                 dataType: "json",
                 success: function (response) {
                     var select = $('#id_banco');
                     select.empty();
+
+                    select.append($('<option>', {
+                        value: 0,
+                        text: "SELECCIONA..."
+                    }));
 
                     $.each(response, function(index, value) {
                     select.append($('<option>', {
@@ -110,11 +125,50 @@
         function AbrirVentanaReporte(){
             var id_proveedor = $("#id_proveedor").val();
             var id_banco = $("#id_banco").val();
-            var urldetallefactura = "/detallereporte/?id_proveedor=" + id_proveedor + "&id_banco=" + id_banco ;
+            var fechadesde = $("#id_fechadesde").val();
+            var fechahasta = $("#id_fechahasta").val();
+
+            if(id_proveedor==0){
+                Swal.fire(
+                    'Por favor elige un Proveedor',
+                    '',
+                    'warning'
+                )
+                return false;
+            }
+
+            if(id_banco==0){
+                Swal.fire(
+                    'Por favor elige un Banco',
+                    '',
+                    'warning'
+                )
+                return false;
+            }
+
+            if(fechadesde==""){
+                Swal.fire(
+                    'Por favor elige Fecha Desde',
+                    '',
+                    'warning'
+                )
+                return false;
+            }
+
+            if(fechahasta==""){
+                Swal.fire(
+                    'Por favor elige Fecha Hasta',
+                    '',
+                    'warning'
+                )
+                return false;
+            }
+
+
+            var urldetallefactura = "/detallereportesfacturas/?id_proveedor=" + id_proveedor + "&id_banco=" + id_banco + "&fechadesde=" + fechadesde + "&fechahasta=" + fechahasta ;
             window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
+            
         }
-
-
 
     
     </script>

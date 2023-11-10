@@ -37,6 +37,12 @@ class Personal(models.Model):
 
     obra = models.ForeignKey(Obra, null=True, blank=True, on_delete=models.CASCADE)
 
+    cuil = models.CharField(max_length=20, null=True, blank=True)
+
+    domicilio = models.CharField(max_length=250, null=True, blank=True)
+    
+    telefono = models.CharField(max_length=30, null=True, blank=True)
+
     contratista = models.ForeignKey(
         Contratista, on_delete=models.CASCADE, null=True, blank=True)
     
