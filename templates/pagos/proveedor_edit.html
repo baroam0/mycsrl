@@ -125,13 +125,16 @@
         }
 
         function NuevoDatosBancarios(pk){
-            var urldetallefactura = "/pagos/proveedorbanco/nuevo/" + pk;
-            window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
+            //var urldetallefactura = "/pagos/proveedorbanco/nuevo/" + pk;
+            //window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
+            window.location.replace("/pagos/proveedorbanco/nuevo/" + pk)
+
         }
 
         function EditarDatosBancarios(pk){
-            var urldetallefactura = "/pagos/proveedorbanco/editar/" + pk;
-            window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
+            //var urldetallefactura = "/pagos/proveedorbanco/editar/" + pk;
+            //window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
+            window.location.replace("/pagos/proveedorbanco/editar/" + pk);
         }
 
         function ImprimirDatosBancarios(pk){

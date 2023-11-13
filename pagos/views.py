@@ -505,10 +505,10 @@ def proveedorbanco_new(request, pk):
             proveedorbanco.proveedor = proveedor
             proveedorbanco.save()
             messages.success(request, "Se ha grabado los datos.")
-            return redirect('/pagos/obra/listado')
+            return redirect('/pagos/proveedor/proveedoredit/' + str(proveedor.pk))
         else:
             messages.warning(request, form.errors)
-            return redirect('/pagos/obra/listado')
+            return redirect('/pagos/proveedor/proveedoredit/' + str(proveedor.pk))
     else:
         form = ProveedorBancoForm()
         return render(
@@ -516,6 +516,7 @@ def proveedorbanco_new(request, pk):
             'facturas/proveedorbanco_edit.html',
             {
                 "form": form,
+                "proveedor": proveedor,
                 "resultados": proveedoresbanco
             }
         )
@@ -523,6 +524,7 @@ def proveedorbanco_new(request, pk):
 
 def proveedorbanco_edit(request, pk):
     consulta = ProveedorBanco.objects.get(pk=pk)
+    proveedor = Proveedor.objects.get(pk=consulta.proveedor.pk)
    
     if request.POST:
         form = ProveedorBancoForm(request.POST, instance=consulta)
@@ -532,16 +534,19 @@ def proveedorbanco_edit(request, pk):
             proveedorbanco.usuario = usuario
             proveedorbanco.save()
             messages.success(request, "SE HA GRABADO LOS DATOS DE OBRA")
-            return redirect('/pagos/obra/listado')
+            return redirect('/pagos/proveedor/proveedoredit/' + str(proveedor.pk))
         else:
             messages.warning(request, form.errors)
-            return redirect('/pagos/obra/listado')
+            return redirect('/pagos/proveedor/proveedoredit/' + str(proveedor.pk))
     else:
         form = ProveedorBancoForm(instance=consulta)
         return render(
             request,
             'facturas/proveedorbanco_edit.html',
-            {"form": form}
+            {
+                "form": form,
+                "proveedor": proveedor,
+            }
         )
 
 
