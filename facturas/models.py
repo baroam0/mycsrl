@@ -138,7 +138,6 @@ class DetalleFacturaProveedor(models.Model):
 
     def getpreciounitariobruto(self):
         preciounitario = self.preciounitario - self.descuento - (self.preciounitario * self.descuentoporcentaje / 100)
-        print(preciounitario)
         monto = self.cantidad * preciounitario
         return monto
 

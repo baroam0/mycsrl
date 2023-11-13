@@ -364,14 +364,12 @@
 
 
         function AbrirVentana(pk){
-            var urldetallefactura = "/facturas/detalle/nuevo/" + pk;
-            window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
+            window.location.replace("/facturas/detalle/nuevo/" + pk);
         }
 
         
         function AbrirVentanaEditar(pk){
-            var urldetallefactura = "/facturas/detalle/editar/" + pk;
-            window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
+            window.location.replace("/facturas/detalle/editar/" + pk);
         }
 
 

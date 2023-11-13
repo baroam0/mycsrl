@@ -440,22 +440,26 @@ def nuevodetallefactura(request,pk):
             detallefactura.usuario = usuario
             detallefactura.save()
             messages.success(request, "Se ha grabado los datos.")
-            return redirect('/facturas/unidades/listado')
+            return redirect('/facturas/editar/' + str(factura.pk))
         else:
             messages.warning(request, form.errors)
-            return redirect('/facturas/unidades/listado')
+            return redirect('/facturas/editar/' + str(factura.pk))
     else:
         form = DetalleFacturaProveedorForm()
         return render(
             request,
             'facturas/detallefactura_edit.html',
-            {"form": form}
+            {
+                "factura": factura,
+                "form": form,
+            }
         )
 
 
 @login_required(login_url='/login')
 def editardetallefactura(request, pk):
     detallefactura = DetalleFacturaProveedor.objects.get(pk=pk)
+    factura = FacturaProveedor.objects.get(pk=detallefactura.factura.pk)
 
     if request.POST:
         form = DetalleFacturaProveedorForm(request.POST, instance=detallefactura)
@@ -465,16 +469,17 @@ def editardetallefactura(request, pk):
             detallefactura.usuario = usuario
             detallefactura.save()
             messages.success(request, "Se ha modificado los datos.")
-            return redirect('/facturas/listado')
+            return redirect('/facturas/editar/' + str(factura.pk))
         else:
             messages.warning(request, form.errors)
-            return redirect('/facturas/listado')
+            return redirect('/facturas/editar/' + str(factura.pk))
     else:
         form = DetalleFacturaProveedorForm(instance=detallefactura)
         return render(
             request,
             'facturas/detallefactura_edit.html',
             {
+                "factura": factura,
                 "form": form,
                 "pk": pk
             }

@@ -1,16 +1,16 @@
 
-{% extends 'base_nomenu.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
     <div class="container">
 
         <br>
         <div class="row">
-            <div class="col-sm-3"></div>
-            <div class="col-sm-6">
-                <h3>Detalle Factura </h3>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-8">
+                <h3> Detalle Factura Nro {{factura.comprobante}} - {{factura.proveedor}} </h3>
             </div>
-            <div class="col-sm-3"></div>
+            <div class="col-sm-2"></div>
         </div>
 
         <div class="row">
@@ -56,7 +56,7 @@
     <script>
 
         function BotonCancelar(){
-            window.close();
+            window.location.replace("/facturas/editar/" + {{factura.pk}});
         }
 
         function LoadDetailUnit(pk){
@@ -64,7 +64,6 @@
                 url: '/facturas/ajax/loadunidad/' + pk,
                 type: 'GET',
                 success: function(response){
-                    console.log(response.data);
                     $('#id_unidad').val(response.data);
                 },
                 error: function(error){
@@ -73,30 +72,21 @@
             })
         }
 
-
+        /*
         function val() {
             d = document.getElementById("id_descripciondetalle").value;
-        }
-
-        $('#id_descripciondetalle').change(function(){
-            LoadDetailUnit($(this).val());
-        })
+        }*/
 
 
-        $(document).ready(function () {
-            TranslateDatepickerToEs($("#id_fecha"));
-            window.onunload = function(){
-                window.opener.location.reload();
-                window.close(); 
-            };
+        $(document).ready(function () {            
             $("#id_obra").select2();
             $("#id_rubro").select2();
             $("#id_descripciondetalle").select2();
+            $("#id_rodado").select2();
 
-            $( "#myform" ).on( "submit", function( event ) {
-               
-
-            });
+            $('#id_descripciondetalle').change(function(){
+                LoadDetailUnit($(this).val());
+            })
         });
 
     </script>
