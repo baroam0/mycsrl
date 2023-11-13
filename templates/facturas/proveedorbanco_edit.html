@@ -59,21 +59,7 @@
             window.location.replace("/pagos/proveedor/proveedoredit/" + {{proveedor.pk}});
         }
 
-
         $(document).ready(function () {
-            TranslateDatepickerToEs($("#id_fecha"));
-            window.onunload = function(){
-                window.opener.location.reload();
-                window.close(); 
-            };
-            $("#id_obra").select2();
-            $("#id_rubro").select2();
-            $("#id_descripciondetalle").select2();
-
-            $( "#myform" ).on( "submit", function( event ) {
-               
-
-            });
         });
 
     </script>
