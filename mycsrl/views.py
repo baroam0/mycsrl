@@ -192,8 +192,8 @@ def helperpagado(factura_id, usuario):
     totaliva = (totalfactura * 21 / 100 )
     totalfactura = totalfactura + totaliva + factura.preciocepcionglobal + factura.ajusteglobal
 
-    totaldevengado = round(totaldevengado, 2)
-    totalfactura = round(totalfactura, 2)
+    totaldevengado = float(round(totaldevengado, 2))
+    totalfactura = float(round(totalfactura, 2))
 
 
     if totalfactura == totaldevengado:
