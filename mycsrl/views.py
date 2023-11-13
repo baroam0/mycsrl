@@ -184,13 +184,7 @@ def helperpagado(factura_id, usuario):
     for i in devengamientos:
         totaldevengado = totaldevengado + i.monto
 
-    totalfactura = 0
-    for i in detallefacturas:
-        totalfactura = totalfactura + i.gettotal()
-    
-    totalfactura = totalfactura - factura.descuentoglobal
-    totaliva = (totalfactura * 21 / 100 )
-    totalfactura = totalfactura + totaliva + factura.preciocepcionglobal + factura.ajusteglobal
+    totalfactura = factura.gettotalfactura()
 
     totaldevengado = float(round(totaldevengado, 2))
     totalfactura = float(round(totalfactura, 2))

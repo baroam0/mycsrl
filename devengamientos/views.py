@@ -40,19 +40,13 @@ def devengamiento_new(request, pk):
     detallefacturas = DetalleFacturaProveedor.objects.filter(factura=factura)
     devengamientos = Devengamiento.objects.filter(factura=factura)
 
-    totalfactura = 0
-    for i in detallefacturas:
-        totalfactura = totalfactura + i.gettotal()
-    
-    totalfactura = totalfactura - factura.descuentoglobal
-    totaliva = (totalfactura * factura.iva.retencion / 100 )
-    totalingresosbrutos = (totalfactura * factura.ingresosbrutos.retencion / 100 )
-    
-    totalfactura = totalfactura + totaliva + factura.preciocepcionglobal + factura.ajusteglobal + totalingresosbrutos
+    totalfactura = factura.gettotalfactura()
 
     totaldevengado = 0
     for i in devengamientos:
         totaldevengado = totaldevengado + i.monto
+    
+    totaldevengado = float(totaldevengado)
 
     if request.POST:
         usuario = request.user
@@ -89,14 +83,15 @@ def devengamiento_edit(request, pk):
     consulta = Devengamiento.objects.get(pk=pk)
     detallefacturas = DetalleFacturaProveedor.objects.filter(factura=consulta.factura.pk)
     devengamientos = Devengamiento.objects.filter(factura=consulta.factura.pk)
+    factura = FacturaProveedor.objects.get(pk=consulta.factura.pk)
 
-    totalfactura = 0
-    for i in detallefacturas:
-        totalfactura = totalfactura + i.gettotal()
+    totalfactura = factura.gettotalfactura()
 
     totaldevengado = 0
     for i in devengamientos:
         totaldevengado = totaldevengado + i.monto
+
+    totaldevengado = float(totaldevengado)
 
     if request.POST:
         form = DevengamientoForm(request.POST, instance=consulta)
