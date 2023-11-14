@@ -395,8 +395,6 @@ def quincena_edit(request, pk):
         )
 
 
-
-
 #############################################################################
 
 @login_required(login_url='/login')
@@ -425,8 +423,6 @@ def quincenadetalle_new(request, pk):
                 "quincena": quincena
             }
         )
-
-
 
 
 ##############################################################################
