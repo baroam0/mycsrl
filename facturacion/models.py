@@ -30,6 +30,18 @@ class Facturacion(models.Model):
     def __str__(self):
         return str(self.pk) + " - " + str(self.fecha) 
 
+    def totalfacturacionporobra(self):
+        
+        total = 0
+
+        try:
+            detallesfacturaciones = DetalleFacturacion.objects.filter(facturacion=self.obra.pk)
+            for i in detallesfacturaciones:
+                total = total + i.monto
+            return total
+        except:
+            return None
+
     def totalfacturacion(self):
         detallesfacturaciones = DetalleFacturacion.objects.filter(facturacion=self.pk)
         total = 0
