@@ -254,11 +254,11 @@ def altabajapersonal_edit(request, pk):
             altabajapersonal.save()
             activapersonal(personal.pk, altabajapersonal.alta, altabajapersonal.baja)   
             messages.success(request, "Se ha grabado los datos.")
-            return redirect('/personal/categoria/listado')
+            return redirect('/personal/editar/' + str(personal.pk))
             
         else:
             messages.warning(request, form.errors)
-            return redirect('/personal/categoria/listado')
+            return redirect('/personal/editar/' + str(personal.pk))
     else:
         form = AltaBajaPersonalForm(instance=altabaja)
         return render(
@@ -395,6 +395,43 @@ def quincena_edit(request, pk):
         )
 
 
+
+
+#############################################################################
+
+@login_required(login_url='/login')
+def quincenadetalle_new(request, pk):
+    quincena = Quincena.objects.get(pk=pk)
+    if request.POST:
+        form = QuincenaDetalleForm(request.POST)
+
+        if form.is_valid():
+            usuario = request.user
+            quincenadetalle = form.save(commit=False)
+            quincenadetalle.quincena = quincena
+            quincenadetalle.usuario = usuario
+            quincenadetalle.save()
+            return redirect('/personal/quincena/editar/' + str(quincena.pk))
+        else:
+            messages.warning(request, form.errors)
+            return redirect('/personal/quincena/editar/' + str(quincena.pk))
+    else:
+        form = QuincenaDetalleForm()
+        return render(
+            request,
+            'personal/quincenadetalle_addpersonal.html',
+            {
+                "form": form,
+                "quincena": quincena
+            }
+        )
+
+
+
+
+##############################################################################
+
+
 def printquincenalistado(request, pk):
     
     quincena = Quincena.objects.get(pk=pk)
@@ -405,7 +442,7 @@ def printquincenalistado(request, pk):
     for e in quincenadetalle:
         personalids.append(e.personal.pk)
 
-    altasbajas = AltaBajaPersonal.objects.filter(personal__in=personalids)
+    altasbajas = AltaBajaPersonal.objects.filter(personal__in=personalids).order_by('personal__contratista')
 
     return render(
         request,
