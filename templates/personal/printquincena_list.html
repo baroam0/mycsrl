@@ -53,6 +53,7 @@
                         <th>Fecha Ingreso </th>
                         <th>Horas </th>
                         <th>Categoria</th>
+                        <th> </th>
                         <th>Contratista / Obra</th>
                     </tr>
                 </thead>
@@ -64,6 +65,7 @@
                         <td> {{ personal.alta | date:"d-m-Y" }} </td>
                         <td style="outline: thin solid"> </td>
                         <td>{{ personal.personal.categoria }}  </td>
+                        <td style="outline: thin solid; width: 110px;"> </td>
                         {% if personal.personal.contratista %}
 			    {% if personal.personal.obra %}
                            	 <td>{{ personal.personal.contratista }} / {{personal.personal.obra}}  </td>
