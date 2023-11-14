@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-sm-1"></div>
             <div class="col-sm-10">
-                <h2>Detalle Quincena - {{quincenadetalle.quincena.fechainicio}} - {{quincenadetalle.quincena.fechafin}} </h2>
+                <h2>Detalle Quincena - {{quincena.fechainicio}} - {{quincena.fechafin}} </h2>
             </div>
             <div class="col-sm-1">
                 <button type="button" class="btn btn-default" title="Imprimir" onclick="location.href='/personal/imprimirquincena/{{pk}}'">
@@ -22,9 +22,6 @@
             <div class="col-12">
              
                 <form  method="POST">{% csrf_token %}
-                   
-
-             
 
                     <!--div class="row">
                         <div class="col-2">
@@ -63,16 +60,22 @@
                 </thead>
 
                 <tbody>
-                    {% for quincenadetalle in quincenasdetalles %}
+
+                    {% for personal in personales %}
                     <tr>
-                        <td>{{ quincenadetalle.personal.apellido }}, {{ quincenadetalle.personal.nombre }}  </td>
-                        <td> {{ quincenadetalle.alta}} </td>
+                        <td>{{ personal.personal.apellido }}, {{ personal.personal.nombre }}  </td>
+                        <td> {{ personal.alta | date:"d-m-Y" }} </td>
                         <td style="outline: thin solid"> </td>
-                        <td>{{ quincenadetalle.personal.categoria }}  </td>
-                        {% if quincenadetalle.personal.contratista%}
-                            <td>{{ quincenadetalle.personal.contratista }} / {{quincenadetalle.personal.obra}}  </td>
+                        <td>{{ personal.personal.categoria }}  </td>
+
+                        {% if personal.personal.contratista %}
+                            <td>{{ personal.personal.contratista }} / {{personal.personal.obra}}  </td>
                         {% else %}
-                            <td>- / {{ quincenadetalle.personal.obra }}  </td>
+                            {%if personal.personal.obra%}
+                                <td>- / {{ personal.personal.obra }}  </td>
+                            {% else %}
+                                <td>- / - </td>
+                            {% endif %}    
                         {% endif %}
                         
                     </tr>

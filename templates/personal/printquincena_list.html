@@ -58,16 +58,20 @@
                 </thead>
 
                 <tbody>
-                    {% for quincenadetalle in personales %}
+                    {% for personal in personales %}
                     <tr>
-                        <td>{{ quincenadetalle.personal.apellido }}, {{ quincenadetalle.personal.nombre }}  </td>
-                        <td> {{ quincenadetalle.alta | date:"d-m-Y" }} </td>
+                        <td>{{ personal.personal.apellido }}, {{ personal.personal.nombre }}  </td>
+                        <td> {{ personal.alta | date:"d-m-Y" }} </td>
                         <td style="outline: thin solid"> </td>
-                        <td>{{ quincenadetalle.personal.categoria }}  </td>
-                        {% if quincenadetalle.personal.contratista%}
-                            <td>{{ quincenadetalle.personal.contratista }} / {{quincenadetalle.personal.obra}}  </td>
+                        <td>{{ personal.personal.categoria }}  </td>
+                        {% if personal.personal.contratista %}
+                            <td>{{ personal.personal.contratista }} / {{personal.personal.obra}}  </td>
                         {% else %}
-                            <td>- / {{ quincenadetalle.personal.obra }}  </td>
+                            {%if personal.personal.obra%}
+                                <td>- / {{ personal.personal.obra }}  </td>
+                            {% else %}
+                                <td>- / - </td>
+                            {% endif %}    
                         {% endif %}
                         
                     </tr>

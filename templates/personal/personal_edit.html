@@ -117,14 +117,16 @@
 
 
         function AltaBaja(pk){
-            var urldetalle = "/personal/altabaja/" + pk;
-            window.open(urldetalle,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
+            //var urldetalle = "/personal/altabaja/" + pk;
+            //window.open(urldetalle,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
+            window.location.replace("/personal/altabaja/" + pk);
         }
 
 
         function ModificaAltaBaja(pk){
-            var urldetalle = "/personal/altabajaedit/" + pk;
-            window.open(urldetalle,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
+            //var urldetalle = "/personal/altabajaedit/" + pk;
+            //window.open(urldetalle,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
+            window.location.replace("/personal/altabajaedit/" + pk);
         }
 
         function BorrarAltaBaja(pk){

@@ -1,4 +1,4 @@
-{% extends 'base_nomenu.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
 
@@ -33,7 +33,7 @@
                         </div>
 
                         <div class="col-4">    
-                            <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="AltaBaja()">
+                            <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="Volver()">
                                 <i class="far fa-times-circle"></i>
                                 Cancelar
                             </button>
@@ -68,13 +68,10 @@
 
 
         function Volver() {
-            window.location.replace("/personal/listado");
+            window.location.replace("/personal/editar/" + {{pk.pk}});
         }
 
-        function AltaBaja(pk){
-            var urldetallefactura = "/pagos/proveedorbanco/nuevo/" + pk;
-            window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
-        }
+     
     </script>
 
 {% endblock %}

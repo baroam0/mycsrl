@@ -218,11 +218,11 @@ def altabajapersonal_new(request, pk):
             altabajapersonal.save()
             activapersonal(personal.pk, altabajapersonal.alta, altabajapersonal.baja)   
             messages.success(request, "Se ha grabado los datos.")
-            return redirect('/personal/categoria/listado')
+            return redirect('/personal/editar/' + str(pk))
             
         else:
             messages.warning(request, form.errors)
-            return redirect('/personal/categoria/listado')
+            return redirect('/personal/editar/' + str(pk))
     else:
         form = AltaBajaPersonalForm()
         return render(
@@ -357,21 +357,19 @@ def quincena_new(request):
 
 @login_required(login_url='/login')
 def quincena_edit(request, pk):
-    quincenadetalle = QuincenaDetalle.objects.get(pk=pk)
-    quincena = Quincena.objects.get(pk=quincenadetalle.quincena.pk)
-    quincenasdetalles = QuincenaDetalle.objects.filter(
-        quincena=quincenadetalle.quincena).order_by('personal__contratista')
-
+    
+    quincena = Quincena.objects.get(pk=pk)
+    quincenadetalle = QuincenaDetalle.objects.filter(quincena=quincena.pk)
+    
     personalids=list()
 
-    for e in quincenasdetalles:
-        personalids.append(e.pk)
+    for e in quincenadetalle:
+        personalids.append(e.personal.pk)
     
-    qq = AltaBajaPersonal.objects.filter(personal__in=personalids)
-
-
+    personales = AltaBajaPersonal.objects.filter(personal__in=personalids)   
+    
     if request.POST:
-        form = QuincenaDetalleForm(request.POST, instance=quincenadetalle)
+        form = QuincenaForm(request.POST, instance=quincena)
         if form.is_valid():
             categoria = form.save(commit=False)
             usuario = request.user
@@ -383,13 +381,14 @@ def quincena_edit(request, pk):
             messages.warning(request, form.errors)
             return redirect('/personal/categoria/listado')
     else:
-        form = QuincenaDetalleForm(instance=quincenadetalle)
+        form = QuincenaForm(instance=quincena)
         return render(
             request,
             'personal/quincenadetalle_edit.html',
             {
                 "form": form,
-                "quincenasdetalles": qq,
+                "personales": personales,
+                "quincena": quincena,
                 "quincenadetalle": quincenadetalle,
                 "pk": pk
             }
@@ -397,18 +396,17 @@ def quincena_edit(request, pk):
 
 
 def printquincenalistado(request, pk):
-    quincenadetalle = QuincenaDetalle.objects.get(pk=pk)
-    quincena = Quincena.objects.get(pk=quincenadetalle.quincena.pk)
-    quincenasdetalles = QuincenaDetalle.objects.filter(
-        quincena=quincenadetalle.quincena)
+    
+    quincena = Quincena.objects.get(pk=pk)
+    quincenadetalle = QuincenaDetalle.objects.filter(quincena=quincena.pk)
     
     personalids=list()
 
-    for e in quincenasdetalles:
-        personalids.append(e.pk)
-    
+    for e in quincenadetalle:
+        personalids.append(e.personal.pk)
+
     altasbajas = AltaBajaPersonal.objects.filter(personal__in=personalids)
-    
+
     return render(
         request,
         'personal/printquincena_list.html',
