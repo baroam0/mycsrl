@@ -152,9 +152,11 @@ def detallereporteingresoegresoobra(request):
     obra = Obra.objects.get(pk=request.GET.get("id_obra"))
 
     detallesfacturas = DetalleFacturaProveedor.objects.filter(obra=obra.pk)
-    factura = FacturaProveedor.objects.get(pk=detallesfacturas[0].factura.pk)
 
-    devengamientos = Devengamiento.objects.filter(factura=factura)
+    facturas = FacturaProveedor.objects.filter(pk__in=detallesfacturas)
+
+    devengamientos = Devengamiento.objects.filter(factura__in=facturas)
+    
     cobros = Facturacion.objects.filter(obra=obra.pk)
 
     if devengamientos:
