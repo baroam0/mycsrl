@@ -65,7 +65,11 @@
                         <td style="outline: thin solid"> </td>
                         <td>{{ personal.personal.categoria }}  </td>
                         {% if personal.personal.contratista %}
-                            <td>{{ personal.personal.contratista }} / {{personal.personal.obra}}  </td>
+			    {% if personal.personal.obra %}
+                           	 <td>{{ personal.personal.contratista }} / {{personal.personal.obra}}  </td>
+			     {% else %}
+			         <td> {{personal.personal.contratista}} / -</td>
+                             {%endif %}	
                         {% else %}
                             {%if personal.personal.obra%}
                                 <td>- / {{ personal.personal.obra }}  </td>
@@ -79,7 +83,7 @@
                 </tbody>
             </table>
 
-            <nav aria-label="Page navigation">
+            <!--nav aria-label="Page navigation">
                 <ul class="pagination justify-content-center">
                     {% if resultados.has_previous %}
                         <li class="page-item">
@@ -114,7 +118,7 @@
                         </li>
                     {% endif %}
                 </ul>
-            </nav>
+            </nav-->
 
         </form>
 
