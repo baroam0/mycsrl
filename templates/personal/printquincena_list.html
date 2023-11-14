@@ -2,6 +2,20 @@
 {% extends 'base_nomenu.html' %}
 
 {% block content %}
+    <style>
+        table {
+            counter-reset: rowNumber;
+        }
+        
+        table tbody tr::before {
+            display: table-cell;
+            counter-increment: rowNumber;
+            content: counter(rowNumber) "";
+            padding-right: 0.3em;
+            padding-top: 0.7em;
+            text-align: right;
+        }
+    </style>
 
     <div class="container">
 
@@ -34,6 +48,7 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
+                        <th>Orden</th>
                         <th>Apellido y Nombre</th>
                         <th>Fecha Ingreso </th>
                         <th>Horas </th>
