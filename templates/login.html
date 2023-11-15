@@ -34,18 +34,17 @@
       </p>
 
       <div class="register-logo">
-        <b>Mantenimiento y Construcciones SRL</b>
+        <img class="mb-4" src="{% static "images/logo.jpg" %}" alt="" width="144" height="125">
+        <!--b>Mantenimiento y Construcciones SRL</b-->
       </div>
 
 
       <form action="/login/" method="post"> {% csrf_token %}
 
         {% if mensaje %}
-            
           <div class="alert alert-success" role="alert">
             {{mensaje}}
           </div>
-            
         {% endif %}
 
 
