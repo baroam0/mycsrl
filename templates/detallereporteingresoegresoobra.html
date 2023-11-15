@@ -32,7 +32,7 @@
                         <tbody>
                             {% for cobro in cobros  %}
                                 <tr>
-                                    <td>{{ cobro.fecha }}  </td>
+                                    <td>{{ cobro.fecha | date:"d-m-Y" }}  </td>
                                     <td>{{ cobro.descripcion }}  </td>
                                     <td>{{ cobro.comprobante }}  </td>
                                     <td>$ {{ cobro.totalfacturacion }}</td>
@@ -50,6 +50,8 @@
                 <thead>
                     <tr>
                         <th>Fecha</th>
+                        <th>Proveedor</th>
+                        <th>Comprobante</th>
                         <th>Medio Pago</th>
                         <th>Monto</th>
                     </tr>
@@ -58,7 +60,9 @@
                 <tbody>
                     {% for devengamiento in devengamientos %}
                         <tr>
-                            <td>{{ devengamiento.fecha }}  </td>
+                            <td>{{ devengamiento.fecha | date:"d-m-Y"  }}  </td>
+                            <td>{{ devengamiento.factura.proveedor }}  </td>
+                            <td>{{ devengamiento.factura.comprobante }}  </td>
                             <td>{{ devengamiento.mediopago }}  </td>
                             <td>$ {{ devengamiento.monto }}</td>
                         </tr>

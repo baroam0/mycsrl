@@ -159,16 +159,21 @@ def detallereporteingresoegresoobra(request):
     
     cobros = Facturacion.objects.filter(obra=obra.pk)
 
+    totalpagos = 0
+    for i in devengamientos:
+        totalpagos = totalpagos + i.monto
+
+    """
     if devengamientos:
         totalpagos = devengamientos[0].pagosporfactura()
     else:
         totalpagos = 0
-    
+    """    
     if cobros:
         totalcobros = cobros[0].totalfacturacion()
     else:
         totalcobros = 0
-    
+
     return render(
         request, 
         'detallereporteingresoegresoobra.html',
