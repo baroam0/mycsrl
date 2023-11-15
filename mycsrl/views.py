@@ -132,8 +132,6 @@ def detallereportesporfacturas(request):
     )   
 
 
-
-
 def reporteingresoegresoobra(request):    
     obras = Obra.objects.all()
 
@@ -144,7 +142,6 @@ def reporteingresoegresoobra(request):
             "obras": obras,
         }
     )
-
 
 
 def detallereporteingresoegresoobra(request):
@@ -223,3 +220,36 @@ def helperpagado(factura_id, usuario):
         
     return True
 
+
+def reportegastoporobra(request):    
+    obras = Obra.objects.all()
+
+    return render(
+        request, 
+        'reportes/reportegastoporobra.html',
+        {
+            "obras": obras,
+        }
+    )
+
+
+def detallereportesgastosporobra(request):
+    """Funcion para reporte de gastos por facturas"""
+
+    obra = Obra.objects.get(pk=request.GET.get("id_obra"))
+    detallesfacturas = DetalleFacturaProveedor.objects.filter(obra=obra)
+
+    totalgasto = 0
+    for i in detallesfacturas:
+        totalgasto = totalgasto + i.getpreciofinal()
+
+
+    return render(
+        request, 
+        'reportes/detallereportegastoporobra.html',
+        {
+            "obra": obra,
+            "detallesfacturas": detallesfacturas,
+            "totalgasto": totalgasto
+        }
+    )   

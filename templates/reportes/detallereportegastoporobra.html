@@ -1,0 +1,76 @@
+
+{% extends 'base_nomenu.html' %}
+
+{% block content %}
+
+    <div class="container">
+
+        <br>
+        
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-10">
+                <h3> Detalle Gastos por Obra - {{obra}} </h3>
+            </div>
+            <div class="col-sm-1"></div>
+        </div>
+        
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Proveedor</th>
+                            <th>Comprobante</th>
+                            <th>Descripcion</th>
+                            <th>Cantidad</th>
+                            <th>Precio Final incl Impuestos</th>
+                            <th>Pagado</th>
+                            <th>Pagado Parcial</th>
+                        </tr>
+                    </thead>
+                    
+                    
+                    <tbody>
+                        {% for detalle in detallesfacturas%}                   
+                        <tr>
+                                <td>{{ detalle.factura.fecha | date:"d-m-Y" }}  </td>
+                                <td>{{ detalle.factura.proveedor}}</td>
+                                <td>{{ detalle.factura.comprobante}}</td> 
+                                <td>{{ detalle.descripciondetalle }} </td>
+                                <td>{{ detalle.cantidad }} </td>
+                                <td>$ {{ detalle.getpreciofinal | floatformat:2 }} </td>
+                                {%if detalle.factura.pagado %}
+                                    <td> SI </td>
+                                {% else %}
+                                    <td> NO </td>
+                                {% endif %}
+
+                                {%if detalle.factura.pagoparcial %}
+                                    <td> SI </td>
+                                {% else %}
+                                    <td> NO </td>
+                                {% endif %}
+                        </tr>
+                        {% endfor %}             
+                    </tbody>
+                </table>
+        
+                <h5>Total Gasto: $ {{ totalgasto | floatformat:2 }}</h5>
+                
+        <hr>
+
+    </div>
+
+
+
+{% endblock %}
+
+
+    <script>
+        $(document).ready(function () {
+            
+        });
+
+    
+    </script>
+

@@ -124,7 +124,7 @@ class DetalleFacturaProveedor(models.Model):
         decimal_places=2, max_digits=20, null=False, blank=False)
     preciounitario = models.DecimalField(
         decimal_places=4, max_digits=20, null=False, blank=False)
-    
+
     descuento = models.DecimalField(decimal_places=4,max_digits=20, default=0)
     descuentoporcentaje = models.DecimalField(decimal_places=4,max_digits=20, default=0)
 
@@ -133,7 +133,7 @@ class DetalleFacturaProveedor(models.Model):
     )
 
     ajuste = models.DecimalField(decimal_places=4,max_digits=20, default=0)
-     
+
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
 
     def getpreciounitariobruto(self):
