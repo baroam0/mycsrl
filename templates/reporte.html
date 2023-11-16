@@ -17,15 +17,6 @@
 
         <hr>
 
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{message.tags}}" role="alert">
-                    {{message}}
-                </div>
-            {% endfor %}
-        {% endif %}
-
-
         <form action="/reportes/" method="GET">
             <div class="form-inline">
                 <div class="col-6">
@@ -84,7 +75,8 @@
 
         $("#id_proveedor").on('change', function(e) {
             var idproveedor = $(this).select2('data')[0].id;
-            CargarCombo($(this).select2('data')[0].id);
+            //CargarCombo($(this).select2('data')[0].id);
+            CargarCombo(idproveedor);
         });
 
 
@@ -110,6 +102,16 @@
         function AbrirVentanaReporte(){
             var id_proveedor = $("#id_proveedor").val();
             var id_banco = $("#id_banco").val();
+
+            if(id_banco==0 || id_banco==null){
+                Swal.fire(
+                    'Por favor elige un Banco',
+                    '',
+                    'warning'
+                )
+                return false;
+            }
+            
             var urldetallefactura = "/detallereporte/?id_proveedor=" + id_proveedor + "&id_banco=" + id_banco ;
             window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
         }
