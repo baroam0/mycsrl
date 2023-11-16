@@ -150,11 +150,18 @@ def detallereporteingresoegresoobra(request):
 
     detallesfacturas = DetalleFacturaProveedor.objects.filter(obra=obra.pk)
 
-    facturas = FacturaProveedor.objects.filter(pk__in=detallesfacturas)
+    detallesfacturas_list = list()
+    for i in detallesfacturas:
+        detallesfacturas_list.append(i.factura.pk)
+
+    facturas = FacturaProveedor.objects.filter(pk__in=detallesfacturas_list)
 
     devengamientos = Devengamiento.objects.filter(factura__in=facturas)
     
     cobros = Facturacion.objects.filter(obra=obra.pk)
+
+    for i in detallesfacturas:
+        print(i.factura.proveedor)
 
     totalpagos = 0
     for i in devengamientos:
