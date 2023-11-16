@@ -3,6 +3,10 @@
 
 
 {% block content %}
+    <header>
+        <img style="float: right;" src="{% static "images/logo.jpg" %}" alt="" width="150" height="93">
+    </header>
+    
     <style>
         table {
             counter-reset: rowNumber;
@@ -15,84 +19,80 @@
             padding-right: 0.3em;
             padding-top: 0.7em;
             text-align: right;
-            padding:1px; 
-            margin:1px
+            padding:2px; 
+            margin:2px;
+            width: 1.8px
         }
 
+        .p1 {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 15.5px
+        }
+
+        h3 {
+            text-align: center;
+        }
+
+        body {
+            counter-reset: page;
+        }
+
+        .page-count:after {
+            counter-increment: page;
+            content: "Pag. " counter(page) " de " counter(page);
+        }
+        
+                
     </style>
 
-    <div class="container">
+    <body style="margin:0;padding:0">
 
         <br>
-        
-        <div class="row">
-            <div class="col-sm-2"></div>
-            <div class="col-sm-8">
-                <h3> Quincena {{quincena.fechainicio}} - {{quincena.fechafin}} </h3>
-            </div>
-            <div class="col-sm-2"></div>
-        </div>
-        
-        <hr>
+        <br>
+        <h3> Quincena {{quincena.fechainicio}} - {{quincena.fechafin}} </h3>
 
-        <form action="/personal/listado" method="GET">
-            <div class="form-inline">
-                <div class="col-2">
-                </div>
-                <div class="col-2">
-                </div>
-                <div class="col-8">
-                    
-                    
-                </div>
-            </div>
+        <br>
+        <table class="table p1">
+            <thead>
+                <tr>
+                    <th>N°</th>
+                    <th>Apellido y Nombre</th>
+                    <th>Ingreso </th>
+                    <th>Horas </th>
+                    <th>Categoria</th>
+                    <th> </th>
+                    <th>Contratista / Obra</th>
+                </tr>
+            </thead>
 
-            <br>
-
-            <table class="table table-hover">
-                <thead>
+            <tbody>
+                {% for personal in personales %}
                     <tr>
-                        <th>Nro</th>
-                        <th>Apellido y Nombre</th>
-                        <th>Fecha Ingreso </th>
-                        <th>Horas </th>
-                        <th>Categoria</th>
-                        <th> </th>
-                        <th>Contratista / Obra</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {% for personal in personales %}
-                    <tr>
-                        <td style="padding:1px; margin:1px"> {{ personal.personal.apellido }}, {{ personal.personal.nombre }}  </td>
-                        <td style="padding:1px; margin:1px"> {{ personal.alta | date:"d-m-Y" }} </td>
-                        <td style="outline: thin solid; padding:1px; margin:1px"> </td>
-                        <td style="padding:1px; margin:1px"> {{ personal.personal.categoria }}  </td>
-                        <td style="outline: thin solid; width: 110px; padding:1px; margin:1px"> </td>
+                        <td style="padding:2px; margin:2px; width: 250px"> {{ personal.personal.apellido }}, {{ personal.personal.nombre }}  </td>
+                        <td style="padding:2px; margin:2px;"> {{ personal.alta | date:"d-m-Y" }} </td>
+                        <td style="outline: thin solid; padding:2px; margin:2px; width: 20px"> </td>
+                        <td style="padding:2px; margin:2px;"> {{ personal.personal.categoria }}  </td>
+                        <td style="outline: thin solid; width: 100px; padding:2px; margin:2px"> </td>
                         {% if personal.personal.contratista %}
-			    {% if personal.personal.obra %}
-                           	 <td style="padding:1px; margin:1px">{{ personal.personal.contratista }} / {{personal.personal.obra}}  </td>
-			     {% else %}
-			         <td style="padding:1px; margin:1px"> {{personal.personal.contratista}} / -</td>
-                             {%endif %}	
+                            {% if personal.personal.obra %}
+                                <td style="padding:2px; margin:2px; font-size: 13px">{{ personal.personal.contratista }} / {{personal.personal.obra}}  </td>
+                            {% else %}
+                                <td style="padding:2px; margin:2px; font-size: 13px"> {{personal.personal.contratista}} / -</td>
+                            {%endif %}	
                         {% else %}
                             {%if personal.personal.obra%}
-                                <td style="padding:1px; margin:1px">- / {{ personal.personal.obra }}  </td>
+                                <td style="padding:2px; margin:2px; font-size: 13px">- / {{ personal.personal.obra }}  </td>
                             {% else %}
-                                <td style="padding:1px; margin:1px">- / - </td>
+                                <td style="padding:2px; margin:2px; font-size: 13px">- / - </td>
                             {% endif %}    
                         {% endif %}
-                        
+                            
                     </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-
-        </form>
-
-    </div>
-
+                {% endfor %}
+            </tbody>
+        </table>
+    </body>
+    <div class="page-count" style="text-align: center;"></div>
 {% endblock %}
 
 
