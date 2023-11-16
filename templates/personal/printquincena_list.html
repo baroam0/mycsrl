@@ -1,5 +1,6 @@
+{% extends 'base_nomenu.html' %}pa
+{% load static %}
 
-{% extends 'base_nomenu.html' %}
 
 {% block content %}
     <style>
@@ -14,7 +15,10 @@
             padding-right: 0.3em;
             padding-top: 0.7em;
             text-align: right;
+            padding:1px; 
+            margin:1px
         }
+
     </style>
 
     <div class="container">
@@ -48,7 +52,7 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>Orden</th>
+                        <th>Nro</th>
                         <th>Apellido y Nombre</th>
                         <th>Fecha Ingreso </th>
                         <th>Horas </th>
@@ -61,22 +65,22 @@
                 <tbody>
                     {% for personal in personales %}
                     <tr>
-                        <td>{{ personal.personal.apellido }}, {{ personal.personal.nombre }}  </td>
-                        <td> {{ personal.alta | date:"d-m-Y" }} </td>
-                        <td style="outline: thin solid"> </td>
-                        <td>{{ personal.personal.categoria }}  </td>
-                        <td style="outline: thin solid; width: 110px;"> </td>
+                        <td style="padding:1px; margin:1px"> {{ personal.personal.apellido }}, {{ personal.personal.nombre }}  </td>
+                        <td style="padding:1px; margin:1px"> {{ personal.alta | date:"d-m-Y" }} </td>
+                        <td style="outline: thin solid; padding:1px; margin:1px"> </td>
+                        <td style="padding:1px; margin:1px"> {{ personal.personal.categoria }}  </td>
+                        <td style="outline: thin solid; width: 110px; padding:1px; margin:1px"> </td>
                         {% if personal.personal.contratista %}
 			    {% if personal.personal.obra %}
-                           	 <td>{{ personal.personal.contratista }} / {{personal.personal.obra}}  </td>
+                           	 <td style="padding:1px; margin:1px">{{ personal.personal.contratista }} / {{personal.personal.obra}}  </td>
 			     {% else %}
-			         <td> {{personal.personal.contratista}} / -</td>
+			         <td style="padding:1px; margin:1px"> {{personal.personal.contratista}} / -</td>
                              {%endif %}	
                         {% else %}
                             {%if personal.personal.obra%}
-                                <td>- / {{ personal.personal.obra }}  </td>
+                                <td style="padding:1px; margin:1px">- / {{ personal.personal.obra }}  </td>
                             {% else %}
-                                <td>- / - </td>
+                                <td style="padding:1px; margin:1px">- / - </td>
                             {% endif %}    
                         {% endif %}
                         
@@ -84,43 +88,6 @@
                     {% endfor %}
                 </tbody>
             </table>
-
-            <!--nav aria-label="Page navigation">
-                <ul class="pagination justify-content-center">
-                    {% if resultados.has_previous %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page=1">
-                                <i class="fas fa-angle-double-left"></i>
-                            </a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ resultados.previous_page_number }}">
-                                <i class="fas fa-angle-left"></i>
-                            </a>
-                        </li>
-
-                    {% endif %}
-
-                    <li class="page-item disabled">
-                        <a class="page-link">
-                            Pag. {{ resultados.number }} de {{ resultados.paginator.num_pages }}
-                        </a>
-                    </li>
-
-                    {% if resultados.has_next %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ resultados.next_page_number }}">
-                                <i class="fas fa-angle-right"></i>
-                            </a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ resultados.paginator.num_pages }}">
-                                <i class="fas fa-angle-double-right"></i>
-                            </a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </nav-->
 
         </form>
 
