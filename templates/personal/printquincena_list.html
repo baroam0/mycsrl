@@ -1,9 +1,9 @@
-{% extends 'base_nomenu.html' %}pa
+{% extends 'base_nomenu.html' %}
 {% load static %}
 
 
 {% block content %}
-    <header>
+    <header class="onlyprint">
         <img style="float: right;" src="{% static "images/logo.jpg" %}" alt="" width="150" height="93">
     </header>
     
@@ -37,12 +37,22 @@
             counter-reset: page;
         }
 
+        .page-count {
+            counter-increment: total;
+        }
+
         .page-count:after {
             counter-increment: page;
-            content: "Pag. " counter(page) " de " counter(page);
+            content: "Pag. " counter(page) " de " counter(total);
         }
-        
-                
+
+        @media print {
+            header.onlyprint {
+                position: fixed; /* Display only on print page (each) */
+                top: 0; /* Because it's header */
+            }
+        }
+   
     </style>
 
     <body style="margin:0;padding:0">
@@ -92,7 +102,17 @@
             </tbody>
         </table>
     </body>
-    <div class="page-count" style="text-align: center;"></div>
+
+    <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+            <div class="page-count"> </div>
+        </div>
+        <div class="col-sm-4">
+        </div>
+    </div>
+    
+    </div>
 {% endblock %}
 
 
