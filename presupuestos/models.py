@@ -34,6 +34,10 @@ class Presupuesto(models.Model):
 class DetallePresupuesto(models.Model):
     presupuesto = models.ForeignKey(Presupuesto, on_delete=models.CASCADE)    
     contratista = models.ForeignKey(Contratista, on_delete=models.CASCADE)
+    descripcion = models.CharField(max_length=250, null=True, blank=True)
+    cantidad = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True
+    )
     importe = models.DecimalField(decimal_places=2, max_digits=10)
     entregado = models.DecimalField(decimal_places=2, max_digits=10)
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
