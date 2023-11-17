@@ -97,6 +97,7 @@ def presupuesto_edit(request, pk):
 @login_required(login_url='/login')
 def detallepresupuesto_new(request, pk):
     presupuesto = Presupuesto.objects.get(pk=pk)
+    
     if request.POST:
         usuario = request.user
         form =  DetallePresupuestoForm(request.POST)
@@ -119,7 +120,11 @@ def detallepresupuesto_new(request, pk):
         return render(
             request,
             'presupuestos/detallepresupuesto_edit.html',
-            {"form": form}
+            {
+                "form": form,
+                "idpresupuesto": presupuesto.pk
+            }
+
         )
 
 
@@ -128,8 +133,8 @@ def detallepresupuesto_new(request, pk):
 def detallepresupuesto_edit(request, pk):
     consulta = DetallePresupuesto.objects.get(pk=pk)
 
-    prespuesto = Presupuesto.objects.get(pk=consulta.presupuesto.pk)
-   
+    presupuesto = Presupuesto.objects.get(pk=consulta.presupuesto.pk)
+
     if request.POST:
         form = DetallePresupuestoForm(request.POST, instance=consulta)
         if form.is_valid():
