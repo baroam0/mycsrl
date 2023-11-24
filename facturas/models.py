@@ -152,8 +152,14 @@ class DetalleFacturaProveedor(models.Model):
         else:
             iibb = 0 / 100
 
-        preciounitarioiva = float(self.preciounitario) - float(self.descuento) - (float(self.preciounitario) * float(self.descuentoporcentaje) / 100) * float(iva)
-        preciounitarioibb = float(self.preciounitario) - float(self.descuento) - (float(self.preciounitario) * float(self.descuentoporcentaje) / 100) * float(iibb)
+        precioivatmp = float(self.preciounitario) - float(self.descuento) - (float(self.preciounitario) * float(self.descuentoporcentaje) / 100) 
+        #preciounitarioiva = float(self.preciounitario) - float(self.descuento) - (float(self.preciounitario) * float(self.descuentoporcentaje) / 100) * float(iva)
+        preciounitarioiva = precioivatmp * float(iva)
+        
+        precioiibbtmp = float(self.preciounitario) - float(self.descuento) - (float(self.preciounitario) * float(self.descuentoporcentaje) / 100)
+        #preciounitarioibb = float(self.preciounitario) - float(self.descuento) - (float(self.preciounitario) * float(self.descuentoporcentaje) / 100) * float(iibb)
+        preciounitarioibb = precioiibbtmp * float(iibb)
+        
         monto = float(self.preciounitario) + float(preciounitarioiva) + float(preciounitarioibb)
         return monto
 

@@ -25,7 +25,7 @@
                             <th>Cantidad</th>
                             <th>Precio Final incl Impuestos</th>
                             <th>Pagado</th>
-                            <th>Pagado Parcial</th>
+                            <!--th>Pagado Parcial</th-->
                         </tr>
                     </thead>
                     
@@ -46,9 +46,9 @@
                                 {% endif %}
 
                                 {%if detalle.factura.pagoparcial %}
-                                    <td> SI </td>
+                                    <!--td> SI </td-->
                                 {% else %}
-                                    <td> NO </td>
+                                    <!--td> NO </td-->
                                 {% endif %}
                         </tr>
                         {% endfor %}             
