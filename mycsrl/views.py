@@ -247,16 +247,30 @@ def detallereportesgastosporobra(request):
     detallesfacturas = DetalleFacturaProveedor.objects.filter(obra=obra)
 
     totalgasto = 0
+
+    facturalist = list()
+
+    for i in detallesfacturas:
+        facturalist.append(i.factura.pk)
+
+    facturas = FacturaProveedor.objects.filter(pk__in=facturalist)
+
+    descuento  = 0
+    ajuste = 0
+    for i in facturas:
+        descuento = descuento + i.descuentoglobal
+        ajuste = ajuste + i.ajusteglobal
+
     for i in detallesfacturas:
         totalgasto = totalgasto + i.getpreciofinal()
 
-
+    valor = float(totalgasto) - float(descuento) + float(ajuste)
     return render(
         request, 
         'reportes/detallereportegastoporobra.html',
         {
             "obra": obra,
             "detallesfacturas": detallesfacturas,
-            "totalgasto": totalgasto
+            "totalgasto": valor
         }
     )   
