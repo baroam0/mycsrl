@@ -170,6 +170,8 @@ def detallereporteingresoegresoobra(request):
         totalcobros = cobros[0].totalfacturacion()
     else:
         totalcobros = 0
+    
+    saldo = totalcobros - totalpagos
 
     return render(
         request, 
@@ -179,7 +181,8 @@ def detallereporteingresoegresoobra(request):
             "cobros": cobros,
             "devengamientos": devengamientos,
             "totalpagos": totalpagos,
-            "totalcobros": totalcobros
+            "totalcobros": totalcobros,
+            "saldo": saldo
         }
     )   
 
