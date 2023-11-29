@@ -162,9 +162,6 @@ def detallereporteingresoegresoobra(request):
     
     cobros = Facturacion.objects.filter(obra=obra.pk)
 
-    for i in detallesfacturas:
-        print(i.factura.proveedor)
-
     totalpagos = 0
     for i in devengamientos:
         totalpagos = totalpagos + i.monto

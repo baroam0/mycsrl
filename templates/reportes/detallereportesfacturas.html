@@ -23,6 +23,7 @@
                     <thead>
                         <tr>
                             <th>Fecha</th>
+                            <th>Comprobante</th>
                             <th>Obra</th>
                             <th>Descripcion</th>
                             <th>Cantidad</th>
@@ -35,6 +36,7 @@
                         {% for detalle in detallefacturaproveedor%}
                         <tr>
                                 <td>{{ detalle.factura.fecha }}  </td>
+                                <td>{{ detalle.factura.comprobante }}  </td>
                                 <td>{{detalle.obra}}</td> 
                                 <td>{{ detalle.descripciondetalle }} </td>
                                 <td>{{ detalle.cantidad }} </td>
