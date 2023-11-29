@@ -92,7 +92,7 @@ def detallereporteporfactura(request):
     )   
 
 
-def reportesfacturas(request):    
+def reportesfacturas(request):
     proveedores = Proveedor.objects.all()
     return render(
         request, 
@@ -131,7 +131,7 @@ def detallereportesporfacturas(request):
             "total": total,
             "banco": proveedorbanco
         }
-    )   
+    )
 
 
 def reporteingresoegresoobra(request):    
@@ -267,3 +267,26 @@ def detallereportesgastosporobra(request):
             "totalgasto": valor
         }
     )   
+
+
+def reportecontratista(request):
+    obras = Obra.objects.all()
+    return render(
+        request, 
+        'reportes/reportecontratistas.html',
+        {
+            "obras": obras,
+        }
+    )
+
+
+
+def detallereportecontratista(request):
+    obras = Obra.objects.all()
+    return render(
+        request, 
+        'reportes/reportecontratistas.html',
+        {
+            "obras": obras,
+        }
+    )

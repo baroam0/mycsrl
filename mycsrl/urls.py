@@ -23,7 +23,7 @@ from .views import (home, loginusuario, salir, reporteporfactura, detallereporte
                     detallereporteingresoegresoobra, 
                     ajaxcomprobanteproveedor, ajaxbancoproveedor, ajaxproveedor,
                     reportesfacturas, detallereportesporfacturas,
-                    reportegastoporobra, detallereportesgastosporobra)
+                    reportegastoporobra, detallereportesgastosporobra, reportecontratista)
 
 
 urlpatterns = [
@@ -53,7 +53,7 @@ urlpatterns = [
     path('detallereportesfacturas/', detallereportesporfacturas),
 
     path('reportegastoporobra/', reportegastoporobra),
-    path('detallereportesgastosporobra/', detallereportesgastosporobra)
-
+    path('detallereportesgastosporobra/', detallereportesgastosporobra),
+    path('reportecontratista/', reportecontratista),
     
 ]
