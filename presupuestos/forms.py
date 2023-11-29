@@ -44,4 +44,4 @@ class DetallePresupuestoForm(forms.ModelForm):
 
     class Meta:
         model = DetallePresupuesto
-        fields = ["contratista", "importe", "entregado"]
+        fields = ["contratista", "importe", "entregado", "descripcion", "cantidad"]

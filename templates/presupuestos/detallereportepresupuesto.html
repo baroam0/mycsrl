@@ -1,0 +1,87 @@
+
+{% extends 'base_nomenu.html' %}
+{% load static %}
+
+{% block content %}
+    <header class="onlyprint">
+        <img style="float: right;" src="{% static "images/logo.jpg" %}" alt="" width="150" height="93">
+    </header>
+
+    <div class="container">
+
+        <br>
+        
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-10">
+                <h4> Detalle Presupuesto de Obra - {{presupuesto.obra}} </h4>
+            </div>
+            <div class="col-sm-1"></div>
+        </div>
+        
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            
+                            <th>Contratista</th>
+                            <th>Entrega</th>
+                            <th>Descripcion</th>
+                            <th>Cantidad</th>
+                            <!--th>Pagado Parcial</th-->
+                        </tr>
+                    </thead>
+                    
+                    
+                    <tbody>
+                        {% for detalle in detallespresupuestos%}
+                        <tr>
+                                
+                                <td>{{ detalle.contratista}}</td>
+                                
+                                {% if detalle.entregado %}
+                                <td> $ {{ detalle.entregado}}</td> 
+                                {%else%}
+                                <td> </td> 
+                                {%endif%}
+
+                                {% if detalle.descripcion %}
+                                <td> {{ detalle.descripcion}}</td> 
+                                {%else%}
+                                <td> </td> 
+                                {%endif%}
+
+                                {% if detalle.cantidad %}
+                                <td> {{ detalle.cantidad}}</td> 
+                                {%else%}
+                                <td> </td> 
+                                {%endif%}
+
+                                
+                                
+
+                        </tr>
+                        {% endfor %}             
+                    </tbody>
+                </table>
+        
+                <h5>Total Presupuesto: $ {{ montopresupuesto | floatformat:2 }}</h5>
+                <h5>Total Entregado: $ {{ entrega | floatformat:2 }}</h5>
+                <h5>Saldo: $ {{ saldo | floatformat:2 }}</h5>
+                
+        <hr>
+
+    </div>
+
+
+
+{% endblock %}
+
+
+    <script>
+        $(document).ready(function () {
+            
+        });
+
+    
+    </script>
+

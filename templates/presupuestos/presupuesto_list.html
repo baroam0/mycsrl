@@ -50,6 +50,7 @@
                 <thead>
                     <tr>
                         <th>Obra</th>
+                        <th>Cod. de Obra</th>
                         <th>Estado</th>
                         <th>Usuario </th>
                         <th>Accion</th>
@@ -60,6 +61,7 @@
                     {% for resultado in resultados %}
                     <tr>
                         <td>{{ resultado.obra }}  </td>
+                        <td>{{ resultado.obra.pk }}  </td>
                         {% if resultado.cerrado%}
                             <td>Cerrado </td>
                         {% else %}
@@ -71,6 +73,9 @@
                         <td>
                             <button type="button" class="btn btn-link btn-sm" onclick="location.href='/presupuesto/editar/' + {{ resultado.pk }}">
                                 <i class="fas fa-pencil-alt"></i>
+                            </button>
+                            <button type="button" class="btn btn-link btn-sm" onclick="location.href='/presupuesto/printpresupuesto/' + {{ resultado.pk }}">
+                                <i class="fas fa-print"></i>
                             </button>
                         </td>
                     </tr>

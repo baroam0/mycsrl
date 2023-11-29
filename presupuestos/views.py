@@ -159,4 +159,38 @@ def detallepresupuesto_edit(request, pk):
         )
 
 
+#####################################################################
+###################SECCION IMPRESION ################################
+#####################################################################
+
+
+@login_required(login_url='/login')
+def printpresupuesto(request, pk):
+    presupuesto = Presupuesto.objects.get(pk=pk)
+    detallespresupuestos = DetallePresupuesto.objects.filter(presupuesto=presupuesto)
+
+    montopresupuesto = 0
+    entrega = 0
+    saldo = 0
+    for i in detallespresupuestos:
+        montopresupuesto = montopresupuesto + i.importe
+        entrega = entrega + i.entregado
+    
+    saldo = montopresupuesto - entrega
+
+
+
+    return render(
+            request,
+            'presupuestos/detallereportepresupuesto.html',
+            {
+                "presupuesto": presupuesto,
+                "detallespresupuestos": detallespresupuestos,
+                "montopresupuesto": montopresupuesto,
+                "entrega": entrega,
+                "saldo": saldo
+            }
+        )
+
+
 # Create your views here.
