@@ -44,7 +44,7 @@
                         {% endfor %}
                     </tbody>
                 </table>
-                <h5>Ajuste: $ {{ facturaproveedor.ajusteglobal | floatformat:2  }}</h5>
+                <!--h5>Ajuste: $ {{ facturaproveedor.ajusteglobal | floatformat:2  }}</h5-->
                 <h5>Total: $ {{ facturaproveedor.gettotalfactura | floatformat:2  }}</h5>
                 {% for b in banco %}
 					<h6>Banco: {{b.descripcionbanco.upper}} </h6>

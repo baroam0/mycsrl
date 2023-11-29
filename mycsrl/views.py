@@ -114,8 +114,10 @@ def detallereportesporfacturas(request):
     proveedorbanco = ProveedorBanco.objects.filter(pk=request.GET.get("id_banco"))
 
     total = 0
-    for d in detallefacturaproveedor:
-        total = total + d.getpreciounitarioxcantidad()
+    for d in facturaproveedor:
+        total = total + d.gettotalfactura()
+
+    
     
     return render(
         request, 
