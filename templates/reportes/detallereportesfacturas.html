@@ -1,9 +1,13 @@
 
 {% extends 'base_nomenu.html' %}
+{% load static %}
 
 {% block content %}
 
     <div class="container">
+        <!--header class="onlyprint">
+            <img style="float: right;" src="{% static "images/logo.jpg" %}" alt="" width="150" height="93">
+        </header-->
 
         <br>
         
@@ -14,7 +18,7 @@
             </div>
             <div class="col-sm-1"></div>
         </div>
-        {% for detalle in detallefacturaproveedor%}
+        
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -26,21 +30,22 @@
                             <th>Monto</th>
                         </tr>
                     </thead>
-
+                    
                     <tbody>                   
+                        {% for detalle in detallefacturaproveedor%}
                         <tr>
                                 <td>{{ detalle.factura.fecha }}  </td>
                                 <td>{{detalle.obra}}</td> 
                                 <td>{{ detalle.descripciondetalle }} </td>
                                 <td>{{ detalle.cantidad }} </td>
-                                <td>$ {{ detalle.getmontoitemconivaiibb | floatformat:2 }} </td>
-                                <td>$ {{ detalle.gettotalmontoporitemiibb | floatformat:2 }}</td>
+                                <td>$ {{ detalle.getpreciounitarioiva | floatformat:2 }} </td>
+                                <td>$ {{ detalle.getpreciounitarioxcantidad | floatformat:2 }}</td>
                         </tr>
-                        
+                        {% endfor %}
                     </tbody>
                 </table>
-        {% endfor %}
-                <h5>Total: $ {{ facturaproveedor.gettotalfacturaconivayiibb | floatformat:2 }}</h5>
+        
+                <h5>Total: $ {{ total | floatformat:2 }}</h5>
                 {% for b in banco %}
 					<h6>Banco: {{b.descripcionbanco.upper}} </h6>
 					<h6>Alias: {{b.alias}} </h6>

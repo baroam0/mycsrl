@@ -115,7 +115,7 @@ def detallereportesporfacturas(request):
 
     total = 0
     for d in detallefacturaproveedor:
-        total = total + d.getmontoitemconiva()
+        total = total + d.getpreciounitarioxcantidad()
     
     return render(
         request, 

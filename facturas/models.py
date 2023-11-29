@@ -161,6 +161,10 @@ class DetalleFacturaProveedor(models.Model):
         
         monto = float(self.preciounitario) + float(preciounitarioiva) + float(preciounitarioibb)
         return monto
+    
+    def getpreciounitarioxcantidad(self):
+        monto = float(self.cantidad) * self.getpreciounitarioiva()
+        return monto
 
     def getpreciofinal(self):
         if self.factura.iva:
