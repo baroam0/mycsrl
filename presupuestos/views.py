@@ -70,7 +70,7 @@ def presupuesto_edit(request, pk):
             usuario = request.user
             presupuesto.usuario = usuario
             presupuesto.save()
-            messages.success(request, "Se ha modificado los datos del banco")
+            messages.success(request, "Se ha modificado los datos del presupuesto")
             return redirect('/presupuesto/listado')
         else:
             messages.warning(request, form.errors)
@@ -142,7 +142,7 @@ def detallepresupuesto_edit(request, pk):
             usuario = request.user
             detallepresupuesto.usuario = usuario
             detallepresupuesto.save()
-            messages.success(request, "Se ha modificado los datos del banco")
+            messages.success(request, "Se ha modificado los datos del presupuesto")
             return redirect('/presupuesto/editar/' + str(consulta.presupuesto.pk))
         else:
             messages.warning(request, form.errors)

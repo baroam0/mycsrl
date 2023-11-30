@@ -1,15 +1,18 @@
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.db.models import Sum
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from django.http import JsonResponse
+from contratistas.models import Contratista
 
 from lib.funcionesfechas import formateafecha
 from devengamientos.models import Devengamiento
 from pagos.models import Obra, Proveedor, ProveedorBanco
 from facturas.models import FacturaProveedor, DetalleFacturaProveedor
 from facturacion.models import Facturacion, DetalleFacturacion
+from presupuestos.models import Presupuesto, DetallePresupuesto
 
 
 @login_required(login_url='/login')
@@ -285,11 +288,26 @@ def reportecontratista(request):
 
 
 def detallereportecontratista(request):
-    obras = Obra.objects.all()
+    obra = Obra.objects.get(pk=request.GET.get("id_obra"))
+    presupuesto = Presupuesto.objects.get(obra=obra, cerrado=False)
+    detallepresupuestos = DetallePresupuesto.objects.filter(presupuesto=presupuesto)
+
+    contratista_list = list()
+
+    for d in detallepresupuestos:
+        contratista_list.append(d.contratista.pk)
+    
+    contratistas = Contratista.objects.filter(pk__in=contratista_list)
+
+    result = DetallePresupuesto.objects.filter(presupuesto=presupuesto).values('contratista').order_by('contratista').annotate(total_price=Sum('entregado'))
+    
+
     return render(
         request, 
-        'reportes/reportecontratistas.html',
+        'reportes/detallereportecontratista.html',
         {
-            "obras": obras,
+            "obra": obra,
+            "contratistas": contratistas,
+            "result": result
         }
     )
