@@ -32,6 +32,7 @@ class Presupuesto(models.Model):
 
 
 class DetallePresupuesto(models.Model):
+    fecha = models.DateField(blank=True, null=True)
     presupuesto = models.ForeignKey(Presupuesto, on_delete=models.CASCADE)    
     contratista = models.ForeignKey(Contratista, on_delete=models.CASCADE)
     descripcion = models.CharField(max_length=250, null=True, blank=True)

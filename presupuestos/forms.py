@@ -27,6 +27,7 @@ class PresupuestoForm(forms.ModelForm):
 
 
 class DetallePresupuestoForm(forms.ModelForm):    
+    
     contratista = forms.ModelChoiceField(queryset=Contratista.objects.all(), label="Contratistas")
 
     descripcion = forms.CharField(label="Descripcion", required=False)

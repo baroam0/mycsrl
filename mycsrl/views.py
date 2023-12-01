@@ -299,8 +299,7 @@ def detallereportecontratista(request):
     
     contratistas = Contratista.objects.filter(pk__in=contratista_list)
 
-    result = DetallePresupuesto.objects.filter(presupuesto=presupuesto).values('contratista').order_by('contratista').annotate(total_price=Sum('entregado'))
-    
+    result = DetallePresupuesto.objects.filter(presupuesto=presupuesto).values('contratista__descripcion').annotate(total_price=Sum('entregado'))
 
     return render(
         request, 
