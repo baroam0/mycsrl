@@ -11,54 +11,34 @@
             <div class="col-sm-1"></div>
 
             <div class="col-sm-10">
-                <h3> Detalle Pesupuesto por Obra - {{obra}} </h3>
+                <h3> Detalle Pesupuesto por Contratisa. </h3>
             </div>
 
             <div class="col-sm-1"></div>
         </div>
         
                 <table class="table table-bordered">
-                    {{result}}
-                    {% for c in contratistas %}
+                    
                         <h5>{{c}} </h5>
                         <thead>
                             <tr>
-                                <th>Descripcion</th>
-                                <th>Proveedor</th>
-                                <th>Comprobante</th>
-                                <th>Descripcion</th>
-                                <th>Cantidad</th>
-                                <th>Precio Final incl Impuestos</th>
-                                <th>Pagado</th>
+                                <th>Contratista</th>
+                                <th>Obra</th>
+                                <th>Importe</th>
+                                <th>Entregado</th>
+                                <th>Saldo</th>
                                 <!--th>Pagado Parcial</th-->
                             </tr>
                         </thead>
-                        
-                    
-                    {% endfor %}
-                    
-                    
                     
                     <tbody>
-                        {% for detalle in detallesfacturas%}                   
+                        {% for r in result %}                   
                         <tr>
-                                <td>{{ detalle.factura.fecha | date:"d-m-Y" }}  </td>
-                                <td>{{ detalle.factura.proveedor}}</td>
-                                <td>{{ detalle.factura.comprobante}}</td> 
-                                <td>{{ detalle.descripciondetalle }} </td>
-                                <td>{{ detalle.cantidad }} </td>
-                                <td>$ {{ detalle.getpreciofinal | floatformat:2 }} </td>
-                                {%if detalle.factura.pagado %}
-                                    <td> SI </td>
-                                {% else %}
-                                    <td> NO </td>
-                                {% endif %}
-
-                                {%if detalle.factura.pagoparcial %}
-                                    <!--td> SI </td-->
-                                {% else %}
-                                    <!--td> NO </td-->
-                                {% endif %}
+                            <td>{{ r.contratista__descripcion }}  </td>
+                            <td>{{ r.presupuesto__obra__descripcion }}</td>
+                            <td>{{ r.total_importe }}</td> 
+                            <td>{{ r.total_entregado  }} </td>
+                            <td>{{ r.saldo }} </td>
                         </tr>
                         {% endfor %}             
                     </tbody>

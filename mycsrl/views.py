@@ -1,7 +1,7 @@
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.db.models import Sum
+from django.db.models import F, Sum
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from django.http import JsonResponse
@@ -288,25 +288,29 @@ def reportecontratista(request):
 
 
 def detallereportecontratista(request):
-    obra = Obra.objects.get(pk=request.GET.get("id_obra"))
-    presupuesto = Presupuesto.objects.get(obra=obra, cerrado=False)
-    detallepresupuestos = DetallePresupuesto.objects.filter(presupuesto=presupuesto)
 
-    contratista_list = list()
+    presupuesto = Presupuesto.objects.filter(cerrado=False)
 
-    for d in detallepresupuestos:
-        contratista_list.append(d.contratista.pk)
+    presupuestolist = list()
+
+    for p in presupuesto:
+        presupuestolist.append(p.pk)
+
     
-    contratistas = Contratista.objects.filter(pk__in=contratista_list)
-
-    result = DetallePresupuesto.objects.filter(presupuesto=presupuesto).values('contratista__descripcion').annotate(total_price=Sum('entregado'))
+    result = (DetallePresupuesto.objects
+              .filter(presupuesto__in=presupuestolist)
+              .values('presupuesto__obra__descripcion', 'contratista__descripcion')
+              .annotate(total_importe=Sum('importe'))
+              .annotate(total_entregado=Sum('entregado'))
+              .annotate(saldo=F("total_importe") - F("total_entregado"))
+              .order_by('contratista__descripcion')
+            )
 
     return render(
         request, 
         'reportes/detallereportecontratista.html',
         {
-            "obra": obra,
-            "contratistas": contratistas,
+         
             "result": result
         }
     )
