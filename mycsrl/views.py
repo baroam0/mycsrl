@@ -1,7 +1,7 @@
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.db.models import F, Sum
+from django.db.models import Count, Sum
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from django.http import JsonResponse
@@ -296,7 +296,7 @@ def detallereportecontratista(request):
     for p in presupuesto:
         presupuestolist.append(p.pk)
 
-    
+    """
     result = (DetallePresupuesto.objects
               .filter(presupuesto__in=presupuestolist)
               .values('presupuesto__obra__descripcion', 'contratista__descripcion')
@@ -305,6 +305,40 @@ def detallereportecontratista(request):
               .annotate(saldo=F("total_importe") - F("total_entregado"))
               .order_by('contratista__descripcion')
             )
+    """
+    result = DetallePresupuesto.objects.filter(presupuesto__in=presupuestolist).order_by("contratista")
+
+    contratistalist = list()
+
+    for r in result:
+       contratistalist.append(r.contratista.pk)
+    
+    contratistalist = list(set(contratistalist))
+    
+    contratistas = Contratista.objects.filter(pk__in=contratistalist)
+
+    datalist = dict()
+
+    for c in contratistas:
+        k = c.descripcion
+        d = dict()
+        datalist[k] = d
+
+    result_group = (DetallePresupuesto.objects
+                    .values("presupuesto__obra__descripcion")
+                    .annotate(total=Count("presupuesto__obra__descripcion"))
+    )
+
+    """
+    for i in datalist:
+        print(i)
+        for r in result:
+            if i == r.contratista.descripcion:
+                d = dict()
+                datalist[i] = {
+
+                }
+    """
 
     return render(
         request, 

@@ -14,18 +14,6 @@ class Presupuesto(models.Model):
     def __str__(self):
         return str(self.pk)
 
-    def getsaldo(self):
-        totalimporte = 0
-        totalentregado = 0
-        presupuestos = DetallePresupuesto.objects.filter(presupuesto=self.pk)
-
-        for p in presupuestos:
-            totalimporte = totalimporte + p.importe
-            totalentregado = totalentregado + p.entregado
-        
-        saldo = totalimporte - totalentregado
-        return saldo
-    
     class Meta: 
         verbose_name_plural = "Presupuestos"
         unique_together = ['id','obra']
@@ -42,6 +30,18 @@ class DetallePresupuesto(models.Model):
     importe = models.DecimalField(decimal_places=2, max_digits=10)
     entregado = models.DecimalField(decimal_places=2, max_digits=10)
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
+
+    def getsaldo(self):
+        totalimporte = 0
+        totalentregado = 0
+        presupuestos = DetallePresupuesto.objects.filter(presupuesto=self.presupuesto.pk)
+
+        for p in presupuestos:
+            totalimporte = totalimporte + p.importe
+            totalentregado = totalentregado + p.entregado
+        
+        saldo = totalimporte - totalentregado
+        return saldo
 
     def __str__(self):
         return str(self.pk)
