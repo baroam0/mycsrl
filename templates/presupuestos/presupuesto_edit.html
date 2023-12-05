@@ -25,7 +25,7 @@
             
             <div class="col-12">
                 
-                <form  method="POST">{% csrf_token %}
+                <form id="myform"  method="POST">{% csrf_token %}
                     {{ form.as_p }}
 
                     <hr>
@@ -109,7 +109,14 @@
 
     <script>
         $(document).ready(function () {
-            $('#id_obra').select2();
+            
+            
+            document.getElementById("id_obra").disabled = true;
+            //$('#id_obra').disabled = True;
+
+            $('#myform').submit (function() {
+                document.getElementById("id_obra").disabled = false;
+            });
         });
 
         function AltaBaja(pk) {

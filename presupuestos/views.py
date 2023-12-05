@@ -48,7 +48,7 @@ def presupuesto_new(request):
                 return redirect('/presupuesto/listado')
         else:
             messages.warning(request, form.errors)
-            return redirect('/bancos/listado')
+            return redirect('/presupuesto/listado')
     else:
         form = PresupuestoForm()
         return render(
@@ -74,7 +74,7 @@ def presupuesto_edit(request, pk):
             return redirect('/presupuesto/listado')
         else:
             messages.warning(request, form.errors)
-            return redirect('/bancos/listado')
+            return redirect('/presupuesto/listado')
     else:
         form = PresupuestoForm(instance=consulta)
         return render(
