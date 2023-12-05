@@ -11,38 +11,44 @@
             <div class="col-sm-1"></div>
 
             <div class="col-sm-10">
-                <h3> Detalle Pesupuesto por Contratisa. </h3>
+                <h3> Detalle Pesupuesto por Contratista. </h3>
             </div>
 
             <div class="col-sm-1"></div>
         </div>
-        
-                <table class="table table-bordered">
-                    
-                        <h5>{{c}} </h5>
-                        <thead>
-                            <tr>
-                                <th>Contratista</th>
-                                <th>Obra</th>
-                                <th>Importe</th>
-                                <th>Entregado</th>
-                                <th>Saldo</th>
-                                <!--th>Pagado Parcial</th-->
-                            </tr>
-                        </thead>
-                    
-                    <tbody>
-                        {% for r in result %}                   
+
+            {% for key, value in result.items %}        
+                <h4>{{key}} </h4>
+                <table class="table table-bordered">    
+                    <thead>
                         <tr>
-                            <td>{{ r.contratista__descripcion }}  </td>
-                            <td>{{ r.presupuesto__obra__descripcion }}</td>
-                            <td>{{ r.total_importe }}</td> 
-                            <td>{{ r.total_entregado  }} </td>
-                            <td>{{ r.saldo }} </td>
+                            <th>Codigo Obra</th>
+                            <th>Obra</th>
+                            <th>Importe</th>
+                            <th>Entregado</th>
+                            <th>Saldo</th>
+                            <th>Total Ejecutado</th>
+                            <th>Importe</th>
                         </tr>
-                        {% endfor %}             
-                    </tbody>
-                </table>
+                    </thead>
+                    
+                    {% for v in value %}
+                        <tbody>
+                            <tr>
+                                <td>{{ v.codigo }}  </td>
+                                <td>{{ v.obra }}</td>
+                                <td>{{ v.importe }}</td> 
+                                <td>{{ v.entregado  }} </td>
+                                <td>{{ v.saldo }} </td>
+                                <td> </td>
+                                <td> </td>
+                            </tr>
+                        </tbody>
+                    {%endfor%}
+                </table>           
+                {% endfor %}
+                        
+                
         
                 <h5>Total Gasto: $ {{ totalgasto | floatformat:2 }}</h5>
                 

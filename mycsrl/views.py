@@ -1,7 +1,7 @@
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count, Sum
+from django.db.models import F, Sum
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from django.http import JsonResponse
@@ -287,64 +287,64 @@ def reportecontratista(request):
 
 
 
+
+def dictbuilder(contratista_id, obra_id):
+    contratista = Contratista.objects.get(pk=contratista_id)
+    obra = Obra.objects.get(pk=obra_id)
+    presupuesto = Presupuesto.objects.get(obra=obra.pk)
+
+    if presupuesto:
+        detallepresupuesto = (DetallePresupuesto.objects
+                              .filter(contratista=contratista.pk, presupuesto=presupuesto.pk)
+                              .order_by("contratista__descripcion")
+                              )
+
+        result = dict()
+        for d in detallepresupuesto:
+            tmpdict = {
+                "codigo": d.presupuesto.obra.pk,
+                "obra": d.presupuesto.obra,
+                "importe": d.gettotalimportecontratista(),
+                "entregado": d.gettotalentregadocontratista(),
+                "saldo": d.presupuesto.getsaldo()
+            }
+            result = tmpdict
+    else:
+        result = None
+    return result
+
+
 def detallereportecontratista(request):
 
-    presupuesto = Presupuesto.objects.filter(cerrado=False)
-
-    presupuestolist = list()
-
-    for p in presupuesto:
-        presupuestolist.append(p.pk)
-
-    """
-    result = (DetallePresupuesto.objects
-              .filter(presupuesto__in=presupuestolist)
-              .values('presupuesto__obra__descripcion', 'contratista__descripcion')
-              .annotate(total_importe=Sum('importe'))
-              .annotate(total_entregado=Sum('entregado'))
-              .annotate(saldo=F("total_importe") - F("total_entregado"))
-              .order_by('contratista__descripcion')
-            )
-    """
-    result = DetallePresupuesto.objects.filter(presupuesto__in=presupuestolist).order_by("contratista")
+    presupuestos = Presupuesto.objects.filter(cerrado=False)
+    detallepresupuestos = DetallePresupuesto.objects.filter(presupuesto__in=presupuestos)
 
     contratistalist = list()
 
-    for r in result:
-       contratistalist.append(r.contratista.pk)
+    for d in detallepresupuestos:
+        contratistalist.append(d.pk)
     
     contratistalist = list(set(contratistalist))
-    
+
     contratistas = Contratista.objects.filter(pk__in=contratistalist)
 
     datalist = dict()
 
+    pibotobra = presupuestos[0].obra.descripcion
+
     for c in contratistas:
-        k = c.descripcion
-        d = dict()
-        datalist[k] = d
+        datalist[c.descripcion] = list()
+        for d in detallepresupuestos:
+            if c.descripcion == d.contratista.descripcion:
+                data = dictbuilder(d.contratista.pk, d.presupuesto.obra.pk)
+                datalist[c.descripcion].append(data)
 
-    result_group = (DetallePresupuesto.objects
-                    .values("presupuesto__obra__descripcion")
-                    .annotate(total=Count("presupuesto__obra__descripcion"))
-    )
-
-    """
-    for i in datalist:
-        print(i)
-        for r in result:
-            if i == r.contratista.descripcion:
-                d = dict()
-                datalist[i] = {
-
-                }
-    """
-
+    print(datalist)
     return render(
         request, 
         'reportes/detallereportecontratista.html',
         {
          
-            "result": result
+            "result": datalist
         }
     )

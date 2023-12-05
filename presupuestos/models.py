@@ -13,6 +13,34 @@ class Presupuesto(models.Model):
 
     def __str__(self):
         return str(self.pk)
+    
+    def getsaldo(self):
+        totalimporte = 0
+        totalentregado = 0
+        presupuestos = DetallePresupuesto.objects.filter(presupuesto=self.pk)
+
+        for p in presupuestos:
+            totalimporte = totalimporte + p.importe
+            totalentregado = totalentregado + p.entregado
+        
+        saldo = totalimporte - totalentregado
+        return saldo
+
+    def gettotalimporte(self):
+        totalimporte = 0
+        presupuestos = DetallePresupuesto.objects.filter(presupuesto=self.pk)
+
+        for p in presupuestos:
+            totalimporte = totalimporte + p.importe
+        return float(totalimporte)
+    
+    def gettotalentregado(self):
+        totalentregado = 0
+        presupuestos = DetallePresupuesto.objects.filter(presupuesto=self.pk)
+
+        for p in presupuestos:
+            totalentregado = totalentregado + p.entregado
+        return float(totalentregado)
 
     class Meta: 
         verbose_name_plural = "Presupuestos"
@@ -31,14 +59,30 @@ class DetallePresupuesto(models.Model):
     entregado = models.DecimalField(decimal_places=2, max_digits=10)
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
 
-    def getsaldo(self):
+    def gettotalimportecontratista(self):
         totalimporte = 0
-        totalentregado = 0
-        presupuestos = DetallePresupuesto.objects.filter(presupuesto=self.presupuesto.pk)
+        presupuestos = DetallePresupuesto.objects.filter(presupuesto=self.presupuesto.pk, contratista=self.contratista.pk)
 
         for p in presupuestos:
             totalimporte = totalimporte + p.importe
+        return float(totalimporte)
+    
+    def gettotalentregadocontratista(self):
+        totalentregado = 0
+        presupuestos = DetallePresupuesto.objects.filter(presupuesto=self.presupuesto.pk, contratista=self.contratista.pk)
+
+        for p in presupuestos:
             totalentregado = totalentregado + p.entregado
+        return float(totalentregado)
+    
+    def getsaldocontratista(self):
+        totalimporte = 0
+        totalentregado = 0
+        presupuestos = DetallePresupuesto.objects.filter(presupuesto=self.pk, contratista=self.contratista.pk)
+
+        for p in presupuestos:
+            totalimporte = totalimporte + p.gettotalimportecontratista()
+            totalentregado = totalentregado + p.gettotalentregadocontratista()
         
         saldo = totalimporte - totalentregado
         return saldo
