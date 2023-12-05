@@ -20,7 +20,7 @@
             {% for key, value in result.items %}        
                 <br>
                 <h4>{{key}} </h4>
-                <table class="table table-bordered">    
+                <table class="table table-sm">    
                     <thead>
                         <tr>
                             <th>Codigo Obra</th>
@@ -47,8 +47,49 @@
                         </tbody>
                     {%endfor%}
                 </table>
+
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td><font color="white">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></td>
+                            <td>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                &nbsp;&nbsp;    
+                            </td>
+                            <td>{% with value|last as last %}
+                                    {{ last.totalimporte }}
+                                {% endwith %} 
+                            </td> 
+                            <td>{% with value|last as last %}
+                                    {{ last.totalentregado }}
+                                {% endwith %} 
+                            </td>
+                            <td>
+                                {% with value|last as last %}
+                                    {{ last.totalsaldo }}
+                                {% endwith %}
+                            </td>
+                            <td><font color="white">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></td>
+                            <td><font color="white">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></td>
+                        </tr>
+                    </tbody>
+
+                </table>
                 
-                <h5>Total Importe: $ 
+                <!--h6>Total Importe: $ 
                         {% with value|last as last %}
                             {{ last.totalimporte }}
                         {% endwith %} 
@@ -60,10 +101,9 @@
                         {% with value|last as last %}
                             {{ last.totalsaldo }}
                         {% endwith %}
-                :</h5>           
+                </h6-->   
                 {% endfor %}
                 
-        <hr>
 
     </div>
 

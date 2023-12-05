@@ -345,7 +345,7 @@ def detallereportecontratista(request):
 
     presupuestos = Presupuesto.objects.filter(cerrado=False)
     detallepresupuestos = DetallePresupuesto.objects.filter(presupuesto__in=presupuestos)
-
+    
     obralist = list()
 
     for p in presupuestos:
@@ -358,7 +358,7 @@ def detallereportecontratista(request):
     contratistalist = list()
 
     for d in detallepresupuestos:
-        contratistalist.append(d.pk)
+        contratistalist.append(d.contratista.pk)
     
     contratistalist = list(set(contratistalist))
 
