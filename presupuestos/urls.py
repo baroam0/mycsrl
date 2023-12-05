@@ -22,7 +22,7 @@ from django.urls import include, path
 from .views import (
    listadopresupuesto, presupuesto_new, presupuesto_edit,
    detallepresupuesto_new, detallepresupuesto_edit,
-   printpresupuesto
+   printpresupuesto, detalleprespuesto_delete
 )
 
 
@@ -34,4 +34,5 @@ urlpatterns = [
     path('detalle/nuevo/<int:pk>', detallepresupuesto_new, name='detallepresupuesto_new'),
     path('detalle/editar/<int:pk>', detallepresupuesto_edit, name='detallepresupuesto_edit'),
     path('printpresupuesto/<int:pk>', printpresupuesto, name='printpresupuesto'),
+    path('detallepresupuesto/delete/<int:pk>', detalleprespuesto_delete, name='detalleprespuesto_delete'),
 ]

@@ -82,6 +82,10 @@
                                     <button type="button" class="btn btn-link btn-sm" onclick="location.href='/presupuesto/detalle/editar/' + {{ resultado.pk }}">
                                         <i class="fas fa-pencil-alt"></i>
                                     </button>
+
+                                    <button type="button" class="btn btn-link btn-sm" onclick="location.href='/presupuesto/detallepresupuesto/delete/' + {{ resultado.pk }}">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
                                 </td>
                             </tr>
                             {% endfor %}

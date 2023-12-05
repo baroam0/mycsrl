@@ -3,7 +3,7 @@ from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponseRedirect
 
 from .forms import PresupuestoForm, DetallePresupuestoForm
 from .models import Presupuesto, DetallePresupuesto
@@ -155,6 +155,27 @@ def detallepresupuesto_edit(request, pk):
             {
                 "form": form,
                 "idpresupuesto": consulta.presupuesto.pk
+            }
+        )
+
+
+@login_required(login_url='/login')
+def detalleprespuesto_delete(request, pk):
+    detallepresupuesto = DetallePresupuesto.objects.get(pk=pk)
+    
+    presupuesto = Presupuesto.objects.get(
+        pk=detallepresupuesto.presupuesto.pk)
+    
+    if request.method =="POST":
+        usuario = request.user
+        detallepresupuesto.delete()
+        return HttpResponseRedirect("/presupuesto/editar/" + str(presupuesto.pk))
+ 
+    return render(
+            request,
+            'presupuestos/detallepresupuesto_delete.html',
+            {
+                "detalle": detallepresupuesto
             }
         )
 
