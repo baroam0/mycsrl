@@ -23,7 +23,7 @@
                 <table class="table table-sm">    
                     <thead>
                         <tr>
-                            <th>Codigo Obra</th>
+                            <th>Cod.</th>
                             <th>Obra</th>
                             <th>Importe</th>
                             <th>Entregado</th>
@@ -36,54 +36,40 @@
                     {% for v in value %}
                         <tbody>
                             <tr>
-                                <td>{{ v.codigo }}  </td>
-                                <td>{{ v.obra }}</td>
-                                <td>{{ v.importe }}</td> 
-                                <td>{{ v.entregado  }} </td>
-                                <td>{{ v.saldo }} </td>
-                                <td> </td>
-                                <td> </td>
+                                <td style="width:5%">{{ v.codigo }}  </td>
+                                <td style="width:40%">{{ v.obra }}</td>
+                                <td style="width:15%">{{ v.importe }}</td> 
+                                <td style="width:15%">{{ v.entregado  }} </td>
+                                <td style="width:10%">{{ v.saldo }} </td>
+                                <td style="width:30%"> </td>
+                                <td style="width:20%"> </td>
                             </tr>
                         </tbody>
                     {%endfor%}
                 </table>
 
                 <table class="table table-sm">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </thead>
-
                     <tbody>
                         <tr>
-                            <td><font color="white">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></td>
-                            <td>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                &nbsp;&nbsp;    
+                            <td style="width:5%"></td>
+                            <td style="width:37%">
+                                
                             </td>
-                            <td>{% with value|last as last %}
+                            <td style="width:15%">{% with value|last as last %}
                                     {{ last.totalimporte }}
                                 {% endwith %} 
                             </td> 
-                            <td>{% with value|last as last %}
+                            <td style="width:15%">{% with value|last as last %}
                                     {{ last.totalentregado }}
                                 {% endwith %} 
                             </td>
-                            <td>
+                            <td style="width:10%">
                                 {% with value|last as last %}
                                     {{ last.totalsaldo }}
                                 {% endwith %}
                             </td>
-                            <td><font color="white">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></td>
-                            <td><font color="white">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></td>
+                            <td style="width:30%"> </td>
+                            <td style="width:20%"> </td>
                         </tr>
                     </tbody>
 
