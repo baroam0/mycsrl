@@ -18,6 +18,7 @@
         </div>
 
             {% for key, value in result.items %}        
+                <br>
                 <h4>{{key}} </h4>
                 <table class="table table-bordered">    
                     <thead>
@@ -45,12 +46,22 @@
                             </tr>
                         </tbody>
                     {%endfor%}
-                </table>           
-                {% endfor %}
-                        
+                </table>
                 
-        
-                <h5>Total Gasto: $ {{ totalgasto | floatformat:2 }}</h5>
+                <h5>Total Importe: $ 
+                        {% with value|last as last %}
+                            {{ last.totalimporte }}
+                        {% endwith %} 
+                    Total Entregado: $ 
+                        {% with value|last as last %}
+                            {{ last.totalentregado }}
+                        {% endwith %} 
+                    Total Saldo: $
+                        {% with value|last as last %}
+                            {{ last.totalsaldo }}
+                        {% endwith %}
+                :</h5>           
+                {% endfor %}
                 
         <hr>
 

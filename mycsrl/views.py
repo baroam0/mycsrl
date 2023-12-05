@@ -286,27 +286,35 @@ def reportecontratista(request):
     )
 
 
-
-
 def dictbuilder(contratista_id, obra_id):
     contratista = Contratista.objects.get(pk=contratista_id)
     obra = Obra.objects.get(pk=obra_id)
     presupuesto = Presupuesto.objects.get(obra=obra.pk)
 
     if presupuesto:
+        
         detallepresupuesto = (DetallePresupuesto.objects
                               .filter(contratista=contratista.pk, presupuesto=presupuesto.pk)
                               .order_by("contratista__descripcion")
                               )
+        
+        totalimporte = 0
+        totalentregado = 0
+        saldo = 0
+        for d in detallepresupuesto:
+            totalimporte = totalimporte + d.importe
+            totalentregado = totalentregado + d.entregado
+        
+        saldo = totalimporte - totalentregado
 
         result = dict()
         for d in detallepresupuesto:
             tmpdict = {
-                "codigo": d.presupuesto.obra.pk,
-                "obra": d.presupuesto.obra,
-                "importe": d.gettotalimportecontratista(),
-                "entregado": d.gettotalentregadocontratista(),
-                "saldo": d.presupuesto.getsaldo()
+                "codigo": obra.pk,
+                "obra": obra.descripcion,
+                "importe": totalimporte,
+                "entregado": totalentregado,
+                "saldo": saldo
             }
             result = tmpdict
     else:
@@ -314,10 +322,38 @@ def dictbuilder(contratista_id, obra_id):
     return result
 
 
+def totalescontratistas(contratista_id):
+    contratista = Contratista.objects.get(pk=contratista_id)
+    detallespresupuestos = DetallePresupuesto.objects.filter(contratista=contratista.pk)
+    totales = {}
+    totalimporte = 0
+    totalentregado = 0
+    saldo = 0
+
+    for d in detallespresupuestos:
+        totalimporte = totalimporte + d.importe
+        totalentregado = totalentregado + d.entregado
+    saldo = float(totalimporte) - float(totalentregado)
+
+    totales["totalimporte"] = totalimporte
+    totales["totalentregado"] = totalentregado
+    totales["totalsaldo"] = saldo
+    return totales
+
+
 def detallereportecontratista(request):
 
     presupuestos = Presupuesto.objects.filter(cerrado=False)
     detallepresupuestos = DetallePresupuesto.objects.filter(presupuesto__in=presupuestos)
+
+    obralist = list()
+
+    for p in presupuestos:
+        obralist.append(p.obra.pk)
+    
+    obralist = list(set(obralist))
+
+    obras = Obra.objects.filter(pk__in=obralist)
 
     contratistalist = list()
 
@@ -330,21 +366,28 @@ def detallereportecontratista(request):
 
     datalist = dict()
 
-    pibotobra = presupuestos[0].obra.descripcion
-
+    """
     for c in contratistas:
         datalist[c.descripcion] = list()
         for d in detallepresupuestos:
             if c.descripcion == d.contratista.descripcion:
                 data = dictbuilder(d.contratista.pk, d.presupuesto.obra.pk)
                 datalist[c.descripcion].append(data)
+    """
+
+    for c in contratistas:
+        datalist[c.descripcion] = list()
+        for o in obras:
+            data = dictbuilder(c.pk, o.pk)
+            datalist[c.descripcion].append(data)
+        totales = totalescontratistas(c.pk)
+        datalist[c.descripcion].append(totales)
 
     print(datalist)
     return render(
         request, 
         'reportes/detallereportecontratista.html',
-        {
-         
+        {         
             "result": datalist
         }
     )
