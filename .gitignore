@@ -49,7 +49,7 @@ Thumbs.db
 *.wmv
 
 # Project Settings
-/mycsrl/settings.py
+#/mycsrl/settings.py
 
 # Database
 *.sqlite3
