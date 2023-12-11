@@ -1,6 +1,8 @@
 
 {% extends 'base_nomenu.html' %}
 
+{% load humanize %}
+
 {% block content %}
 
     <div class="container">
@@ -36,16 +38,16 @@
                             <td>{{ detalle.obra }} </td>
                             <td>{{ detalle.descripciondetalle }} </td>
                             <td>{{ detalle.cantidad }} </td>
-                            <td>$ {{ detalle.preciounitario | floatformat:2 }} </td>
-                            <td>$ {{ detalle.getpreciounitarioiva | floatformat:2 }} </td>
-                            <td>$ {{ detalle.getpreciofinal | floatformat:2 }}</td>
+                            <td>$ {{ detalle.getpreciounitariomodel | intcomma }} </td>
+                            <td>$ {{ detalle.getpreciounitarioiva | intcomma }} </td>
+                            <td>$ {{ detalle.getpreciofinal | intcomma }}</td>
                         </tr>
 
                         {% endfor %}
                     </tbody>
                 </table>
                 <!--h5>Ajuste: $ {{ facturaproveedor.ajusteglobal | floatformat:2  }}</h5-->
-                <h5>Total: $ {{ facturaproveedor.gettotalfactura | floatformat:2  }}</h5>
+                <h5>Total: $ {{ facturaproveedor.gettotalfactura | intcomma  }}</h5>
                 {% for b in banco %}
 					<h6>Banco: {{b.descripcionbanco.upper}} </h6>
 					<h6>Alias: {{b.alias}} </h6>
