@@ -214,12 +214,14 @@ def detallereporteingresoegresoobra(request):
     
     cobros = Facturacion.objects.filter(obra=obra.pk)
 
+    totalcobros = 0
     totalpagos = 0
     for i in devengamientos:
         totalpagos = totalpagos + i.monto
     
     if cobros:
-        totalcobros = cobros[0].totalfacturacion()
+        for c in cobros:
+            totalcobros = totalcobros +  c.totalfacturacion()
     else:
         totalcobros = 0
     
