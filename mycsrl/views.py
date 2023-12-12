@@ -1,4 +1,5 @@
 
+from locale import dcgettext
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import F, Sum
@@ -106,6 +107,17 @@ def reportesfacturas(request):
     )
 
 
+def gettotalobra(obra):
+        obra = Obra.objects.get(descripcion=obra)
+        detalles = DetalleFacturaProveedor.objects.filter(obra=obra)
+
+        total = 0
+        for d in detalles:
+            total = total + d.getpreciounitarioxcantidad()
+        
+        return float(total)
+
+
 def detallereportesporfacturas(request):
     """Funcion para reporte de facturas por rango de fechas"""
 
@@ -120,8 +132,43 @@ def detallereportesporfacturas(request):
     for d in facturaproveedor:
         total = total + d.gettotalfactura()
 
+    obraslist = list()
+
+    for d in detallefacturaproveedor:
+        obraslist.append(d.obra.pk)
     
+    obraslist = list(set(obraslist))
+
+    obras = Obra.objects.filter(pk__in=obraslist)
+
+    datadict = dict()
+
+    for o in obras:
+        datadict[o.descripcion] = list()
     
+    totalgeneral = 0
+    itemlist = list()
+    tmpdict = dict()
+
+    for d in datadict:
+        for df in detallefacturaproveedor:
+            if d == df.obra.descripcion:
+                tmpdict["fecha"] = str(df.factura.fecha)
+                tmpdict["comprobante"] = df.factura.comprobante
+                tmpdict["cantidad"] = df.cantidad
+                tmpdict["descripcion"] = df.descripciondetalle.descripciondetalle
+                tmpdict["preciofinal"] = df.getpreciounitarioiva()
+                tmpdict["total"] = df.getpreciounitarioxcantidad()
+                totalgeneral = totalgeneral + df.getpreciounitarioxcantidad()
+                itemlist.append(tmpdict)
+                datadict[d].append(itemlist) 
+                tmpdict = dict()
+            itemlist = list()
+            print(df.gettotalobra())
+        #datadict[d].append({"t": gettotalobra(d)})
+    
+    print(datadict)
+
     return render(
         request, 
         'reportes/detallereportesfacturas.html',
@@ -132,7 +179,9 @@ def detallereportesporfacturas(request):
             "facturaproveedor": facturaproveedor,
             "detallefacturaproveedor": detallefacturaproveedor,
             "total": total,
-            "banco": proveedorbanco
+            "banco": proveedorbanco,
+            "datadict" : datadict,
+            "totalgeneral": totalgeneral
         }
     )
 

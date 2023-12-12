@@ -33,12 +33,61 @@
         <div class="row">
             <div class="col-sm-4"></div>
             <div class="col-sm-4">
-                <h5> RESUMEN </h5>
+                <h5> RESUMEN {{proveedor}} </h5>
             </div>
             <div class="col-sm-4"></div>
         </div>
-        
+
+        <br>
+
+            {% for key, value in datadict.items %} 
+
+                <div class="col-sm-4">
+                    <h6> {{key}} </h6>
+                </div>
+
                 <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Comprobante</th>
+                            <th>Cantidad</th>
+                            <th>Descripcion</th>
+                            <th>Precio Unitario incl Impuestos</th>
+                            <th>Monto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for v in value %}
+                            <tr>
+                                <td>{{ v.0.fecha }} </td>
+                                <td>{{ v.0.comprobante }}  </td>
+                                <td>{{ v.0.cantidad }} </td>
+                                <td>{{ v.0.descripcion }} </td>
+                                <td>$ {{ v.0.preciofinal | intcomma }} </td>
+                                <td>$ {{ v.0.total | intcomma }}</td>
+                            </tr>
+                        {%endfor%}
+                    </tbody>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Total:</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </table>
+                <br>
+
+            {%endfor%}
+
+
+        
+                <!--table class="table table-bordered">
                     <thead>
                         <tr>
                             <th>Fecha</th>
@@ -51,7 +100,7 @@
                         </tr>
                     </thead>
                     
-                    <tbody>                   
+                    <tbody>
                         {% for detalle in detallefacturaproveedor%}
                         <tr>
                                 <td>{{ detalle.factura.fecha }}  </td>
@@ -64,9 +113,9 @@
                         </tr>
                         {% endfor %}
                     </tbody>
-                </table>
+                </table-->
         
-                <h5>Total: $ {{ total | intcomma }}</h5>
+                <h5>Total: $ {{ totalgeneral | intcomma }}</h5>
                 {% for b in banco %}
 					<h6>Banco: {{b.descripcionbanco.upper}} </h6>
 					<h6>Alias: {{b.alias}} </h6>
