@@ -1,6 +1,8 @@
 
 {% extends 'base_nomenu.html' %}
 
+{% load humanize %}
+
 {% block content %}
 
     <div class="container">
@@ -37,8 +39,8 @@
                                 <td>{{ detalle.factura.proveedor}}</td>
                                 <td>{{ detalle.factura.comprobante}}</td> 
                                 <td>{{ detalle.descripciondetalle }} </td>
-                                <td>{{ detalle.cantidad }} </td>
-                                <td>$ {{ detalle.getpreciofinal | floatformat:2 }} </td>
+                                <td>{{ detalle.cantidad | intcomma }} </td>
+                                <td>$ {{ detalle.getpreciofinal | intcomma }} </td>
                                 {%if detalle.factura.pagado %}
                                     <td> SI </td>
                                 {% else %}
@@ -55,7 +57,7 @@
                     </tbody>
                 </table>
         
-                <h5>Total Gasto: $ {{ totalgasto | floatformat:2 }}</h5>
+                <h5>Total Gasto: $ {{ totalgasto | intcomma }}</h5>
                 
         <hr>
 

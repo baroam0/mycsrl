@@ -329,7 +329,7 @@ def detallereportesgastosporobra(request):
         {
             "obra": obra,
             "detallesfacturas": detallesfacturas,
-            "totalgasto": valor
+            "totalgasto": round(valor,4)
         }
     )   
 
