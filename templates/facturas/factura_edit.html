@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load humanize %}
+
 {% block content %}
 
     <div >
@@ -66,19 +68,19 @@
 
                 <tbody>
                     <tr>
-                        <td><h5>Subtotal: $ {{factura.getsubtotalfactura | floatformat:2}}</h5></td>
+                        <td><h5>Subtotal: $ {{factura.getsubtotalfactura | intcomma }}</h5></td>
                     </tr>
                     <tr>
-                        <td><h5>Descuento: $ {{factura.descuentoglobal | floatformat:2}}</h5></td>
+                        <td><h5>Descuento: $ {{factura.descuentoglobal | intcomma}}</h5></td>
                     </tr>
                     <tr>
-                        <td><h5>IVA: $ {{factura.getiva | floatformat:2}}</h5></td>
+                        <td><h5>IVA: $ {{factura.getiva | intcomma}}</h5></td>
                     </tr>
                     <tr>
-                        <td><h5>Ingresos Brutos: $ {{factura.getiibb | floatformat:2}}</h5></td>
+                        <td><h5>Ingresos Brutos: $ {{factura.getiibb | intcomma}}</h5></td>
                     </tr>
                     <tr>
-                        <td><h5>Total: $ {{ factura.gettotalfactura | floatformat:2}}</h5></td>
+                        <td><h5>Total: $ {{ factura.gettotalfactura | intcomma}}</h5></td>
                     </tr>
 
                 </tbody>
@@ -110,9 +112,9 @@
                             <td>{{ detallefactura.descripciondetalle.descripciondetalle.upper }} </td>
                             <td>{{ detallefactura.cantidad }} </td>
                             <td>{{ detallefactura.unidad.descripcion }}</td>
-                            <td>{{ detallefactura.preciounitario }}</td>
+                            <td>{{ detallefactura.preciounitario | intcomma }}</td>
                             <!--td>$ {{ detallefactura.getpreciounitariobruto |floatformat:2 }} </td-->
-                            <td>$ {{ detallefactura.getpreciofinal |floatformat:2 }} </td>
+                            <td>$ {{ detallefactura.getpreciofinal | intcomma }} </td>
                             <td>{{ detallefactura.usuario }}</td>
                             <td>
                                 <button type="button" class="btn btn-link btn-sm" onclick="AbrirVentanaEditar({{detallefactura.pk}})">
