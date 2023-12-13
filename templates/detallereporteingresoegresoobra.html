@@ -1,6 +1,8 @@
 
 {% extends 'base_nomenu.html' %}
 
+{% load humanize %}
+
 {% block content %}
 
     <div class="container">
@@ -8,11 +10,11 @@
         <br>
         
         <div class="row">
-            <div class="col-sm-4"></div>
-            <div class="col-sm-4">
-                <h3> Detalle Ingreso / Egreso por Obra. </h3>
+            <div class="col-sm-3"></div>
+            <div class="col-sm-6">
+                <h3> Resumen Ingreso / Egreso por Obra. </h3>
             </div>
-            <div class="col-sm-4"></div>
+            <div class="col-sm-3"></div>
         </div>
 
 
@@ -35,12 +37,12 @@
                                     <td>{{ cobro.fecha | date:"d-m-Y" }}  </td>
                                     <td>{{ cobro.descripcion }}  </td>
                                     <td>{{ cobro.comprobante }}  </td>
-                                    <td>$ {{ cobro.totalfacturacion }}</td>
+                                    <td>$ {{ cobro.totalfacturacion | intcomma }}</td>
                                 </tr>
                             {% endfor %}
                         </tbody>
                 </table>
-                <h5> Total Ingresos: $ {{totalcobros}} </h5>
+                <h5> Total Ingresos: $ {{totalcobros | intcomma }} </h5>
         
         <hr>
 
@@ -64,12 +66,12 @@
                             <td>{{ devengamiento.factura.proveedor }}  </td>
                             <td>{{ devengamiento.factura.comprobante }}  </td>
                             <td>{{ devengamiento.mediopago }}  </td>
-                            <td>$ {{ devengamiento.monto }}</td>
+                            <td>$ {{ devengamiento.monto | intcomma }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
-            <h5> Total Egresos: $ {{totalpagos}} </h5>
+            <h5> Total Egresos: $ {{totalpagos | intcomma}} </h5>
         
         <hr>
 
