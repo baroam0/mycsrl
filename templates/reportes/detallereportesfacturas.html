@@ -69,17 +69,25 @@
                             </tr>
                         {%endfor%}
                     </tbody>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Total:</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    
+                    {% for k,v in dicttotales.items%}
+                        {% if key == k %}
+                        <table class="table">
+                            
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>Total: </td>
+                                    <td> $ {{v.total | intcomma}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        {% endif %}
+                    {% endfor %}
+                    
                 </table>
                 <br>
 

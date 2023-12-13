@@ -115,7 +115,7 @@ def gettotalobra(obra):
         for d in detalles:
             total = total + d.getpreciounitarioxcantidad()
         
-        return float(total)
+        return float(round(total,4))
 
 
 def detallereportesporfacturas(request):
@@ -138,9 +138,7 @@ def detallereportesporfacturas(request):
         obraslist.append(d.obra.pk)
     
     obraslist = list(set(obraslist))
-
     obras = Obra.objects.filter(pk__in=obraslist)
-
     datadict = dict()
 
     for o in obras:
@@ -159,15 +157,24 @@ def detallereportesporfacturas(request):
                 tmpdict["descripcion"] = df.descripciondetalle.descripciondetalle
                 tmpdict["preciofinal"] = df.getpreciounitarioiva()
                 tmpdict["total"] = df.getpreciounitarioxcantidad()
-                totalgeneral = totalgeneral + df.getpreciounitarioxcantidad()
                 itemlist.append(tmpdict)
                 datadict[d].append(itemlist) 
                 tmpdict = dict()
             itemlist = list()
-            print(df.gettotalobra())
-        #datadict[d].append({"t": gettotalobra(d)})
-    
-    print(datadict)
+
+    dicttotales = dict()
+
+    totalg = 0
+
+    for d in datadict:
+        for df in detallefacturaproveedor:
+            if d == df.obra.descripcion:
+                totalg = totalg + df.getpreciounitarioxcantidad()
+        dicttotales[d] = {"total": gettotalobra(d)}
+        totalg = 0
+
+    for d in dicttotales:
+        totalgeneral = totalgeneral + dicttotales[d]["total"]
 
     return render(
         request, 
@@ -181,7 +188,8 @@ def detallereportesporfacturas(request):
             "total": total,
             "banco": proveedorbanco,
             "datadict" : datadict,
-            "totalgeneral": totalgeneral
+            "totalgeneral": totalgeneral,
+            "dicttotales": dicttotales
         }
     )
 
