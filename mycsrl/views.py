@@ -169,8 +169,10 @@ def detallereportesporfacturas(request):
     for d in datadict:
         for df in detallefacturaproveedor:
             if d == df.obra.descripcion:
-                totalg = totalg + df.getpreciounitarioxcantidad()
-        dicttotales[d] = {"total": gettotalobra(d)}
+                #totalg = totalg + df.getpreciounitarioxcantidad()
+                totalg = df.factura.gettotalfactura()
+        #dicttotales[d] = {"total": gettotalobra(d)}
+        dicttotales[d] = {"total": totalg}
         totalg = 0
 
     for d in dicttotales:
