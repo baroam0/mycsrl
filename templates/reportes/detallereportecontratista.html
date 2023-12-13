@@ -1,6 +1,8 @@
 
 {% extends 'base_nomenu.html' %}
 
+{% load humanize %}
+
 {% block content %}
 
     <div class="container">
@@ -11,7 +13,7 @@
             <div class="col-sm-1"></div>
 
             <div class="col-sm-10">
-                <h3> Detalle Pesupuesto por Contratista. </h3>
+                <h3> Detalle Presupuesto por Contratista. </h3>
             </div>
 
             <div class="col-sm-1"></div>
@@ -38,9 +40,9 @@
                             <tr>
                                 <td style="width:5%">{{ v.codigo }}  </td>
                                 <td style="width:40%">{{ v.obra }}</td>
-                                <td style="width:15%">{{ v.importe }}</td> 
-                                <td style="width:15%">{{ v.entregado  }} </td>
-                                <td style="width:10%">{{ v.saldo }} </td>
+                                <td style="width:15%">{{ v.importe | intcomma }}</td> 
+                                <td style="width:15%">{{ v.entregado | intcomma  }} </td>
+                                <td style="width:10%">{{ v.saldo | intcomma }} </td>
                                 <td style="width:30%"> </td>
                                 <td style="width:20%"> </td>
                             </tr>
@@ -56,16 +58,16 @@
                                 
                             </td>
                             <td style="width:15%">{% with value|last as last %}
-                                    {{ last.totalimporte }}
+                                    {{ last.totalimporte | intcomma }}
                                 {% endwith %} 
                             </td> 
                             <td style="width:15%">{% with value|last as last %}
-                                    {{ last.totalentregado }}
+                                    {{ last.totalentregado | intcomma }}
                                 {% endwith %} 
                             </td>
                             <td style="width:10%">
                                 {% with value|last as last %}
-                                    {{ last.totalsaldo }}
+                                    {{ last.totalsaldo | intcomma }}
                                 {% endwith %}
                             </td>
                             <td style="width:30%"> </td>
