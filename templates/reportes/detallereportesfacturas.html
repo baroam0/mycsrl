@@ -5,7 +5,22 @@
 
 {% block content %}
 
-    <div class="container">
+    <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      border: 1px solid #ddd;
+    }
+    
+    th, td {
+      text-align: left;
+      padding: 16px;
+    }
+    </style>
+    
+
+
+    <!--div class="container"-->
         <!--header class="onlyprint">
             <img style="float: right;" src="{% static "images/logo.jpg" %}" alt="" width="150" height="93">
         </header-->
@@ -46,7 +61,7 @@
                     <h6> {{key}} </h6>
                 </div>
 
-                <table class="table table-bordered">
+                <table class="table table-hover text-nowrap">
                     <thead>
                         <tr>
                             <th>Fecha</th>
@@ -131,7 +146,7 @@
                 {% endfor %}
         <hr>
 
-    </div>
+    <!--/div-->
 
 
 

@@ -2,6 +2,7 @@
 from django.db import models
 
 from bancos.models import Banco
+from empresas.models import Empresa
 from usuariosadm.models import UserAdm
 
 
@@ -22,6 +23,13 @@ class MedioPago(models.Model):
 
 class Obra(models.Model):
     descripcion = models.CharField(max_length=200, unique=True)
+
+    empresa = models.ForeignKey(
+        Empresa, 
+        on_delete=models.CASCADE, 
+        blank=True, null=True
+    )
+
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
 
     def __str__(self):
