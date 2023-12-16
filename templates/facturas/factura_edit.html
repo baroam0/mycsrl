@@ -96,7 +96,7 @@
        		            <th>Cantidad</th>
                         <th>Unidad</th>
                         <th>Precio Unitario</th>
-                        <th>Monto incl Imp</th>
+                        <th>Importe</th>
                         <th>Usuario</th>
                         <th>Accion</th>
                     </tr>
@@ -112,7 +112,7 @@
                             <td>{{ detallefactura.unidad.descripcion }}</td>
                             <td>{{ detallefactura.preciounitario }}</td>
                             <!--td>$ {{ detallefactura.getpreciounitariobruto |floatformat:2 }} </td-->
-                            <td>$ {{ detallefactura.getpreciofinal |floatformat:2 }} </td>
+                            <td>$ {{ detallefactura.getprecioitemsubtotal |floatformat:2 }} </td>
                             <td>{{ detallefactura.usuario }}</td>
                             <td>
                                 <button type="button" class="btn btn-link btn-sm" onclick="AbrirVentanaEditar({{detallefactura.pk}})">

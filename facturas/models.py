@@ -146,7 +146,24 @@ class DetalleFacturaProveedor(models.Model):
             total = total + d.getpreciounitarioxcantidad()
         
         return float(total)
+    
+    def getprecioitemsubtotal(self):
 
+        if self.descuento:
+            descuento = self.descuento
+        else:
+            descuento = - 0
+
+        if self.descuentoporcentaje:
+            descuentoporcentaje = self.preciounitario * self.descuentoporcentaje / 100
+        else:
+            descuentoporcentaje = 0
+
+        precio = self.preciounitario - descuento - descuentoporcentaje
+        
+        monto = self.cantidad * precio
+        print(self.cantidad, precio, monto)
+        return monto
 
     def getpreciounitariomodel(self):
         return round(self.preciounitario,2)
