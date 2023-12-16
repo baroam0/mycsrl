@@ -9,6 +9,7 @@ from .models import (
 )
 
 from bancos.models import Banco
+from empresas.models import Empresa
 from rodados.models import Rodado
 
 
@@ -45,7 +46,6 @@ class DetalleFacturaForm(forms.ModelForm):
         queryset=Proveedor.objects.all(), 
         label="Proveedor"
     )
-
 
     rubro = forms.ModelChoiceField(
         queryset=Rubro.objects.all(), 
@@ -105,6 +105,11 @@ class ObraForm(forms.ModelForm):
    
     descripcion = forms.CharField(
         label="Descripcion"
+    )
+    
+    empresa = forms.ModelChoiceField(
+        queryset=Empresa.objects.all(), 
+        label="Empresa", required=False
     )
     
     def __init__(self, *args, **kwargs):

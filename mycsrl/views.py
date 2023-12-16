@@ -124,7 +124,9 @@ def detallereportesporfacturas(request):
     fechadesde = formateafecha(request.GET.get("fechadesde"))
     fechahasta = formateafecha(request.GET.get("fechahasta"))
     proveedor =  Proveedor.objects.get(pk=request.GET.get("id_proveedor"))
-    facturaproveedor = FacturaProveedor.objects.filter(proveedor=proveedor,fecha__range=(fechadesde, fechahasta))
+    facturaproveedor = FacturaProveedor.objects.filter(pagado=False,proveedor=proveedor,fecha__range=(fechadesde, fechahasta))
+    for i in facturaproveedor:
+        print(i.pagado)
     detallefacturaproveedor = DetalleFacturaProveedor.objects.filter(factura__in=facturaproveedor).order_by('-obra')
     proveedorbanco = ProveedorBanco.objects.filter(pk=request.GET.get("id_banco"))
 
