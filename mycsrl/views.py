@@ -125,8 +125,7 @@ def detallereportesporfacturas(request):
     fechahasta = formateafecha(request.GET.get("fechahasta"))
     proveedor =  Proveedor.objects.get(pk=request.GET.get("id_proveedor"))
     facturaproveedor = FacturaProveedor.objects.filter(pagado=False,proveedor=proveedor,fecha__range=(fechadesde, fechahasta))
-    for i in facturaproveedor:
-        print(i.pagado)
+
     detallefacturaproveedor = DetalleFacturaProveedor.objects.filter(factura__in=facturaproveedor).order_by('-obra')
     proveedorbanco = ProveedorBanco.objects.filter(pk=request.GET.get("id_banco"))
 
@@ -167,19 +166,22 @@ def detallereportesporfacturas(request):
     dicttotales = dict()
 
     totalg = 0
-
+    empresa = ""
     for d in datadict:
         for df in detallefacturaproveedor:
             if d == df.obra.descripcion:
                 #totalg = totalg + df.getpreciounitarioxcantidad()
                 totalg = df.factura.gettotalfactura()
-        #dicttotales[d] = {"total": gettotalobra(d)}
-        dicttotales[d] = {"total": totalg}
+                empresa = df.obra.empresa.descripcion
+    
+        dicttotales[d] = {"total": totalg, "empresa": empresa}
         totalg = 0
+        empresa = ""
 
     for d in dicttotales:
         totalgeneral = totalgeneral + dicttotales[d]["total"]
 
+    print(dicttotales)
     return render(
         request, 
         'reportes/detallereportesfacturas.html',

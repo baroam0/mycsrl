@@ -121,7 +121,7 @@ class ObraForm(forms.ModelForm):
 
     class Meta:
         model = Obra
-        fields = ["descripcion"]
+        fields = ["descripcion", "empresa"]
 
 
 
