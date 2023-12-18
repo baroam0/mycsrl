@@ -1,0 +1,136 @@
+
+{% extends 'base_nomenu.html' %}
+{% load humanize %}
+{% load static %}
+
+{% block content %}
+
+    <style>
+    @media print{@page {size: landscape}}
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      border: 1px solid #ddd;
+      font-size: 11px;
+    }
+    
+    th, td {
+      text-align: left;
+      padding: 15px;
+      font-size: 13px;
+    }
+    </style>
+    
+
+
+    <!--div class="container"-->
+        <!--header class="onlyprint">
+            <img style="float: right;" src="{% static "images/logo.jpg" %}" alt="" width="150" height="93">
+        </header-->
+
+        <br>
+
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-3">DESDE: {{fechadesde }}</div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-3">HASTA: {{fechahasta}}</div>
+        </div>
+        
+        <div class="row">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4">
+                <h5> RESUMEN {{proveedor}} </h5>
+            </div>
+            <div class="col-sm-4"></div>
+        </div>
+
+        <br>
+
+            {% for key, value in datadict.items %} 
+
+                <div class="col-sm-4">
+                    <h6> {{key}} </h6>
+                </div>
+
+                <table class="table ">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Comprobante</th>
+                            <th>Cantidad</th>
+                            <th>Descripcion</th>
+                            <th>Precio Unitario incl Impuestos</th>
+                            <th>Monto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for v in value %}
+                            <tr>
+                                <td>{{ v.0.fecha }} </td>
+                                <td>{{ v.0.comprobante }}  </td>
+                                <td>{{ v.0.cantidad }} </td>
+                                <td>{{ v.0.descripcion }} </td>
+                                <td>$ {{ v.0.preciofinal | intcomma }} </td>
+                                <td>$ {{ v.0.total | intcomma }}</td>
+                            </tr>
+                        {%endfor%}
+                    </tbody>
+                </table>
+                    {% for k,v in dicttotales.items%}
+                        {% if key == k %}
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td> </td>
+                                    <td> </td>
+                                    <td> </td>
+                                    <td> </td>
+                                    <td> <b> Total {{v.empresa}} : </b> </td>
+                                    <td> <b> $ {{v.total | intcomma}} </b> </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        {% endif %}
+                    {% endfor %}
+            {%endfor%}
+
+            <div class="row">
+                <div class="col-sm-4"></div>
+                <div class="col-sm-4"><h5><b>Total: $ {{ totalgeneral | intcomma }} </b></h5></div>
+                <div class="col-sm-4"></div>
+            </div>        
+                
+            {% for b in banco %}
+				<h6>Banco: {{b.descripcionbanco.upper}} </h6>
+			    <h6>Alias: {{b.alias}} </h6>
+				<h6>CBU: {{b.cbu}} </h6>
+            {% endfor %}
+        <hr>
+
+    <!--/div-->
+
+
+
+{% endblock %}
+
+
+    <script>
+        $(document).ready(function () {
+            
+        });
+
+    
+    </script>
+

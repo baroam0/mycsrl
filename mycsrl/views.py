@@ -10,6 +10,7 @@ from contratistas.models import Contratista
 
 from lib.funcionesfechas import formateafecha
 from devengamientos.models import Devengamiento
+from empresas.models import Empresa
 from pagos.models import Obra, Proveedor, ProveedorBanco
 from facturas.models import FacturaProveedor, DetalleFacturaProveedor
 from facturacion.models import Facturacion, DetalleFacturacion
@@ -119,7 +120,80 @@ def gettotalobra(obra):
 
 
 def detallereportesporfacturas(request):
-    """Funcion para reporte de facturas por rango de fechas"""
+    fechadesde = formateafecha(request.GET.get("fechadesde"))
+    fechahasta = formateafecha(request.GET.get("fechahasta"))
+    proveedor =  Proveedor.objects.get(pk=request.GET.get("id_proveedor"))
+    facturaproveedor = FacturaProveedor.objects.filter(pagado=False,proveedor=proveedor,fecha__range=(fechadesde, fechahasta))
+    detallefacturaproveedor = DetalleFacturaProveedor.objects.filter(factura__in = facturaproveedor)
+    datadict= dict()
+    tmplist = list()
+
+    obraslist = list()
+    for df in detallefacturaproveedor:
+        obraslist.append(df.obra.pk)
+    obraslist = list(set(obraslist))
+    obras = Obra.objects.filter(pk__in=obraslist)
+
+    empresaslist = list()
+    for df in detallefacturaproveedor:
+        empresaslist.append(df.obra.empresa.pk)
+    empresaslist = list(set(empresaslist))
+    empresas = Empresa.objects.filter(pk__in=empresaslist)
+
+    datadict[proveedor.razonsocial] = list()
+
+    for e in empresas:
+        d = {
+            e.descripcion: list()
+        }
+        datadict[proveedor.razonsocial].append(d)
+        d = dict()
+
+    for dd in datadict[proveedor.razonsocial]:
+        for d in dd:
+            for e in empresas:
+                for o in obras:
+                    if d == e.descripcion:
+                        if o.empresa.descripcion == e.descripcion:
+                            tmpdict = dict()
+                            tmpdict = {
+                                o.descripcion: list()
+                            }
+                            dd[e.descripcion].append(tmpdict)
+                            tmpdict= dict() 
+
+    tmpdict = dict()
+    for dd in datadict[proveedor.razonsocial]:
+        for d in dd:
+            for o in obras:
+                for df in detallefacturaproveedor:
+                    if o.descripcion == df.obra.descripcion:
+                        
+                        tmpdict = {
+                            "comprobante": df.factura.comprobante,
+                            "cantidad": df.cantidad , 
+                            "descripcion": df.descripciondetalle.descripciondetalle
+                        }
+                        
+                        for el in dd[d]:
+                            el[o.descripcion] = tmpdict
+                        
+                        tmpdict = dict()
+
+    print(datadict)
+    return render(
+        request, 
+        'reportes/detallereportesfacturas.html',
+        {
+            "fechadesde": fechadesde,
+            "fechahasta": fechahasta,
+        }
+    )
+
+
+"""
+def detallereportesporfacturas(request):
+    Funcion para reporte de facturas por rango de fechas
 
     fechadesde = formateafecha(request.GET.get("fechadesde"))
     fechahasta = formateafecha(request.GET.get("fechahasta"))
@@ -198,7 +272,7 @@ def detallereportesporfacturas(request):
             "dicttotales": dicttotales
         }
     )
-
+"""
 
 def reporteingresoegresoobra(request):    
     obras = Obra.objects.all()
