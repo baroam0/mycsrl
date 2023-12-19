@@ -135,7 +135,7 @@ class DetalleFactura(models.Model):
         ("Litro", "Litro")
     ]
 
-    unidad = models.CharField(
+    unidad = models.CharField(                    
         max_length=20,
         choices=CHOICESUNIDAD,
         default="Unidad",

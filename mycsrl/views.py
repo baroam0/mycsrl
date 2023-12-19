@@ -142,45 +142,37 @@ def detallereportesporfacturas(request):
 
     datadict[proveedor.razonsocial] = list()
 
+    
     for e in empresas:
-        d = {
-            e.descripcion: list()
-        }
-        datadict[proveedor.razonsocial].append(d)
-        d = dict()
-
-    for dd in datadict[proveedor.razonsocial]:
-        for d in dd:
-            for e in empresas:
-                for o in obras:
-                    if d == e.descripcion:
-                        if o.empresa.descripcion == e.descripcion:
-                            tmpdict = dict()
-                            tmpdict = {
-                                o.descripcion: list()
-                            }
-                            dd[e.descripcion].append(tmpdict)
-                            tmpdict= dict() 
-
-    tmpdict = dict()
-    for dd in datadict[proveedor.razonsocial]:
-        for d in dd:
-            for o in obras:
-                for df in detallefacturaproveedor:
-                    if o.descripcion == df.obra.descripcion:
-                        
-                        tmpdict = {
-                            "comprobante": df.factura.comprobante,
-                            "cantidad": df.cantidad , 
-                            "descripcion": df.descripciondetalle.descripciondetalle
-                        }
-                        
-                        for el in dd[d]:
-                            el[o.descripcion] = tmpdict
-                        
-                        tmpdict = dict()
-
+        datadict[proveedor.razonsocial].append(
+            {
+                "empresa": e.descripcion,
+                "data": list()
+            }
+        )
+    
+    for d in datadict[proveedor.razonsocial]:
+        for o in obras:
+            if o.empresa.descripcion == d["empresa"]:
+                d["data"].append({
+                    "obra": o.descripcion,
+                    "data": list()
+                })
+    
+    for d in datadict[proveedor.razonsocial]:
+        for df in detallefacturaproveedor:
+            if df.obra.empresa.descripcion == d["empresa"]:
+                if df.obra.descripcion == d["data"][0]["obra"]:
+                    d["data"][0]["data"].append({
+                        "fecha": df.factura.fecha,
+                        "comprobante" : df.factura.comprobante,
+                        "detalle": df.descripciondetalle.descripciondetalle,
+                        "cantidad": df.cantidad,
+                        "preciofinal": df.getpreciounitario()
+                    })
+    
     print(datadict)
+
     return render(
         request, 
         'reportes/detallereportesfacturas.html',

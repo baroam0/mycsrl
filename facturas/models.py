@@ -122,8 +122,9 @@ class DetalleFacturaProveedor(models.Model):
         Unidad, on_delete=models.CASCADE)
     cantidad = models.DecimalField(
         decimal_places=2, max_digits=20, null=False, blank=False)
-    preciounitario = models.DecimalField(
-        decimal_places=4, max_digits=20, null=False, blank=False)
+    
+    preciototal = models.DecimalField(
+        decimal_places=4, max_digits=20, null=False, blank=False, default=0)
 
     descuento = models.DecimalField(decimal_places=4,max_digits=20, default=0)
     descuentoporcentaje = models.DecimalField(decimal_places=4,max_digits=20, default=0)
@@ -136,6 +137,11 @@ class DetalleFacturaProveedor(models.Model):
 
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
 
+    def getpreciounitario(self):
+        monto = self.preciototal / self.cantidad
+        monto = monto - self.descuento
+        monto = monto - (monto * self.descuentoporcentaje / 100 )
+        return float(monto)
 
     def gettotalobra(self):
         obra = Obra.objects.get(pk=self.obra.pk)
@@ -211,7 +217,7 @@ class DetalleFacturaProveedor(models.Model):
         else:
             iibb = 0 / 100
 
-        preciotmp = float(self.preciounitario) * float(self.cantidad)
+        preciotmp = float(self.getpreciounitario()) * float(self.cantidad)
         preciotmp = preciotmp - (preciotmp * float(self.descuento))
         preciotmp = preciotmp - (preciotmp * float(self.descuentoporcentaje) / 100)
         precioiva = preciotmp * float(iva)
