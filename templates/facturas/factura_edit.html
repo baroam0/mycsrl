@@ -96,7 +96,7 @@
                         <th>Rubro</th>
                         <th>Descripcion</th>
        		            <th>Cantidad</th>
-                        <th>Unidad< /th>
+                        <th>Unidad </th>
                         <th>Precio Unitario</th>
                         <th>Importe</th>
                         <th>Usuario</th>
@@ -112,9 +112,9 @@
                             <td>{{ detallefactura.descripciondetalle.descripciondetalle.upper }} </td>
                             <td>{{ detallefactura.cantidad }} </td>
                             <td>{{ detallefactura.unidad.descripcion }}</td>
-                            <td>{{ detallefactura.preciounitario | intcomma }}</td>
+                            <td>{{ detallefactura.getpreciounitario | intcomma }}</td>
                             <!--td>$ {{ detallefactura.getpreciounitariobruto |floatformat:2 }} </td-->
-                            <td>$ {{ detallefactura.getpreciofinal | intcomma }} </td>
+                            <td>$ {{ detallefactura.preciototal | intcomma }} </td>
                             <td>{{ detallefactura.usuario }}</td>
                             <td>
                                 <button type="button" class="btn btn-link btn-sm" onclick="AbrirVentanaEditar({{detallefactura.pk}})">
