@@ -168,10 +168,9 @@ def detallereportesporfacturas(request):
                         "comprobante" : df.factura.comprobante,
                         "detalle": df.descripciondetalle.descripciondetalle,
                         "cantidad": df.cantidad,
-                        "preciofinal": df.getpreciounitario()
+                        "preciofinal": df.getpreciounitario(),
+                        "total": round(df.preciototal,2),
                     })
-    
-    print(datadict)
 
     return render(
         request, 
@@ -179,6 +178,7 @@ def detallereportesporfacturas(request):
         {
             "fechadesde": fechadesde,
             "fechahasta": fechahasta,
+            "datadict": datadict
         }
     )
 
@@ -391,21 +391,21 @@ def detallereportesgastosporobra(request):
         descuento = descuento + i.descuentoglobal
         ajuste = ajuste + i.ajusteglobal
 
-    """
-    for i in detallesfacturas:
-        totalgasto = totalgasto + i.getpreciofinal()
-    """
 
-    totalgasto = obra.getgastoporobra()
+    #totalgasto = obra.getgastoporobra()
+        
+    for df in detallesfacturas:
+        totalgasto = totalgasto + df.getpreciototalfinal()      
+    
 
-    valor = float(totalgasto) - float(descuento) + float(ajuste)
+    #valor = float(totalgasto) - float(descuento) + float(ajuste)
     return render(
         request, 
         'reportes/detallereportegastoporobra.html',
         {
             "obra": obra,
             "detallesfacturas": detallesfacturas,
-            "totalgasto": round(valor,4)
+            "totalgasto": round(totalgasto,4)
         }
     )   
 

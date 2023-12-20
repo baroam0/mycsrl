@@ -74,13 +74,20 @@ class FacturaProveedor(models.Model):
         IngresoBruto, on_delete=models.CASCADE, null=True)
     
     def getiibb(self):
-        iibb = float(self.getsubtotalfactura()) * float(self.ingresosbrutos.retencion) / 100 
+        if self.ingresosbrutos:
+            iibb = float(self.getsubtotalfactura()) * float(self.ingresosbrutos.retencion) / 100 
+        else:
+            iibb = float(self.getsubtotalfactura()) * 0 / 100 
         return float(round(iibb,2))
 
 
     def getiva(self):
         monto = float(self.getsubtotalfactura()) - float(self.descuentoglobal)
-        iva = monto * float(self.iva.retencion) / 100 
+        
+        if self.iva:
+            iva = monto * float(self.iva.retencion) / 100 
+        else:
+            iva = monto * 0 / 100 
         return float(round(iva,2))
 
     
@@ -94,7 +101,7 @@ class FacturaProveedor(models.Model):
         return float(round(monto,2))
     
     def gettotalfactura(self):
-        monto = self.getsubtotalfactura() + float(self.ajusteglobal) + self.getiva() + self.getiibb()
+        monto = float(self.getsubtotalfactura()) + float(self.ajusteglobal) + self.getiva() + self.getiibb() + float(self.ajusteglobal)
         return monto
 
     def __str__(self):
@@ -131,11 +138,45 @@ class DetalleFacturaProveedor(models.Model):
 
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
 
+    def gettotalporobra(self):
+        detallefactura = DetalleFacturaProveedor.objects.filter(obra=self.obra)
+        monto = 0
+        for df in detallefactura:
+            monto = monto + df.getpreciototalfinal()
+        return monto
+
     def getpreciounitario(self):
         monto = self.preciototal / self.cantidad
         monto = monto - self.descuento
         monto = monto - (monto * self.descuentoporcentaje / 100 )
         return float(round(monto,2))
+    
+    def getpreciototalfinal(self):
+        monto = 0
+        if self.descuento:
+            descuento = self.descuento
+        else:
+            descuento = 0
+        
+        if self.descuentoporcentaje:
+            descuentoporcentaje = self.preciototal * self.descuentoporcentaje /100
+        else:
+            descuentoporcentaje = 0
+        monto = float(self.preciototal) - float(descuento) - float(descuentoporcentaje)
+
+        if self.factura.iva:
+            iva = float(self.factura.iva.retencion / 100)
+            iva = monto * iva
+        else:
+            iva = 0
+
+        if self.factura.ingresosbrutos:
+            iibb = float(self.factura.ingresosbrutos.retencion / 100)
+            iibb = monto * iibb
+        else:
+            iibb = 0
+        monto = float(monto) + float(iva) + float(iibb)
+        return round(monto, 2)        
 
 
     def __str__(self):

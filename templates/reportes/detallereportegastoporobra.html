@@ -40,7 +40,7 @@
                                 <td>{{ detalle.factura.comprobante}}</td> 
                                 <td>{{ detalle.descripciondetalle }} </td>
                                 <td>{{ detalle.cantidad | intcomma }} </td>
-                                <td>$ {{ detalle.getpreciofinal | intcomma }} </td>
+                                <td>$ {{ detalle.getpreciototalfinal | intcomma }} </td>
                                 {%if detalle.factura.pagado %}
                                     <td> SI </td>
                                 {% else %}

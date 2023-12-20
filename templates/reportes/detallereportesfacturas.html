@@ -16,8 +16,12 @@
     
     th, td {
       text-align: left;
-      padding: 15px;
-      font-size: 13px;
+      padding: 13px;
+      font-size: 11px;
+    }
+    
+    .fecha {
+        font-size: 10px;
     }
     </style>
     
@@ -36,7 +40,7 @@
             <div class="col-sm-2"></div>
             <div class="col-sm-2"></div>
             <div class="col-sm-2"></div>
-            <div class="col-sm-3">DESDE: {{fechadesde }}</div>
+            <div class="col-sm-3 fecha">DESDE: {{fechadesde }}</div>
         </div>
 
         <div class="row">
@@ -45,22 +49,22 @@
             <div class="col-sm-2"></div>
             <div class="col-sm-2"></div>
             <div class="col-sm-2"></div>
-            <div class="col-sm-3">HASTA: {{fechahasta}}</div>
+            <div class="col-sm-3 fecha">HASTA: {{fechahasta}}</div>
         </div>
         
         <div class="row">
-            <div class="col-sm-4"></div>
-            <div class="col-sm-4">
-                <h5> RESUMEN {{proveedor}} </h5>
+            <!--div class="col-sm-1"></div-->
+            <div class="col-sm-12">
+                <h6> RESUMEN </h6>
             </div>
-            <div class="col-sm-4"></div>
+            <!--div class="col-sm-1"></div-->
         </div>
 
         <br>
 
             {% for key, value in datadict.items %} 
 
-                <div class="col-sm-4">
+                <div class="col-sm-12">
                     <h6> {{key}} </h6>
                 </div>
 
@@ -77,14 +81,19 @@
                     </thead>
                     <tbody>
                         {% for v in value %}
-                            <tr>
-                                <td>{{ v.0.fecha }} </td>
-                                <td>{{ v.0.comprobante }}  </td>
-                                <td>{{ v.0.cantidad }} </td>
-                                <td>{{ v.0.descripcion }} </td>
-                                <td>$ {{ v.0.preciofinal | intcomma }} </td>
-                                <td>$ {{ v.0.total | intcomma }}</td>
-                            </tr>
+                            
+                            {% for e in v.data %}
+                                {% for a in e.data %}
+                                    <tr>
+                                        <td>{{ a.fecha }} </td>
+                                        <td>{{ a.comprobante }}  </td>
+                                        <td>{{ a.cantidad }} </td>
+                                        <td>{{ a.detalle }} </td>
+                                        <td>$ {{ a.preciofinal | intcomma }} </td>
+                                        <td>$ {{ a.total | intcomma }}</td>
+                                    </tr>
+                                {%endfor%}
+                            {%endfor%}
                         {%endfor%}
                     </tbody>
                 </table>
