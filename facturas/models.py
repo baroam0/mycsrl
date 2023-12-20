@@ -101,8 +101,10 @@ class FacturaProveedor(models.Model):
         return float(round(monto,2))
     
     def gettotalfactura(self):
-        monto = float(self.getsubtotalfactura()) + float(self.ajusteglobal) + self.getiva() + self.getiibb() + float(self.ajusteglobal)
-        return monto
+        print(self.ajusteglobal)
+        monto = float(self.getsubtotalfactura()) + float(self.ajusteglobal) + self.getiva() + self.getiibb()
+        print(monto)
+        return round(monto,2)
 
     def __str__(self):
         return str(self.fecha)
