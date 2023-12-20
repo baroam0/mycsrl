@@ -38,8 +38,8 @@
                             <td>{{ detalle.obra }} </td>
                             <td>{{ detalle.descripciondetalle }} </td>
                             <td>{{ detalle.cantidad }} </td>
-                            <td>$ {{ detalle.getpreciounitariomodel | intcomma }} </td>
-                            <td>$ {{ detalle.getpreciounitarioiva | intcomma }} </td>
+                            <td>$ {{ detalle.getpreciounitario | intcomma }} </td>
+                            <td>$ {{ detalle.preciototal | intcomma }} </td>
                             <td>$ {{ detalle.getpreciofinal | intcomma }}</td>
                         </tr>
 

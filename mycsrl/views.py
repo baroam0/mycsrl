@@ -391,8 +391,12 @@ def detallereportesgastosporobra(request):
         descuento = descuento + i.descuentoglobal
         ajuste = ajuste + i.ajusteglobal
 
+    """
     for i in detallesfacturas:
         totalgasto = totalgasto + i.getpreciofinal()
+    """
+
+    totalgasto = obra.getgastoporobra()
 
     valor = float(totalgasto) - float(descuento) + float(ajuste)
     return render(

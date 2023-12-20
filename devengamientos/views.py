@@ -16,7 +16,7 @@ from mycsrl.views import helperpagado
 
 
 @login_required(login_url='/login')
-def listadodevengamiento(request, pk):    
+def listadodevengamiento(request, pk):
     factura = FacturaProveedor.objects.get(pk=pk)
     devengamiento = Devengamiento.objects.filter(factura=factura)
     paginador = Paginator(devengamiento, 20)
@@ -132,7 +132,7 @@ def devengamiento_delete(request, pk):
         devengamiento.delete()
         usuario = request.user
         helperpagado(facturaproveedor.pk, usuario)
-        return redirect('/devengamiento/listado/')
+        return redirect('/devengamiento/nuevo/' + str(devengamiento.factura.pk))
         
     return render(
             request,
