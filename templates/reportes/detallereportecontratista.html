@@ -36,17 +36,22 @@
                     </thead>
                     
                     {% for v in value %}
-                        <tbody>
-                            <tr>
-                                <td style="width:5%">{{ v.codigo }}  </td>
-                                <td style="width:40%">{{ v.obra }}</td>
-                                <td style="width:15%">{{ v.importe | intcomma }}</td> 
-                                <td style="width:15%">{{ v.entregado | intcomma  }} </td>
-                                <td style="width:10%">{{ v.saldo | intcomma }} </td>
-                                <td style="width:30%"> </td>
-                                <td style="width:20%"> </td>
-                            </tr>
-                        </tbody>
+                        
+                            
+                                {% if v.codigo %}
+                                <tbody>
+                                    <tr>
+                                        <td style="width:5%">{{ v.codigo }}  </td>
+                                        <td style="width:40%">{{ v.obra }}</td>
+                                        <td style="width:15%"> $ {{ v.importe | intcomma }}</td> 
+                                        <td style="width:15%"> $ {{ v.entregado | intcomma  }} </td>
+                                        <td style="width:10%"> $ {{ v.saldo | intcomma }} </td>
+                                        <td style="width:30%"> </td>
+                                        <td style="width:20%"> </td>
+                                    </tr>
+                                </tbody>
+                                {% endif %}
+                        
                     {%endfor%}
                 </table>
 
@@ -55,19 +60,19 @@
                         <tr>
                             <td style="width:5%"></td>
                             <td style="width:37%">
-                                
+                                <h6><b>SUMA</b></h6>
                             </td>
                             <td style="width:15%">{% with value|last as last %}
-                                    {{ last.totalimporte | intcomma }}
+                                    $ {{ last.totalimporte | intcomma }}
                                 {% endwith %} 
                             </td> 
                             <td style="width:15%">{% with value|last as last %}
-                                    {{ last.totalentregado | intcomma }}
+                                    $ {{ last.totalentregado | intcomma }}
                                 {% endwith %} 
                             </td>
                             <td style="width:10%">
                                 {% with value|last as last %}
-                                    {{ last.totalsaldo | intcomma }}
+                                    $ {{ last.totalsaldo | intcomma }}
                                 {% endwith %}
                             </td>
                             <td style="width:30%"> </td>
