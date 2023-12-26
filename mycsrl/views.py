@@ -186,7 +186,7 @@ def detallereportesporfacturas(request):
                             "comprobante" : df.factura.comprobante,
                             "detalle": df.descripciondetalle.descripciondetalle,
                             "cantidad": df.cantidad,
-                            "preciofinal": df.getpreciounitario(),
+                            "preciofinal": df.getpreciounitariofinal(),
                             "total": round(df.getpreciototalfinal(),2),
                         })
 
