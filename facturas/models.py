@@ -146,8 +146,6 @@ class DetalleFacturaProveedor(models.Model):
         return float(round(monto,2))
     
     def getpreciounitariofinal(self):
-        
-
         monto = self.preciototal / self.cantidad
         monto = monto - self.descuento
         monto = monto - (monto * self.descuentoporcentaje / 100 )
