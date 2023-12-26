@@ -124,7 +124,7 @@ def detallereportesporfacturas(request):
     fechahasta = formateafecha(request.GET.get("fechahasta"))
     proveedor =  Proveedor.objects.get(pk=request.GET.get("id_proveedor"))
     facturaproveedor = FacturaProveedor.objects.filter(pagado=False,proveedor=proveedor,fecha__range=(fechadesde, fechahasta))
-    detallefacturaproveedor = DetalleFacturaProveedor.objects.filter(factura__in = facturaproveedor)
+    detallefacturaproveedor = DetalleFacturaProveedor.objects.filter(factura__in = facturaproveedor).order_by("obra__descripcion")
     datadict= dict()
     tmplist = list()
 
@@ -199,12 +199,10 @@ def detallereportesporfacturas(request):
   
     for o in obras:
         for df in detallefacturaproveedor:
-            if o.pk == df.obra.pk:
-                totalobra = totalobra + df.getpreciototalfinal()
-                obra = o.descripcion
-            else:
-                datadict.append({
-                    "obra": obra
+            if o.descripcion == df.obra.descripcion:
+                dicttotales.append({
+                    "obra": o.descripcion,
+                    "total": df.gettotalporobra()
                 })
             
         """
@@ -216,8 +214,14 @@ def detallereportesporfacturas(request):
         #totalobra = 0
         #empresa = ""
 
-    for d in dicttotales:
-        totalgeneral = 0
+    #https://bobbyhadz.com/blog/python-remove-duplicates-from-list-of-dictionaries
+
+    dicttotales = list(
+        {
+            dictionary['obra']: dictionary
+            for dictionary in dicttotales
+        }.values()
+    )
    
     print(dicttotales)
     return render(
