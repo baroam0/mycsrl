@@ -118,11 +118,17 @@ def gettotalobra(obra):
         return float(round(total,4))
 
 
-def gettotalempresa(proveedor, empresa, obra):
+def gettotalempresa(proveedor, empresa, fechadesde, fechahasta):
         proveedor = Proveedor.objects.get(pk=proveedor)
-        empresa = Empresa.objects.get(descripcion=empresa.pk)
-        obra = Obra.objects.get(pk=obra, empresa=empresa.pk)
-        detalles = DetalleFacturaProveedor.objects.filter(obra=obra, factura__pagado=False, factura__proveedor=proveedor)
+        empresa = Empresa.objects.get(descripcion=empresa)
+        obra = Obra.objects.filter(empresa=empresa)
+
+        facturaproveedor = FacturaProveedor.objects.filter(
+            pagado=False,
+            proveedor=proveedor,fecha__range=(fechadesde, fechahasta)
+        )
+
+        detalles = DetalleFacturaProveedor.objects.filter(factura__in=facturaproveedor, obra__in=obra)
         total = 0
         for d in detalles:
             total = total + d.getpreciototalfinal()
@@ -153,7 +159,6 @@ def detallereportesporfacturas(request):
 
     datadict[proveedor.razonsocial] = list()
 
-    
     for e in empresas:
         datadict[proveedor.razonsocial].append(
             {
@@ -162,7 +167,6 @@ def detallereportesporfacturas(request):
             }
         )
     
-    
     for d in datadict[proveedor.razonsocial]:
         for o in obras:
             if o.empresa.descripcion == d["empresa"]:
@@ -170,7 +174,6 @@ def detallereportesporfacturas(request):
                     "obra": o.descripcion,
                     "data": list()
                 })
-    
  
     for d in datadict[proveedor.razonsocial]:
         for df in detallefacturaproveedor:
@@ -211,16 +214,18 @@ def detallereportesporfacturas(request):
     )
 
     dicttotalempresa = list()
-    
-    for e in empresas:
-        for o in obras:
-            if o.empresa.pk == e.pk:
-                dicttotalempresa.append({
-                    "empresa": e.descripcion,
-                    "total": gettotalempresa(proveedor.pk, e.pk, o.pk)
-                })
 
-    print(dicttotalempresa)    
+    for e in empresas:
+        #dicttotalempresa[e.descripcion] = 0
+        dicttotalempresa.append(
+            {
+                "empresa": e.descripcion
+            }
+        )
+
+    for d in dicttotalempresa:
+        #dicttotalempresa[d] = gettotalempresa(proveedor.pk, d, fechadesde, fechahasta)
+        d["total"] = gettotalempresa(proveedor.pk, d["empresa"], fechadesde, fechahasta)
 
     return render(
         request, 
@@ -229,7 +234,8 @@ def detallereportesporfacturas(request):
             "fechadesde": fechadesde,
             "fechahasta": fechahasta,
             "datadict": datadict,
-            "dictotales": dicttotales
+            "dictotales": dicttotales,
+            "dicttotalempresa": dicttotalempresa
         }
     )
 
