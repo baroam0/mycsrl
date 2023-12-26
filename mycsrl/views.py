@@ -110,12 +110,23 @@ def reportesfacturas(request):
 
 def gettotalobra(obra):
         obra = Obra.objects.get(descripcion=obra)
-        detalles = DetalleFacturaProveedor.objects.filter(obra=obra)
-
+        detalles = DetalleFacturaProveedor.objects.filter(obra=obra, factura__pagado=False)
         total = 0
         for d in detalles:
-            total = total + d.getpreciounitarioxcantidad()
-        
+            total = total + d.getpreciototalfinal()
+
+        return float(round(total,4))
+
+
+def gettotalempresa(proveedor, empresa, obra):
+        proveedor = Proveedor.objects.get(pk=proveedor)
+        empresa = Empresa.objects.get(descripcion=empresa.pk)
+        obra = Obra.objects.get(pk=obra, empresa=empresa.pk)
+        detalles = DetalleFacturaProveedor.objects.filter(obra=obra, factura__pagado=False, factura__proveedor=proveedor)
+        total = 0
+        for d in detalles:
+            total = total + d.getpreciototalfinal()
+
         return float(round(total,4))
 
 
@@ -173,24 +184,9 @@ def detallereportesporfacturas(request):
                             "detalle": df.descripciondetalle.descripciondetalle,
                             "cantidad": df.cantidad,
                             "preciofinal": df.getpreciounitario(),
-                            "total": round(df.preciototal,2),
+                            "total": round(df.getpreciototalfinal(),2),
                         })
 
-
-    """
-    for d in datadict[proveedor.razonsocial]:
-        for df in detallefacturaproveedor:
-            if df.obra.empresa.descripcion == d["empresa"]:
-                #if df.obra.descripcion == d["data"][0]["obra"]:
-                d["data"][0]["data"].append({
-                        "fecha": df.factura.fecha,
-                        "comprobante" : df.factura.comprobante,
-                        "detalle": df.descripciondetalle.descripciondetalle,
-                        "cantidad": df.cantidad,
-                        "preciofinal": df.getpreciounitario(),
-                        "total": round(df.preciototal,2),
-                })
-    """
     
     dicttotales = list()
     obra = ""
@@ -202,19 +198,10 @@ def detallereportesporfacturas(request):
             if o.descripcion == df.obra.descripcion:
                 dicttotales.append({
                     "obra": o.descripcion,
-                    "total": df.gettotalporobra()
+                    "empresa": o.empresa.descripcion,
+                    "total": round(gettotalobra(o.descripcion),2)
                 })
             
-        """
-            if d["empresa"] == df.obra.descripcion:
-                totalobra = df.factura.gettotalfactura()
-                empresa = df.obra.empresa.descripcion
-            """
-        #dicttotales.append({"total": totalobra, "empresa": empresa})
-        #totalobra = 0
-        #empresa = ""
-
-    #https://bobbyhadz.com/blog/python-remove-duplicates-from-list-of-dictionaries
 
     dicttotales = list(
         {
@@ -222,15 +209,27 @@ def detallereportesporfacturas(request):
             for dictionary in dicttotales
         }.values()
     )
-   
-    print(dicttotales)
+
+    dicttotalempresa = list()
+    
+    for e in empresas:
+        for o in obras:
+            if o.empresa.pk == e.pk:
+                dicttotalempresa.append({
+                    "empresa": e.descripcion,
+                    "total": gettotalempresa(proveedor.pk, e.pk, o.pk)
+                })
+
+    print(dicttotalempresa)    
+
     return render(
         request, 
         'reportes/detallereportesfacturas.html',
         {
             "fechadesde": fechadesde,
             "fechahasta": fechahasta,
-            "datadict": datadict
+            "datadict": datadict,
+            "dictotales": dicttotales
         }
     )
 

@@ -26,12 +26,6 @@
     </style>
     
 
-
-    <!--div class="container"-->
-        <!--header class="onlyprint">
-            <img style="float: right;" src="{% static "images/logo.jpg" %}" alt="" width="150" height="93">
-        </header-->
-
         <br>
 
         <div class="row">
@@ -101,18 +95,18 @@
                             </div>
                         </div>
                         <table>
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Comprobante</th> 
+                                    <th>Cantidad</th>
+                                    <th>Descripcion</th>
+                                    <th>Precio Unitario incl Impuestos</th>
+                                    <th>Monto</th>
+                                </tr>
+                            </thead>
                             
-                                <thead>
-                                    <tr>
-                                        <th>Fecha</th>
-                                        <th>Comprobante</th> 
-                                        <th>Cantidad</th>
-                                        <th>Descripcion</th>
-                                        <th>Precio Unitario incl Impuestos</th>
-                                        <th>Monto</th>
-                                    </tr>
-                                </thead>
-                                {% for a in e.data%}
+                            {% for a in e.data%}
                                 <tbody>
                                     <tr>
                                         <td>{{ a.fecha }} </td>
@@ -123,8 +117,27 @@
                                         <td>$ {{ a.total | intcomma }}</td>
                                     </tr>       
                                 </tbody>
-                                {%endfor%}
+                            {%endfor%}
                         </table>
+
+                        {% for el in dictotales%}
+                        
+                        {% if el.obra == e.obra %}
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td> </td>
+                                            <td> </td>
+                                            <td> </td>
+                                            <td> </td>
+                                            <td> <b> Total {{el.obra}} : </b> </td>
+                                            <td> <b> $ {{el.total | intcomma}} </b> </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            {% endif %}
+                        {% endfor %}
+
                     {%endfor%}
                     <br>
                 {% endfor %}
