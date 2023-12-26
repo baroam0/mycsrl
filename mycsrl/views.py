@@ -151,6 +151,7 @@ def detallereportesporfacturas(request):
             }
         )
     
+    
     for d in datadict[proveedor.razonsocial]:
         for o in obras:
             if o.empresa.descripcion == d["empresa"]:
@@ -159,19 +160,66 @@ def detallereportesporfacturas(request):
                     "data": list()
                 })
     
+ 
+    for d in datadict[proveedor.razonsocial]:
+        for df in detallefacturaproveedor:
+            if df.obra.empresa.descripcion == d["empresa"]:              
+                for e in d["data"]:
+                    if df.obra.descripcion == e["obra"]:
+                        indice =  d["data"].index(e)
+                        d["data"][indice]["data"].append({
+                            "fecha": df.factura.fecha,
+                            "comprobante" : df.factura.comprobante,
+                            "detalle": df.descripciondetalle.descripciondetalle,
+                            "cantidad": df.cantidad,
+                            "preciofinal": df.getpreciounitario(),
+                            "total": round(df.preciototal,2),
+                        })
+
+
+    """
     for d in datadict[proveedor.razonsocial]:
         for df in detallefacturaproveedor:
             if df.obra.empresa.descripcion == d["empresa"]:
-                if df.obra.descripcion == d["data"][0]["obra"]:
-                    d["data"][0]["data"].append({
+                #if df.obra.descripcion == d["data"][0]["obra"]:
+                d["data"][0]["data"].append({
                         "fecha": df.factura.fecha,
                         "comprobante" : df.factura.comprobante,
                         "detalle": df.descripciondetalle.descripciondetalle,
                         "cantidad": df.cantidad,
                         "preciofinal": df.getpreciounitario(),
                         "total": round(df.preciototal,2),
-                    })
+                })
+    """
+    
+    dicttotales = list()
+    obra = ""
+    totalgeneral = 0
+    totalobra = 0
+  
+    for o in obras:
+        for df in detallefacturaproveedor:
+            if o.pk == df.obra.pk:
+                totalobra = totalobra + df.getpreciototalfinal()
+                obra = o.descripcion
+            else:
+                datadict.append({
+                    "obra": obra
+                })
+            
+        """
+            if d["empresa"] == df.obra.descripcion:
+                totalobra = df.factura.gettotalfactura()
+                empresa = df.obra.empresa.descripcion
+            """
+        #dicttotales.append({"total": totalobra, "empresa": empresa})
+        #totalobra = 0
+        #empresa = ""
 
+    for d in dicttotales:
+        totalgeneral = 0
+   
+    print(dicttotales)
     return render(
         request, 
         'reportes/detallereportesfacturas.html',
