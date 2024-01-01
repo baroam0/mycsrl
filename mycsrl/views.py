@@ -256,89 +256,6 @@ def detallereportesporfacturas(request):
     )
 
 
-"""
-def detallereportesporfacturas(request):
-    Funcion para reporte de facturas por rango de fechas
-
-    fechadesde = formateafecha(request.GET.get("fechadesde"))
-    fechahasta = formateafecha(request.GET.get("fechahasta"))
-    proveedor =  Proveedor.objects.get(pk=request.GET.get("id_proveedor"))
-    facturaproveedor = FacturaProveedor.objects.filter(pagado=False,proveedor=proveedor,fecha__range=(fechadesde, fechahasta))
-
-    detallefacturaproveedor = DetalleFacturaProveedor.objects.filter(factura__in=facturaproveedor).order_by('-obra')
-    proveedorbanco = ProveedorBanco.objects.filter(pk=request.GET.get("id_banco"))
-
-    total = 0
-    for d in facturaproveedor:
-        total = total + d.gettotalfactura()
-
-    obraslist = list()
-
-    for d in detallefacturaproveedor:
-        obraslist.append(d.obra.pk)
-    
-    obraslist = list(set(obraslist))
-    obras = Obra.objects.filter(pk__in=obraslist)
-    datadict = dict()
-
-    for o in obras:
-        datadict[o.descripcion] = list()
-    
-    totalgeneral = 0
-    itemlist = list()
-    tmpdict = dict()
-
-    for d in datadict:
-        for df in detallefacturaproveedor:
-            if d == df.obra.descripcion:
-                tmpdict["fecha"] = str(df.factura.fecha)
-                tmpdict["comprobante"] = df.factura.comprobante
-                tmpdict["cantidad"] = df.cantidad
-                tmpdict["descripcion"] = df.descripciondetalle.descripciondetalle
-                tmpdict["preciofinal"] = df.getpreciounitarioiva()
-                tmpdict["total"] = df.getpreciounitarioxcantidad()
-                itemlist.append(tmpdict)
-                datadict[d].append(itemlist) 
-                tmpdict = dict()
-            itemlist = list()
-
-    dicttotales = dict()
-
-    totalg = 0
-    empresa = ""
-    for d in datadict:
-        for df in detallefacturaproveedor:
-            if d == df.obra.descripcion:
-                #totalg = totalg + df.getpreciounitarioxcantidad()
-                totalg = df.factura.gettotalfactura()
-                empresa = df.obra.empresa.descripcion
-    
-        dicttotales[d] = {"total": totalg, "empresa": empresa}
-        totalg = 0
-        empresa = ""
-
-    for d in dicttotales:
-        totalgeneral = totalgeneral + dicttotales[d]["total"]
-
-    print(dicttotales)
-    return render(
-        request, 
-        'reportes/detallereportesfacturas.html',
-        {
-            "fechadesde": fechadesde,
-            "fechahasta": fechahasta,
-            "proveedor": proveedor,
-            "facturaproveedor": facturaproveedor,
-            "detallefacturaproveedor": detallefacturaproveedor,
-            "total": total,
-            "banco": proveedorbanco,
-            "datadict" : datadict,
-            "totalgeneral": totalgeneral,
-            "dicttotales": dicttotales
-        }
-    )
-"""
-
 def reporteingresoegresoobra(request):    
     obras = Obra.objects.all()
 
@@ -597,5 +514,17 @@ def detallereportecontratista(request):
         'reportes/detallereportecontratista.html',
         {         
             "result": datalist
+        }
+    )
+
+
+
+def reporteingresoobra(request):
+    obras = Obra.objects.all()
+    return render(
+        request, 
+        'reportes/reporte_ingreso_obra.html',
+        {
+            "obras": obras,
         }
     )
