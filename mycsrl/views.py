@@ -518,7 +518,6 @@ def detallereportecontratista(request):
     )
 
 
-
 def reporteingresoobra(request):
     obras = Obra.objects.all()
     return render(
@@ -528,3 +527,24 @@ def reporteingresoobra(request):
             "obras": obras,
         }
     )
+
+
+
+def detallereporteingresoobra(request):
+    """Funcion para reporte de gastos por facturas"""
+
+    obra = Obra.objects.get(pk=request.GET.get("id_obra"))
+
+    resultados = Facturacion.objects.filter(obra=obra)
+
+    total = resultados[0].totalfacturacionporobra(obra.pk)
+
+    return render(
+        request, 
+        'reportes/detalleingresoporobra.html',
+        {
+            "obra": obra,
+            "resultados": resultados,
+            "total": total
+        }
+    )   

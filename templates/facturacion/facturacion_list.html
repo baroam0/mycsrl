@@ -1,6 +1,8 @@
 
 {% extends 'base.html' %}
 
+{% load humanize %}
+
 {% block content %}
 
     <div class="container">
@@ -64,7 +66,7 @@
                         <td>{{ resultado.obra }}  </td>
                         <td>{{ resultado.descripcion.upper }}  </td>
                         <td>{{ resultado.comprobante }}  </td>
-                        <td>$ {{ resultado.totalfacturacion }}  </td>
+                        <td>$ {{ resultado.totalfacturacion | intcomma }}  </td>
                         <td>{{ resultado.usuario }}</td>
 
                         <td>

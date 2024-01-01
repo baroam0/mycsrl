@@ -1,5 +1,6 @@
 
 from django.db import models
+import facturacion
 
 from pagos.models import Obra
 from usuariosadm.models import UserAdm
@@ -30,15 +31,18 @@ class Facturacion(models.Model):
     def __str__(self):
         return str(self.pk) + " - " + str(self.fecha) 
 
-    def totalfacturacionporobra(self):
+    def totalfacturacionporobra(self, id_obra):
         total = 0
-        try:
-            detallesfacturaciones = DetalleFacturacion.objects.filter(facturacion=self.obra.pk)
-            for i in detallesfacturaciones:
-                total = total + i.monto
-            return total
-        except:
-            return None
+        obra = Obra.objects.get(pk=id_obra)
+        facturacion = Facturacion.objects.filter(obra=obra)
+
+        detallesfacturaciones = DetalleFacturacion.objects.filter(facturacion__in=facturacion)
+
+        for i in detallesfacturaciones:
+            total = total + i.monto
+        
+        return total
+        
 
     def totalfacturacion(self):
         detallesfacturaciones = DetalleFacturacion.objects.filter(facturacion=self.pk)
