@@ -10,11 +10,11 @@
         <br>
         
         <div class="row">
-            <div class="col-sm-3"></div>
-            <div class="col-sm-6">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-8">
                 <h3> Resumen Ingreso / Egreso por Obra. </h3>
             </div>
-            <div class="col-sm-3"></div>
+            <div class="col-sm-2"></div>
         </div>
 
 
@@ -40,10 +40,15 @@
                                     <td>$ {{ cobro.totalfacturacion | intcomma }}</td>
                                 </tr>
                             {% endfor %}
+
+                            <tr>
+                                <td> <b> Suma INGRESOS </b> </td>
+                                <td> </td>
+                                <td> </td>
+                                <td>$ {{totalcobros | intcomma }}</td>
+                            </tr>
                         </tbody>
                 </table>
-                <h5> Total Ingresos: $ {{totalcobros | intcomma }} </h5>
-        
         <hr>
 
         <h5> Egresos </h5>
@@ -51,10 +56,7 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>Fecha</th>
-                        <th>Proveedor</th>
-                        <th>Comprobante</th>
-                        <th>Medio Pago</th>
+                        <th>Descripcion</th>
                         <th>Monto</th>
                     </tr>
                 </thead>
@@ -62,16 +64,17 @@
                 <tbody>
                     {% for devengamiento in devengamientos %}
                         <tr>
-                            <td>{{ devengamiento.fecha | date:"d-m-Y"  }}  </td>
-                            <td>{{ devengamiento.factura.proveedor }}  </td>
-                            <td>{{ devengamiento.factura.comprobante }}  </td>
-                            <td>{{ devengamiento.mediopago }}  </td>
-                            <td>$ {{ devengamiento.monto | intcomma }}</td>
+                            <td>{{ devengamiento.rubro__descripcion }}  </td>
+                            <td>$ {{ devengamiento.sum_custom_method | intcomma }}  </td>
                         </tr>
                     {% endfor %}
+
+                    <tr>
+                        <td> <b> Suma EGRESOS </b> </td>
+                        <td>$ {{totalpagos | intcomma}}  </td>
+                    </tr>
                 </tbody>
             </table>
-            <h5> Total Egresos: $ {{totalpagos | intcomma}} </h5>
         
         <hr>
 
