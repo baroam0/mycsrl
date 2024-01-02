@@ -2,7 +2,7 @@
 from locale import dcgettext
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.db.models import F, Sum
+from django.db.models import F, Sum, ExpressionWrapper, DecimalField
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from django.http import JsonResponse
@@ -529,7 +529,6 @@ def reporteingresoobra(request):
     )
 
 
-
 def detallereporteingresoobra(request):
     """Funcion para reporte de gastos por facturas"""
 
@@ -548,3 +547,56 @@ def detallereporteingresoobra(request):
             "total": total
         }
     )   
+
+
+def reporteegresoobra(request):
+    obras = Obra.objects.all()
+    return render(
+        request, 
+        'reportes/reporte_egreso_obra.html',
+        {
+            "obras": obras,
+        }
+    )
+
+
+def detallereporteegresoobra(request):
+    """Funcion para reporte de egreso por obra agrupado por rubro """
+
+    obra = Obra.objects.get(pk=request.GET.get("id_obra"))
+
+    resultados = (
+        DetalleFacturaProveedor.objects
+        .filter(obra=obra.pk)
+        .values('rubro__descripcion')
+        .annotate(
+            sum_custom_method=Sum(
+                ExpressionWrapper(
+                    F('preciototal') - 
+                    F('preciototal') * F('descuentoporcentaje') / 100 + 
+                    F('preciototal') * F('factura__iva__retencion') / 100 +
+                    F('preciototal') * F('factura__ingresosbrutos__retencion') / 100 +
+                    F('factura__ajusteglobal'),
+                    output_field=DecimalField()
+                )
+            )
+        )
+    )
+
+    total_egresos = 0
+
+    for r in resultados:
+        total_egresos = total_egresos + r['sum_custom_method']
+        r['sum_custom_method'] = round(r['sum_custom_method'],2)
+    
+    return render(
+        request, 
+        'reportes/detalleegresoporobra.html',
+        {
+            "obra": obra,
+            "resultados": resultados,
+            "total_egresos": round(total_egresos,2)
+        }
+    )
+
+

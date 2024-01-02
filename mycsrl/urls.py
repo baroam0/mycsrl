@@ -18,14 +18,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-from .views import (home, loginusuario, salir, reporteporfactura, 
+from .views import (detallereporteegresoobra, home, loginusuario, reporteegresoobra, salir, reporteporfactura, 
                     detallereporteporfactura, reporteingresoegresoobra, 
                     detallereporteingresoegresoobra, 
                     ajaxcomprobanteproveedor, ajaxbancoproveedor, ajaxproveedor,
                     reportesfacturas, detallereportesporfacturas,
                     reportegastoporobra, detallereportesgastosporobra, 
                     reportecontratista, detallereportecontratista,
-                    reporteingresoobra, detallereporteingresoobra
+                    reporteingresoobra, detallereporteingresoobra,
+                    reporteegresoobra, detallereporteegresoobra
                     )
 
 
@@ -63,5 +64,8 @@ urlpatterns = [
     
     path('reporteingresoobra/', reporteingresoobra),
     path('detallereporteingresoobra/', detallereporteingresoobra),
+
+    path('reporteegresoobra/', reporteegresoobra),
+    path('detallereporteegresoobra/', detallereporteegresoobra),
     
 ]
