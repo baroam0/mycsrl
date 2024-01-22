@@ -149,6 +149,7 @@ def detallereportesporfacturas(request):
     proveedor =  Proveedor.objects.get(pk=request.GET.get("id_proveedor"))
     facturaproveedor = FacturaProveedor.objects.filter(pagado=False,proveedor=proveedor,fecha__range=(fechadesde, fechahasta))
     detallefacturaproveedor = DetalleFacturaProveedor.objects.filter(factura__in = facturaproveedor).order_by("obra__descripcion")
+    banco = ProveedorBanco.objects.filter(proveedor=proveedor.pk)
     datadict= dict()
     tmplist = list()
 
@@ -249,7 +250,8 @@ def detallereportesporfacturas(request):
             "fechahasta": fechahasta,
             "datadict": datadict,
             "dictotales": dicttotales,
-            "dicttotalempresa": dicttotalempresa
+            "dicttotalempresa": dicttotalempresa,
+            "banco": banco
         }
     )
 
