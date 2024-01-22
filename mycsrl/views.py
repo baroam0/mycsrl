@@ -289,8 +289,7 @@ def detallereporteingresoegresoobra(request):
                     F('preciototal') - 
                     F('preciototal') * F('descuentoporcentaje') / 100 + 
                     F('preciototal') * F('factura__iva__retencion') / 100 +
-                    F('preciototal') * F('factura__ingresosbrutos__retencion') / 100 +
-                    F('factura__ajusteglobal'),
+                    F('preciototal') * F('factura__ingresosbrutos__retencion') / 100,
                     output_field=DecimalField()
                 )
             )
