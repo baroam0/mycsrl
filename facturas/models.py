@@ -164,7 +164,7 @@ class DetalleFacturaProveedor(models.Model):
             iibb = monto * self.factura.ingresosbrutos.retencion / 100
         else: 
             iibb = 0
-        print(monto)
+
         monto = monto + percepcion + iva + iibb
         return float(round(monto,2))
 

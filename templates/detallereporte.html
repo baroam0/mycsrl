@@ -12,7 +12,7 @@
         <div class="row">
             <div class="col-sm-1"></div>
             <div class="col-sm-10">
-                <h3> Reporte Factura - {{facturaproveedor.proveedor}} - {{facturaproveedor.fecha}} - {{facturaproveedor.comprobante}} </h3>
+                <h3> Resumen Factura - {{facturaproveedor.proveedor}} - {{facturaproveedor.fecha}} - {{facturaproveedor.comprobante}} </h3>
             </div>
             <div class="col-sm-1"></div>
         </div>
@@ -26,7 +26,6 @@
                             <th>Cantidad</th>
                             <th>Precio Unitario</th>
                             <th>Precio Final</th>
-                            <th>Monto</th>
                         </tr>
                     </thead>
 
@@ -39,8 +38,7 @@
                             <td>{{ detalle.descripciondetalle }} </td>
                             <td>{{ detalle.cantidad }} </td>
                             <td>$ {{ detalle.getpreciounitario | intcomma }} </td>
-                            <td>$ {{ detalle.preciototal | intcomma }} </td>
-                            <td>$ {{ detalle.getpreciofinal | intcomma }}</td>
+                            <td>$ {{ detalle.getpreciototalfinal | intcomma }} </td>
                         </tr>
 
                         {% endfor %}
