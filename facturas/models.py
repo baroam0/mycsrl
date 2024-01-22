@@ -96,7 +96,7 @@ class FacturaProveedor(models.Model):
         monto = 0
 
         for d in detallesfacturas:
-            monto = monto + d.preciototal
+            monto = monto + d.getpreciototal()
         
         return float(round(monto,2))
     
@@ -140,10 +140,14 @@ class DetalleFacturaProveedor(models.Model):
 
 
     def getpreciounitario(self):
-        monto = self.preciototal / self.cantidad
+        monto = self.getpreciototal() / self.cantidad
         monto = monto - self.descuento
         monto = monto - (monto * self.descuentoporcentaje / 100 )
         return float(round(monto,2))
+
+    def getpreciototal(self):
+        monto = self.preciototal + self.ajuste
+        return monto
     
     def getpreciounitariofinal(self):
         monto = self.preciototal / self.cantidad
