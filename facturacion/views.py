@@ -197,7 +197,7 @@ def detallefacturacion_new(request, pk):
                 return redirect('/facturacion/editar/' + str(facturacion.pk))
             except Exception as e:
                 messages.warning(request, "Ha ocurrido un error.")
-                return redirect('/facturacion/listado')
+                return redirect('/facturacion/editar/' + str(facturacion.pk))
         else:
             messages.warning(request, form.errors)
             return redirect('/facturacion/listado')
@@ -216,31 +216,30 @@ def detallefacturacion_new(request, pk):
 
 @login_required(login_url='/login')
 def detallefacturacion_edit(request, pk):
-    consulta = Facturacion.objects.get(pk=pk)
-    detallesfacturacion = DetalleFacturacion.objects.filter(facturacion=consulta)
-   
+    consulta = DetalleFacturacion.objects.get(pk=pk)
+    facturacion = Facturacion.objects.get(pk=consulta.facturacion.pk)
+
     if request.POST:
-        form = FacturacionForm(request.POST, instance=consulta)
+        form = DetalleFacturacionForm(request.POST, instance=consulta)
         if form.is_valid():
             facturacion = form.save(commit=False)
             usuario = request.user
             facturacion.usuario = usuario
             facturacion.save()
             messages.success(request, "Se ha modificado los datos.")
-            return redirect('/facturacion/listado')
+            return redirect('/facturacion/editar/' + str(consulta.facturacion.pk))
         else:
             messages.warning(request, form.errors)
-            return redirect('/bancos/listado')
+            return redirect('/facturacion/editar/' + str(consulta.facturacion.pk))
     else:
-        form = FacturacionForm(instance=consulta)
+        form = DetalleFacturacionForm(instance=consulta)
         return render(
             request,
-            'facturacion/facturacion_edit.html',
+            'facturacion/detallefacturacion_edit.html',
             {
                 "form": form,
                 "pk":pk,
-                "resultados": detallesfacturacion,
-                "facturacion": consulta
+                "facturacion": facturacion
             }
         )
 

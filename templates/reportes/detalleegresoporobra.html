@@ -1,0 +1,68 @@
+
+{% extends 'base_nomenu.html' %}
+
+{% load humanize %}
+
+{% block content %}
+
+    <div class="container">
+
+        <br>
+        
+        <div class="row">
+            <div class="col-sm-8"><h4>EGRESOS</h4> </div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-8"><h5>EMPRESA: {{obra.empresa.descripcion }}</h5> </div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-8"><h5>OBRA: {{obra.descripcion }}</h5> </div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
+        </div>
+        
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Monto</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody>
+                        {% for resultado in resultados %}                   
+                        <tr>
+                            <td>{{ resultado.rubro__descripcion }}  </td>
+                            <td>$ {{ resultado.sum_custom_method | intcomma }}</td>
+                            
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td><b> SUMA EGRESOS </b> </td>
+                             
+                            <td> <b> $ {{ total_egresos | intcomma }} </b> </td>
+                        </tr>             
+                    </tbody>
+                </table>
+        <hr>
+
+    </div>
+
+
+{% endblock %}
+
+
+    <script>
+        $(document).ready(function () {
+            
+        });
+
+    
+    </script>
+

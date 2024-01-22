@@ -55,49 +55,10 @@
 
     <script>
 
-        function BotonCancelar(){
-            window.close();
+        function BotonCancelar() {
+            window.location.replace("/facturacion/editar/" + {{facturacion.pk}});
         }
 
-        function LoadDetailUnit(pk){
-            $.ajax({
-                url: '/facturas/ajax/loadunidad/' + pk,
-                type: 'GET',
-                success: function(response){
-                    console.log(response.data);
-                    $('#id_unidad').val(response.data);
-                },
-                error: function(error){
-                    console.log(error);
-                }
-            })
-        }
-
-
-        function val() {
-            d = document.getElementById("id_descripciondetalle").value;
-        }
-
-        $('#id_descripciondetalle').change(function(){
-            LoadDetailUnit($(this).val());
-        })
-
-
-        $(document).ready(function () {
-            TranslateDatepickerToEs($("#id_fecha"));
-            window.onunload = function(){
-                window.opener.location.reload();
-                window.close(); 
-            };
-            $("#id_obra").select2();
-            $("#id_rubro").select2();
-            $("#id_descripciondetalle").select2();
-
-            $( "#myform" ).on( "submit", function( event ) {
-               
-
-            });
-        });
 
     </script>
 
