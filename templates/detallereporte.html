@@ -1,72 +1,166 @@
 
 {% extends 'base_nomenu.html' %}
-
 {% load humanize %}
+{% load static %}
 
 {% block content %}
 
-    <div class="container">
+    <style>
+    @media print{@page {size: landscape}}
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      border: 1px solid #ddd;
+      font-size: 11px;
+    }
+    
+    th, td {
+      text-align: left;
+      padding: 10px;
+      font-size: 9px;
+    }
+    
+    .fecha {
+        font-size: 10px;
+    }
+    </style>
+    
 
         <br>
+
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-3 fecha">DESDE: {{fechadesde }}</div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-3 fecha">HASTA: {{fechahasta}}</div>
+        </div>
         
         <div class="row">
-            <div class="col-sm-10"><h3> Resumen Factura</h3> </div>
-            <div class="col-sm-1"></div>
-            <div class="col-sm-1"></div>
-        </div>
-
-        <div class="row">
-            <div class="col-sm-10"><h3><b>{{facturaproveedor.proveedor}}</b></h3></div>
-            <div class="col-sm-1"></div>
-            <div class="col-sm-1"></div>
-        </div>
-
-        {% for detalle in detallefacturaproveedor%}
-
-            <div class="row">
-                <div class="col-sm-10"><h4> {{detalle.obra}} </h3></div>
-                <div class="col-sm-1"></div>
-                <div class="col-sm-1"></div>
+            <!--div class="col-sm-1"></div-->
+            <div class="col-sm-12">
+                <h4> RESUMEN </h4>
             </div>
+            <!--div class="col-sm-1"></div-->
+        </div>
 
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Comprobante</th>
-                            <th>Descripcion</th>
-                            <th>Cantidad</th>
-                            <th>Precio Unitario</th>
-                            <th>Precio Final incl Impuestos</th>
-                        </tr>
-                    </thead>
 
-                    <tbody>
+            {% for key, value in datadict.items %} 
+                <div class="row">
+                    <div class="col-sm-10">
+                        <!--h5> {{key}} </h5-->
+                    </div>
+
+                    <div class="col-sm-1">
+                    </div>
+                    
+                    <div class="col-sm-1">
+                    </div>
+                </div>
+
+                {% for v in value %}
+                    
+                    <div class="row">
+                        <div class="col-sm-10">
+                            <h6> {{v.empresa}} </h6>
+                        </div>
+
+                        <div class="col-sm-1">
+                        </div>
+
+                        <div class="col-sm-1">
+                        </div>                        
+                    </div>
+                    {% for e in v.data%}
+
+                        <div class="row">
+                            <div class="col-sm-10">
+                                {{e.obra}}
+                            </div>
+
+                            <div class="col-sm-1">
+                            </div>
+
+                            <div class="col-sm-1">
+                            </div>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Comprobante</th> 
+                                    <th>Cantidad</th>
+                                    <th>Descripcion</th>
+                                    <th>Precio Unitario incl Impuestos</th>
+                                    <th>Monto</th>
+                                </tr>
+                            </thead>
+                            
+                            {% for a in e.data%}
+                                <tbody>
+                                    <tr>
+                                        <td>{{ a.fecha }} </td>
+                                        <td>{{ a.comprobante }}  </td>
+                                        <td>{{ a.cantidad }} </td>
+                                        <td>{{ a.detalle }} </td>
+                                        <td>$ {{ a.preciofinal | intcomma }} </td>
+                                        <td>$ {{ a.total | intcomma }}</td>
+                                    </tr>       
+                                </tbody>
+                            {%endfor%}
+                        </table>
+
+                        {% for el in dictotales%}
                         
+                        {% if el.obra == e.obra %}
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td> </td>
+                                            <td> </td>
+                                            <td> </td>
+                                            <td> </td>
+                                            <td> <h6> Total {{el.obra}} : </h6> </td>
+                                            <td> <h6><b> $ {{el.total | intcomma}} </h6> </b> </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            {% endif %}
+                        {% endfor %}
 
-                        <tr>
-                            <td>{{ detalle.factura.fecha }}  </td>
-                            <td>{{ detalle.factura.comprobante }} </td>
-                            <td>{{ detalle.descripciondetalle }} </td>
-                            <td>{{ detalle.cantidad }} </td>
-                            <td>$ {{ detalle.getpreciounitario | intcomma }} </td>
-                            <td>$ {{ detalle.getpreciototalfinal | intcomma }} </td>
-                        </tr>
-
-                        
-                    </tbody>
-                </table>
-        {% endfor %}
-                <!--h5>Ajuste: $ {{ facturaproveedor.ajusteglobal | floatformat:2  }}</h5-->
-                <h5>Total: $ {{ facturaproveedor.gettotalfactura | intcomma  }}</h5>
-                {% for b in banco %}
-					<h6>Banco: {{b.descripcionbanco.upper}} </h6>
-					<h6>Alias: {{b.alias}} </h6>
-					<h6>CBU: {{b.cbu}} </h6>
+                    {%endfor%}
+                    <br>
                 {% endfor %}
+
+            {%endfor%}
+                
+            
+            {% for em in dicttotalempresa %}
+                <div class="row">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-8"><h6><b>Total {{em.empresa}} : $ {{em.total | intcomma}}  </b></h5></div>
+                    <div class="col-sm-2"></div>
+                </div>        
+            {% endfor %}
+            
+            {% for b in banco %}
+				<h6>Banco: {{b.descripcionbanco.upper}} </h6>
+			    <h6>Alias: {{b.alias}} </h6>
+				<h6>CBU: {{b.cbu}} </h6>
+            {% endfor %}
         <hr>
 
-    </div>
+    <!--/div-->
 
 
 

@@ -82,6 +82,7 @@ def reporteporfactura(request):
 
 
 def detallereporteporfactura(request):
+    """
     facturaproveedor = FacturaProveedor.objects.get(pk=request.GET.get("id_proveedor"))
     detallefacturaproveedor = DetalleFacturaProveedor.objects.filter(factura=facturaproveedor).order_by('-obra')
     proveedorbanco = ProveedorBanco.objects.filter(pk=request.GET.get("id_banco"))
@@ -94,7 +95,133 @@ def detallereporteporfactura(request):
             "detallefacturaproveedor": detallefacturaproveedor,
             "banco": proveedorbanco
         }
-    )   
+    )
+    """
+    
+    fechadesde = formateafecha(request.GET.get("id_fechadesde"))
+    fechahasta = formateafecha(request.GET.get("id_fechahasta"))
+    proveedor =  Proveedor.objects.get(pk=request.GET.get("id_proveedor"))
+    #facturaproveedor = FacturaProveedor.objects.filter(pagado=False,proveedor=proveedor)
+    facturaproveedor = FacturaProveedor.objects.get(pk=request.GET.get("id_proveedor"))
+    #detallefacturaproveedor = DetalleFacturaProveedor.objects.filter(factura__in = facturaproveedor).order_by("obra__descripcion")
+    detallefacturaproveedor = DetalleFacturaProveedor.objects.filter(factura=facturaproveedor).order_by('-obra')
+    
+    #banco = ProveedorBanco.objects.filter(proveedor=proveedor.pk)
+    proveedorbanco = ProveedorBanco.objects.filter(pk=request.GET.get("id_banco"))
+    banco = proveedorbanco
+    datadict= dict()
+    tmplist = list()
+
+    obraslist = list()
+    for df in detallefacturaproveedor:
+        obraslist.append(df.obra.pk)
+    obraslist = list(set(obraslist))
+    obras = Obra.objects.filter(pk__in=obraslist)
+
+    empresaslist = list()
+    for df in detallefacturaproveedor:
+        empresaslist.append(df.obra.empresa.pk)
+    empresaslist = list(set(empresaslist))
+    empresas = Empresa.objects.filter(pk__in=empresaslist)
+
+    datadict[proveedor.razonsocial] = list()
+
+    for e in empresas:
+        datadict[proveedor.razonsocial].append(
+            {
+                "empresa": e.descripcion,
+                "data": list()
+            }
+        )
+    
+    for d in datadict[proveedor.razonsocial]:
+        for o in obras:
+            if o.empresa.descripcion == d["empresa"]:
+                d["data"].append({
+                    "obra": o.descripcion,
+                    "data": list()
+                })
+ 
+    for d in datadict[proveedor.razonsocial]:
+        for df in detallefacturaproveedor:
+            if df.obra.empresa.descripcion == d["empresa"]:              
+                for e in d["data"]:
+                    if df.obra.descripcion == e["obra"]:
+                        indice =  d["data"].index(e)
+                        d["data"][indice]["data"].append({
+                            "fecha": df.factura.fecha,
+                            "comprobante" : df.factura.comprobante,
+                            "detalle": df.descripciondetalle.descripciondetalle,
+                            "cantidad": df.cantidad,
+                            "preciofinal": df.getpreciounitariofinal(),
+                            "total": round(df.getpreciototalfinal(),2),
+                        })
+
+    
+    dicttotales = list()
+    obra = ""
+    totalgeneral = 0
+    totalobra = 0
+  
+    for o in obras:
+        for df in detallefacturaproveedor:
+            if o.descripcion == df.obra.descripcion:
+                dicttotales.append({
+                    "obra": o.descripcion,
+                    "empresa": o.empresa.descripcion,
+                    "total": round(gettotalobra(o.descripcion),2)
+                })
+            
+
+    dicttotales = list(
+        {
+            dictionary['obra']: dictionary
+            for dictionary in dicttotales
+        }.values()
+    )
+
+    dicttotalempresa = list()
+
+    for e in empresas:
+        dicttotalempresa.append(
+            {
+                "empresa": e.descripcion,
+                "total": 0
+            }
+        )
+
+    """
+    for d in dicttotalempresa:
+        d["total"] = gettotalempresa(proveedor.pk, d["empresa"], fechadesde, fechahasta)
+    """
+
+    for d in dicttotalempresa:
+        for e in dicttotales:
+            if e["empresa"] == d["empresa"]:
+                d["total"] =  d["total"] + e["total"]
+                
+
+    return render(
+        request, 
+        'detallereporte.html',
+        {
+            "fechadesde": fechadesde,
+            "fechahasta": fechahasta,
+            "datadict": datadict,
+            "dictotales": dicttotales,
+            "dicttotalempresa": dicttotalempresa,
+            "banco": banco
+        }
+    ) 
+
+
+
+
+
+
+
+
+
 
 
 def reportesfacturas(request):
@@ -195,7 +322,7 @@ def detallereportesporfacturas(request):
                             "detalle": df.descripciondetalle.descripciondetalle,
                             "cantidad": df.cantidad,
                             "preciofinal": df.getpreciounitariofinal(),
-                            "total": round(df.getpreciototalfinal(),2),
+                            "total": df.getpreciototalfinal(),
                         })
 
     

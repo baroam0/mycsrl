@@ -36,6 +36,19 @@
                 
             </div>
 
+
+            <div class="form-inline">
+                <div class="col-6">
+                    <label for="id_fechadesde">Fecha Desde:</label> 
+                    <input type="text" name="id_fechadesde" class="form-control" required id="id_fechadesde">
+                </div>
+
+                <div class="col-6">
+                    <label for="id_fechahasta">Fecha Hasta:</label> 
+                    <input type="text" name="id_fechahasta" class="form-control" required id="id_fechahasta">
+                </div>
+            </div>
+
             <hr>
 
             <div class="form-inline">
@@ -70,6 +83,8 @@
     <script>
         $(document).ready(function () {
             $('#id_proveedor').select2();
+            TranslateDatepickerToEs($("#id_fechadesde"));
+            TranslateDatepickerToEs($("#id_fechahasta"));
         });
 
 
@@ -102,6 +117,8 @@
         function AbrirVentanaReporte(){
             var id_proveedor = $("#id_proveedor").val();
             var id_banco = $("#id_banco").val();
+            var id_fechadesde = $("#id_fechadesde").val();
+            var id_fechahasta = $("#id_fechahasta").val();
 
             if(id_banco==0 || id_banco==null){
                 Swal.fire(
@@ -112,7 +129,7 @@
                 return false;
             }
             
-            var urldetallefactura = "/detallereporte/?id_proveedor=" + id_proveedor + "&id_banco=" + id_banco ;
+            var urldetallefactura = "/detallereporte/?id_proveedor=" + id_proveedor + "&id_banco=" + id_banco + "&id_fechadesde=" + id_fechadesde + "&id_fechahasta=" + id_fechahasta ;
             window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
         }
 

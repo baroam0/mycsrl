@@ -169,7 +169,7 @@ class DetalleFacturaProveedor(models.Model):
         else: 
             iibb = 0
 
-        monto = monto + percepcion + iva + iibb
+        monto = monto + percepcion + iva + iibb + self.ajuste
         return float(round(monto,2))
 
     def getpreciototalfinal(self):
@@ -196,8 +196,8 @@ class DetalleFacturaProveedor(models.Model):
             iibb = monto * iibb
         else:
             iibb = 0
-        monto = float(monto) + float(iva) + float(iibb)
-        return round(monto, 2)        
+        monto = float(monto) + float(iva) + float(iibb) + float(self.ajuste)
+        return round(monto, 4)        
 
 
     def __str__(self):
