@@ -335,37 +335,37 @@ def listadofactura(request):
             Q(proveedor__nombrefantasia__icontains=parametro) |
             Q(proveedor__razonsocial__icontains=parametro) |
             Q(comprobante__contains=parametro)
-        ).order_by('fecha')
+        ).order_by('-fecha')
 
         consultaobra = DetalleFacturaProveedor.objects.filter(
             obra__descripcion__icontains=parametro
-        ).values_list('factura_id')
+        ).values_list('factura_id').order_by('-factura__fecha')
 
         consultadescripciondetalle = DetalleFacturaProveedor.objects.filter(
             descripciondetalle__descripciondetalle__icontains=parametro
-        ).values_list('factura_id')
+        ).values_list('factura_id').order_by('-factura__fecha')
 
 
         consultadrubro = DetalleFacturaProveedor.objects.filter(
             rubro__descripcion__icontains=parametro
-        ).values_list('factura_id')
+        ).values_list('factura_id').order_by('-factura__fecha')
 
         consultafacturaobras = FacturaProveedor.objects.filter(
             pk__in=consultaobra
-        )
+        ).order_by('-fecha')
 
         consultafacturadescripcion = FacturaProveedor.objects.filter(
             pk__in=consultadescripciondetalle
-        )
+        ).order_by('-fecha')
 
         consultafacturarubro = FacturaProveedor.objects.filter(
             pk__in=consultadrubro
-        )
+        ).order_by('-fecha')
         
         facturas = consulta | consultafacturaobras | consultafacturadescripcion | consultafacturarubro
 
     else:
-        facturas = FacturaProveedor.objects.all()
+        facturas = FacturaProveedor.objects.all().order_by('-fecha')
     paginador = Paginator(facturas, 20)
 
     if "page" in request.GET:
