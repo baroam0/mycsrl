@@ -11,13 +11,13 @@
       border-collapse: collapse;
       width: 100%;
       border: 1px solid #ddd;
-      font-size: 11px;
+      font-size: 12px;
     }
     
     th, td {
       text-align: left;
-      padding: 10px;
-      font-size: 9px;
+      padding: 1px;
+      font-size: 12px;
     }
     
     .fecha {
@@ -25,9 +25,6 @@
     }
     </style>
     
-
-        <br>
-
         <div class="row">
             <div class="col-sm-1"></div>
             <div class="col-sm-2"></div>
@@ -49,7 +46,7 @@
         <div class="row">
             <!--div class="col-sm-1"></div-->
             <div class="col-sm-12">
-                <h4> RESUMEN </h4>
+                <h5> RESUMEN </h5>
             </div>
             <!--div class="col-sm-1"></div-->
         </div>
@@ -58,7 +55,7 @@
             {% for key, value in datadict.items %} 
                 <div class="row">
                     <div class="col-sm-10">
-                        <h5> {{facturaproveedor.proveedor}} </h5>
+                        <h6> {{facturaproveedor.proveedor}} </h6>
                     </div>
 
                     <div class="col-sm-1">
@@ -97,24 +94,24 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Fecha</th>
-                                    <th>Comprobante</th> 
-                                    <th>Cantidad</th>
-                                    <th>Descripcion</th>
-                                    <th>Precio Unitario incl Impuestos</th>
-                                    <th>Monto</th>
+                                    <th>FECHA</th>
+                                    <th>COMPROBANTE</th> 
+                                    <th>CANTIDAD</th>
+                                    <th>DESCRIPCION</th>
+                                    <th>PRECIO FINAL</th>
+                                    <th>MONTO</th>
                                 </tr>
                             </thead>
                             
                             {% for a in e.data%}
                                 <tbody>
-                                    <tr>
-                                        <td>{{ a.fecha }} </td>
-                                        <td>{{ a.comprobante }}  </td>
-                                        <td>{{ a.cantidad }} </td>
-                                        <td>{{ a.detalle }} </td>
-                                        <td>$ {{ a.preciofinal | intcomma }} </td>
-                                        <td>$ {{ a.total | intcomma }}</td>
+                                    <tr height="20px">
+                                        <td height="7">{{ a.fecha }} </td>
+                                        <td height="7">{{ a.comprobante }}  </td>
+                                        <td height="7">{{ a.cantidad }} </td>
+                                        <td height="7">{{ a.detalle }} </td>
+                                        <td height="7">$ {{ a.preciofinal | intcomma }} </td>
+                                        <td height="7">$ {{ a.total | intcomma }}</td>
                                     </tr>       
                                 </tbody>
                             {%endfor%}
@@ -125,13 +122,13 @@
                         {% if el.obra == e.obra %}
                                 <table class="table">
                                     <tbody>
-                                        <tr>
-                                            <td> </td>
-                                            <td> </td>
-                                            <td> </td>
-                                            <td> </td>
-                                            <td> <h6> Total {{el.obra}} : </h6> </td>
-                                            <td> <h6><b> $ {{el.total | intcomma}} </h6> </b> </td>
+                                        <tr height="20px">
+                                            <td height="7"> </td>
+                                            <td height="7"> </td>
+                                            <td height="7"> </td>
+                                            <td height="7"> </td>
+                                            <td height="7"> <b> TOTAL {{el.obra}} : </b> </td>
+                                            <td height="7"> <b> $ {{el.total | intcomma}}  </b> </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -139,7 +136,6 @@
                         {% endfor %}
 
                     {%endfor%}
-                    <br>
                 {% endfor %}
 
             {%endfor%}
@@ -148,7 +144,7 @@
             {% for em in dicttotalempresa %}
                 <div class="row">
                     <div class="col-sm-2"></div>
-                    <div class="col-sm-8"><h6><b>Total {{em.empresa}} : $ {{em.total | intcomma}}  </b></h5></div>
+                    <div class="col-sm-8"><b>TOTAL {{em.empresa}} : $ {{em.total | intcomma}}  </b></div>
                     <div class="col-sm-2"></div>
                 </div>        
             {% endfor %}
