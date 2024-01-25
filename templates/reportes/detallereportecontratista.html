@@ -13,7 +13,7 @@
             <div class="col-sm-1"></div>
 
             <div class="col-sm-10">
-                <h3> Presupuesto. </h3>
+                <h3> PRESUPUESTO. </h3>
             </div>
 
             <div class="col-sm-1"></div>
@@ -31,7 +31,7 @@
                             <th>Entregado</th>
                             <th>Saldo</th>
                             <th>Total Ejecutado</th>
-                            <th>Importe</th>
+                            <th>Importe&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
                         </tr>
                     </thead>
 
@@ -39,46 +39,44 @@
                         {% if v.codigo %}
                             <tbody>
                                 <tr>
-                                    <td style="width:5%">{{ v.codigo }}  </td>
-                                    <td style="width:40%">{{ v.obra }}</td>
-                                    <td style="width:15%"> $ {{ v.importe | intcomma }}</td> 
-                                    <td style="width:15%"> $ {{ v.entregado | intcomma  }} </td>
-                                    <td style="width:10%"> $ {{ v.saldo | intcomma }} </td>
-                                    <td style="width:30%"> </td>
-                                    <td style="width:30%"> </td>
+                                    <td >{{ v.codigo }}  </td>
+                                    <td >{{ v.obra }}</td>
+                                    <td > $ {{ v.importe | intcomma }}</td> 
+                                    <td > $ {{ v.entregado | intcomma  }} </td>
+                                    <td > $ {{ v.saldo | intcomma }} </td>
+                                    <td style=" outline: thin solid;"> </td>
+                                    <td style=" outline: thin solid;"> </td>
                                 </tr>
                             </tbody>
                         {% endif %}
                     {%endfor%}
-                </table>
 
-                <table class="table table-sm">
-                    <tbody>
-                        <tr>
-                            <td style="width:5%"></td>
-                            <td style="width:37%">
-                                <h6><b>SUMA {{key}}</b></h6>
-                            </td>
-                            <td style="width:15%">{% with value|last as last %}
-                                    $ {{ last.totalimporte | intcomma }}
-                                {% endwith %} 
-                            </td> 
-                            <td style="width:15%">{% with value|last as last %}
-                                    $ {{ last.totalentregado | intcomma }}
-                                {% endwith %} 
-                            </td>
-                            <td style="width:10%">
-                                {% with value|last as last %}
-                                    $ {{ last.totalsaldo | intcomma }}
-                                {% endwith %}
-                            </td>
-                            <td style="width:30%"> </td>
-                            <td style="width:20%"> </td>
-                        </tr>
-                    </tbody>
+                    <tr>
+                        <td >&nbsp;</td>
+                        <td >
+                            <b>SUMA {{key}}</b>
+                        </td>
+                        <td >{% with value|last as last %}
+                                $ {{ last.totalimporte | intcomma }}
+                            {% endwith %} 
+                        </td> 
+                        <td >{% with value|last as last %}
+                                $ {{ last.totalentregado | intcomma }}
+                            {% endwith %} 
+                        </td>
+                        <td>
+                            {% with value|last as last %}
+                                $ {{ last.totalsaldo | intcomma }}
+                            {% endwith %}
+                        </td>
+                        <td>&nbsp; </td>
+                        <td>&nbsp; </td>
+                    </tr>
 
                 </table>
+
                 
+                <br><br>
                 {% endfor %}
 
     </div>

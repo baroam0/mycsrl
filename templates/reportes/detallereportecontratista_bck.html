@@ -1,0 +1,126 @@
+
+{% extends 'base_nomenu.html' %}
+
+{% load humanize %}
+
+{% block content %}
+
+    <div class="container">
+
+        <br>
+        
+        <div class="row">
+            <div class="col-sm-1"></div>
+
+            <div class="col-sm-10">
+                <h3> PRESUPUESTO. </h3>
+            </div>
+
+            <div class="col-sm-1"></div>
+        </div>
+
+            {% for key, value in result.items %}        
+                <br>
+                <h4>{{key}} </h4>
+                <table class="table">    
+                    <thead>
+                        <tr>
+                            <th>Cod.</th>
+                            <th>Obra</th>
+                            <th>Importe</th>
+                            <th>Entregado</th>
+                            <th>Saldo</th>
+                            <th>Total Ejecutado</th>
+                            <th>Importe</th>
+                        </tr>
+                    </thead>
+
+                    {% for v in value %}
+                        {% if v.codigo %}
+                            <tbody>
+                                <tr>
+                                    <td >{{ v.codigo }}  </td>
+                                    <td >{{ v.obra }}</td>
+                                    <td > $ {{ v.importe | intcomma }}</td> 
+                                    <td > $ {{ v.entregado | intcomma  }} </td>
+                                    <td > $ {{ v.saldo | intcomma }} </td>
+                                    <td style=" outline: thin solid;"> </td>
+                                    <td style=" outline: thin solid;"> </td>
+                                
+                        {% endif %}
+
+                        <td >&nbsp;</td>
+                            <td >
+                                <b>SUMA {{key}}</b>
+                            </td>
+                            <td >{% with value|last as last %}
+                                    $ {{ last.totalimporte | intcomma }}
+                                {% endwith %} 
+                            </td> 
+                            <td >{% with value|last as last %}
+                                    $ {{ last.totalentregado | intcomma }}
+                                {% endwith %} 
+                            </td>
+                            <td>
+                                {% with value|last as last %}
+                                    $ {{ last.totalsaldo | intcomma }}
+                                {% endwith %}
+                            </td>
+                            <td>&nbsp; </td>
+                            <td>&nbsp; </td>
+                    
+                        </tr>
+                        </tbody>
+                    {%endfor%}
+                </table>
+
+                <!--table class="table">
+                    <thead>
+                        
+                            
+                        </tr>
+                    </thead>
+                   
+                    <tbody>
+                        <tr>
+                            <td >&nbsp;</td>
+                            <td >
+                                <b>SUMA {{key}}</b>
+                            </td>
+                            <td >{% with value|last as last %}
+                                    $ {{ last.totalimporte | intcomma }}
+                                {% endwith %} 
+                            </td> 
+                            <td >{% with value|last as last %}
+                                    $ {{ last.totalentregado | intcomma }}
+                                {% endwith %} 
+                            </td>
+                            <td>
+                                {% with value|last as last %}
+                                    $ {{ last.totalsaldo | intcomma }}
+                                {% endwith %}
+                            </td>
+                            <td>&nbsp; </td>
+                            <td>&nbsp; </td>
+                        </tr>
+                    </tbody>
+
+                </table-->
+                <br><br><br>
+                {% endfor %}
+
+    </div>
+
+
+
+{% endblock %}
+
+
+    <script>
+        $(document).ready(function () {
+            
+        });
+
+    
+    </script>
+

@@ -1,4 +1,6 @@
 
+import decimal
+
 from locale import dcgettext
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -596,7 +598,7 @@ def totalescontratistas(contratista_id):
 
     totales["totalimporte"] = totalimporte
     totales["totalentregado"] = totalentregado
-    totales["totalsaldo"] = saldo
+    totales["totalsaldo"] = format(saldo, '.2f')
     return totales
 
 
