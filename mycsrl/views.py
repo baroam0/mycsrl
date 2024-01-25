@@ -200,7 +200,7 @@ def detallereporteporfactura(request):
             if e["empresa"] == d["empresa"]:
                 d["total"] =  d["total"] + e["total"]
                 
-
+    print(proveedor)
     return render(
         request, 
         'detallereporte.html',
@@ -210,7 +210,8 @@ def detallereporteporfactura(request):
             "datadict": datadict,
             "dictotales": dicttotales,
             "dicttotalempresa": dicttotalempresa,
-            "banco": banco
+            "banco": banco,
+            "facturaproveedor": facturaproveedor
         }
     ) 
 
