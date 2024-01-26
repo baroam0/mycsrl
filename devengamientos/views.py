@@ -132,7 +132,7 @@ def devengamiento_delete(request, pk):
         devengamiento.delete()
         usuario = request.user
         helperpagado(facturaproveedor.pk, usuario)
-        return redirect('/devengamiento/nuevo/' + str(devengamiento.factura.pk))
+        return redirect('/devengamiento/editar/' + str(devengamiento.factura.pk))
         
     return render(
             request,

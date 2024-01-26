@@ -243,3 +243,20 @@ def detallefacturacion_edit(request, pk):
             }
         )
 
+
+@login_required(login_url='/login')
+def detallefacturacion_delete(request, pk):
+    detallefacturacion = DetalleFacturacion.objects.get(pk=pk)
+
+    if request.method =="POST":
+        detallefacturacion.delete()
+        return redirect('/facturacion/editar/' + str(detallefacturacion.facturacion.pk))
+        
+    return render(
+            request,
+            'facturacion/detallefacturacion_delete.html',
+            {
+                "detalle": detallefacturacion
+            }
+        )
+

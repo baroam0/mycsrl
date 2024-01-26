@@ -20,7 +20,7 @@ from django.urls import include, path
 
 from .views import (listadofacturacion, facturacion_new, facturacion_edit,
                     listadoconcepto, concepto_new, concepto_edit,
-                    detallefacturacion_new, detallefacturacion_edit)
+                    detallefacturacion_new, detallefacturacion_edit, detallefacturacion_delete)
 
 urlpatterns = [
     path('listado/', listadofacturacion, name='listadofacturacion'),
@@ -33,4 +33,6 @@ urlpatterns = [
 
     path('detalle/nuevo/<int:pk>', detallefacturacion_new, name='detallefacturacion_new'),
     path('detalle/editar/<int:pk>', detallefacturacion_edit, name='detallefacturacion_edit'),
+
+    path('detalle/delete/<int:pk>', detallefacturacion_delete, name='detallefacturacion_delete'),
 ]

@@ -72,7 +72,11 @@
                                 <button type="button" class="btn btn-link btn-sm" onclick="location.href='/facturacion/detalle/editar/' + {{ resultado.pk }}">
                                     <i class="fas fa-pencil-alt"></i>
                                 </button>
+                                <button type="button" class="btn btn-link btn-sm" onclick="location.href='/facturacion/detalle/delete/' + {{ resultado.pk }}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </td>
+
                         </tr>
                         {% endfor %}
                     </tbody>
