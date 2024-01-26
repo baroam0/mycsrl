@@ -10,3 +10,12 @@ def formateafecha(parametro):
     return fechaformateada
 
 
+def formateafechaestandar(parametro):
+    if "/" in parametro:
+        parametro = parametro.split("/")
+    else:
+        parametro = parametro.split("-")
+    
+    fechaformateada = parametro[0] + "-" + parametro[1] + "-" + parametro[2]
+
+    return fechaformateada

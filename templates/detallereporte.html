@@ -42,55 +42,29 @@
             <div class="col-sm-2"></div>
             <div class="col-sm-3 fecha">HASTA: {{fechahasta}}</div>
         </div>
-        
-        <div class="row">
-            <!--div class="col-sm-1"></div-->
-            <div class="col-sm-12">
-                <h5> RESUMEN </h5>
-            </div>
-            <!--div class="col-sm-1"></div-->
-        </div>
 
-
+        <h4> RESUMEN </h4>
+           
             {% for key, value in datadict.items %} 
-                <div class="row">
-                    <div class="col-sm-10">
-                        <h6> {{facturaproveedor.proveedor}} </h6>
-                    </div>
-
-                    <div class="col-sm-1">
-                    </div>
+                
+                <h5> {{facturaproveedor.proveedor}} </h5>
                     
-                    <div class="col-sm-1">
-                    </div>
-                </div>
 
                 {% for v in value %}
                     
                     <div class="row">
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <h6> {{v.empresa}} </h6>
                         </div>
-
-                        <div class="col-sm-1">
-                        </div>
-
-                        <div class="col-sm-1">
-                        </div>                        
                     </div>
                     {% for e in v.data%}
 
                         <div class="row">
-                            <div class="col-sm-10">
-                                {{e.obra}}
-                            </div>
-
-                            <div class="col-sm-1">
-                            </div>
-
-                            <div class="col-sm-1">
+                            <div class="col-sm-12">
+                                <b>{{e.obra}}</b>
                             </div>
                         </div>
+                        
                         <table>
                             <thead>
                                 <tr>
@@ -106,7 +80,7 @@
                             {% for a in e.data%}
                                 <tbody>
                                     <tr height="20px">
-                                        <td height="7">{{ a.fecha }} </td>
+                                        <td height="7">{{ a.fecha | date:"d-m-Y" }} </td>
                                         <td height="7">{{ a.comprobante }}  </td>
                                         <td height="7">{{ a.cantidad }} </td>
                                         <td height="7">{{ a.detalle }} </td>

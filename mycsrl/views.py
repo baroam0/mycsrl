@@ -10,7 +10,7 @@ from django.views.generic import TemplateView
 from django.http import JsonResponse
 from contratistas.models import Contratista
 
-from lib.funcionesfechas import formateafecha
+from lib.funcionesfechas import formateafecha, formateafechaestandar
 from devengamientos.models import Devengamiento
 from empresas.models import Empresa
 from pagos.models import Obra, Proveedor, ProveedorBanco
@@ -100,8 +100,8 @@ def detallereporteporfactura(request):
     )
     """
     
-    fechadesde = formateafecha(request.GET.get("id_fechadesde"))
-    fechahasta = formateafecha(request.GET.get("id_fechahasta"))
+    fechadesde = formateafechaestandar(request.GET.get("id_fechadesde"))
+    fechahasta = formateafechaestandar(request.GET.get("id_fechahasta"))
     proveedor =  Proveedor.objects.get(pk=request.GET.get("id_proveedor"))
     #facturaproveedor = FacturaProveedor.objects.filter(pagado=False,proveedor=proveedor)
     facturaproveedor = FacturaProveedor.objects.get(pk=request.GET.get("id_proveedor"))
@@ -156,7 +156,7 @@ def detallereporteporfactura(request):
                             "detalle": df.descripciondetalle.descripciondetalle,
                             "cantidad": df.cantidad,
                             "preciofinal": df.getpreciounitariofinal(),
-                            "total": round(df.getpreciototalfinal(),2),
+                            "total": format(df.getpreciototalfinal(), '.2f')
                         })
 
     
@@ -276,6 +276,10 @@ def gettotalempresa(proveedor, empresa, fechadesde, fechahasta):
 def detallereportesporfacturas(request):
     fechadesde = formateafecha(request.GET.get("fechadesde"))
     fechahasta = formateafecha(request.GET.get("fechahasta"))
+
+    fechadesdetemplate = formateafechaestandar(request.GET.get("fechadesde"))
+    fechahastatemplate = formateafechaestandar(request.GET.get("fechahasta"))
+
     proveedor =  Proveedor.objects.get(pk=request.GET.get("id_proveedor"))
     facturaproveedor = FacturaProveedor.objects.filter(pagado=False,proveedor=proveedor,fecha__range=(fechadesde, fechahasta))
     detallefacturaproveedor = DetalleFacturaProveedor.objects.filter(factura__in = facturaproveedor).order_by("obra__descripcion")
@@ -325,7 +329,7 @@ def detallereportesporfacturas(request):
                             "detalle": df.descripciondetalle.descripciondetalle,
                             "cantidad": df.cantidad,
                             "preciofinal": df.getpreciounitariofinal(),
-                            "total": df.getpreciototalfinal(),
+                            "total": format(df.getpreciototalfinal(),'.2f')
                         })
 
     
@@ -361,11 +365,6 @@ def detallereportesporfacturas(request):
             }
         )
 
-    """
-    for d in dicttotalempresa:
-        d["total"] = gettotalempresa(proveedor.pk, d["empresa"], fechadesde, fechahasta)
-    """
-
     for d in dicttotalempresa:
         for e in dicttotales:
             if e["empresa"] == d["empresa"]:
@@ -376,8 +375,8 @@ def detallereportesporfacturas(request):
         request, 
         'reportes/detallereportesfacturas.html',
         {
-            "fechadesde": fechadesde,
-            "fechahasta": fechahasta,
+            "fechadesde": fechadesdetemplate,
+            "fechahasta": fechahastatemplate,
             "datadict": datadict,
             "dictotales": dicttotales,
             "dicttotalempresa": dicttotalempresa,
