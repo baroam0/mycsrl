@@ -11,7 +11,15 @@ class EmpresaForm(forms.ModelForm):
     descripcion = forms.CharField(
         label="Descripcion"
     )
+
+    domicilio = forms.CharField(
+        label="Domicilio", required=False
+    )
     
+    telefono = forms.CharField(
+        label="Telefono", required=False
+    )
+
     def __init__(self, *args, **kwargs):
         super(EmpresaForm, self).__init__(*args, **kwargs)
         for field in iter(self.fields):
@@ -21,5 +29,5 @@ class EmpresaForm(forms.ModelForm):
 
     class Meta:
         model = Empresa
-        fields = ["descripcion"]
+        fields = ["descripcion", "domicilio", "telefono"]
 
