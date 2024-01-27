@@ -330,6 +330,20 @@ def listadofactura(request):
     if "txtBuscar" in request.GET:
         parametro = request.GET.get('txtBuscar')
         
+        consultamontototal = FacturaProveedor.objects.all()
+        montototal = FacturaProveedor.objects.none()
+
+        for e in consultamontototal:
+            valor = str(parametro)
+            valor = valor.replace(".", "")
+            valor = float(valor.replace(",", "."))
+
+            try:
+                if float(e.gettotalfactura()) == float(valor):
+                    montototal = montototal | FacturaProveedor.objects.filter(pk=e.pk) 
+            except:
+                pass
+
         consulta = FacturaProveedor.objects.filter(
             Q(pk__icontains=parametro) |
             Q(proveedor__nombrefantasia__icontains=parametro) |
@@ -362,7 +376,7 @@ def listadofactura(request):
             pk__in=consultadrubro
         ).order_by('-fecha')
         
-        facturas = consulta | consultafacturaobras | consultafacturadescripcion | consultafacturarubro
+        facturas = consulta | consultafacturaobras | consultafacturadescripcion | consultafacturarubro | montototal
 
     else:
         facturas = FacturaProveedor.objects.all().order_by('-fecha')
