@@ -5,8 +5,88 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 
-from .forms import ConceptoForm, FacturacionForm, DetalleFacturacionForm
-from .models import Concepto, Facturacion, DetalleFacturacion
+from .forms import CodIngresoForm, ConceptoForm, FacturacionForm, DetalleFacturacionForm
+from .models import CodIngreso, Concepto, Facturacion, DetalleFacturacion
+
+
+#################################################################
+#################SECCION COD INGRESO ############################
+#################################################################
+
+@login_required(login_url='/login')
+def listadocodingreso(request):
+    if "txtBuscar" in request.GET:
+        parametro = request.GET.get('txtBuscar')
+        codingresos =  CodIngreso.objects.filter(descripcion__contains=parametro)
+    else:
+        codingresos = CodIngreso.objects.all()
+    paginador = Paginator(codingresos, 20)
+
+    if "page" in request.GET:
+        page = request.GET.get('page')
+    else:
+        page = 1
+    resultados = paginador.get_page(page)
+
+    return render(
+        request,
+        'facturacion/codingreso_list.html',
+        {
+            'resultados': resultados
+        }
+    )
+
+
+@login_required(login_url='/login')
+def codingreso_new(request):
+    if request.POST:
+        usuario = request.user
+        form = CodIngresoForm(request.POST)
+        if form.is_valid():
+            condingreso = form.save(commit=False)
+            condingreso.usuario = usuario
+            try:
+                condingreso.save()
+                messages.success(request, "Se ha grabado los datos")
+                return redirect('/facturacion/codingreso/listado')
+            except Exception as e:
+                messages.warning(request, "Ha ocurrido un error.")
+                return redirect('/facturacion/codingreso/listado')
+        else:
+            messages.warning(request, form.errors)
+            return redirect('/facturacion/codingreso/listado')
+    else:
+        form = CodIngresoForm()
+        return render(
+            request,
+            'facturacion/codingreso_edit.html',
+            {"form": form}
+        )
+
+
+@login_required(login_url='/login')
+def codingreso_edit(request, pk):
+    consulta = CodIngreso.objects.get(pk=pk)
+   
+    if request.POST:
+        form = CodIngresoForm(request.POST, instance=consulta)
+        if form.is_valid():
+            codingreso = form.save(commit=False)
+            usuario = request.user
+            codingreso.usuario = usuario
+            codingreso.save()
+            messages.success(request, "Se ha modificado los datos.")
+            return redirect('/facturacion/codingreso/listado')
+        else:
+            messages.warning(request, form.errors)
+            return redirect('/facturacion/codingreso/listado')
+    else:
+        form = CodIngresoForm(instance=consulta)
+        return render(
+            request,
+            'facturacion/codingreso_edit.html',
+            {"form": form}
+        )
 
 
 #################################################################
@@ -19,8 +99,8 @@ def listadoconcepto(request):
         parametro = request.GET.get('txtBuscar')
         conceptos = Concepto.objects.filter(descripcion__contains=parametro)
     else:
-        bancos = Concepto.objects.all()
-    paginador = Paginator(bancos, 20)
+        conceptos = Concepto.objects.all()
+    paginador = Paginator(conceptos, 20)
 
     if "page" in request.GET:
         page = request.GET.get('page')
@@ -32,7 +112,8 @@ def listadoconcepto(request):
         'facturacion/conceptos_list.html',
         {
             'resultados': resultados
-        })
+        }
+    )
 
 
 @login_required(login_url='/login')
@@ -82,7 +163,7 @@ def concepto_edit(request, pk):
         form = ConceptoForm(instance=consulta)
         return render(
             request,
-            'bancos/banco_edit.html',
+            'facturacion/conceptos_edit.html',
             {"form": form}
         )
 

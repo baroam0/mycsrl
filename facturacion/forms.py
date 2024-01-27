@@ -4,8 +4,24 @@ from django import forms
 from django.contrib.auth.models import User
 
 
-from .models import Concepto, Facturacion, DetalleFacturacion
+from .models import CodIngreso, Concepto, Facturacion, DetalleFacturacion
 from pagos.models import Obra
+
+
+class CodIngresoForm(forms.ModelForm):   
+    descripcion = forms.CharField(
+        label="Descripcion"
+    )
+    def __init__(self, *args, **kwargs):
+        super(CodIngresoForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+
+    class Meta:
+        model = CodIngreso
+        fields = ["descripcion"]
 
 
 class ConceptoForm(forms.ModelForm):   
@@ -30,6 +46,10 @@ class FacturacionForm(forms.ModelForm):
     obra = forms.ModelChoiceField(queryset=Obra.objects.all(), label="Obra") 
     descripcion = forms.CharField(label="Descripcion")
     comprobante = forms.CharField(label="Comprobante")
+    codingreso = forms.ModelChoiceField(
+        queryset=CodIngreso.objects.all(),
+        label="Cod. Ingreso"
+    )
 
     def __init__(self, *args, **kwargs):
         super(FacturacionForm, self).__init__(*args, **kwargs)
@@ -40,7 +60,7 @@ class FacturacionForm(forms.ModelForm):
 
     class Meta:
         model = Facturacion
-        fields = ["fecha","obra","descripcion", "comprobante"]
+        fields = ["fecha","obra","descripcion", "comprobante", "codingreso"]
 
 
 class DetalleFacturacionForm(forms.ModelForm):
