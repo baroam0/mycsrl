@@ -31,6 +31,9 @@ class Obra(models.Model):
         blank=True, null=True
     )
 
+    licitacion = models.CharField(max_length=50, null=True, blank=True)
+    comitente = models.CharField(max_length=200, null=True, blank=True)
+
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
 
     def __str__(self):

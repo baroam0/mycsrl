@@ -4,8 +4,6 @@
 {% block content %}
 
     <div class="container">
-
-        <br>
         
         <div class="row">
             <div class="col-sm-4"></div>
@@ -25,7 +23,7 @@
             {% endfor %}
         {% endif %}
 
-
+       
         <form action="/pagos/obra/listado" method="GET">
             <div class="form-inline">
                 <div class="col-2">
@@ -50,6 +48,9 @@
                 <thead>
                     <tr>
                         <th>Descripcion</th>
+                        <th>Empresa</th>
+                        <th>Comitente</th>
+                        <th>Licitación</th>
                         <th>Usuario</th>
                         <th>Accion</th>
                     </tr>
@@ -60,6 +61,9 @@
                     <tr>
    
                         <td>{{resultado.descripcion.upper }}</td>
+                        <td>{{resultado.empresa.descripcion.upper }}</td>
+                        <td>{{resultado.comitente.upper }}</td>
+                        <td>{{resultado.licitacion.upper }}</td>
                         <td>{{resultado.usuario}} </td>
 
                         <td>
@@ -110,7 +114,6 @@
             </nav>
 
         </form>
-
     </div>
 
 {% endblock %}
