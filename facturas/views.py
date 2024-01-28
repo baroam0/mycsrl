@@ -334,11 +334,12 @@ def listadofactura(request):
         montototal = FacturaProveedor.objects.none()
 
         for e in consultamontototal:
-            valor = str(parametro)
-            valor = valor.replace(".", "")
-            valor = float(valor.replace(",", "."))
-
+            
             try:
+                valor = str(parametro)
+                valor = valor.replace(".", "")
+                valor = float(valor.replace(",", "."))
+
                 if float(e.gettotalfactura()) == float(valor):
                     montototal = montototal | FacturaProveedor.objects.filter(pk=e.pk) 
             except:
