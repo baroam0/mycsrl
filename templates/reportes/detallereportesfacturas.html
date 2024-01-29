@@ -16,8 +16,12 @@
     
     th, td {
       text-align: left;
-      padding: 1px;
+      padding: 0px;
       font-size: 12px;
+    }
+
+    .tituloobra {
+        font-size: 12px;
     }
     
     .fecha {
@@ -58,8 +62,8 @@
                     {% for e in v.data%}
 
                         <div class="row">
-                            <div class="col-sm-12">
-                                <b>{{e.obra}}</b>
+                            <div class="col-sm-12 tituloobra">
+                                <b> <u> {{e.obra}} </u> </b>
                             </div>
                         </div>
                         <table>
@@ -77,12 +81,12 @@
                             {% for a in e.data%}
                                 <tbody>
                                     <tr>
-                                        <td>{{ a.fecha | date:"d-m-Y" }} </td>
-                                        <td>{{ a.comprobante }}  </td>
-                                        <td>{{ a.cantidad }} </td>
-                                        <td>{{ a.detalle }} </td>
-                                        <td>$ {{ a.preciofinal | intcomma }} </td>
-                                        <td>$ {{ a.total | intcomma }}</td>
+                                        <td width="15">{{ a.fecha | date:"d-m-Y" }} </td>
+                                        <td width="15">{{ a.comprobante }}  </td>
+                                        <td width="15">{{ a.cantidad }} </td>
+                                        <td width="25">{{ a.detalle }} </td>
+                                        <td width="15">$ {{ a.preciofinal | intcomma }} </td>
+                                        <td width="15"s>$ {{ a.total | intcomma }}</td>
                                     </tr>       
                                 </tbody>
                             {%endfor%}
@@ -90,27 +94,22 @@
 
                         {% for el in dictotales%}
                         
-                        {% if el.obra == e.obra %}
-                                <table class="table">
-                                    <tbody>
-                                        <tr height="20px">
-                                            <td height="7"> </td>
-                                            <td height="7"> </td>
-                                            <td height="7"> </td>
-                                            <td height="7"> </td>
-                                            <td height="7"> <b> TOTAL {{el.obra}} : </b> </td>
-                                            <td height="7"> <b> $ {{el.total | intcomma}}  </b> </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            {% if el.obra == e.obra %}
+                                <div class="row">
+                                    <div class="col-sm-1"></div>
+                                    <div class="col-sm-1"></div>
+                                    <div class="col-sm-1"></div>
+                                    <div class="col-sm-1"></div>
+                                    <div class="col-sm-4 tituloobra"> <b> TOTAL {{el.obra}} : </b> </div>
+                                    <div class="col-sm-4 tituloobra"> <b> $ {{el.total | intcomma}}  </b> </div>
+                                </div>
                             {% endif %}
                         {% endfor %}
                     {%endfor%}
                 {% endfor %}
 
             {%endfor%}
-                
-            
+
             {% for em in dicttotalempresa %}
                 <div class="row">
                     <div class="col-sm-2"></div>

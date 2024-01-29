@@ -19,6 +19,10 @@
       padding: 1px;
       font-size: 12px;
     }
+
+    .tituloobra {
+        font-size: 12px;
+    }
     
     .fecha {
         font-size: 10px;
@@ -43,7 +47,7 @@
             <div class="col-sm-3 fecha">HASTA: {{fechahasta}}</div>
         </div>
 
-        <h5> RESUMEN </h5>           
+        <h4> RESUMEN </h4>           
             {% for key, value in datadict.items %} 
                 
                 <h5> {{facturaproveedor.proveedor}} </h5>
@@ -53,14 +57,14 @@
                     
                     <div class="row">
                         <div class="col-sm-12">
-                            <h5> {{v.empresa}} </h5>
+                            <h6> {{v.empresa}} </h6>
                         </div>
                     </div>
                     {% for e in v.data%}
 
                         <div class="row">
-                            <div class="col-sm-12">
-                                <b>{{e.obra}}</b>
+                            <div class="col-sm-12 tituloobra">
+                                <b> <u> {{e.obra}} </u> </b>
                             </div>
                         </div>
                         
@@ -79,32 +83,27 @@
                             {% for a in e.data%}
                                 <tbody>
                                     <tr height="20px">
-                                        <td height="7">{{ a.fecha | date:"d-m-Y" }} </td>
-                                        <td height="7">{{ a.comprobante }}  </td>
-                                        <td height="7">{{ a.cantidad }} </td>
-                                        <td height="7">{{ a.detalle }} </td>
-                                        <td height="7">$ {{ a.preciofinal | intcomma }} </td>
-                                        <td height="7">$ {{ a.total | intcomma }}</td>
+                                        <td width="15">{{ a.fecha | date:"d-m-Y" }} </td>
+                                        <td width="15">{{ a.comprobante }}  </td>
+                                        <td width="15">{{ a.cantidad }} </td>
+                                        <td width="25">{{ a.detalle }} </td>
+                                        <td width="15">$ {{ a.preciofinal | intcomma }} </td>
+                                        <td width="15"s>$ {{ a.total | intcomma }}</td>
                                     </tr>       
                                 </tbody>
                             {%endfor%}
                         </table>
 
                         {% for el in dictotales%}
-                        
-                        {% if el.obra == e.obra %}
-                                <table class="table">
-                                    <tbody>
-                                        <tr height="20px">
-                                            <td height="7"> </td>
-                                            <td height="7"> </td>
-                                            <td height="7"> </td>
-                                            <td height="7"> </td>
-                                            <td height="7"> <b> TOTAL {{el.obra}} : </b> </td>
-                                            <td height="7"> <b> $ {{el.total | intcomma}}  </b> </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            {% if el.obra == e.obra %}
+                                <div class="row">
+                                    <div class="col-sm-1"></div>
+                                    <div class="col-sm-1"></div>
+                                    <div class="col-sm-1"></div>
+                                    <div class="col-sm-1"></div>
+                                    <div class="col-sm-4 tituloobra"> <b> TOTAL {{el.obra}} : </b> </div>
+                                    <div class="col-sm-4 tituloobra"> <b> $ {{el.total | intcomma}}  </b> </div>
+                                </div>
                             {% endif %}
                         {% endfor %}
 
