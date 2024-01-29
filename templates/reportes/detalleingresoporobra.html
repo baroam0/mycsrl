@@ -5,72 +5,83 @@
 
 {% block content %}
 
-    <div class="container">
+<style>  
+    
+    .tituloscertificado {
+      font-size: 16px;
+    }
 
-        <br>
+    .titulosingreso {
+      font-size: 14px;
+    }
+</style>
+
+    <!--div class="container"-->
         
-        <div class="row">
-            <div class="col-sm-8"><h4>CERTIFICADOS</h4> </div>
-            <div class="col-sm-2"></div>
-            <div class="col-sm-2"></div>
+        <div class="tituloscertificado">    
+            <br>
+            <b>CERTIFICADOS</b>
+            <br>
         </div>
 
-        <div class="row">
-            <div class="col-sm-8"><h5>EMPRESA: {{obra.empresa.descripcion }}</h5> </div>
-            <div class="col-sm-2"></div>
-            <div class="col-sm-2"></div>
-        </div>
-
-        <div class="row">
-            <div class="col-sm-8"><h5>OBRA: {{obra.descripcion }}</h5> </div>
-            <div class="col-sm-2"></div>
-            <div class="col-sm-2"></div>
+        <div class="titulosingreso">
+            <b>EMPRESA:</b> {{obra.empresa.descripcion }}
+            <br>
+            <b>DIRECCION:</b> {{obra.empresa.domicilio}}
         </div>
         
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Factura</th>
-                            <th>Detalle</th>
-                            <th>Monto</th>
-                        </tr>
-                    </thead>
-                    
-                    <tbody>
-                        {% for resultado in resultados %}                   
-                        <tr>
-                            <td>{{ resultado.fecha | date:"d-m-Y" }}  </td>
-                            <td>{{ resultado.comprobante}}</td>
-                            <td>{{ resultado.descripcion}}</td> 
-                            <td>$ {{ resultado.totalfacturacion |intcomma }} </td>
-                        </tr>
-                        {% endfor %}
-                        <tr>
-                            <td><b> SUMA </b> </td>
-                            <td></td>
-                            <td></td> 
-                            <td> <b> $ {{ total | intcomma }} </b> </td>
-                        </tr>             
-                    </tbody>
-                </table>
-                
-                <!--h5>Total Ingreso: $ {{ total | intcomma }}</h5-->
-                
         <hr>
 
-    </div>
+        <div class="titulosingreso">
+            <b>OBRA:</b> {{obra.descripcion }}
+            <br>
+            <b>LICITACION:</b> 
+            {% if obra.licitacion %}
+                {{obra.licitacion }}
+            {%else%}
+                -
+            {%endif%}
+        </div>
+        <hr>
+        <table>
+            <thead>
+                <tr>
+                    <th>FECHA</th>
+                    <th>FACTURA</th>
+                    <th>DETALLE</th>
+                    <th>COD_INGRESO</th>  
+                    <th>MONTO</th>
+                </tr>
+            </thead>
+                    
+            <tbody>
+                {% for resultado in resultados %}                   
+                    <tr>
+                        <td>{{ resultado.fecha | date:"d-m-Y" }}  </td>
+                        <td>{{ resultado.comprobante}}</td>
+                        <td>{{ resultado.descripcion}}</td>
+                        <td>{{ resultado.codingreso}}</td> 
+                        <td>$ {{ resultado.totalfacturacion |intcomma }} </td>
+                    </tr>
+                {% endfor %}
+                    <tr>
+                        <td><b> SUMA </b> </td>
+                        <td></td>
+                        <td></td>
+                        <td></td> 
+                        <td> <b> $ {{ total | intcomma }} </b> </td>
+                    </tr>             
+                </tbody>
+        </table>
+
+    <!--/div-->
 
 
 
 {% endblock %}
 
-
     <script>
-        $(document).ready(function () {
-            
+        $(document).ready(function () {            
         });
-
     
     </script>
-

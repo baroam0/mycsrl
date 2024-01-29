@@ -50,6 +50,8 @@
                 <thead>
                     <tr>
                         <th>Descripcion</th>
+                        <th>Domicilio</th>
+                        <th>Telefono</th>
                         <th>Usuario</th>
                         <th>Accion</th>
                     </tr>
@@ -59,6 +61,8 @@
                     {% for resultado in resultados %}
                     <tr>
                         <td>{{ resultado.descripcion.upper }}  </td>
+                        <td>{{ resultado.domicilio.upper }}  </td>
+                        <td>{{ resultado.telefono.upper }}  </td>
                         <td>{{ resultado.usuario }}</td>
 
                         <td>

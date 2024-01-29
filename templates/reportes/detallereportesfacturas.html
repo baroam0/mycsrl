@@ -5,7 +5,7 @@
 
 {% block content %}
 
-    <style>
+    <!--style>
     @media print{@page {size: landscape}}
     table {
       border-collapse: collapse;
@@ -27,7 +27,7 @@
     .fecha {
         font-size: 10px;
     }
-    </style>
+    </style-->
 
         <div class="row">
             <div class="col-sm-1"></div>
@@ -62,8 +62,8 @@
                     {% for e in v.data%}
 
                         <div class="row">
-                            <div class="col-sm-12 tituloobra">
-                                <b> <u> {{e.obra}} </u> </b>
+                            <div class="col-sm-12 nombreobra">
+                                <b>{{e.obra}}</b>
                             </div>
                         </div>
                         <table>

@@ -6,6 +6,22 @@ from pagos.models import Obra
 from usuariosadm.models import UserAdm
 
 
+class CodIngreso(models.Model):
+    descripcion = models.CharField(max_length=50, unique=True)
+    usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.descripcion.upper()
+    
+    def save(self, *args, **kwargs):
+        self.descripcion = self.descripcion.upper()
+        super(CodIngreso, self).save(*args, **kwargs)
+
+    class Meta:
+        verbose_name_plural = "CodIngresos"
+
+
+
 class Concepto(models.Model):
     descripcion = models.CharField(max_length=50, unique=True)
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
@@ -18,7 +34,7 @@ class Concepto(models.Model):
         super(Concepto, self).save(*args, **kwargs)
 
     class Meta:
-        verbose_name_plural = "Concpetos"
+        verbose_name_plural = "Conceptos"
 
 
 class Facturacion(models.Model):
@@ -26,6 +42,8 @@ class Facturacion(models.Model):
     obra = models.ForeignKey(Obra, on_delete=models.CASCADE)
     descripcion = models.CharField(max_length=200, null=False, blank=False)
     comprobante = models.CharField(max_length=20, null=False, blank=False)
+    codingreso = models.ForeignKey(
+        CodIngreso, on_delete=models.CASCADE, null=True, blank=True)
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
 
     def __str__(self):

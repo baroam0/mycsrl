@@ -5,30 +5,6 @@
 
 {% block content %}
 
-    <style>
-    @media print{@page {size: landscape}}
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      border: 1px solid #ddd;
-      font-size: 12px;
-    }
-    
-    th, td {
-      text-align: left;
-      padding: 1px;
-      font-size: 12px;
-    }
-
-    .tituloobra {
-        font-size: 12px;
-    }
-    
-    .fecha {
-        font-size: 10px;
-    }
-    </style>
-    
         <div class="row">
             <div class="col-sm-1"></div>
             <div class="col-sm-2"></div>
@@ -63,8 +39,8 @@
                     {% for e in v.data%}
 
                         <div class="row">
-                            <div class="col-sm-12 tituloobra">
-                                <b> <u> {{e.obra}} </u> </b>
+                            <div class="col-sm-12 nombreobra">
+                                <b>{{e.obra}}</b>
                             </div>
                         </div>
                         

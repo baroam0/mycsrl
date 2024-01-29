@@ -1,9 +1,6 @@
 
 {% extends 'base.html' %}
 
-
-{% load humanize %}
-
 {% block content %}
 
     <div class="container">
@@ -11,11 +8,11 @@
         <br>
         
         <div class="row">
-            <div class="col-sm-4"></div>
-            <div class="col-sm-4">
-                <h3> Listado de Facturas. </h3>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-8">
+                <h3> Listado de Cod Ingresos de Facturacion. </h3>
             </div>
-            <div class="col-sm-4"></div>
+            <div class="col-sm-2"></div>
         </div>
         
         <hr>
@@ -29,7 +26,7 @@
         {% endif %}
 
 
-        <form action="/facturas/listado" method="GET">
+        <form action="/facturacion/codingreso/listado" method="GET">
             <div class="form-inline">
                 <div class="col-2">
                 </div>
@@ -41,7 +38,7 @@
                         <i class="fas fa-search"></i>
                     </button>
 
-                    <button type="button" class="btn btn-default" title="Nueva Factura!" onclick="location.href='/facturas/nuevo'">
+                    <button type="button" class="btn btn-default" title="Nuevo Banco!" onclick="location.href='/facturacion/codingreso/nuevo'">
                         <i class="fas fa-plus"></i>
                     </button>
                 </div>
@@ -51,12 +48,8 @@
 
             <table class="table table-hover">
                 <thead>
-                    <tr>   
-                        <th>Numero</th>
-                        <th>Fecha</th>
-                        <th>Proveedor</th>
-                        <th>Comprobante</th>
-                        <th>Monto</th>
+                    <tr>
+                        <th>Descripcion</th>
                         <th>Usuario</th>
                         <th>Accion</th>
                     </tr>
@@ -64,31 +57,13 @@
 
                 <tbody>
                     {% for resultado in resultados %}
-
-                        {% if resultado.pagoparcial %}
-                            {% if resultado.pagado %}
-                                <tr style="background-color:#f1bef1">
-                            {%else %}
-                                <tr style="background-color:#dbd80f">
-                            {% endif %}
-                        {% else %}
-                            <tr>
-                        {% endif %}
-                    
-                        <td>{{ resultado.pk }}  </td>
-                        <td>{{ resultado.fecha }}  </td>
-                        <td>{{ resultado.proveedor }} </td>
-                        <td>{{ resultado.comprobante }} </td>
-                        <td>$ {{ resultado.gettotalfactura | intcomma }} </td>
+                    <tr>
+                        <td>{{ resultado.descripcion.upper }}  </td>
                         <td>{{ resultado.usuario }}</td>
 
                         <td>
-                            <button type="button" class="btn btn-link btn-sm" onclick="location.href='/facturas/editar/' + {{ resultado.pk }}">
+                            <button type="button" class="btn btn-link btn-sm" onclick="location.href='/facturacion/codingreso/editar/' + {{ resultado.pk }}">
                                 <i class="fas fa-pencil-alt"></i>
-                            </button>
-
-                            <button type="button" class="btn btn-link btn-sm" onclick="location.href='/devengamiento/nuevo/' + {{ resultado.pk }}">
-                                <i class="fas fa-hand-holding-usd"></i>
                             </button>
                         </td>
                     </tr>

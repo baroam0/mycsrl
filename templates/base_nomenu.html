@@ -40,6 +40,30 @@
   <img style="float: right;" src="{% static "images/logo.jpg" %}" alt="" width="150" height="93">
 </header>
 
+
+<style>
+  @media print{@page {size: landscape}}
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    border: 1px solid #ddd;
+    font-size: 12px;
+  }
+  
+  th, td {
+    text-align: left;
+    padding: 1px;
+    font-size: 12px;
+  }
+  
+  .fecha {
+    font-size: 10px;
+  }
+
+  .nombreobra {
+    font-size: 12px;
+  }
+</style>
 {%block content %}
 
 {% endblock %}

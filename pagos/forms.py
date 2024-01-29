@@ -111,6 +111,15 @@ class ObraForm(forms.ModelForm):
         queryset=Empresa.objects.all(), 
         label="Empresa", required=False
     )
+
+    licitacion = forms.CharField(
+        label="Licitación", required=False
+    ) 
+
+    comitente = forms.CharField(
+        label="Comitente",
+        required=False
+    )
     
     def __init__(self, *args, **kwargs):
         super(ObraForm, self).__init__(*args, **kwargs)
@@ -121,7 +130,7 @@ class ObraForm(forms.ModelForm):
 
     class Meta:
         model = Obra
-        fields = ["descripcion", "empresa"]
+        fields = ["descripcion", "empresa", "licitacion", "comitente"]
 
 
 
