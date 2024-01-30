@@ -445,7 +445,7 @@ def printquincenalistado(request, pk):
         'personal/printquincena_list.html',
         {
             'personales': altasbajas,
-            'quincena': quincena
+            'quincena': quincena,
         })
 
 

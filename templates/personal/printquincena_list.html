@@ -1,11 +1,11 @@
-{% extends 'base_nomenu_portrait.html' %}
+{% extends 'base_nomenu_bck.html' %}
 {% load static %}
 
 
 {% block content %}
-    <header class="onlyprint">
+    <!--header class="onlyprint">
         <img style="float: right;" src="{% static "images/logo.jpg" %}" alt="" width="150" height="93">
-    </header>
+    </header-->
     
     <style>
         table {
@@ -59,19 +59,19 @@
 
         <br>
         <br>
-        <h3> Quincena {{quincena.fechainicio}} - {{quincena.fechafin}} </h3>
+        <h3> QUINCENA {{quincena.fechainicio | date:"d-m-Y"}} AL {{quincena.fechafin | date:"d-m-Y"}} </h3>
 
         <br>
         <table class="table p1">
             <thead>
                 <tr>
                     <th>N°</th>
-                    <th>Apellido y Nombre</th>
-                    <th>Ingreso </th>
-                    <th>Horas </th>
-                    <th>Categoria</th>
+                    <th>APELLIDO Y NOMBRE</th>
+                    <th>INGRESO </th>
+                    <th>HORAS </th>
+                    <th>CATEGORIA</th>
                     <th> </th>
-                    <th>Contratista / Obra</th>
+                    <th>CONTRATISTA / OBRA</th>
                 </tr>
             </thead>
 
@@ -104,11 +104,11 @@
     </body>
 
     <div class="row">
-        <div class="col-sm-4"></div>
-        <div class="col-sm-4">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-10">
             <div class="page-count"> </div>
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-1">
         </div>
     </div>
     
