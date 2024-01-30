@@ -1,0 +1,74 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Mantenimiento y Construcciones SRL </title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/all.min.css'%}">
+  <!-- Ionicons -->
+  <!--link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"-->
+  <link rel="stylesheet" href="{% static 'dist/css/ionicons.min.css'%}">
+  
+  <!-- iCheck -->
+  <link rel="stylesheet" href="{% static 'plugins/icheck-bootstrap/icheck-bootstrap.min.css'%}">
+  <!-- JQVMap -->
+  <link rel="stylesheet" href="{% static 'plugins/jqvmap/jqvmap.min.css'%}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css'%}">
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" href="{% static 'plugins/overlayScrollbars/css/OverlayScrollbars.min.css'%}">
+  <!-- Daterange picker -->
+  <link rel="stylesheet" href="{% static 'plugins/daterangepicker/daterangepicker.css'%}">
+  <!-- summernote -->
+  <link rel="stylesheet" href="{% static 'plugins/summernote/summernote-bs4.css'%}">
+  <link rel="stylesheet" href="{% static 'plugins/select2/css/select2.min.css'%}">
+
+  <!-- Datepicker -->
+  <link rel="stylesheet" href="{% static 'plugins/jquery-ui/jquery-ui.min.css' %}">
+
+  <!-- Tempus-Dominus Bootstrp 4 -->
+  <link rel="stylesheet" href="{% static 'plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css'%}">
+
+</head>
+
+<header class="onlyprint">
+  <img style="float: right;" src="{% static "images/logo.jpg" %}" alt="" width="150" height="93">
+</header>
+
+
+<style>
+  @media print{@page {size: portrait }}
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    border: 1px solid #ddd;
+    font-size: 12px;
+  }
+  
+  th, td {
+    text-align: left;
+    padding: 1px;
+    font-size: 12px;
+  }
+  
+  .fecha {
+    font-size: 10px;
+  }
+
+  .nombreobra {
+    font-size: 12px;
+  }
+</style>
+{%block content %}
+
+{% endblock %}
+
+
+{% block js_extra %}
+{% endblock %}
+</html>
