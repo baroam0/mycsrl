@@ -7,32 +7,52 @@
 
     <div class="container">
 
-        <br>
-        
         <div class="row">
-            <div class="col-sm-2"></div>
-            <div class="col-sm-8">
-                <h3> Resumen Ingreso / Egreso por Obra. </h3>
-            </div>
-            <div class="col-sm-2"></div>
+            RESULTADO
         </div>
 
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>RUBROS</th>
+                    <th></th>
+                    <th>INGRESOS</th>
+                    <th>EGRESOS</th>
+                </tr>
+            </thead>
 
-        <h4> {{obras}} </h4>
-        <h5> Ingresos </h5>
-        
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Concepto</th>
-                            <th>Comprobante</th>
-                            <th>Monto</th>
-                        </tr>
-                    </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td>{{ obras }} </td>
+                    <td> </td>
+                    <td>$ {{ obras.empresa }}</td>
+                    <td> </td>
+                </tr>
 
-                        <tbody>
-                            {% for cobro in cobros  %}
+                <tr>
+                    <td>
+                        <b>EGRESOS</b>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+                {% for devengamiento in devengamientos %}
+                <tr>
+                    <td></td>
+                    <td>{{ devengamiento.rubro__descripcion }}  </td>
+                    <td></td>
+                    <td>$ 00,00 </td>
+                    <td>$ {{ devengamiento.sum_custom_method | intcomma }}  </td>
+                </tr>
+                {% endfor %}
+
+
+                {% for cobro in cobros  %}
                                 <tr>
                                     <td>{{ cobro.fecha | date:"d-m-Y" }}  </td>
                                     <td>{{ cobro.descripcion }}  </td>
