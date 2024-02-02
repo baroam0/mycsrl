@@ -5,10 +5,19 @@
 
 {% block content %}
 
+    <style>
+
+        .nombreobra {
+            font-size: 15px;
+            font-weight: bold;
+        }
+    
+    </style>
+
     <div class="container">
 
         <div class="row">
-            RESULTADO
+            RESU                LTADO
         </div>
 
         <table>
@@ -25,9 +34,9 @@
             <tbody>
                 <tr>
                     <td></td>
-                    <td>{{ obras }} </td>
+                    <td class="nombreobra">{{ obras }} </td>
                     <td> </td>
-                    <td>$ {{ obras.empresa }}</td>
+                    <td class="nombreobra"> {{ obras.empresa }}</td>
                     <td> </td>
                 </tr>
 
@@ -51,66 +60,61 @@
                 </tr>
                 {% endfor %}
 
+                <tr>
+                    <td> </td>
+                    <td> <b> Suma EGRESOS </b> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td>$ {{totalpagos | intcomma}}  </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <b>INGRESOS</b>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
 
                 {% for cobro in cobros  %}
-                                <tr>
-                                    <td>{{ cobro.fecha | date:"d-m-Y" }}  </td>
-                                    <td>{{ cobro.descripcion }}  </td>
-                                    <td>{{ cobro.comprobante }}  </td>
-                                    <td>$ {{ cobro.totalfacturacion | intcomma }}</td>
-                                </tr>
-                            {% endfor %}
-
-                            <tr>
-                                <td> <b> Suma INGRESOS </b> </td>
-                                <td> </td>
-                                <td> </td>
-                                <td>$ {{totalcobros | intcomma }}</td>
-                            </tr>
-                        </tbody>
-                </table>
-        <hr>
-
-        <h5> Egresos </h5>
-
-            <table class="table table-bordered">
-                <thead>
                     <tr>
-                        <th>Descripcion</th>
-                        <th>Monto</th>
+                        <td>  </td>
+                        <td>{{ cobro.descripcion }}  </td>
+                        <td>  </td>
+                        <td>$ {{ cobro.totalfacturacion | intcomma }}</td>
+                        <td>  </td>
                     </tr>
-                </thead>
+                {% endfor %}
 
-                <tbody>
-                    {% for devengamiento in devengamientos %}
-                        <tr>
-                            <td>{{ devengamiento.rubro__descripcion }}  </td>
-                            <td>$ {{ devengamiento.sum_custom_method | intcomma }}  </td>
-                        </tr>
-                    {% endfor %}
+                <tr>
+                    <td> </td>
+                    <td> <b> Suma INGRESOS </b> </td>
+                    <td> </td>
+                    <td>$ {{totalcobros | intcomma }}</td>
+                    <td> </td>
+                    <td> </td>
+                </tr>
 
-                    <tr>
-                        <td> <b> Suma EGRESOS </b> </td>
-                        <td>$ {{totalpagos | intcomma}}  </td>
-                    </tr>
-                </tbody>
-            </table>
-        
+                <tr>
+                    <td> </td>
+                    <td> <b> RESULTADO </b> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> <b> $ {{saldo | intcomma }} </b></td>
+                    
+                </tr>
+            </tbody>
+        </table>
         <hr>
-
-        <h5> Saldo: $ {{ saldo | intcomma }} </h5>
     </div>
-
 
 
 {% endblock %}
 
-
     <script>
         $(document).ready(function () {
             
-        });
-
-    
+        });    
     </script>
-
