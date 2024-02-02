@@ -1,5 +1,5 @@
 
-{% extends 'base_nomenu.html' %}
+{% extends 'base_nomenu_portrait.html' %}
 
 {% load humanize %}
 
@@ -7,45 +7,61 @@
 
     <div class="container">
 
-        <br>
-        
-        <div class="row">
-            EGRESOS
+        <div class="tituloscertificado">    
+            <br>
+            <b>CERTIFICADOS</b>
+            <br>
         </div>
 
-        <div class="row">
-            EMPRESA: {{obra.empresa.descripcion }}
+        <div class="titulosingreso">
+            
+            <b>EMPRESA:</b> {{obra.empresa.descripcion }}
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <b>CERTIFICADO:</b> {{texto}} 
+            
+            <br>
+            <b>DIRECCION:</b> {{obra.empresa.domicilio}}
+            <br>
+            <b>TELEFONO:</b> {{obra.empresa.telefono }}
         </div>
 
-        <div class="row nombreobra">
-            <b><u>{{obra.descripcion }}</u></b>
-        </div>
-        
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Monto</th>
-                        </tr>
-                    </thead>
-                    
-                    <tbody>
-                        {% for resultado in resultados %}                   
-                        <tr>
-                            <td>{{ resultado.rubro__descripcion }}  </td>
-                            <td>$ {{ resultado.sum_custom_method | intcomma }}</td>
-                            
-                        </tr>
-                        {% endfor %}
-                        <tr>
-                            <td><b> SUMA EGRESOS </b> </td>
-                             
-                            <td> <b> $ {{ total_egresos | intcomma }} </b> </td>
-                        </tr>             
-                    </tbody>
-                </table>
         <hr>
 
+        <div class="titulosingreso">
+            <b>OBRA:</b> {{obra.descripcion }}
+            <br>
+            <b>LICITACION:</b> 
+            {% if obra.licitacion %}
+                {{obra.licitacion }}
+            {%else%}
+                -
+            {%endif%}
+        </div>
+        <hr>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Monto</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for resultado in resultados %}
+                    <tr>
+                        <td>{{ resultado.rubro__descripcion }}  </td>
+                        <td>$ {{ resultado.sum_custom_method | intcomma }}</td>    
+                    </tr>
+                    {% endfor %}
+                    
+                    <tr>
+                        <td><b> SUMA EGRESOS </b> </td>     
+                        <td> <b> $ {{ total_egresos | intcomma }} </b> </td>
+                    </tr>             
+                </tbody>
+            </table>
+        <hr>
     </div>
 
 

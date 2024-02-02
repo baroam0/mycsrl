@@ -32,15 +32,18 @@
                     <label>Obras</label>
                     <select id="id_obra" class="form-control">
                         <option value=0> SELECCIONA... </option>
-                        {% for obra in obras %}
+                        {% for obra in obras %}                
                             <option value={{obra.pk}}> {{obra }} </option>
                         {% endfor %}
                     </select>
                 </div>
-                
-            </div>
 
-            
+
+                <div class="col-6">
+                    <label>Texto</label>
+                    <input type="text" name="id_texto" class="form-control" required="" id="id_texto">
+                </div>
+            </div>
 
             <hr>
 
@@ -75,6 +78,7 @@
 
         function AbrirVentanaReporte(){
             var id_obra = $("#id_obra").val();
+            var id_texto = $("#id_texto").val();
 
             if(id_obra==0){
                 Swal.fire(
@@ -85,9 +89,9 @@
                 return false;
             }
 
-            var urldetallefactura = "/detallereporteegresoobra/?id_obra=" + id_obra;
+            var urldetallefactura = "/detallereporteegresoobra/?id_obra=" + id_obra + "&id_texto=" + id_texto;
             window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
-            
+   
         }
 
     

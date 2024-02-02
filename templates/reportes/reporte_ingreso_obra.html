@@ -17,14 +17,6 @@
 
         <hr>
 
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{message.tags}}" role="alert">
-                    {{message}}
-                </div>
-            {% endfor %}
-        {% endif %}
-
 
         <form action="/reportes/" method="GET">
             <div class="form-inline">
@@ -37,10 +29,12 @@
                         {% endfor %}
                     </select>
                 </div>
-                
-            </div>
 
-            
+                <div class="col-6">
+                    <label>Texto</label>
+                    <input type="text" name="id_texto" class="form-control" required="" id="id_texto">
+                </div>
+            </div>
 
             <hr>
 
@@ -75,6 +69,7 @@
 
         function AbrirVentanaReporte(){
             var id_obra = $("#id_obra").val();
+            var id_texto = $("#id_texto").val();
 
             if(id_obra==0){
                 Swal.fire(
@@ -85,7 +80,7 @@
                 return false;
             }
 
-            var urldetallefactura = "/detallereporteingresoobra/?id_obra=" + id_obra;
+            var urldetallefactura = "/detallereporteingresoobra/?id_obra=" + id_obra + "&id_texto=" + id_texto;
             window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
             
         }

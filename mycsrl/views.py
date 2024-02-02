@@ -668,6 +668,7 @@ def detallereporteingresoobra(request):
     """Funcion para reporte de gastos por facturas"""
 
     obra = Obra.objects.get(pk=request.GET.get("id_obra"))
+    texto = request.GET.get("id_texto")
 
     resultados = Facturacion.objects.filter(obra=obra)
 
@@ -679,6 +680,7 @@ def detallereporteingresoobra(request):
         {
             "obra": obra,
             "resultados": resultados,
+            "texto": texto,
             "total": total
         }
     )   
@@ -699,6 +701,7 @@ def detallereporteegresoobra(request):
     """Funcion para reporte de egreso por obra agrupado por rubro """
 
     obra = Obra.objects.get(pk=request.GET.get("id_obra"))
+    texto = request.GET.get("id_texto")
 
     resultados = (
         DetalleFacturaProveedor.objects
@@ -730,6 +733,7 @@ def detallereporteegresoobra(request):
         {
             "obra": obra,
             "resultados": resultados,
+            "texto": texto,
             "total_egresos": round(total_egresos,2)
         }
     )

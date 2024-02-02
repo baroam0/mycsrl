@@ -1,5 +1,5 @@
 
-{% extends 'base_nomenu.html' %}
+{% extends 'base_nomenu_portrait.html' %}
 
 {% load humanize %}
 
@@ -26,6 +26,8 @@
 
         <div class="titulosingreso">
             <b>EMPRESA:</b> {{obra.empresa.descripcion }}
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <b>CERTIFICADO:</b> {{texto}} 
             <br>
             <b>DIRECCION:</b> {{obra.empresa.domicilio}}
             <br>
@@ -36,6 +38,7 @@
 
         <div class="titulosingreso">
             <b>OBRA:</b> {{obra.descripcion }}
+            
             <br>
             <b>LICITACION:</b> 
             {% if obra.licitacion %}
