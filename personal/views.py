@@ -366,7 +366,7 @@ def quincena_edit(request, pk):
     for e in quincenadetalle:
         personalids.append(e.personal.pk)
     
-    personales = AltaBajaPersonal.objects.filter(personal__in=personalids)   
+    personales = AltaBajaPersonal.objects.filter(personal__in=personalids, baja=None)   
     
     if request.POST:
         form = QuincenaForm(request.POST, instance=quincena)
