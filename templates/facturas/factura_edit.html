@@ -98,6 +98,7 @@
        		            <th>Cantidad</th>
                         <th>Unidad </th>
                         <th>Precio Unitario</th>
+                        <th>Precio Final</th>
                         <th>Importe</th>
                         <th>Usuario</th>
                         <th>Accion</th>
@@ -112,7 +113,8 @@
                             <td>{{ detallefactura.descripciondetalle.descripciondetalle.upper }} </td>
                             <td>{{ detallefactura.cantidad }} </td>
                             <td>{{ detallefactura.unidad.descripcion }}</td>
-                            <td>{{ detallefactura.getpreciounitario | intcomma }}</td>
+                            <td>$ {{ detallefactura.getpreciounitario | intcomma }}</td>
+                            <td>$ {{ detallefactura.getpreciounitariofinal | intcomma }}</td>
                             <!--td>$ {{ detallefactura.getpreciounitariobruto |floatformat:2 }} </td-->
                             <td>$ {{ detallefactura.getpreciototal | intcomma }} </td>
                             <td>{{ detallefactura.usuario }}</td>
