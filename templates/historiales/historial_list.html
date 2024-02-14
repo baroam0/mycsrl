@@ -58,6 +58,7 @@
                         <th>Descripcion</th>
                         <th>Proveedor</th>
                         <th>Precio</th>
+                        <th>Precio Final</th>
                         <th>Fecha</th>
                     </tr>
                 </thead>
@@ -68,7 +69,8 @@
                         <td>{{ resultado.obra }}  </td>
                         <td>{{ resultado.descripciondetalle }}  </td>
                         <td>{{ resultado.factura.proveedor }}  </td>
-                        <td>$ {{ resultado.preciounitario | floatformat:2 }}</td>
+                        <td>$ {{ resultado.getpreciounitario | floatformat:2 }}</td>
+                        <td>$ {{ resultado.getpreciounitariofinal | floatformat:2 }}</td>
                         <td>{{ resultado.factura.fecha }}</td>
                         
                     </tr>
