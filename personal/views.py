@@ -438,7 +438,8 @@ def printquincenalistado(request, pk):
     for e in quincenadetalle:
         personalids.append(e.personal.pk)
 
-    altasbajas = AltaBajaPersonal.objects.filter(personal__in=personalids).order_by('personal__contratista')
+    #altasbajas = AltaBajaPersonal.objects.filter(personal__in=personalids).order_by('personal__contratista')
+    altasbajas = AltaBajaPersonal.objects.filter(personal__in=personalids, baja=None).order_by('personal__contratista')
 
     return render(
         request,
