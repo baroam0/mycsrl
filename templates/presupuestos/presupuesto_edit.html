@@ -111,12 +111,14 @@
         $(document).ready(function () {
             
             
-            document.getElementById("id_obra").disabled = true;
-            //$('#id_obra').disabled = True;
+            //document.getElementById("id_obra").disabled = true;
+            $('#id_obra').select2();
 
+            /*
             $('#myform').submit (function() {
                 document.getElementById("id_obra").disabled = false;
             });
+            */
         });
 
         function AltaBaja(pk) {
