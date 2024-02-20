@@ -1,4 +1,4 @@
-{% extends 'base_nomenu_bck.html' %}
+{% extends 'base_nomenu_bckk.html' %}
 {% load static %}
 
 
@@ -58,11 +58,10 @@
     <body style="margin:0;padding:0">
 
         <br>
-        <br>
+        
         <h3> QUINCENA {{quincena.fechainicio | date:"d-m-Y"}} AL {{quincena.fechafin | date:"d-m-Y"}} </h3>
 
         <br>
-        <br><br><br>
         <table class="table p1">
             <thead>
                 <tr>
@@ -86,15 +85,15 @@
                         <td style="outline: thin solid; width: 100px; padding:2px; margin:2px"> </td>
                         {% if personal.personal.contratista %}
                             {% if personal.personal.obra %}
-                                <td style="padding:2px; margin:2px; font-size: 13px">{{ personal.personal.contratista }} / {{personal.personal.obra}}  </td>
+                                <td style="padding:2px; margin:2px; font-size: 13px; width:35%">{{ personal.personal.contratista }} / {{personal.personal.obra}}  </td>
                             {% else %}
-                                <td style="padding:2px; margin:2px; font-size: 13px"> {{personal.personal.contratista}} / -</td>
+                                <td style="padding:2px; margin:2px; font-size: 13px; width:35%"> {{personal.personal.contratista}} / -</td>
                             {%endif %}	
                         {% else %}
                             {%if personal.personal.obra%}
-                                <td style="padding:2px; margin:2px; font-size: 13px">- / {{ personal.personal.obra }}  </td>
+                                <td style="padding:2px; margin:2px; font-size: 13px; width:35%">- / {{ personal.personal.obra }}  </td>
                             {% else %}
-                                <td style="padding:2px; margin:2px; font-size: 13px">- / - </td>
+                                <td style="padding:2px; margin:2px; font-size: 13px; width:35%">- / - </td>
                             {% endif %}    
                         {% endif %}
                             
