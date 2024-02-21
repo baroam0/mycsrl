@@ -120,17 +120,20 @@ class ObraForm(forms.ModelForm):
         label="Comitente",
         required=False
     )
-    
+
+    finalizada = forms.BooleanField(label="Finzalizada", required=False)
+
     def __init__(self, *args, **kwargs):
         super(ObraForm, self).__init__(*args, **kwargs)
         for field in iter(self.fields):
-            self.fields[field].widget.attrs.update({
+            if field != "finalizada":
+                self.fields[field].widget.attrs.update({
                 'class': 'form-control'
             })
 
     class Meta:
         model = Obra
-        fields = ["descripcion", "empresa", "licitacion", "comitente"]
+        fields = ["descripcion", "empresa", "licitacion", "comitente", "finalizada"]
 
 
 

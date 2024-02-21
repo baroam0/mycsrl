@@ -1,0 +1,78 @@
+
+{% extends 'base_nomenu_portrait.html' %}
+
+{% load humanize %}
+
+{% block content %}
+
+<style>  
+    
+    .tituloscertificado {
+      font-size: 16px;
+    }
+
+    .titulosingreso {
+      font-size: 14px;
+    }
+</style>
+
+    <!--div class="container"-->
+        
+        <div class="tituloscertificado">    
+            <br>
+            <b>OBRAS SIN FINALIZAR</b>
+            <br>
+        </div>
+        <br>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>OBRA</th>
+                    <th>EMPRESA</th>
+                    <th>COMITENTE</th>
+                    <th>LICITACION</th>  
+                </tr>
+            </thead>
+                    
+            <tbody>
+                {% for resultado in resultados %}                   
+                    <tr>
+                        {% if resultado.descripcion %}
+                            <td>{{ resultado.descripcion }}  </td>
+                        {% else %}
+                            <td> - </td>
+                        {% endif %}
+
+                        {% if resultado.empresa %}
+                            <td>{{ resultado.empresa }}  </td>
+                        {% else %}
+                            <td> - </td>
+                        {% endif %}
+
+                        {% if resultado.comitente %}
+                            <td>{{ resultado.comitente }}  </td>
+                        {% else %}
+                            <td> - </td>
+                        {% endif %}
+
+                        {% if resultado.licitacion %}
+                            <td>{{ resultado.licitacion }}  </td>
+                        {% else %}
+                            <td> - </td>
+                        {% endif %} 
+                    </tr>
+                {% endfor %}             
+                </tbody>
+        </table>
+
+    <!--/div-->
+
+
+
+{% endblock %}
+
+    <script>
+        $(document).ready(function () {            
+        });
+    
+    </script>

@@ -739,3 +739,13 @@ def detallereporteegresoobra(request):
     )
 
 
+def reporteobrasactivas(request):
+    resultados = Obra.objects.filter(finalizada=False)
+
+    return render(
+        request, 
+        'reportes/reporte_obras_activas.html',
+        {
+            "resultados": resultados
+        }
+    )

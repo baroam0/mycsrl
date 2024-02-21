@@ -1,4 +1,5 @@
 
+from email.policy import default
 from django.db import models
 
 from bancos.models import Banco
@@ -33,6 +34,8 @@ class Obra(models.Model):
 
     licitacion = models.CharField(max_length=50, null=True, blank=True)
     comitente = models.CharField(max_length=200, null=True, blank=True)
+
+    finalizada = models.BooleanField(default=False)
 
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
 
