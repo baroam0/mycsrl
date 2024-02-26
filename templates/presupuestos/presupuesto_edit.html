@@ -74,8 +74,9 @@
                         <tbody>
                             {% for resultado in detallespresupuestos %}
                             <tr>
-                                <td>{{ resultado.contratista }}  </td>
-                                <td>{{ resultado.importe }}  </td>
+                                <td>{{ resultado.fecha | date:"d-m-Y" }} </td>
+                                <td>{{ resultado.contratista }} </td>
+                                <td>{{ resultado.importe }} </td>
                                 <td>{{ resultado.entregado }}</td>
                                 <td>{{ resultado.usuario }}</td>
                                 <td>

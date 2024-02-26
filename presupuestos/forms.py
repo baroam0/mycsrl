@@ -28,7 +28,14 @@ class PresupuestoForm(forms.ModelForm):
 
 class DetallePresupuestoForm(forms.ModelForm):    
     
-    contratista = forms.ModelChoiceField(queryset=Contratista.objects.all(), label="Contratistas")
+    fecha = forms.DateField(
+        label="Fecha", required=True
+    )
+
+    contratista = forms.ModelChoiceField(
+        queryset=Contratista.objects.all(), 
+        label="Contratistas"
+    )
 
     descripcion = forms.CharField(label="Descripcion", required=False)
     cantidad = forms.DecimalField(label="Cantidad", required=False)
@@ -45,4 +52,4 @@ class DetallePresupuestoForm(forms.ModelForm):
 
     class Meta:
         model = DetallePresupuesto
-        fields = ["contratista", "importe", "entregado", "descripcion", "cantidad"]
+        fields = ["fecha", "contratista", "importe", "entregado", "descripcion", "cantidad"]
