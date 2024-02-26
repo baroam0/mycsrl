@@ -13,7 +13,19 @@ from .models import Presupuesto, DetallePresupuesto
 def listadopresupuesto(request):
     if "txtBuscar" in request.GET:
         parametro = request.GET.get('txtBuscar')
-        presupuestos = Presupuesto.objects.filter(obra__descripcion__contains=parametro)
+        obras = Presupuesto.objects.filter(obra__descripcion__contains=parametro)
+        ids_presupuestos = Presupuesto.objects.filter(pk__contains=parametro)
+
+        ids_detallepresupuestos = DetallePresupuesto.objects.filter(
+            pk__contains=parametro
+        ).order_by('-fecha')
+
+        array_presupuestos = list()
+        for e in ids_detallepresupuestos:
+            array_presupuestos.append(e.presupuesto.pk)
+
+        detallespresupuestos = Presupuesto.objects.filter(pk__in=array_presupuestos)
+        presupuestos = obras | ids_presupuestos | detallespresupuestos
     else:
         presupuestos  = Presupuesto.objects.all()
     paginador = Paginator(presupuestos, 20)
@@ -23,6 +35,8 @@ def listadopresupuesto(request):
     else:
         page = 1
     resultados = paginador.get_page(page)
+
+    
     return render(
         request,
         'presupuestos/presupuesto_list.html',
