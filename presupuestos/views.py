@@ -13,7 +13,7 @@ from .models import Presupuesto, DetallePresupuesto
 def listadopresupuesto(request):
     if "txtBuscar" in request.GET:
         parametro = request.GET.get('txtBuscar')
-        presupuestos = Presupuesto.objects.filter(obra_descripcion__contains=parametro)
+        presupuestos = Presupuesto.objects.filter(obra__descripcion__contains=parametro)
     else:
         presupuestos  = Presupuesto.objects.all()
     paginador = Paginator(presupuestos, 20)
