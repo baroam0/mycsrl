@@ -608,32 +608,34 @@ def detallereportecontratista(request):
     
     obralist = list()
 
+    """
     for p in presupuestos:
         obralist.append(p.obra.pk)
     
     obralist = list(set(obralist))
 
     obras = Obra.objects.filter(pk__in=obralist)
+    """
 
     contratistalist = list()
 
     for d in detallepresupuestos:
-        contratistalist.append(d.contratista.pk)
+        print(d.contratista.descripcion)
+        print(d.presupuesto.obra.descripcion)
+        print(d.gettotalimportecontratista())
+        print(d.gettotalentregadocontratista())
+        print(d.getsaldocontratista())
+        if d.getsaldocontratista() > 0:
+            obralist.append(d.presupuesto.obra.pk)
+            contratistalist.append(d.contratista.pk)
     
+    obralist = list(set(obralist))
+    obras = Obra.objects.filter(pk__in=obralist)
     contratistalist = list(set(contratistalist))
 
     contratistas = Contratista.objects.filter(pk__in=contratistalist)
 
     datalist = dict()
-
-    """
-    for c in contratistas:
-        datalist[c.descripcion] = list()
-        for d in detallepresupuestos:
-            if c.descripcion == d.contratista.descripcion:
-                data = dictbuilder(d.contratista.pk, d.presupuesto.obra.pk)
-                datalist[c.descripcion].append(data)
-    """
 
     for c in contratistas:
         datalist[c.descripcion] = list()
@@ -643,7 +645,7 @@ def detallereportecontratista(request):
         totales = totalescontratistas(c.pk)
         datalist[c.descripcion].append(totales)
 
-    print(datalist)
+    
     return render(
         request, 
         'reportes/detallereportecontratista.html',
