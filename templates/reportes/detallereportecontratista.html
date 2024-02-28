@@ -39,13 +39,13 @@
                         {% if v.codigo %}
                             <tbody>
                                 <tr>
-                                    <td >{{ v.codigo }}  </td>
-                                    <td >{{ v.obra }}</td>
-                                    <td > $ {{ v.importe | intcomma }}</td> 
-                                    <td > $ {{ v.entregado | intcomma  }} </td>
-                                    <td > $ {{ v.saldo | intcomma }} </td>
-                                    <td style=" outline: thin solid;"> </td>
-                                    <td style=" outline: thin solid;"> </td>
+                                    <td sytle="width:10%;" >{{ v.codigo }}  </td>
+                                    <td sytle="width:34%;">{{ v.obra }}</td>
+                                    <td sytle="width:10%;"> $ {{ v.importe | intcomma }}</td> 
+                                    <td sytle="width:10%;"> $ {{ v.entregado | intcomma  }} </td>
+                                    <td sytle="width:10%;"> $ {{ v.saldo | intcomma }} </td>
+                                    <td style=" outline: thin solid; width:13%;"> </td>
+                                    <td style=" outline: thin solid; width:13%;"> </td>
                                 </tr>
                             </tbody>
                         {% endif %}

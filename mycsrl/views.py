@@ -552,12 +552,11 @@ def dictbuilder(contratista_id, obra_id):
     presupuesto = Presupuesto.objects.get(obra=obra.pk)
 
     if presupuesto:
-        
         detallepresupuesto = (DetallePresupuesto.objects
                               .filter(contratista=contratista.pk, presupuesto=presupuesto.pk)
                               .order_by("contratista__descripcion")
                               )
-        
+
         totalimporte = 0
         totalentregado = 0
         saldo = 0
@@ -569,14 +568,16 @@ def dictbuilder(contratista_id, obra_id):
 
         result = dict()
         for d in detallepresupuesto:
-            tmpdict = {
-                "codigo": obra.pk,
-                "obra": obra.descripcion,
-                "importe": totalimporte,
-                "entregado": totalentregado,
-                "saldo": saldo
-            }
-            result = tmpdict
+            valor = d.getsaldocontratistaexcluyente(d.contratista.pk, d.presupuesto.obra.pk)
+            if valor != 0:
+                tmpdict = {
+                    "codigo": obra.pk,
+                    "obra": obra.descripcion,
+                    "importe": totalimporte,
+                    "entregado": totalentregado,
+                    "saldo": saldo
+                }
+                result = tmpdict
     else:
         result = None
     return result
@@ -591,8 +592,11 @@ def totalescontratistas(contratista_id):
     saldo = 0
 
     for d in detallespresupuestos:
-        totalimporte = totalimporte + d.importe
-        totalentregado = totalentregado + d.entregado
+        valor = d.getsaldocontratistaexcluyente(contratista.pk, d.presupuesto.obra.pk)
+        if valor != 0:
+            totalimporte = totalimporte + d.importe
+            totalentregado = totalentregado + d.entregado
+    
     saldo = float(totalimporte) - float(totalentregado)
 
     totales["totalimporte"] = totalimporte
@@ -608,26 +612,11 @@ def detallereportecontratista(request):
     
     obralist = list()
 
-    """
-    for p in presupuestos:
-        obralist.append(p.obra.pk)
-    
-    obralist = list(set(obralist))
-
-    obras = Obra.objects.filter(pk__in=obralist)
-    """
-
     contratistalist = list()
 
     for d in detallepresupuestos:
-        print(d.contratista.descripcion)
-        print(d.presupuesto.obra.descripcion)
-        print(d.gettotalimportecontratista())
-        print(d.gettotalentregadocontratista())
-        print(d.getsaldocontratista())
-        if d.getsaldocontratista() > 0:
-            obralist.append(d.presupuesto.obra.pk)
-            contratistalist.append(d.contratista.pk)
+        obralist.append(d.presupuesto.obra.pk)
+        contratistalist.append(d.contratista.pk)
     
     obralist = list(set(obralist))
     obras = Obra.objects.filter(pk__in=obralist)

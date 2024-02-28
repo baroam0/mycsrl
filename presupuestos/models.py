@@ -79,12 +79,31 @@ class DetallePresupuesto(models.Model):
         totalimporte = 0
         totalentregado = 0
         #presupuestos = DetallePresupuesto.objects.filter(presupuesto=self.pk, contratista=self.contratista.pk)
-
         
         totalimporte = self.gettotalimportecontratista()
         totalentregado = self.gettotalentregadocontratista()
         saldo = float(totalimporte) - float(totalentregado)
         return saldo
+    
+    def getsaldocontratistaexcluyente(self, contratista, obra):
+        obra = Obra.objects.get(pk=obra)
+        presupuesto = Presupuesto.objects.get(obra=obra.pk)
+        totalimporte = 0
+        totalentregado = 0
+        detallepresupuestos = DetallePresupuesto.objects.filter(
+            contratista=contratista,
+            presupuesto=presupuesto
+        )
+
+        for d in detallepresupuestos:
+            totalimporte = totalimporte + d.importe
+            totalentregado = totalentregado + d.entregado
+        
+        #totalimporte = self.gettotalimportecontratista()
+        #totalentregado = self.gettotalentregadocontratista()
+        saldo = float(totalimporte) - float(totalentregado)
+        return saldo
+
 
     def __str__(self):
         return str(self.pk)
