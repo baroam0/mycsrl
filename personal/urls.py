@@ -23,7 +23,7 @@ from .views import (
     listadopersonal, personal_new, personal_edit,
     listadocagetoria, categoria_new, categoria_edit,
     altabajapersonal_new, altabajapersonal_edit, altabajapersonal_delete,
-    quincena_list, quincena_new, quincena_edit,
+    quincena_list, quincena_new, quincena_edit, quincena_delete,
     printlistadopersonal, printquincenalistado,
     quincenadetalle_new
 )
@@ -48,6 +48,7 @@ urlpatterns = [
     path('quincena/listado/', quincena_list, name='quincena_list'),
     path('quincena/nuevo/', quincena_new, name='quincena_new'),
     path('quincena/editar/<int:pk>', quincena_edit, name='quincena_edit'),
+    path('quincena/delete/<int:pk>', quincena_delete, name='quincena_delete'),
 
     path('quincenadetalle/new/<int:pk>', quincenadetalle_new, name='quincenadetalle_new'),
 

@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-sm-4"></div>
             <div class="col-sm-4">
-                <h3> Listado de Quicena. </h3>
+                <h3> Listado de Quincena. </h3>
             </div>
             <div class="col-sm-4"></div>
         </div>
@@ -64,10 +64,14 @@
                         <td>{{ resultado.fechainicio }}  </td>
                         <td>{{ resultado.fechafin }}  </td>
                         <td>{{ resultado.usuario }}  </td>
-                        
+
                         <td>
                             <button type="button" class="btn btn-link btn-sm" onclick="location.href='/personal/quincena/editar/' + {{ resultado.pk }}">
                                 <i class="fas fa-pencil-alt"></i>
+                            </button>
+
+                            <button type="button" class="btn btn-link btn-sm" onclick="location.href='/personal/quincena/delete/' + {{ resultado.pk }}">
+                                <i class="fas fa-trash"></i>
                             </button>
                         </td>
                     </tr>

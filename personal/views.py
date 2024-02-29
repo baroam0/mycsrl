@@ -395,6 +395,24 @@ def quincena_edit(request, pk):
         )
 
 
+@login_required(login_url='/login')
+def quincena_delete(request, pk):
+    quincena = Quincena.objects.get(pk=pk)
+
+    if request.method =="POST":
+        quincena.delete()
+        return redirect('/personal/quincena/listado/')
+        
+    return render(
+            request,
+            'personal/quincena_delete.html',
+            {
+                "detalle": quincena
+            }
+        )
+
+
+
 #############################################################################
 
 @login_required(login_url='/login')
