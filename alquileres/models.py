@@ -1,5 +1,21 @@
+
+from datetime import datetime
 from django.db import models
 
+
+def yearstuple():
+    startyear = 2024
+    fecha = datetime.today()
+    endyear = fecha.year
+    y = tuple(range(startyear, endyear + 1))
+    data = list()
+    for i in y:
+        data.append(
+            (i,i)
+        )
+    data = tuple(data)
+    return data
+    
 
 class Anio(models.Model):
     anio = models.IntegerField(null=False, blank=False)
@@ -40,29 +56,16 @@ class Departamento(models.Model):
     inquilino_dni = models.IntegerField(max_length=150)
 
     def __str__(self):
-        return str(self.edificio.descripcion) + "-" + self.descripcion
+        return self.edificio.descripcion + "-" + self.descripcion
 
     class Meta:
         verbose_name_plural = "Detarpamentos"
 
 
 class Recibo(models.Model):
-    meses = (
-        (1, 'Enero'),
-        (2, 'Febrero'),
-        (3, 'Marzo'),
-        (4, 'Abril'),
-        (5, 'Mayo'),
-        (6, 'Junio'),
-        (7, 'Julio'),
-        (8, 'Agosto'),
-        (9, 'Septiembre'),
-        (10, 'Octubre'),
-        (11, 'Noviembre'),
-        (12, 'Diciembre'),
-    )
 
     fecha = models.DateField(null=False, blank=False)
+
     departamento = models.ForeignKey(
         Departamento, 
         on_delete=models.CASCADE, 
@@ -70,10 +73,13 @@ class Recibo(models.Model):
         blank=False
     )
 
-    mes = models.CharField(max_length=2, choices=meses)
+    descripcion = models.CharField(max_length=50, null=False)
 
 
     monto = models.DecimalField(null=False, blank=False)
+
+    def __str__(self):
+        return self.departamento.edificio.descripcion + '-' + self.departamento.descripcion
 
 
     class Meta:
