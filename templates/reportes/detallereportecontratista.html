@@ -5,24 +5,28 @@
 
 {% block content %}
 
-    <div class="container">
+    <!--div class="container">
 
-        <br>
+        <!--br-->
+
         
-        <div class="row">
-            <div class="col-sm-1"></div>
+        
+            <!--div class="row">
+                <div class="col-sm-1"></div>
 
-            <div class="col-sm-10">
-                <h3> PRESUPUESTO. </h3>
-            </div>
+                <div class="col-sm-10">
+                    <h3> PRESUPUESTO. </h3>
+                </div>
 
-            <div class="col-sm-1"></div>
-        </div>
+                <div class="col-sm-1"></div>
+            </div-->
 
             {% for key, value in result.items %}        
+                <div style="page-break-before: always;">
+                <h5> PRESUPUESTO. </h5>
                 <br>
                 <b>{{key}}</b>
-                <table>    
+                <table>
                     <thead>
                         <tr>
                             <th>COD.</th>
@@ -74,9 +78,11 @@
                     </tr>
                 </table>
                 <br>
+                </div>  
                 {% endfor %}
 
-    </div>
+                      
+    <!--/div-->
 
 
 
