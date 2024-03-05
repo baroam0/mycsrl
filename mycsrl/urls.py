@@ -35,6 +35,9 @@ urlpatterns = [
     path('salir/', salir),
     path('login/', loginusuario, name="login"),
     path('admin/', admin.site.urls),
+
+    path('alquileres/', include("alquileres.urls")),
+
     path('user/', include("usuariosadm.urls")),
     path('pagos/', include("pagos.urls")),
     path('bancos/', include("bancos.urls")),

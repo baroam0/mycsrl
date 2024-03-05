@@ -22,7 +22,7 @@ def yearstuple():
 
 class Edificio(models.Model):
     descripcion = models.CharField(max_length=250, unique=True)
-    direcciones = models.CharField(max_length=250, null=True, blank=True)
+    direccion = models.CharField(max_length=250, null=True, blank=True)
     
     dialimite = models.IntegerField(blank=False, null=False)
     interespordia = models.DecimalField(

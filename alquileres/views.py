@@ -5,8 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 
-from .forms import BancoForm
-from .models import Banco
+from .forms import EdificioForm
+from .models import Edificio
 
 
 @login_required(login_url='/login')
@@ -15,7 +15,7 @@ def listadoedificio(request):
         parametro = request.GET.get('txtBuscar')
         edificios = Edificio.objects.filter(descripcion__contains=parametro)
     else:
-        edificioss = Edificio.objects.all()
+        edificios = Edificio.objects.all()
     paginador = Paginator(edificios, 20)
 
     if "page" in request.GET:
@@ -25,35 +25,35 @@ def listadoedificio(request):
     resultados = paginador.get_page(page)
     return render(
         request,
-        'bancos/edificio_list.html',
+        'alquileres/edificio_list.html',
         {
             'resultados': resultados
         })
 
 
 @login_required(login_url='/login')
-def banco_new(request):
+def edificio_new(request):
     if request.POST:
         usuario = request.user
-        form =  BancoForm(request.POST)
+        form = EdificioForm(request.POST)
         if form.is_valid():
-            banco = form.save(commit=False)
-            banco.usuario = usuario
+            edificio = form.save(commit=False)
+            edificio.usuario = usuario
             try:
-                banco.save()
-                messages.success(request, "Se ha grabado los datos del banco.")
-                return redirect('/bancos/listado')
+                edificio.save()
+                messages.success(request, "Se ha grabado los datos del edificio.")
+                return redirect('/alquileres/edificios/listado')
             except Exception as e:
                 messages.warning(request, "Ha ocurrido un error.")
-                return redirect('/bancos/listado')
+                return redirect('/alquileres/edificio/listado')
         else:
             messages.warning(request, form.errors)
-            return redirect('/bancos/listado')
+            return redirect('/alquileres/edificios/listado')
     else:
-        form = BancoForm()
+        form = EdificioForm()
         return render(
             request,
-            'bancos/banco_edit.html',
+            'alquileres/edificio_edit.html',
             {"form": form}
         )
 
