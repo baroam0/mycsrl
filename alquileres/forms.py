@@ -95,7 +95,6 @@ class ReciboForm(forms.ModelForm):
         (12,"Diciembre")
     )
 
-
     fecha = forms.DateField(label="Fecha")
 
     departamento = forms.ModelChoiceField(
@@ -122,4 +121,4 @@ class ReciboForm(forms.ModelForm):
 
     class Meta:
         model = Recibo
-        fields = ["fecha", "mes", "anio"]
+        fields = ["fecha", "departamento", "mes", "anio", "monto"]

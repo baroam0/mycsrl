@@ -113,22 +113,26 @@ class Recibo(models.Model):
     def __str__(self):
         return self.departamento.edificio.descripcion + '-' + self.departamento.descripcion + str(self.pk)
     
-    def calcular_interes(self, fecha_recibo, fecha_limite):
-
-        fecha_limite = datetime(int(self.anio), int(self.mes), int(self.departamento.edificio.dialimite))
-        fecha_recibo = self.fecha
+    def save(self, *args, **kwargs):
+        str_d = str(self.anio) + "/" + str(self.mes) + "/" + str(self.departamento.edificio.dialimite)
+        date_format = "%Y/%m/%d"
+        fecha_limite = datetime.strptime(str_d, date_format)
+        #fecha_limite = datetime(int(self.anio), int(self.mes), int(self.departamento.edificio.dialimite))
         
-        diferencia = fecha_recibo - fecha_limite
+        print(type(self.fecha))
+        print(type(fecha_limite))
 
+        diferencia = self.fecha - fecha_limite.date()
         cantidad_dias = diferencia.days
 
         if cantidad_dias > 0:
-            interes = self.departamento.edificio.interespordia * cantidad_dias
-            monto = self.monto + (self.monto * interes / 100)
+            interes = float(self.departamento.edificio.interespordia) * float(cantidad_dias)
+            self.monto_calculado = float(self.monto) + float(self.monto) * float(interes) /100
         else:
-            monto = self.monto
+            self.monto_calculado = self.monto
 
-        return monto
+        super(Recibo, self).save(*args, **kwargs)
+    
       
     class Meta:
         verbose_name_plural = "Recibos"    

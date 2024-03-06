@@ -18,9 +18,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-from .views import listadoedificio, edificio_new, edificio_edit, listadodepartamento, departamento_edit, departamento_new, recibo_new
+from .views import (
+    ajax_monto_recibo,
+    listadoedificio, edificio_new, edificio_edit, 
+    listadodepartamento, departamento_edit, departamento_new, 
+    recibo_new, recibo_edit, listadorecibo)
 
 urlpatterns = [
+    
+
     path('edificio/listado/', listadoedificio, name='listadoedicio'),
     path('edificio/nuevo', edificio_new, name='edificionew'),
     path('edificio/edit/<int:pk>', edificio_edit, name='edificioedit'),
@@ -29,5 +35,8 @@ urlpatterns = [
     path('departamento/nuevo', departamento_new, name='edificionew'),
     path('departamento/edit/<int:pk>', departamento_edit, name='edificioedit'),
 
+    path('recibo/ajax-monto/', ajax_monto_recibo, name='ajax_monto_recibo'),
+    path('recibo/listado/', listadorecibo, name='listadodepartamento'),
     path('recibo/nuevo', recibo_new, name='recibonew'),
+    path('recibo/edit/<int:pk>', recibo_edit, name='edificioedit'),
 ]

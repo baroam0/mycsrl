@@ -1,0 +1,91 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="container">
+
+        <br>
+        
+        <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-8">
+                <h3> Reporte Ingreso por Obra.</h3>
+            </div>
+            <div class="col-sm-2"></div>
+        </div>
+
+        <hr>
+
+
+        <form action="/reportes/" method="GET">
+            <div class="form-inline">
+                <div class="col-6">
+                    <label>Obras</label>
+                    <select id="id_obra" class="form-control">
+                        <option value=0> SELECCIONA... </option>
+                        {% for obra in obras %}
+                            <option value={{obra.pk}}> {{obra }} </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-6">
+                    <label>Texto</label>
+                    <input type="text" name="id_texto" class="form-control" required="" id="id_texto">
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="form-inline">
+                <div class="col-4">
+                </div>
+
+                <div class="col-4">
+                    <button type="button" class="btn btn-default" title="Generar" onclick="AbrirVentanaReporte()">
+                        <i class="fas fa-play"></i>
+                    </button>
+                </div>
+
+                <div class="col-4">
+                </div>
+            </div>
+
+            <br>
+
+        </form>
+    </div>
+
+{% endblock %}
+
+
+{% block js_extra %}
+
+    <script>
+        $(document).ready(function () {
+            $('#id_obra').select2();
+        });
+
+        function AbrirVentanaReporte(){
+            var id_obra = $("#id_obra").val();
+            var id_texto = $("#id_texto").val();
+
+            if(id_obra==0){
+                Swal.fire(
+                    'Por favor elige una Obra',
+                    '',
+                    'warning'
+                )
+                return false;
+            }
+
+            var urldetallefactura = "/detallereporteingresoobra/?id_obra=" + id_obra + "&id_texto=" + id_texto;
+            window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
+            
+        }
+
+    
+    </script>
+
+{% endblock %}

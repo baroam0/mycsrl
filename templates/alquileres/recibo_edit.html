@@ -20,6 +20,12 @@
                 <form  method="POST">{% csrf_token %}
                     {{ form.as_p }}
 
+                    <p>
+                        <label for="id_montofinal">Monto Final: </label> 
+                        <input type="number" name="montocalculado" step="any" class="form-control" id="id_montofinal" disabled>
+                    </p>
+
+
                     <hr>
 
                     <div class="row">
@@ -34,7 +40,7 @@
                         </div>
 
                         <div class="col-2">    
-                            <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="IrListadoBanco()">
+                            <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="IrListado()">
                                 <i class="far fa-times-circle"></i>
                                 Cancelar
                             </button>
@@ -60,15 +66,34 @@
         $(document).ready(function () {
             $('#id_departamento').select2();
             TranslateDatepickerToEs($("#id_fecha"));
+
+            $('#id_monto').on('keyup', function() {
+
+                $.ajax({
+                    type: "GET",
+                    url: "/alquileres/recibo/ajax-monto/",
+                    data: {
+                        fecha: $('#id_fecha').val(),
+                        mes: $('#id_mes').val(),
+                        anio: $('#id_anio').val(),
+                        departamento: $('#id_departamento').val(),
+                        monto: $(this).val()
+                    },
+                    success: function (response) {
+                        $('#id_montofinal').val(response.monto_calculado);
+                    }
+                });
+
+            });
+        
         });
 
-    
     </script>
     
     
     <script>
-        function IrListadoBanco() {
-            window.location.replace("/bancos/listado");
+        function IrListado() {
+            window.location.replace("/alquileres/recibo/listado");
         }
     </script>
 
