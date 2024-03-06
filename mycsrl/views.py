@@ -740,3 +740,28 @@ def reporteobrasactivas(request):
             "resultados": resultados
         }
     )
+
+
+def reporteprespuestoindividual(request):
+    presupuestos  = Presupuesto.objects.all()
+    return render(
+        request, 
+        'reportes/reporte_presupuesto_individual.html',
+        {
+            "presupuestos": presupuestos,
+        }
+    )
+
+
+def reportedetalleprespuestoindividual(request):
+    
+    presupuesto  = Presupuesto.objects.get(pk=request.GET.get("id"))
+    detallespresupuestos = DetallePresupuesto.objects.filter(presupuesto=presupuesto.pk)
+
+    return render(
+        request, 
+        'reportes/detallereportepresupuesto.html',
+        {
+            "detallespresupuestos": detallespresupuestos,
+        }
+    )

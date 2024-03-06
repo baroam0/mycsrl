@@ -1,0 +1,50 @@
+
+{% extends 'base_nomenu_portrait.html' %}
+
+{% load humanize %}
+
+{% block content %}
+
+    <div class="container">
+
+        <div>    
+            <br>
+            <b>PRESUPUESTOS</b>
+            <br>
+        </div>
+
+        <hr>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Monto</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for resultado in resultados %}
+                    <tr>
+                        <td>{{ resultado.rubro__descripcion }}  </td>
+                        <td>$ {{ resultado.sum_custom_method | intcomma }}</td>    
+                    </tr>
+                {% endfor %}
+                    
+            </tbody>
+        </table>
+        <hr>
+    </div>
+
+
+{% endblock %}
+
+
+    <script>
+        $(document).ready(function () {
+            
+        });
+
+    
+    </script>
+

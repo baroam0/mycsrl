@@ -26,7 +26,8 @@ from .views import (detallereporteegresoobra, home, loginusuario, reporteegresoo
                     reportegastoporobra, detallereportesgastosporobra, 
                     reportecontratista, detallereportecontratista,
                     reporteingresoobra, detallereporteingresoobra,
-                    reporteegresoobra, detallereporteegresoobra, reporteobrasactivas
+                    reporteegresoobra, detallereporteegresoobra, reporteobrasactivas,
+                    reporteprespuestoindividual, reportedetalleprespuestoindividual
                     )
 
 
@@ -71,5 +72,8 @@ urlpatterns = [
     path('reporteegresoobra/', reporteegresoobra),
     path('reporteobrasactivas/', reporteobrasactivas),
     path('detallereporteegresoobra/', detallereporteegresoobra),
-    
+
+    path('presupuestoindividual/', reporteprespuestoindividual),
+    path('detallereportepresupuestoindividual/', reportedetalleprespuestoindividual),
+
 ]
