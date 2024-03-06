@@ -1,9 +1,10 @@
 
 
+from random import choices
 from django import forms
 from django.contrib.auth.models import User
 
-from .models import Edificio
+from .models import Edificio, Departamento, Recibo
 
 
 class EdificioForm(forms.ModelForm):
@@ -12,7 +13,7 @@ class EdificioForm(forms.ModelForm):
         label="Descripcion"
     )
 
-    direcciones = forms.CharField(
+    direccion = forms.CharField(
         label="Direccion",
         required=True
     )
@@ -37,3 +38,70 @@ class EdificioForm(forms.ModelForm):
         model = Edificio
         fields = ["descripcion", "direccion", "dialimite", "interespordia"]
 
+
+
+class DepartamentoForm(forms.ModelForm):
+
+    edificio = forms.ModelChoiceField(
+        queryset=Edificio.objects.all(),
+        label="Edificio"
+    )
+
+    descripcion = forms.CharField(
+        label="Descripcion"
+    )
+
+    inquilino_apellido = forms.CharField(
+        label="Apellido Inquilino",
+        required=True
+    )
+
+    inquilino_nombre = forms.CharField(
+        label="Nombre Inquilino",
+        required=True
+    )
+
+    inquilino_dni = forms.CharField(
+        label="DNI Inquilino",
+        required=True
+    )
+    
+    def __init__(self, *args, **kwargs):
+        super(DepartamentoForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+
+    class Meta:
+        model = Departamento
+        fields = ["edificio", "descripcion", "inquilino_apellido", "inquilino_nombre", "inquilino_dni"]
+
+
+class ReciboForm(forms.ModelForm):
+
+
+    fecha = forms.DateField(label="Fecha")
+
+    departamento = forms.ModelChoiceField(
+        label="Departamento",
+        queryset=Departamento.objects.all(),
+        required=True
+    )
+
+    monto = forms.DecimalField(
+        label="Monto", 
+        required=True
+    )
+
+
+    def __init__(self, *args, **kwargs):
+        super(ReciboForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+
+    class Meta:
+        model = Recibo
+        fields = ["fecha"]
