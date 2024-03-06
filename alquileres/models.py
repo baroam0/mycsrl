@@ -118,9 +118,6 @@ class Recibo(models.Model):
         date_format = "%Y/%m/%d"
         fecha_limite = datetime.strptime(str_d, date_format)
         #fecha_limite = datetime(int(self.anio), int(self.mes), int(self.departamento.edificio.dialimite))
-        
-        print(type(self.fecha))
-        print(type(fecha_limite))
 
         diferencia = self.fecha - fecha_limite.date()
         cantidad_dias = diferencia.days

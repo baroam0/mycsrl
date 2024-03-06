@@ -20,6 +20,7 @@ from django.urls import include, path
 
 from .views import (
     ajax_monto_recibo,
+    print_recibo,
     listadoedificio, edificio_new, edificio_edit, 
     listadodepartamento, departamento_edit, departamento_new, 
     recibo_new, recibo_edit, listadorecibo)
@@ -38,5 +39,6 @@ urlpatterns = [
     path('recibo/ajax-monto/', ajax_monto_recibo, name='ajax_monto_recibo'),
     path('recibo/listado/', listadorecibo, name='listadodepartamento'),
     path('recibo/nuevo', recibo_new, name='recibonew'),
-    path('recibo/edit/<int:pk>', recibo_edit, name='edificioedit'),
+    path('recibo/edit/<int:pk>', recibo_edit, name='reciboedit'),
+    path('recibo/print/<int:pk>', print_recibo, name='printrecibo'),
 ]

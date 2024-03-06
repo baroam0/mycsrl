@@ -10,7 +10,7 @@ from django.shortcuts import render, redirect
 from .forms import EdificioForm, DepartamentoForm, ReciboForm
 from .models import Departamento, Edificio, Recibo
 
-from lib.numeroatexto import numerotxt
+from lib.numeroatexto import numerotxt, numtxt
 
 @login_required(login_url='/login')
 def listadoedificio(request):
@@ -272,14 +272,31 @@ def ajax_monto_recibo(request):
 def print_recibo(request, pk):
     recibo = Recibo.objects.get(pk=pk)
 
-    valor_letras = numerotxt(recibo.monto_calculado)
+    MESES = {
+        1:"Enero",
+        2:"Febrero",
+        3:"Marzo",
+        4:"Abril",
+        5:"Mayo",
+        6:"Junio",
+        7:"Julio",
+        8:"Agosto",
+        9:"Septiembre",
+        10:"Octubre",
+        11:"Noviembre",
+        12:"Diciembre"
+    }
+       
+
+    valor_letras = numtxt(recibo.monto_calculado)
 
     return render(
         request,
         'alquileres/print_recibo.html',
         {
             "recibo": recibo,
-            "montoletras": valor_letras
+            "montoletras": valor_letras,
+            "mes": MESES[recibo.mes]
         }
     )
 

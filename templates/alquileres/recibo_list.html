@@ -74,7 +74,7 @@
                             <button type="button" class="btn btn-link btn-sm" onclick="location.href='/alquileres/recibo/edit/' + {{ resultado.pk }}">
                                 <i class="fas fa-pencil-alt"></i>
                             </button>
-                            <button type="button" class="btn btn-link btn-sm" onclick="location.href='/alquileres/recibo/edit/' + {{ resultado.pk }}">
+                            <button type="button" class="btn btn-link btn-sm" onclick="abrirVentanaNueva({{resultado.pk}})">
                                 <i class="fas fa-print"></i>
                             </button>
                         </td>
@@ -123,5 +123,16 @@
         </form>
 
     </div>
+
+    <script>
+        
+        function abrirVentanaNueva(pk) {
+            window.open("/alquileres/recibo/print/" + pk, "_blank");
+        }
+        
+        function IrListado() {
+            window.location.replace("/alquileres/recibo/listado");
+        }
+    </script>
 
 {% endblock %}

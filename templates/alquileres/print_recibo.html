@@ -1,91 +1,156 @@
 
-{% extends 'base.html' %}
+{% extends 'base_empty.html' %}
+
+{% load humanize %}
 
 {% block content %}
 
-    <div class="container">
+    <style>
+        .fecha{
+            font-size: 22px;
+        }
+        .div-center {
+            text-align: justify;
+            font-size: 22px;
+        }
 
-        <br>
-        
-        <div class="row">
-            <div class="col-sm-2"></div>
-            <div class="col-sm-8">
-                <h3> Reporte Ingreso por Obra.</h3>
-            </div>
-            <div class="col-sm-2"></div>
+        p {
+            border: solid #000 4px;
+            text-align: center;
+        }
+    </style>
+
+
+    <h4>
+        RECIBO <b> "{{recibo.departamento.edificio.descripcion.upper}}" </b>
+    </h4>
+
+    <div class="row">
+        <div class="col-sm-4">
         </div>
 
-        <hr>
+        <div class="col-sm-4">
+        </div>
 
-
-        <form action="/reportes/" method="GET">
-            <div class="form-inline">
-                <div class="col-6">
-                    <label>Obras</label>
-                    <select id="id_obra" class="form-control">
-                        <option value=0> SELECCIONA... </option>
-                        {% for obra in obras %}
-                            <option value={{obra.pk}}> {{obra }} </option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <div class="col-6">
-                    <label>Texto</label>
-                    <input type="text" name="id_texto" class="form-control" required="" id="id_texto">
-                </div>
-            </div>
-
-            <hr>
-
-            <div class="form-inline">
-                <div class="col-4">
-                </div>
-
-                <div class="col-4">
-                    <button type="button" class="btn btn-default" title="Generar" onclick="AbrirVentanaReporte()">
-                        <i class="fas fa-play"></i>
-                    </button>
-                </div>
-
-                <div class="col-4">
-                </div>
-            </div>
-
-            <br>
-
-        </form>
+        <div class="col-sm-4 fecha">
+            Formosa, {{recibo.fecha}}
+        </div>
     </div>
 
+    <br>
+
+    <div class="div-center">
+
+    Recibí del Sr/a <b> {{recibo.departamento.inquilino_apellido.upper}}, {{recibo.departamento.inquilino_nombre.upper}} </b>, la suma de <b> PESOS: 
+    {{montoletras}} </b>, en concepto del pago del alquiler del <b> {{recibo.departamento.descripcion.upper}} </b>, correspondiente al mes
+    de {{mes}} / {{recibo.anio}} y expensas.
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-2 fecha">
+            <p>
+                $ {{recibo.monto_calculado | intcomma}}
+            </p>
+            
+        </div>
+
+        <div class="col-sm-4">
+        </div>
+
+        <div class="col-sm-4">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4 fecha">
+           
+        </div>
+
+        <div class="col-sm-4">
+        </div>
+
+        <div class="col-sm-4">
+            .........................................................
+        </div>
+    </div>
+
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+
+
+    <h4>
+        RECIBO <b> "{{recibo.departamento.edificio.descripcion.upper}}" </b>
+    </h4>
+
+    <div class="row">
+        <div class="col-sm-4">
+        </div>
+
+        <div class="col-sm-4">
+        </div>
+
+        <div class="col-sm-4 fecha">
+            Formosa, {{recibo.fecha}}
+        </div>
+    </div>
+
+    <br>
+
+    <div class="div-center">
+
+        Recibí del Sr/a <b> {{recibo.departamento.inquilino_apellido.upper}}, {{recibo.departamento.inquilino_nombre.upper}} </b>, 
+        la suma de <b> PESOS: {{montoletras}} </b>, en concepto del pago del alquiler del <b> {{recibo.departamento.descripcion.upper}} 
+        </b>, correspondiente al mes de {{mes}} / {{recibo.anio}} y expensas.
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-2 fecha">
+            <p>
+                $ {{recibo.monto_calculado | intcomma }}
+            </p>
+            
+        </div>
+
+        <div class="col-sm-4">
+        </div>
+
+        <div class="col-sm-4">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4 fecha">
+           
+        </div>
+
+        <div class="col-sm-4">
+        </div>
+
+        <div class="col-sm-4">
+            .........................................................
+        </div>
+    </div>
+          
+    
 {% endblock %}
 
 
 {% block js_extra %}
 
-    <script>
-        $(document).ready(function () {
-            $('#id_obra').select2();
-        });
-
-        function AbrirVentanaReporte(){
-            var id_obra = $("#id_obra").val();
-            var id_texto = $("#id_texto").val();
-
-            if(id_obra==0){
-                Swal.fire(
-                    'Por favor elige una Obra',
-                    '',
-                    'warning'
-                )
-                return false;
-            }
-
-            var urldetallefactura = "/detallereporteingresoobra/?id_obra=" + id_obra + "&id_texto=" + id_texto;
-            window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
-            
-        }
-
-    
-    </script>
+   
 
 {% endblock %}
