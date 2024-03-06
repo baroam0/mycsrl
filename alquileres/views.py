@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 
-from .forms import EdificioForm, DepartamentoForm
+from .forms import EdificioForm, DepartamentoForm, ReciboForm
 from .models import Departamento, Edificio, Recibo
 
 
@@ -183,9 +183,9 @@ def listadorecibo(request):
 def recibo_new(request):
     if request.POST:
         usuario = request.user
-        form = DepartamentoForm(request.POST)
+        form = ReciboForm(request.POST)
         if form.is_valid():
-            departamento = form.save(commit=False)
+            recibo = form.save(commit=False)
             departamento.usuario = usuario
             try:
                 departamento.save()
@@ -198,10 +198,10 @@ def recibo_new(request):
             messages.warning(request, form.errors)
             return redirect('/alquileres/departamento/listado')
     else:
-        form = DepartamentoForm()
+        form = ReciboForm()
         return render(
             request,
-            'alquileres/departamento_edit.html',
+            'alquileres/recibo_edit.html',
             {"form": form}
         )
 

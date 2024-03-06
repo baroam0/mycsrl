@@ -18,7 +18,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-from .views import listadoedificio, edificio_new, edificio_edit, listadodepartamento, departamento_edit, departamento_new
+from .views import listadoedificio, edificio_new, edificio_edit, listadodepartamento, departamento_edit, departamento_new, recibo_new
 
 urlpatterns = [
     path('edificio/listado/', listadoedificio, name='listadoedicio'),
@@ -28,4 +28,6 @@ urlpatterns = [
     path('departamento/listado/', listadodepartamento, name='listadodepartamento'),
     path('departamento/nuevo', departamento_new, name='edificionew'),
     path('departamento/edit/<int:pk>', departamento_edit, name='edificioedit'),
+
+    path('recibo/nuevo', recibo_new, name='recibonew'),
 ]

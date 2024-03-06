@@ -4,7 +4,7 @@ from random import choices
 from django import forms
 from django.contrib.auth.models import User
 
-from .models import Edificio, Departamento, Recibo
+from .models import Edificio, Departamento, Recibo, yearstuple
 
 
 class EdificioForm(forms.ModelForm):
@@ -80,6 +80,21 @@ class DepartamentoForm(forms.ModelForm):
 
 class ReciboForm(forms.ModelForm):
 
+    MESES = (
+        (1,"Enero"),
+        (2,"Febrero"),
+        (3,"Marzo"),
+        (4,"Abril"),
+        (5,"Mayo"),
+        (6,"Junio"),
+        (7,"Julio"),
+        (8,"Agosto"),
+        (9,"Septiembre"),
+        (10,"Octubre"),
+        (11,"Noviembre"),
+        (12,"Diciembre")
+    )
+
 
     fecha = forms.DateField(label="Fecha")
 
@@ -94,6 +109,9 @@ class ReciboForm(forms.ModelForm):
         required=True
     )
 
+    mes = forms.ChoiceField(choices=MESES)
+
+    anio = forms.ChoiceField(choices=yearstuple())
 
     def __init__(self, *args, **kwargs):
         super(ReciboForm, self).__init__(*args, **kwargs)
@@ -104,4 +122,4 @@ class ReciboForm(forms.ModelForm):
 
     class Meta:
         model = Recibo
-        fields = ["fecha"]
+        fields = ["fecha", "mes", "anio"]

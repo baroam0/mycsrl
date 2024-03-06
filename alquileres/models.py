@@ -101,6 +101,13 @@ class Recibo(models.Model):
 
     anio = models.IntegerField(choices=ANIOS)
 
+    monto_calculado = models.DecimalField(
+        decimal_places=2,
+        max_digits=10,
+        null=True, 
+        blank=True
+    )
+
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
 
     def __str__(self):
