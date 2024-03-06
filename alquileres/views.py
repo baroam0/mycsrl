@@ -168,9 +168,6 @@ def listadorecibo(request):
             departamento__descripcion__contains=parametro
         ).order_by('-fecha')
     else:
-        valor = 500
-        t = numerotxt(valor)
-        print(t)
         recibos = Recibo.objects.all().order_by('-fecha')
     paginador = Paginator(recibos, 20)
 
@@ -270,5 +267,20 @@ def ajax_monto_recibo(request):
         'monto_calculado': monto_calculado
     }
     return JsonResponse(data)
+
+
+def print_recibo(request, pk):
+    recibo = Recibo.objects.get(pk=pk)
+
+    valor_letras = numerotxt(recibo.monto_calculado)
+
+    return render(
+        request,
+        'alquileres/print_recibo.html',
+        {
+            "recibo": recibo,
+            "montoletras": valor_letras
+        }
+    )
 
 # Create your views here.
