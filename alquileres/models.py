@@ -108,16 +108,19 @@ class Recibo(models.Model):
         blank=True
     )
 
+    apellido = models.CharField(max_length=300, null=True, blank=True)
+    nombre = models.CharField(max_length=300, null=True, blank=True)
+
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.departamento.edificio.descripcion + '-' + self.departamento.descripcion + str(self.pk)
     
     def save(self, *args, **kwargs):
+        
         str_d = str(self.anio) + "/" + str(self.mes) + "/" + str(self.departamento.edificio.dialimite)
         date_format = "%Y/%m/%d"
         fecha_limite = datetime.strptime(str_d, date_format)
-        #fecha_limite = datetime(int(self.anio), int(self.mes), int(self.departamento.edificio.dialimite))
 
         diferencia = self.fecha - fecha_limite.date()
         cantidad_dias = diferencia.days
@@ -127,8 +130,12 @@ class Recibo(models.Model):
             self.monto_calculado = float(self.monto) + float(self.monto) * float(interes) /100
         else:
             self.monto_calculado = self.monto
+            
+        self.apellido = self.departamento.inquilino_apellido
+        self.nombre = self.departamento.inquilino_nombre
 
         super(Recibo, self).save(*args, **kwargs)
+        
     
       
     class Meta:
