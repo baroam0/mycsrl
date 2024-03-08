@@ -25,7 +25,10 @@
                     <select id="id_presupuesto" class="form-control">
                         <option value=0> SELECCIONA... </option>
                         {% for p in presupuestos %}
-                            <option value={{p.pk}}> {{ p.obra.descripcion }} </option>
+                            <option value={{p.pk}}> 
+                                {{ p.presupuesto__obra__descripcion }} - {{p.contratista__descripcion}} 
+                                
+                            </option>
                         {% endfor %}
                     </select>
                 </div>

@@ -4,7 +4,7 @@ import decimal
 from locale import dcgettext
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.db.models import F, Sum, ExpressionWrapper, DecimalField
+from django.db.models import F, Sum, ExpressionWrapper, DecimalField, Count
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from django.http import JsonResponse
@@ -743,7 +743,16 @@ def reporteobrasactivas(request):
 
 
 def reporteprespuestoindividual(request):
-    presupuestos  = Presupuesto.objects.all()
+
+    presupuestos = (DetallePresupuesto.objects
+        .values('pk','presupuesto__obra__descripcion', 'contratista__descripcion')
+        .annotate(dcount=Count('presupuesto__obra__descripcion'))
+        .order_by()
+    )
+    
+    for i in presupuestos:
+        print(i)
+
     return render(
         request, 
         'reportes/reporte_presupuesto_individual.html',
@@ -755,8 +764,11 @@ def reporteprespuestoindividual(request):
 
 def reportedetalleprespuestoindividual(request):
     
-    presupuesto  = Presupuesto.objects.get(pk=request.GET.get("id"))
-    detallespresupuestos = DetallePresupuesto.objects.filter(presupuesto=presupuesto.pk)
+    detallepresupuesto  = DetallePresupuesto.objects.get(pk=request.GET.get("id"))
+    contratista = Contratista.objects.get(pk=detallepresupuesto.contratista.pk)
+    presupuesto = Presupuesto.objects.get(presupuesto=detallepresupuesto.presupuesto.pk)
+    detallespresupuestos = DetallePresupuesto.objects.get(
+    )
 
     return render(
         request, 
