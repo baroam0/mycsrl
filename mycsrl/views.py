@@ -763,8 +763,9 @@ def reportedetalleprespuestoindividual(request):
     detallepresupuesto  = DetallePresupuesto.objects.get(pk=request.GET.get("id"))
     contratista = Contratista.objects.get(pk=detallepresupuesto.contratista.pk)
     presupuesto = Presupuesto.objects.get(pk=detallepresupuesto.presupuesto.pk)
+
     detallespresupuestos = DetallePresupuesto.objects.filter(
-        presupuesto=presupuesto.pk
+        presupuesto=presupuesto.pk, contratista=contratista
     )
 
     montoimporte = 0

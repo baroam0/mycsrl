@@ -27,6 +27,7 @@
             <thead>
                 <tr>
                     <th>Fecha</th>
+                    <th>Codigo</th>
                     <th>Detalle</th>
                     <th>Presupuesto</th>
                     <th>Entregado</th>
@@ -37,12 +38,14 @@
                 {% for detalle in detallespresupuestos %}
                     <tr>
                         <td>{{ detalle.fecha }} </td>
+                        <td>{{ detalle.pk }} </td>
                         <td>{{ detalle.descripcion }} </td>
                         <td>$ {{ detalle.importe | intcomma }} </td>
                         <td>$ {{ detalle.entregado | intcomma }} </td>
                     </tr>
                 {% endfor %}
                     <tr>
+                        <td> </td>
                         <td> </td>
                         <td> </td>
                         <td><b>$ {{ montoimporte | intcomma }} </b></td>
