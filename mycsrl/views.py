@@ -749,9 +749,6 @@ def reporteprespuestoindividual(request):
         .annotate(dcount=Count('presupuesto__obra__descripcion'))
         .order_by()
     )
-    
-    for i in presupuestos:
-        print(i)
 
     return render(
         request, 
@@ -763,17 +760,28 @@ def reporteprespuestoindividual(request):
 
 
 def reportedetalleprespuestoindividual(request):
-    
     detallepresupuesto  = DetallePresupuesto.objects.get(pk=request.GET.get("id"))
     contratista = Contratista.objects.get(pk=detallepresupuesto.contratista.pk)
-    presupuesto = Presupuesto.objects.get(presupuesto=detallepresupuesto.presupuesto.pk)
-    detallespresupuestos = DetallePresupuesto.objects.get(
+    presupuesto = Presupuesto.objects.get(pk=detallepresupuesto.presupuesto.pk)
+    detallespresupuestos = DetallePresupuesto.objects.filter(
+        presupuesto=presupuesto.pk
     )
+
+    montoimporte = 0
+    montoentregado = 0
+
+    for d in detallespresupuestos:
+        montoimporte = montoimporte + d.importe
+        montoentregado = montoentregado + d.entregado
 
     return render(
         request, 
         'reportes/detallereportepresupuesto.html',
         {
+            "contratista": contratista,
             "detallespresupuestos": detallespresupuestos,
+            "presupuesto": presupuesto,
+            "montoimporte": montoimporte,
+            "montoentregado" : montoentregado
         }
     )
