@@ -4,7 +4,7 @@ from random import choices
 from django import forms
 from django.contrib.auth.models import User
 
-from .models import Edificio, Departamento, Recibo, yearstuple
+from .models import Contrato, Edificio, Departamento, Recibo, yearstuple, MESES
 
 
 class EdificioForm(forms.ModelForm):
@@ -65,6 +65,11 @@ class DepartamentoForm(forms.ModelForm):
         label="DNI Inquilino",
         required=True
     )
+
+    monto = forms.DecimalField(
+        label="Monto", 
+        required=True
+    )
     
     def __init__(self, *args, **kwargs):
         super(DepartamentoForm, self).__init__(*args, **kwargs)
@@ -75,36 +80,18 @@ class DepartamentoForm(forms.ModelForm):
 
     class Meta:
         model = Departamento
-        fields = ["edificio", "descripcion", "inquilino_apellido", "inquilino_nombre", "inquilino_dni"]
+        fields = ["edificio", "descripcion",
+                  "inquilino_apellido", "inquilino_nombre", 
+                  "inquilino_dni", "monto"]
 
 
 class ReciboForm(forms.ModelForm):
-
-    MESES = (
-        (1,"Enero"),
-        (2,"Febrero"),
-        (3,"Marzo"),
-        (4,"Abril"),
-        (5,"Mayo"),
-        (6,"Junio"),
-        (7,"Julio"),
-        (8,"Agosto"),
-        (9,"Septiembre"),
-        (10,"Octubre"),
-        (11,"Noviembre"),
-        (12,"Diciembre")
-    )
 
     fecha = forms.DateField(label="Fecha")
 
     departamento = forms.ModelChoiceField(
         label="Departamento",
         queryset=Departamento.objects.all(),
-        required=True
-    )
-
-    monto = forms.DecimalField(
-        label="Monto", 
         required=True
     )
 
@@ -121,4 +108,41 @@ class ReciboForm(forms.ModelForm):
 
     class Meta:
         model = Recibo
-        fields = ["fecha", "departamento", "mes", "anio", "monto"]
+        fields = ["fecha", "departamento", "mes", "anio"]
+
+
+
+class ContratoForm(forms.ModelForm):
+
+    fecha = forms.DateField(label="Fecha", required=True)
+
+    departamento = forms.ModelChoiceField(
+        label="Departamento",
+        queryset=Departamento.objects.all(),
+        required=True
+    )
+
+    mes_inicio = forms.ChoiceField(choices=MESES)
+
+    anio_inicio = forms.ChoiceField(choices=yearstuple())
+
+    mes_fin = forms.ChoiceField(choices=MESES)
+
+    anio_fin = forms.ChoiceField(choices=yearstuple())
+
+    finalizado = forms.BooleanField(required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(ContratoForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            if field != "finalizado":
+                self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+
+    class Meta:
+        model = Contrato
+        fields = [
+            "fecha", "departamento", "mes_inicio", "anio_inicio",
+            "mes_fin", "anio_fin"
+        ]

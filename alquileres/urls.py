@@ -23,7 +23,11 @@ from .views import (
     print_recibo,
     listadoedificio, edificio_new, edificio_edit, 
     listadodepartamento, departamento_edit, departamento_new, 
-    recibo_new, recibo_edit, listadorecibo)
+    recibo_new, recibo_edit, listadorecibo,
+    listadocontrato, contrato_new, contrato_edit,
+    listadocuotascontrato,
+    ajax_mostrar_deudas
+    )
 
 urlpatterns = [
     
@@ -41,4 +45,12 @@ urlpatterns = [
     path('recibo/nuevo', recibo_new, name='recibonew'),
     path('recibo/edit/<int:pk>', recibo_edit, name='reciboedit'),
     path('recibo/print/<int:pk>', print_recibo, name='printrecibo'),
+
+    path('contrato/listado/', listadocontrato, name='listadocontrato'),
+    path('contrato/nuevo', contrato_new, name='contratonew'),
+    path('contrato/edit/<int:pk>', contrato_edit, name='contratoedit'),
+
+    path('cuotacontrato/listado/<int:pk>', listadocuotascontrato, name='listadocuotascontrato'),
+    path('cuotacontrato/ajax-deudas/', ajax_mostrar_deudas, name='ajax_mostrar_deudas'),
+
 ]

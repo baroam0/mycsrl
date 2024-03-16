@@ -1,15 +1,34 @@
 
 from datetime import datetime
+import decimal
+from email.policy import default
 from random import choices
 from django.db import models
 
 from usuariosadm.models import UserAdm
 
 
+MESES = (
+        (1,"Enero"),
+        (2,"Febrero"),
+        (3,"Marzo"),
+        (4,"Abril"),
+        (5,"Mayo"),
+        (6,"Junio"),
+        (7,"Julio"),
+        (8,"Agosto"),
+        (9,"Septiembre"),
+        (10,"Octubre"),
+        (11,"Noviembre"),
+        (12,"Diciembre")
+    )
+
+
 def yearstuple():
     startyear = 2024
     fecha = datetime.today()
-    endyear = fecha.year
+    #endyear = fecha.year
+    endyear = 2034
     y = tuple(range(startyear, endyear + 1))
     data = list()
     for i in y:
@@ -18,6 +37,8 @@ def yearstuple():
         )
     data = tuple(data)
     return data
+
+ANIOS = yearstuple()
 
 
 class Edificio(models.Model):
@@ -53,6 +74,12 @@ class Departamento(models.Model):
     inquilino_nombre = models.CharField(max_length=150)
     inquilino_dni = models.IntegerField()
 
+    monto = models.DecimalField(
+        max_digits=10, 
+        decimal_places=2,
+        null=True, 
+        blank=False)
+
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -64,35 +91,11 @@ class Departamento(models.Model):
 
 class Recibo(models.Model):
 
-    MESES = (
-        (1,"Enero"),
-        (2,"Febrero"),
-        (3,"Marzo"),
-        (4,"Abril"),
-        (5,"Mayo"),
-        (6,"Junio"),
-        (7,"Julio"),
-        (8,"Agosto"),
-        (9,"Septiembre"),
-        (10,"Octubre"),
-        (11,"Noviembre"),
-        (12,"Diciembre")
-    )
-
-    ANIOS = yearstuple()
-
     fecha = models.DateField(null=False, blank=False)
 
     departamento = models.ForeignKey(
         Departamento, 
         on_delete=models.CASCADE, 
-        null=False, 
-        blank=False
-    )
-
-    monto = models.DecimalField(
-        decimal_places=2,
-        max_digits=10,
         null=False, 
         blank=False
     )
@@ -127,18 +130,42 @@ class Recibo(models.Model):
 
         if cantidad_dias > 0:
             interes = float(self.departamento.edificio.interespordia) * float(cantidad_dias)
-            self.monto_calculado = float(self.monto) + float(self.monto) * float(interes) /100
+            self.monto_calculado = self.departamento.monto + self.departamento.monto * interes /100
         else:
-            self.monto_calculado = self.monto
+            self.monto_calculado = self.departamento.monto
             
         self.apellido = self.departamento.inquilino_apellido
         self.nombre = self.departamento.inquilino_nombre
 
         super(Recibo, self).save(*args, **kwargs)
-        
-    
-      
+
     class Meta:
         verbose_name_plural = "Recibos"    
+
+
+class Contrato(models.Model):
+    fecha = models.DateField(null=True, blank=True)
+    departamento = models.ForeignKey(Departamento, on_delete=models.CASCADE)
+    mes_inicio = models.IntegerField(choices=MESES)
+    anio_inicio = models.IntegerField(choices=ANIOS)
+    mes_fin = models.IntegerField(choices=MESES)
+    anio_fin = models.IntegerField(choices=ANIOS)
+    finalizado = models.BooleanField(null=True, blank=True)
+    usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, null=True, blank=True)
+    
+    def __str__(self):
+        return str(self.pk)
+
+
+class CuotaContrato(models.Model):
+    fecha = models.DateField(null=True, blank=True)
+    contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE)
+    mes = models.IntegerField(choices=MESES)
+    anio = models.IntegerField(choices=ANIOS)
+    pagado = models.BooleanField(default=False)
+    usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return str(self.contrato)
 
 # Create your models here.

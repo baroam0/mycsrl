@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-sm-4"></div>
             <div class="col-sm-4">
-                <h3> Listado de Bancos. </h3>
+                <h3> Listado de Contratos. </h3>
             </div>
             <div class="col-sm-4"></div>
         </div>
@@ -26,7 +26,7 @@
         {% endif %}
 
 
-        <form action="/bancos/listado" method="GET">
+        <form action="/alquielres/contrato/listado" method="GET">
             <div class="form-inline">
                 <div class="col-2">
                 </div>
@@ -38,7 +38,7 @@
                         <i class="fas fa-search"></i>
                     </button>
 
-                    <button type="button" class="btn btn-default" title="Nuevo Banco!" onclick="location.href='/bancos/new'">
+                    <button type="button" class="btn btn-default" title="Nuevo Contrato!" onclick="location.href='/alquileres/contrato/nuevo'">
                         <i class="fas fa-plus"></i>
                     </button>
                 </div>
@@ -49,8 +49,12 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>Descripcion</th>
+                        <th>Edificio</th>
+                        <th>Departamento</th>
+                        <th>Inicio</th>
+                        <th>Fin</th>
                         <th>Usuario</th>
+                        <th>Cuotas</th>
                         <th>Accion</th>
                     </tr>
                 </thead>
@@ -58,11 +62,19 @@
                 <tbody>
                     {% for resultado in resultados %}
                     <tr>
-                        <td>{{ resultado.descripcion.upper }}  </td>
-                        <td>{{ resultado.usuario }}</td>
+                        <td>{{ resultado.departamento.edificio.descripcion.upper }}  </td>
+                        <td>{{ resultado.departamento.descripcion.upper }}  </td>
+                        <td>{{ resultado.mes_inicio}} / {{ resultado.anio_inicio}} </td>
+                        <td>{{ resultado.mes_fin}} / {{ resultado.anio_fin}} </td>
+                        <td>{{ resultado.usuario}}  </td>
 
                         <td>
-                            <button type="button" class="btn btn-link btn-sm" onclick="location.href='/bancos/edit/' + {{ resultado.pk }}">
+                            <button type="button" class="btn btn-link btn-sm" onclick="location.href='/alquileres/cuotacontrato/listado/' + {{ resultado.pk }}">
+                                <i class="nav-icon fas fa-dollar-sign"></i>
+                            </button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-link btn-sm" onclick="location.href='/alquileres/contrato/edit/' + {{ resultado.pk }}">
                                 <i class="fas fa-pencil-alt"></i>
                             </button>
                         </td>

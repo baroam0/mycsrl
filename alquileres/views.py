@@ -7,9 +7,10 @@ from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
-from .forms import EdificioForm, DepartamentoForm, ReciboForm
-from .models import Departamento, Edificio, Recibo
+from .forms import EdificioForm, DepartamentoForm, ReciboForm, ContratoForm
+from .models import Departamento, Edificio, Recibo, Contrato, CuotaContrato
 
+from .helper import generarcuotas
 from lib.numeroatexto import numerotxt, numtxt
 
 @login_required(login_url='/login')
@@ -194,6 +195,25 @@ def recibo_new(request):
             recibo.usuario = usuario
             try:
                 recibo.save()
+                departamento = Departamento.objects.get(pk=recibo.departamento.pk)
+                fecha = datetime.today()
+
+                contrato = Contrato.objects.get(
+                    finalizado=False, 
+                    departamento=departamento
+                )
+                
+                cuotacontrato = CuotaContrato.objects.get(
+                    contrato=contrato,
+                    fecha=fecha,
+                    departamento=departamento,
+                    mes=recibo.mes,
+                    anio=recibo.anio,
+                    pagado=True,
+                    usuario=usuario
+                )
+                cuotacontrato.save()
+
                 messages.success(request, "Se ha grabado los datos del recibo.")
                 return redirect('/alquileres/recibo/listado')
             except Exception as e:
@@ -299,5 +319,184 @@ def print_recibo(request, pk):
             "mes": MESES[recibo.mes]
         }
     )
+
+
+@login_required(login_url='/login')
+def listadocontrato(request):
+    if "txtBuscar" in request.GET:
+        parametro = request.GET.get('txtBuscar')
+        contratos = Contrato.objects.filter(descripcion__contains=parametro)
+    else:
+        contratos = Contrato.objects.all()
+    paginador = Paginator(contratos, 20)
+
+    if "page" in request.GET:
+        page = request.GET.get('page')
+    else:
+        page = 1
+    resultados = paginador.get_page(page)
+    return render(
+        request,
+        'alquileres/contrato_list.html',
+        {
+            'resultados': resultados
+        })
+
+
+@login_required(login_url='/login')
+def contrato_new(request):
+    if request.POST:
+        usuario = request.user
+        form = ContratoForm(request.POST)
+        if form.is_valid():
+            contrato = form.save(commit=False)
+            contrato.usuario = usuario
+            try:
+                contrato.save()
+                contrato = Contrato.objects.latest('pk')
+                generarcuotas(contrato, usuario=usuario)
+                messages.success(request, "Se ha grabado el contrato y las cuotas.")
+                return redirect('/alquileres/contrato/listado')
+            except Exception as e:
+                print(e)
+                messages.warning(request, "Ha ocurrido un error.")
+                return redirect('/alquileres/contrato/listado')
+        else:
+            print("qqqqqqq")
+            messages.warning(request, form.errors)
+            return redirect('/alquileres/contrato/listado')
+    else:
+        form = ContratoForm()
+        return render(
+            request,
+            'alquileres/contrato_edit.html',
+            {"form": form}
+        )
+
+
+@login_required(login_url='/login')
+def contrato_edit(request, pk):
+    consulta = Contrato.objects.get(pk=pk)
+   
+    if request.POST:
+        form = ContratoForm(request.POST, instance=consulta)
+        if form.is_valid():
+            edificio = form.save(commit=False)
+            usuario = request.user
+            edificio.usuario = usuario
+            edificio.save()
+            messages.success(request, "Se ha modificado los datos del edificio")
+            return redirect('/alquileres/edificio/listado')
+        else:
+            messages.warning(request, form.errors)
+            return redirect('/alquileres/edificio/listado')
+    else:
+        form = EdificioForm(instance=consulta)
+        return render(
+            request,
+            'alquileres/edificio_edit.html',
+            {"form": form}
+        )
+
+
+
+@login_required(login_url='/login')
+def listadocuotascontrato(request, pk):
+    contrato = Contrato.objects.get(pk=pk)
+
+    cuotascontratos = CuotaContrato.objects.filter(contrato=contrato)
+    paginador = Paginator(cuotascontratos, 20)
+
+    if "page" in request.GET:
+        page = request.GET.get('page')
+    else:
+        page = 1
+    resultados = paginador.get_page(page)
+
+    return render(
+        request,
+        'alquileres/cuotacontrato_list.html',
+        {
+            'contrato': contrato,
+            'resultados': resultados
+        })
+
+
+@login_required(login_url='/login')
+def cuotacontrato_new(request):
+    if request.POST:
+        usuario = request.user
+        form = ContratoForm(request.POST)
+        if form.is_valid():
+            contrato = form.save(commit=False)
+            contrato.usuario = usuario
+            try:
+                contrato.save()
+                contrato = Contrato.objects.latest('pk')
+                generarcuotas(contrato, usuario=usuario)
+                messages.success(request, "Se ha grabado el contrato y las cuotas.")
+                return redirect('/alquileres/contrato/listado')
+            except Exception as e:
+                print(e)
+                messages.warning(request, "Ha ocurrido un error.")
+                return redirect('/alquileres/contrato/listado')
+        else:
+            messages.warning(request, form.errors)
+            return redirect('/alquileres/contrato/listado')
+    else:
+        form = ContratoForm()
+        return render(
+            request,
+            'alquileres/contrato_edit.html',
+            {"form": form}
+        )
+
+
+@login_required(login_url='/login')
+def contrato_edit(request, pk):
+    consulta = Contrato.objects.get(pk=pk)
+   
+    if request.POST:
+        form = ContratoForm(request.POST, instance=consulta)
+        if form.is_valid():
+            edificio = form.save(commit=False)
+            usuario = request.user
+            edificio.usuario = usuario
+            edificio.save()
+            messages.success(request, "Se ha modificado los datos del edificio")
+            return redirect('/alquileres/edificio/listado')
+        else:
+            messages.warning(request, form.errors)
+            return redirect('/alquileres/edificio/listado')
+    else:
+        form = EdificioForm(instance=consulta)
+        return render(
+            request,
+            'alquileres/edificio_edit.html',
+            {"form": form}
+        )
+
+
+def ajax_mostrar_deudas(request):
+    iddepartamento = request.GET.get('departamento')
+
+    departamento = Departamento.objects.get(pk=iddepartamento)
+
+    contrato = Contrato.objects.get(departamento=departamento, finalizado=False)
+
+    cuotascontrato = CuotaContrato.objects.filter(
+        contrato=contrato,
+        pagado=False
+    ).values()
+
+    cuotascontrato = list(cuotascontrato)
+
+    data = {
+        'cuotascontrato': cuotascontrato
+    }
+
+    return JsonResponse(data, safe=False)
+
+
 
 # Create your views here.

@@ -52,6 +52,10 @@
             
         </div>
         
+        <div class="row">
+            <table id="myTable">
+            </table>
+        </div>
     </div>
 
 
@@ -68,7 +72,6 @@
             TranslateDatepickerToEs($("#id_fecha"));
 
             $('#id_monto').on('keyup', function() {
-
                 $.ajax({
                     type: "GET",
                     url: "/alquileres/recibo/ajax-monto/",
@@ -85,6 +88,59 @@
                 });
 
             });
+
+            $('#id_departamento').on('change', function() {
+                
+                var selectedValue = $(this).val();
+                $('#myTable').empty();
+
+                $.ajax({
+                    type: "GET",
+                    url: "/alquileres/cuotacontrato/ajax-deudas/",
+                    data: {
+                        departamento: selectedValue,
+                    },
+                    success: function (response) {
+                        console.log(response);
+
+                        $.each(jsonData.headers, function(key, value) {
+                            const $headerCell = $('<th>').append($('<a>').addClass('sort').attr('href', '#').append($('<span>').text(value)));
+                            $headerRow.append($headerCell);
+                        });
+
+                        /*
+                        $.each(response, function (indexInArray, valueOfElement) { 
+                            //var row = '<tr><td>' + item.name + '</td><td>' + item.price + '</td></tr>';  
+                            //$('#myTable').append(row);
+                        });
+                        /*
+                        response.forEach(function(item) {
+                            var row = '<tr><td>' + item.name + '</td><td>' + item.price + '</td></tr>';
+                            $('#myTable').append(row);
+                        });*/
+                    }
+                });
+
+                //$('#myTable').empty();
+
+                // Populate the table with new data
+                /*
+                data.forEach(function(item) {
+                    var row = '<tr><td>' + item.name + '</td><td>' + item.price + '</td></tr>';
+                    $('#myTable').append(row);
+                });
+                */
+            });
+
+
+
+
+
+
+
+
+
+
         
         });
 
