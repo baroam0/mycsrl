@@ -320,7 +320,7 @@ def facturadetalle_edit(request, pk):
 def listadoobra(request):
     if "txtBuscar" in request.GET:
         parametro = request.GET.get('txtBuscar')
-        obras = Obra.objects.filter(descripcion__contains=parametro)
+        obras = Obra.objects.filter(descripcion__contains=parametro, finalizada=False)
     else:
         obras =  Obra.objects.all()
     paginador = Paginator(obras, 20)

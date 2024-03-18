@@ -118,7 +118,7 @@ def detallereporteporfactura(request):
     for df in detallefacturaproveedor:
         obraslist.append(df.obra.pk)
     obraslist = list(set(obraslist))
-    obras = Obra.objects.filter(pk__in=obraslist)
+    obras = Obra.objects.filter(pk__in=obraslist, finalizada=False)
 
     empresaslist = list()
     for df in detallefacturaproveedor:
@@ -257,7 +257,7 @@ def gettotalobra(obra):
 def gettotalempresa(proveedor, empresa, fechadesde, fechahasta):
         proveedor = Proveedor.objects.get(pk=proveedor)
         empresa = Empresa.objects.get(descripcion=empresa)
-        obra = Obra.objects.filter(empresa=empresa)
+        obra = Obra.objects.filter(empresa=empresa, finalizada=False)
 
         facturaproveedor = FacturaProveedor.objects.filter(
             pagado=False,
@@ -291,7 +291,7 @@ def detallereportesporfacturas(request):
     for df in detallefacturaproveedor:
         obraslist.append(df.obra.pk)
     obraslist = list(set(obraslist))
-    obras = Obra.objects.filter(pk__in=obraslist)
+    obras = Obra.objects.filter(pk__in=obraslist, finalizada=False)
 
     empresaslist = list()
     for df in detallefacturaproveedor:
