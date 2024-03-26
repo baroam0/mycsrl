@@ -1,5 +1,7 @@
 
 from datetime import datetime
+import decimal
+from multiprocessing import current_process
 from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
@@ -7,7 +9,7 @@ from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
-from .forms import EdificioForm, DepartamentoForm, ReciboForm, ContratoForm
+from .forms import EdificioForm, DepartamentoForm, ReciboForm, ContratoForm, CuotaContratoForm
 from .models import Departamento, Edificio, Recibo, Contrato, CuotaContrato
 
 from .helper import generarcuotas
@@ -256,8 +258,7 @@ def recibo_edit(request, pk):
         )
 
 
-def calcula_monto(fecha_recibo,fecha_limite, departamento, monto):
-
+def calcula_monto(fecha_recibo,fecha_limite, departamento):
     fecha_recibo = datetime.strptime(fecha_recibo, '%d/%m/%Y')
 
     diferencia = fecha_recibo - fecha_limite
@@ -265,10 +266,11 @@ def calcula_monto(fecha_recibo,fecha_limite, departamento, monto):
 
     if cantidad_dias > 0:
         interes = float(departamento.edificio.interespordia) * float(cantidad_dias)
-        monto = float(monto) + float(monto) * float(interes) /100
+        #monto = float(monto) + float(monto) * float(interes) /100
+        monto = float(departamento.monto) + float(departamento.monto) * float(interes) /100
     else:
-        monto = monto
-
+        monto = None
+    
     return monto
 
 
@@ -280,8 +282,9 @@ def ajax_monto_recibo(request):
     departamento = Departamento.objects.get(pk=departamento_id)
     fecha_limite = datetime(int(anio), int(mes), int(departamento.edificio.dialimite))
 
-    monto = request.GET.get('monto')
-    monto_calculado = calcula_monto(fecha_recibo, fecha_limite, departamento,monto)
+    #monto = request.GET.get('monto')
+    #monto_calculado = calcula_monto(fecha_recibo, fecha_limite, departamento,monto)
+    monto_calculado = calcula_monto(fecha_recibo, fecha_limite, departamento)
            
     data = {
         'monto_calculado': monto_calculado
@@ -358,11 +361,9 @@ def contrato_new(request):
                 messages.success(request, "Se ha grabado el contrato y las cuotas.")
                 return redirect('/alquileres/contrato/listado')
             except Exception as e:
-                print(e)
                 messages.warning(request, "Ha ocurrido un error.")
                 return redirect('/alquileres/contrato/listado')
         else:
-            print("qqqqqqq")
             messages.warning(request, form.errors)
             return redirect('/alquileres/contrato/listado')
     else:
@@ -381,20 +382,21 @@ def contrato_edit(request, pk):
     if request.POST:
         form = ContratoForm(request.POST, instance=consulta)
         if form.is_valid():
-            edificio = form.save(commit=False)
+            contrato = form.save(commit=False)
             usuario = request.user
-            edificio.usuario = usuario
-            edificio.save()
-            messages.success(request, "Se ha modificado los datos del edificio")
-            return redirect('/alquileres/edificio/listado')
+            contrato.usuario = usuario
+            generarcuotas(consulta, usuario=usuario)
+            contrato.save()
+            messages.success(request, "Se ha grabado el contrato y las cuotas.")
+            return redirect('/alquileres/contrato/listado')
         else:
             messages.warning(request, form.errors)
-            return redirect('/alquileres/edificio/listado')
+            return redirect('/alquileres/contrato/listado')
     else:
-        form = EdificioForm(instance=consulta)
+        form = ContratoForm(instance=consulta)
         return render(
             request,
-            'alquileres/edificio_edit.html',
+            'alquileres/contrato_edit.html',
             {"form": form}
         )
 
@@ -426,77 +428,110 @@ def listadocuotascontrato(request, pk):
 def cuotacontrato_new(request):
     if request.POST:
         usuario = request.user
-        form = ContratoForm(request.POST)
+        form = CuotaContratoForm(request.POST)
         if form.is_valid():
-            contrato = form.save(commit=False)
-            contrato.usuario = usuario
+            cuotacontrato = form.save(commit=False)
+            cuotacontrato.usuario = usuario
             try:
-                contrato.save()
-                contrato = Contrato.objects.latest('pk')
-                generarcuotas(contrato, usuario=usuario)
-                messages.success(request, "Se ha grabado el contrato y las cuotas.")
-                return redirect('/alquileres/contrato/listado')
+                cuotacontrato.save()
+                messages.success(request, "Se ha grabado la cuota.")
+                return redirect('/alquileres/cuotacontrato/listado')
             except Exception as e:
-                print(e)
                 messages.warning(request, "Ha ocurrido un error.")
-                return redirect('/alquileres/contrato/listado')
+                return redirect('/alquileres/cuotacontrato/listado')
         else:
             messages.warning(request, form.errors)
-            return redirect('/alquileres/contrato/listado')
+            return redirect('/alquileres/cuotacontrato/listado')
     else:
-        form = ContratoForm()
+        form = CuotaContratoForm()
         return render(
             request,
-            'alquileres/contrato_edit.html',
-            {"form": form}
+            'alquileres/cuotacontrato_edit.html',
+            {
+                "form": form
+            }
         )
 
 
 @login_required(login_url='/login')
-def contrato_edit(request, pk):
-    consulta = Contrato.objects.get(pk=pk)
+def cuotacontrato_edit(request, pk):
+    consulta = CuotaContrato.objects.get(pk=pk)
+    contrato = consulta.contrato.pk
    
     if request.POST:
-        form = ContratoForm(request.POST, instance=consulta)
+        form = CuotaContratoForm(request.POST, instance=consulta)
         if form.is_valid():
-            edificio = form.save(commit=False)
+            cuotacontrato = form.save(commit=False)
             usuario = request.user
-            edificio.usuario = usuario
-            edificio.save()
-            messages.success(request, "Se ha modificado los datos del edificio")
-            return redirect('/alquileres/edificio/listado')
+            cuotacontrato.usuario = usuario
+            cuotacontrato.save()
+            messages.success(request, "Se ha modificado los datos de la cuota")
+            return redirect('/alquileres/cuotacontrato/listado')
         else:
             messages.warning(request, form.errors)
-            return redirect('/alquileres/edificio/listado')
+            return redirect('/alquileres/cuotacontrato/listado')
     else:
-        form = EdificioForm(instance=consulta)
+        form = CuotaContratoForm(instance=consulta)
         return render(
             request,
-            'alquileres/edificio_edit.html',
-            {"form": form}
+            'alquileres/cuotacontrato_edit.html',
+            {
+                "form": form,
+                "contrato": contrato
+            }
         )
 
 
 def ajax_mostrar_deudas(request):
-    iddepartamento = request.GET.get('departamento')
-
+    fecha = request.GET.get('fecha')
+            
+    iddepartamento = int(request.GET.get('departamento'))
     departamento = Departamento.objects.get(pk=iddepartamento)
 
-    contrato = Contrato.objects.get(departamento=departamento, finalizado=False)
+    try:
+        contrato = Contrato.objects.get(departamento=departamento, finalizado=False)
 
-    cuotascontrato = CuotaContrato.objects.filter(
-        contrato=contrato,
-        pagado=False
-    ).values()
+        montodepartamento = contrato.departamento.monto
 
-    cuotascontrato = list(cuotascontrato)
+        cuotascontrato = CuotaContrato.objects.filter(
+            contrato=contrato,
+            pagado=False
+        )
 
-    data = {
-        'cuotascontrato': cuotascontrato
-    }
+        tmp_data = list()
+        tmp_dict = dict()
+
+        for c in cuotascontrato:            
+            fechalimite = datetime(c.anio, c.mes, c.contrato.departamento.edificio.dialimite)
+            monto = calcula_monto(fecha, fechalimite, c.contrato.departamento)
+
+            if monto:
+                tmp_dict = {
+                    "cuota": str(c.mes) + "-" + str(c.anio),
+                    "monto": monto,
+                    "montodepartamento": montodepartamento
+                }
+                tmp_data.append(tmp_dict)
+                tmp_dict = dict()
+            else:
+                tmp_dict = {
+                    "cuota": str(c.mes) + "-" + str(c.anio),
+                    "monto": c.contrato.departamento.monto,
+                    "montodepartamento": montodepartamento
+                }
+                tmp_data.append(tmp_dict)
+                tmp_dict = dict()
+
+        data = tmp_data
+    except Exception as e:
+        print(e)
+        data = {
+            "cuota": None,
+            "monto": None,
+            "montodepartamento": None
+        }
 
     return JsonResponse(data, safe=False)
-
 
 
 # Create your views here.

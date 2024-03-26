@@ -23,15 +23,36 @@ def generarcuotas(contrato, usuario):
 
     for e in tuplas_meses_anos:
         fecha = datetime.today()
-        cuota = CuotaContrato(
-            fecha=fecha, 
-            contrato=contrato,
-            mes=e[0],
-            anio=e[1],
-            pagado=False,
-            usuario=usuario
+
+        try:
+            consultacouta = CuotaContrato.objects.get(                
+                contrato=contrato,
+                mes=e[0],
+                anio=e[1],
+                pagado=False,
+                usuario=usuario
             )
-        cuota.save()
 
-
+            if consultacouta:
+                print("Omite")
+            else:
+                cuota = CuotaContrato(
+                    fecha=fecha, 
+                    contrato=contrato,
+                    mes=e[0],
+                    anio=e[1],
+                    pagado=False,
+                    usuario=usuario
+                    )
+                cuota.save()
+        except:
+            cuota = CuotaContrato(
+                fecha=fecha, 
+                contrato=contrato,
+                mes=e[0],
+                anio=e[1],
+                pagado=False,
+                usuario=usuario
+            )
+            cuota.save()
 

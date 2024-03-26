@@ -29,21 +29,21 @@
         {% endif %}
 
 
-        <form action="/alquielres/contrato/listado" method="GET">
+        <form action="/alquileres/cuotacontrato/listado" method="GET">
             <div class="form-inline">
                 <div class="col-2">
                 </div>
                 <div class="col-2">
                 </div>
                 <div class="col-8">
-                    <input class="form-control" id="txtBuscar" name="txtBuscar" placeholder="Buscar....">
+                    <!--input class="form-control" id="txtBuscar" name="txtBuscar" placeholder="Buscar....">
                     <button type="submit" class="btn btn-default" title="Buscar!">
                         <i class="fas fa-search"></i>
                     </button>
 
                     <button type="button" class="btn btn-default" title="Nuevo Contrato!" onclick="location.href='/alquileres/contrato/nuevo'">
                         <i class="fas fa-plus"></i>
-                    </button>
+                    </button-->
                 </div>
             </div>
 
@@ -73,8 +73,7 @@
                         {% endif %}
 
                         <td>
-                            <button type="button" class="btn btn-link btn-sm" onclick="location.href='/alquileres/contrato/edit/' + {{ resultado.pk }}">
-                                <i class="fas fa-pencil-alt"></i>
+                            <button type="button" class="btn btn-link btn-sm" onclick="location.href='/alquileres/cuotacontrato/edit/' + {{ resultado.pk }}">                                <i class="fas fa-pencil-alt"></i>
                             </button>
                         </td>
                     </tr>

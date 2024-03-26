@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-sm-4"></div>
             <div class="col-sm-4">
-                <h2>Datos del Contrato.</h2>
+                <h2>Datos de la Cuota.</h2>
             </div>
             <div class="col-sm-4"></div>
         </div>
@@ -93,7 +93,9 @@
 
 
         function IrListado() {
-            window.location.replace("/alquileres/contrato/listado");
+            window.location.replace(
+                "/alquileres/cuotacontrato/listado/" + {{contrato}}
+            );
         }
     </script>
 

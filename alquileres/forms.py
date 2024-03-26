@@ -4,7 +4,7 @@ from random import choices
 from django import forms
 from django.contrib.auth.models import User
 
-from .models import Contrato, Edificio, Departamento, Recibo, yearstuple, MESES
+from .models import Contrato, Edificio, Departamento, Recibo, yearstuple, MESES, CuotaContrato
 
 
 class EdificioForm(forms.ModelForm):
@@ -146,3 +146,27 @@ class ContratoForm(forms.ModelForm):
             "fecha", "departamento", "mes_inicio", "anio_inicio",
             "mes_fin", "anio_fin"
         ]
+
+
+
+class CuotaContratoForm(forms.ModelForm):
+    fecha = forms.DateField(label="Fecha", required=True)
+
+    mes = forms.ChoiceField(choices=MESES)
+    anio = forms.ChoiceField(choices=yearstuple())
+    pagado = forms.BooleanField(required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(CuotaContratoForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            if field != "pagado":
+                self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+
+    class Meta:
+        model = CuotaContrato
+        fields = [
+            "fecha", "mes", "anio", "pagado"
+        ]
+

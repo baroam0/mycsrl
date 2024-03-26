@@ -150,7 +150,7 @@ class Contrato(models.Model):
     anio_inicio = models.IntegerField(choices=ANIOS)
     mes_fin = models.IntegerField(choices=MESES)
     anio_fin = models.IntegerField(choices=ANIOS)
-    finalizado = models.BooleanField(null=True, blank=True)
+    finalizado = models.BooleanField(null=True, blank=True, default=False)
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, null=True, blank=True)
     
     def __str__(self):
@@ -166,6 +166,6 @@ class CuotaContrato(models.Model):
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
-        return str(self.contrato)
+        return str(self.pk) + "-" + str(self.contrato) + "-" + str(self.mes) + "/" + str(self.anio)
 
 # Create your models here.
