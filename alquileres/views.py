@@ -524,7 +524,7 @@ def ajax_mostrar_deudas(request):
 
         data = tmp_data
     except Exception as e:
-        print(e)
+        
         data = {
             "cuota": None,
             "monto": None,

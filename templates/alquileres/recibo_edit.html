@@ -52,7 +52,8 @@
             
         </div>
 
-        <div id="alertas" class="alert alert-warning" role="alert" style="display: none;">
+        <div id="alertas" class="alert alert-warning" role="alert" style="display: block;">
+           
         </div>
         
     </div>
@@ -92,7 +93,6 @@
                 
                 var selectedValue = $(this).val();
                 var fecha = $('#id_fecha').val();
-                $('#cuotasTable').empty();
 
                 $.ajax({
                     type: "GET",
@@ -102,20 +102,23 @@
                         fecha: fecha
                     },
                     success: function (response) {
-                        $('#id_montofinal').val(response.monto_calculado);
-                        $.each(response, function(key, value) {
-                        });
+                        //busco el monto correspodiente a la cuota
+                        var valor_mes = $("#id_mes").val();
+                        var valor_anio = $("#id_anio").val();
+                        var cuota = valor_mes + "-" + valor_anio;
 
+                        $.each(response, function(key, value) {
+                            if(value.cuota == cuota){
+                                $('#id_montofinal').val(value.monto);
+                            }
+
+                        });
                     }
                 });
 
             });        
         });
-
-    </script>
-    
-    
-    <script>
+   
         function IrListado() {
             window.location.replace("/alquileres/recibo/listado");
         }
