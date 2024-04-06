@@ -196,6 +196,7 @@ class DetalleFacturaProveedor(models.Model):
             iibb = monto * iibb
         else:
             iibb = 0
+
         monto = float(monto) + float(iva) + float(iibb) + float(self.ajuste)
         return round(monto, 4)        
 
