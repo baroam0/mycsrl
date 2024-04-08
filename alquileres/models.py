@@ -9,6 +9,7 @@ from usuariosadm.models import UserAdm
 
 
 MESES = (
+        (0,"------"),
         (1,"Enero"),
         (2,"Febrero"),
         (3,"Marzo"),
@@ -31,6 +32,9 @@ def yearstuple():
     endyear = 2034
     y = tuple(range(startyear, endyear + 1))
     data = list()
+    data.append(
+        (0,"---------")
+        )
     for i in y:
         data.append(
             (i,i)

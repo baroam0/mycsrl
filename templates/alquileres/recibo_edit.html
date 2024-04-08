@@ -52,9 +52,8 @@
             
         </div>
 
-        <div id="alertas" class="alert alert-warning" role="alert" style="display: block;">
-           
-        </div>
+        <!--div id="alertas" class="alert alert-warning" role="alert" style="display: block;">
+        </div-->
         
     </div>
 
@@ -67,57 +66,54 @@
 {% block js_extra %}
 
     <script>
-        $(document).ready(function () {
-            $('#id_departamento').select2();
-            TranslateDatepickerToEs($("#id_fecha"));
 
-            $('#id_monto').on('keyup', function() {
-                $.ajax({
-                    type: "GET",
-                    url: "/alquileres/recibo/ajax-monto/",
-                    data: {
-                        fecha: $('#id_fecha').val(),
-                        mes: $('#id_mes').val(),
-                        anio: $('#id_anio').val(),
-                        departamento: $('#id_departamento').val(),
-                        monto: $(this).val()
-                    },
-                    success: function (response) {
-                        $('#id_montofinal').val(response.monto_calculado);
-                    }
-                });
+        function getDatosRecibo(){
+            var id_departamento = $('#id_departamento').val();
+            var fecha = $('#id_fecha').val();
+            var valor_mes = $("#id_mes").val();
+            var valor_anio = $("#id_anio").val();
+            var cuota = valor_mes + "-" + valor_anio;
 
-            });
-
-            $('#id_departamento').on('change', function() {
-                
-                var selectedValue = $(this).val();
-                var fecha = $('#id_fecha').val();
-
-                $.ajax({
+            $.ajax({
                     type: "GET",
                     url: "/alquileres/cuotacontrato/ajax-deudas/",
                     data: {
-                        departamento: selectedValue,
+                        departamento: id_departamento,
                         fecha: fecha
                     },
                     success: function (response) {
                         //busco el monto correspodiente a la cuota
-                        var valor_mes = $("#id_mes").val();
-                        var valor_anio = $("#id_anio").val();
-                        var cuota = valor_mes + "-" + valor_anio;
 
                         $.each(response, function(key, value) {
                             if(value.cuota == cuota){
                                 $('#id_montofinal').val(value.monto);
+                                return false;
+                            }else{
+                                $('#id_montofinal').val(0);
                             }
-
                         });
                     }
                 });
+        }
 
-            });        
+        $(document).ready(function () {
+            $('#id_departamento').select2();
+            TranslateDatepickerToEs($("#id_fecha"));
+
+            $('#id_departamento').on('change', function() {
+                getDatosRecibo();
+            });
+
+            $('#id_mes').on('change', function() {
+                getDatosRecibo();
+            });
+
+            $('#id_anio').on('change', function() {
+                getDatosRecibo();
+            });
         });
+
+        
    
         function IrListado() {
             window.location.replace("/alquileres/recibo/listado");

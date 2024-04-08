@@ -73,7 +73,12 @@
                         {% endif %}
 
                         <td>
-                            <button type="button" class="btn btn-link btn-sm" onclick="location.href='/alquileres/cuotacontrato/edit/' + {{ resultado.pk }}">                                <i class="fas fa-pencil-alt"></i>
+                            <button type="button" class="btn btn-link btn-sm" onclick="location.href='/alquileres/cuotacontrato/edit/' + {{ resultado.pk }}">
+                                <i class="fas fa-pencil-alt"></i>
+                            </button>
+
+                            <button type="button" class="btn btn-link btn-sm" onclick="location.href='/alquileres/cuotacontrato/delete/' + {{ resultado.pk }}">
+                                <i class="fas fa-trash"></i>
                             </button>
                         </td>
                     </tr>

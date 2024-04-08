@@ -482,6 +482,23 @@ def cuotacontrato_edit(request, pk):
         )
 
 
+@login_required(login_url='/login')
+def cuotacontrato_delete(request, pk):
+    cuotacontrato = CuotaContrato.objects.get(pk=pk)
+
+    if request.method =="POST":
+        cuotacontrato.delete()
+        return redirect('/alquileres/cuotacontrato/listado/' + str(cuotacontrato.contrato.pk))
+        
+    return render(
+            request,
+            'alquileres/cuotacontrato_delete.html',
+            {
+                "detalle": cuotacontrato
+            }
+        )
+
+
 def ajax_mostrar_deudas(request):
     fecha = request.GET.get('fecha')
             

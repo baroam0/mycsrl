@@ -26,7 +26,7 @@ from .views import (
     recibo_new, recibo_edit, listadorecibo,
     listadocontrato, contrato_new, contrato_edit,
     listadocuotascontrato,
-    cuotacontrato_new, cuotacontrato_edit,
+    cuotacontrato_new, cuotacontrato_edit, cuotacontrato_delete,
     ajax_mostrar_deudas
     )
 
@@ -53,7 +53,7 @@ urlpatterns = [
 
     path('cuotacontrato/listado/<int:pk>', listadocuotascontrato, name='listadocuotascontrato'),
     path('cuotacontrato/nuevo', cuotacontrato_new, name='cuotaqcontratonuevo'),
-    path('cuotacontrato/edit/<int:pk>', cuotacontrato_edit, name='cuotacontradoedit'),
+    path('cuotacontrato/delete/<int:pk>', cuotacontrato_delete, name='cuotacontrato_delete'),
 
     path('cuotacontrato/ajax-deudas/', ajax_mostrar_deudas, name='ajax_mostrar_deudas'),
 
