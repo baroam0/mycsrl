@@ -52,30 +52,15 @@
 
     <script>
 
-
         function BotonCancelar(){
-            window.close();
+            window.location.replace("/alquileres/cuotacontrato/listado/" + {{detalle.contrato.pk}});
+            
         }
         
-
         function BorrarDetalle(pk){
             var urldetallefactura = "/facturas/delete/" + pk;
             window.open(urldetallefactura,"Ratting","width=700,height=400,left=100,top=100,toolbar=0,status=0,");
         }
-
-
-
-        $(document).ready(function () {
-            
-            window.onunload = function(){
-                window.opener.location.reload();
-                window.close(); 
-            };
-            
-            $( "#myform" ).on( "submit", function( event ) {   
-
-            });
-        });
 
     </script>
 
