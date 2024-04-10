@@ -87,7 +87,7 @@ class Departamento(models.Model):
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.edificio.descripcion + "-" + self.descripcion
+        return self.edificio.descripcion.upper() + "-" + self.descripcion.upper()
 
     class Meta:
         verbose_name_plural = "Detarpamentos"
@@ -134,7 +134,7 @@ class Recibo(models.Model):
 
         if cantidad_dias > 0:
             interes = float(self.departamento.edificio.interespordia) * float(cantidad_dias)
-            self.monto_calculado = self.departamento.monto + self.departamento.monto * interes /100
+            self.monto_calculado = float(self.departamento.monto) + float(self.departamento.monto) * interes /100
         else:
             self.monto_calculado = self.departamento.monto
             

@@ -4,6 +4,13 @@ from datetime import datetime
 from .models import CuotaContrato
 
 
+def grabarpagocuotacontrato(id_cuotacontrato):
+    cuotacontrato = CuotaContrato.objects.get(pk=id_cuotacontrato)
+    cuotacontrato.pagado = True
+    cuotacontrato.save()
+    return True
+
+
 #def generar_tuplas_meses_anos(inicio_mes, inicio_ano, final_mes, final_ano, contrato, usuario):
 def generarcuotas(contrato, usuario):
     

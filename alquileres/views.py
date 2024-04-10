@@ -12,7 +12,7 @@ from django.shortcuts import render, redirect
 from .forms import EdificioForm, DepartamentoForm, ReciboForm, ContratoForm, CuotaContratoForm
 from .models import Departamento, Edificio, Recibo, Contrato, CuotaContrato
 
-from .helper import generarcuotas
+from .helper import generarcuotas, grabarpagocuotacontrato
 from lib.numeroatexto import numerotxt, numtxt
 
 @login_required(login_url='/login')
@@ -197,28 +197,33 @@ def recibo_new(request):
             recibo.usuario = usuario
             try:
                 recibo.save()
+                recibo = Recibo.objects.latest("pk")
                 departamento = Departamento.objects.get(pk=recibo.departamento.pk)
-                fecha = datetime.today()
+                #fecha = datetime.today()
 
                 contrato = Contrato.objects.get(
                     finalizado=False, 
                     departamento=departamento
                 )
+                print("............................")
+                print(contrato)
+                print(recibo.anio)
+                print(recibo.mes)
                 
                 cuotacontrato = CuotaContrato.objects.get(
                     contrato=contrato,
-                    fecha=fecha,
-                    departamento=departamento,
                     mes=recibo.mes,
-                    anio=recibo.anio,
-                    pagado=True,
-                    usuario=usuario
+                    anio=recibo.anio
                 )
+                cuotacontrato.usuario = usuario
+                cuotacontrato.pagado = True
                 cuotacontrato.save()
 
                 messages.success(request, "Se ha grabado los datos del recibo.")
                 return redirect('/alquileres/recibo/listado')
             except Exception as e:
+                print("queeeee")
+                print(str(e))
                 messages.warning(request, str(e))
                 return redirect('/alquileres/recibo/listado')
         else:

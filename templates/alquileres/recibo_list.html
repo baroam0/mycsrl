@@ -1,5 +1,8 @@
-
 {% extends 'base.html' %}
+
+{% load humanize %}
+
+
 
 {% block content %}
 
@@ -67,8 +70,8 @@
                             {{ resultado.departamento.descripcion.upper }} -
                             {{ resultado.apellido.upper }}, {{ resultado.nombre.upper }}
                         </td>
-                        <td>{{ resultado.monto }}  </td>
-                        <td>{{ resultado.monto_calculado }}  </td>
+                        <td>$ {{ resultado.departamento.monto | intcomma }}  </td>
+                        <td>$ {{ resultado.monto_calculado | intcomma }}  </td>
                         <td>{{ resultado.usuario }}</td>
 
                         <td>
