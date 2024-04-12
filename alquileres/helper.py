@@ -1,13 +1,14 @@
 
 from datetime import datetime
+from types import CodeType
 
-from .models import CuotaContrato
-
+from .models import Contrato, CuotaContrato
 
 def grabarpagocuotacontrato(id_cuotacontrato):
     cuotacontrato = CuotaContrato.objects.get(pk=id_cuotacontrato)
     cuotacontrato.pagado = True
     cuotacontrato.save()
+
     return True
 
 
@@ -36,8 +37,6 @@ def generarcuotas(contrato, usuario):
                 contrato=contrato,
                 mes=e[0],
                 anio=e[1],
-                pagado=False,
-                usuario=usuario
             )
 
             if consultacouta:
@@ -53,6 +52,7 @@ def generarcuotas(contrato, usuario):
                     )
                 cuota.save()
         except:
+            print("Except")
             cuota = CuotaContrato(
                 fecha=fecha, 
                 contrato=contrato,
@@ -61,5 +61,8 @@ def generarcuotas(contrato, usuario):
                 pagado=False,
                 usuario=usuario
             )
+            print(cuota)
             cuota.save()
+            
+            
 
