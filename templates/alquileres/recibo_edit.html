@@ -54,6 +54,9 @@
 
         <!--div id="alertas" class="alert alert-warning" role="alert" style="display: block;">
         </div-->
+
+        <div id="alertas">
+        </div>
         
     </div>
 
@@ -66,6 +69,38 @@
 {% block js_extra %}
 
     <script>
+
+        function getCuotasAdeudadas(){
+            var id_departamento = $('#id_departamento').val();
+            var fecha = $('#id_fecha').val();
+            var valor_mes = $("#id_mes").val();
+            var valor_anio = $("#id_anio").val();
+            var cuota = valor_mes + "-" + valor_anio;
+
+            $('#alertas').empty();
+
+            $.ajax({
+                type: "GET",
+                url: "/alquileres/cuotacontrato/ajax-deudas/",
+                data: {
+                    departamento: id_departamento,
+                    fecha: fecha
+                },
+                success: function (response) {
+                    //busco el monto correspodiente a la cuota
+
+                    $.each(response, function(key, value) {
+                        console.log(value.pagado);
+                        if(value.pagado===false){
+                            var mensaje = '<div id="alertas" class="alert alert-warning" style="display: block;">' + value.cuota + "- $ " + value.monto  + '</div>';
+                            $('#alertas').append(mensaje);
+                        }
+                    });
+
+                }
+            });
+        }
+
 
         function getDatosRecibo(){
             var id_departamento = $('#id_departamento').val();
@@ -92,6 +127,7 @@
                                 $('#id_montofinal').val(0);
                             }
                         });
+
                     }
                 });
         }
@@ -102,14 +138,17 @@
 
             $('#id_departamento').on('change', function() {
                 getDatosRecibo();
+                getCuotasAdeudadas();
             });
 
             $('#id_mes').on('change', function() {
                 getDatosRecibo();
+                getCuotasAdeudadas();
             });
 
             $('#id_anio').on('change', function() {
                 getDatosRecibo();
+                getCuotasAdeudadas();
             });
         });
 

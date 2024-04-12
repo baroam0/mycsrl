@@ -531,7 +531,8 @@ def ajax_mostrar_deudas(request):
                 tmp_dict = {
                     "cuota": str(c.mes) + "-" + str(c.anio),
                     "monto": monto,
-                    "montodepartamento": montodepartamento
+                    "montodepartamento": montodepartamento,
+                    "pagado": c.pagado
                 }
                 tmp_data.append(tmp_dict)
                 tmp_dict = dict()
@@ -539,18 +540,21 @@ def ajax_mostrar_deudas(request):
                 tmp_dict = {
                     "cuota": str(c.mes) + "-" + str(c.anio),
                     "monto": c.contrato.departamento.monto,
-                    "montodepartamento": montodepartamento
+                    "montodepartamento": montodepartamento,
+                    "pagado": c.pagado
                 }
                 tmp_data.append(tmp_dict)
                 tmp_dict = dict()
 
         data = tmp_data
+
     except Exception as e:
         
         data = {
             "cuota": None,
             "monto": None,
-            "montodepartamento": None
+            "montodepartamento": None,
+            "pagado": None
         }
 
     return JsonResponse(data, safe=False)
