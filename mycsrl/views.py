@@ -102,9 +102,10 @@ def detallereporteporfactura(request):
     
     fechadesde = formateafechaestandar(request.GET.get("id_fechadesde"))
     fechahasta = formateafechaestandar(request.GET.get("id_fechahasta"))
-    proveedor =  Proveedor.objects.get(pk=request.GET.get("id_proveedor"))
+    
     #facturaproveedor = FacturaProveedor.objects.filter(pagado=False,proveedor=proveedor)
     facturaproveedor = FacturaProveedor.objects.get(pk=request.GET.get("id_proveedor"))
+    proveedor =  Proveedor.objects.get(pk=facturaproveedor.proveedor.pk)
     #detallefacturaproveedor = DetalleFacturaProveedor.objects.filter(factura__in = facturaproveedor).order_by("obra__descripcion")
     detallefacturaproveedor = DetalleFacturaProveedor.objects.filter(factura=facturaproveedor).order_by('-obra')
     
@@ -167,11 +168,12 @@ def detallereporteporfactura(request):
   
     for o in obras:
         for df in detallefacturaproveedor:
+            
             if o.descripcion == df.obra.descripcion:
                 dicttotales.append({
                     "obra": o.descripcion,
                     "empresa": o.empresa.descripcion,
-                    "total": round(gettotalobra(o.descripcion),2)
+                    "total": round(gettotalobra(o.descripcion, df.factura.pk),2)
                 })
             
 
@@ -192,17 +194,12 @@ def detallereporteporfactura(request):
             }
         )
 
-    """
-    for d in dicttotalempresa:
-        d["total"] = gettotalempresa(proveedor.pk, d["empresa"], fechadesde, fechahasta)
-    """
-
     for d in dicttotalempresa:
         for e in dicttotales:
             if e["empresa"] == d["empresa"]:
                 d["total"] =  d["total"] + e["total"]
                 
-    print(proveedor)
+
     return render(
         request, 
         'detallereporte.html',
@@ -218,15 +215,6 @@ def detallereporteporfactura(request):
     ) 
 
 
-
-
-
-
-
-
-
-
-
 def reportesfacturas(request):
     proveedores = Proveedor.objects.all()
     return render(
@@ -238,9 +226,10 @@ def reportesfacturas(request):
     )
 
 
-def gettotalobra(obra):
+def gettotalobra(obra, factura):
         obra = Obra.objects.get(descripcion=obra)
-        detalles = DetalleFacturaProveedor.objects.filter(obra=obra, factura__pagado=False)
+        factura = FacturaProveedor.objects.get(pk=factura)
+        detalles = DetalleFacturaProveedor.objects.filter(obra=obra, factura=factura, factura__pagado=False)
         total = 0
         redondeo = 0
         
@@ -248,7 +237,6 @@ def gettotalobra(obra):
             total = total + d.getpreciototalfinal()
             redondeo = float(d.factura.ajusteglobal)
 
-        print(redondeo)
         total = total + redondeo
         
         return float(round(total,4))
