@@ -58,7 +58,8 @@
                         <th>Comprobante</th>
                         <th>Monto</th>
                         <th>Usuario</th>
-                        <th>Accion</th>
+                        <th>Editar</th>
+                        <th>Pagar</th>
                     </tr>
                 </thead>
 
@@ -86,7 +87,8 @@
                             <button type="button" class="btn btn-link btn-sm" onclick="location.href='/facturas/editar/' + {{ resultado.pk }}">
                                 <i class="fas fa-pencil-alt"></i>
                             </button>
-
+                        </td>
+                        <td>                            
                             <button type="button" class="btn btn-link btn-sm" onclick="location.href='/devengamiento/nuevo/' + {{ resultado.pk }}">
                                 <i class="fas fa-hand-holding-usd"></i>
                             </button>
