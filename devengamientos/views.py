@@ -8,6 +8,9 @@ from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 
+from bancos.models import Banco
+from pagos.models import MedioPago
+
 from .forms import DevengamientoForm
 from .models import Devengamiento
 
@@ -142,6 +145,24 @@ def devengamiento_delete(request, pk):
             }
         )
 
+
+
+
+@login_required(login_url='/login')
+def devengamiento_por_lote(request):
+    bancos = Banco.objects.all()
+    facturas = FacturaProveedor.objects.filter(pagado=False)
+    mediospago = MedioPago.objects.all()
+
+    return render(
+            request,
+            'devengamientos/devengamiento_por_lote.html',
+            {
+                "bancos": bancos,
+                "facturas": facturas,
+                "mediospago": mediospago
+            }
+        )
 
 
 # Create your views here.
