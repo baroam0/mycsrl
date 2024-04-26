@@ -357,7 +357,7 @@ def detallereportesporfacturas(request):
     for d in dicttotalempresa:
         for e in dicttotales:
             if e["empresa"] == d["empresa"]:
-                d["total"] =  d["total"] + e["total"]
+                d["total"] = round(d["total"] + e["total"],2)
                 
 
     return render(
