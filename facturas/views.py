@@ -402,6 +402,8 @@ def nuevafactura(request):
     usuario = request.user
     factura = FacturaProveedor.objects.create(
         usuario=usuario,
+        comprobante=None,
+        ingresosbrutos=None,
         iva=None)
     factura.save()
     ultimafactura = FacturaProveedor.objects.latest('pk')

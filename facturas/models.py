@@ -50,7 +50,7 @@ class Descripciondetalle(models.Model):
 
 
 class FacturaProveedor(models.Model):
-    comprobante = models.CharField(max_length=50, blank=False, null=False)
+    comprobante = models.CharField(max_length=50, blank=True, null=True)
     fecha = models.DateField(null=True, blank=False)
     proveedor = models.ForeignKey(
         Proveedor, on_delete=models.CASCADE, null=True, blank=False)
