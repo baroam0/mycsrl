@@ -138,6 +138,26 @@ class DetalleFacturaProveedor(models.Model):
 
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
 
+    def modeltotalobra(self):
+        monto = 0
+        obra = self.obra
+        proveedor = Proveedor.objects.get(pk=self.factura.proveedor.pk)
+        facturas = FacturaProveedor.objects.filter(proveedor=proveedor)
+        array_factura = list()
+        for f in facturas:
+            array_factura.append(f.pk)
+        detalles = DetalleFacturaProveedor.objects.filter(obra=obra, factura__in=array_factura)
+        total = 0
+        redondeo = 0
+        
+        for d in detalles:
+            total = total + d.getpreciototalfinal()
+            redondeo = float(d.factura.ajusteglobal)
+
+        total = total + redondeo
+
+        return total
+
 
     def getpreciounitario(self):
         monto = self.getpreciototal() / self.cantidad

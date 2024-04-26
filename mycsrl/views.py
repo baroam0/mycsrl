@@ -332,7 +332,8 @@ def detallereportesporfacturas(request):
                 dicttotales.append({
                     "obra": o.descripcion,
                     "empresa": o.empresa.descripcion,
-                    "total": round(gettotalobra(o.descripcion, df.factura.pk),2)
+                    #"total": round(gettotalobra(o.descripcion, df.factura.pk),2)
+                    "total": df.modeltotalobra()
                 })
             
 
