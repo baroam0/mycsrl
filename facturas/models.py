@@ -156,7 +156,7 @@ class DetalleFacturaProveedor(models.Model):
 
         total = total + redondeo
 
-        return total
+        return round(total,2)
 
 
     def getpreciounitario(self):
