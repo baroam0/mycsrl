@@ -77,7 +77,7 @@ def rodado_edit(request, pk):
         form = RodadoForm(instance=consulta)
         return render(
             request,
-            'pagos/obra_edit.html',
+            'rodados/rodado_edit.html',
             {"form": form}
         )
 
