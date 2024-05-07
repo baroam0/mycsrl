@@ -733,23 +733,14 @@ def reporteobrasactivas(request):
 
 
 def reporteprespuestogeneral(request):
-    presupuestos = Presupuesto.objects.filter(cerrado=False)
     datadict = dict()
-    array_presupuestoscerrados = list()
-    for p in presupuestos:
-        array_presupuestoscerrados.append(p.pk)
-    
-    detallepresupuestos = DetallePresupuesto.objects.filter(presupuesto__in=array_presupuestoscerrados)
-    array_contratistas = list()
 
-    for d in detallepresupuestos:
-        array_contratistas.append(d.contratista.pk)
+    presupuestos = Presupuesto.objects.filter(cerrado=False)
 
-    array_contratistas = list(set(array_contratistas))
 
     return render(
         request, 
-        'reportes/reporte_presupuesto_individual.html',
+        'reportes/reporte_presupuesto_general.html',
         {
             "presupuestos": presupuestos,
         }
