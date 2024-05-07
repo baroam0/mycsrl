@@ -731,12 +731,10 @@ def reporteobrasactivas(request):
     )
 
 
-
 def reporteprespuestogeneral(request):
     datadict = dict()
 
     presupuestos = Presupuesto.objects.filter(cerrado=False)
-
 
     return render(
         request, 
