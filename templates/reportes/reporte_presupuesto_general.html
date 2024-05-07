@@ -1,0 +1,88 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="container">
+
+        <br>
+        
+        <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-8">
+                <h3> Reporte Presupuesto.</h3>
+            </div>
+            <div class="col-sm-2"></div>
+        </div>
+
+        <hr>
+
+
+        <form action="/reportes/" method="GET">
+            <div class="form-inline">
+                <div class="col-12">
+                    <label>Presupuestos</label>
+                    <select id="id_presupuesto" class="form-control">
+                        <option value=0> SELECCIONA... </option>
+                        {% for p in presupuestos %}
+                            <option value={{p.pk}}> 
+                                {{ p.presupuesto__obra__descripcion }} - {{p.contratista__descripcion}} 
+                                
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="form-inline">
+                <div class="col-4">
+                </div>
+
+                <div class="col-4">
+                    <button type="button" class="btn btn-default" title="Generar" onclick="AbrirVentanaReporte()">
+                        <i class="fas fa-play"></i>
+                    </button>
+                </div>
+
+                <div class="col-4">
+                </div>
+            </div>
+
+            <br>
+
+        </form>
+    </div>
+
+{% endblock %}
+
+
+{% block js_extra %}
+
+    <script>
+        $(document).ready(function () {
+            $('#id_presupuesto').select2();
+        });
+
+        function AbrirVentanaReporte(){
+            var id_presupuesto = $("#id_presupuesto").val();
+
+            if(id_presupuesto==0){
+                Swal.fire(
+                    'Por favor elige una Obra',
+                    '',
+                    'warning'
+                )
+                return false;
+            }
+
+            var urlreporte = "/detallereportepresupuestoindividual/?id=" + id_presupuesto;
+            window.open(urlreporte,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
+            
+        }
+
+    
+    </script>
+
+{% endblock %}
