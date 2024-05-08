@@ -736,6 +736,23 @@ def reporteprespuestogeneral(request):
 
     presupuestos = Presupuesto.objects.filter(cerrado=False)
 
+    array_presupuestos = list()
+
+    for p in presupuestos:
+        array_presupuestos.append(p.pk)
+    
+    detallepresupuestos = DetallePresupuesto.objects.filter(presupuesto__in=array_presupuestos)
+
+    array_contratista = list()
+
+    for d in detallepresupuestos:
+        array_contratista.append(d.contratista.pk)
+    
+    array_contratista = list(set(array_contratista))
+
+    contratistas = Contratista.objects.filter(pk__in=array_contratista)
+
+
     return render(
         request, 
         'reportes/reporte_presupuesto_general.html',
