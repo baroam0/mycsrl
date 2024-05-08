@@ -138,11 +138,12 @@ class DetalleFacturaProveedor(models.Model):
 
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
 
-    def modeltotalobra(self):
+    def modeltotalobra(self, obra_id):
         monto = 0
-        obra = self.obra
+        #obra = self.obra
+        obra = Obra.objects.get(pk=obra_id)
         proveedor = Proveedor.objects.get(pk=self.factura.proveedor.pk)
-        facturas = FacturaProveedor.objects.filter(proveedor=proveedor)
+        facturas = FacturaProveedor.objects.filter(proveedor=proveedor, pagado=False)
         array_factura = list()
         for f in facturas:
             array_factura.append(f.pk)

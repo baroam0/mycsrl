@@ -333,7 +333,7 @@ def detallereportesporfacturas(request):
                     "obra": o.descripcion,
                     "empresa": o.empresa.descripcion,
                     #"total": round(gettotalobra(o.descripcion, df.factura.pk),2)
-                    "total": df.modeltotalobra()
+                    "total": df.modeltotalobra(o.pk)
                 })
             
 
