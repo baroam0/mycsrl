@@ -732,6 +732,19 @@ def reporteobrasactivas(request):
 
 
 def reporteprespuestogeneral(request):
+
+
+    """
+    from django.db.models import Count
+
+    # Assuming you have a model called 'MyModel' with a field 'category'
+    result = MyModel.objects.values('category').annotate(count=Count('category'))
+
+    for entry in result:
+        print(entry['category'], entry['count'])
+
+    """
+
     datadict = dict()
 
     presupuestos = Presupuesto.objects.filter(cerrado=False)
@@ -751,6 +764,11 @@ def reporteprespuestogeneral(request):
     array_contratista = list(set(array_contratista))
 
     contratistas = Contratista.objects.filter(pk__in=array_contratista)
+
+    for c in contratistas:
+        datadict[c.descripcion] = dict()
+    
+    
 
 
     return render(
