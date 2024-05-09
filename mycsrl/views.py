@@ -747,35 +747,22 @@ def reporteprespuestogeneral(request):
 
     datadict = dict()
 
-    presupuestos = Presupuesto.objects.filter(cerrado=False)
+    obras = Obra.objects.filter(finalizada=False)
 
-    array_presupuestos = list()
+    array_obras = list()
 
-    for p in presupuestos:
-        array_presupuestos.append(p.pk)
+    for o in obras:
+        array_obras.append(o.pk)
     
-    detallepresupuestos = DetallePresupuesto.objects.filter(presupuesto__in=array_presupuestos)
-
-    array_contratista = list()
-
-    for d in detallepresupuestos:
-        array_contratista.append(d.contratista.pk)
+    array_obras = list(set(array_obras))
     
-    array_contratista = list(set(array_contratista))
-
-    contratistas = Contratista.objects.filter(pk__in=array_contratista)
-
-    for c in contratistas:
-        datadict[c.descripcion] = dict()
-    
-    
-
+    presupuestos = Presupuesto.objects.filter(obra__in=array_obras)
 
     return render(
         request, 
         'reportes/reporte_presupuesto_general.html',
         {
-            "presupuestos": presupuestos,
+            "presupuestos": datadict,
         }
     )
 

@@ -103,7 +103,7 @@ class DetallePresupuesto(models.Model):
         #totalentregado = self.gettotalentregadocontratista()
         saldo = float(totalimporte) - float(totalentregado)
         return saldo
-    
+
 
     def gettotalimporteporobra(self, contratista_id, obra_id):
         contratista = Contratista.objects.get(pk=contratista_id)
