@@ -733,30 +733,50 @@ def reporteobrasactivas(request):
 
 def reporteprespuestogeneral(request):
 
-
-    """
-    from django.db.models import Count
-
-    # Assuming you have a model called 'MyModel' with a field 'category'
-    result = MyModel.objects.values('category').annotate(count=Count('category'))
-
-    for entry in result:
-        print(entry['category'], entry['count'])
-
-    """
-
     datadict = dict()
-
-    obras = Obra.objects.filter(finalizada=False)
-
-    array_obras = list()
-
-    for o in obras:
-        array_obras.append(o.pk)
+    obra = Obra.objects.filter(finalizada=False)
+    presupuestos = Presupuesto.objects.filter(obra__in=obra)
     
-    array_obras = list(set(array_obras))
+    detallepresupuestos = (
+        DetallePresupuesto.objects.filter(
+            presupuesto__in=presupuestos
+        )
+    )
+
+    array_contratista = list()
+
+    for d in detallepresupuestos:
+        array_contratista.append(d.contratista.pk)
     
-    presupuestos = Presupuesto.objects.filter(obra__in=array_obras)
+    array_contratista = list(set(array_contratista))
+
+    contratista = Contratista.objects.filter(pk__in=array_contratista)
+
+
+    """
+    result = (Members.objects
+    .values('designation', 'first_name', 'last_name')
+    .annotate(dcount=Count('designation'))
+    .order_by()
+    )
+    """
+
+    for c in contratista:
+        resultados = (
+            DetallePresupuesto.objects.filter(contratista=c)
+            .values('presupuesto__obra__descripcion', 'contratista__descripcion')
+            .annotate(totalimporte=Sum('importe'))
+            .annotate(totalentregado=Sum('entregado'))
+            .order_by('contratista__descripcion')
+        )
+
+        for r in resultados:
+            print(r)
+        
+
+
+    for p in presupuestos:
+        datadict[p.pk] = p.obra
 
     return render(
         request, 
