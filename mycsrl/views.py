@@ -136,7 +136,7 @@ def detallereporteporfactura(request):
                 "data": list()
             }
         )
-    
+
     for d in datadict[proveedor.razonsocial]:
         for o in obras:
             if o.empresa.descripcion == d["empresa"]:
@@ -752,7 +752,6 @@ def reporteprespuestogeneral(request):
 
     contratista = Contratista.objects.filter(pk__in=array_contratista)
 
-
     """
     result = (Members.objects
     .values('designation', 'first_name', 'last_name')
@@ -762,21 +761,62 @@ def reporteprespuestogeneral(request):
     """
 
     for c in contratista:
-        resultados = (
-            DetallePresupuesto.objects.filter(contratista=c)
-            .values('presupuesto__obra__descripcion', 'contratista__descripcion')
-            .annotate(totalimporte=Sum('importe'))
-            .annotate(totalentregado=Sum('entregado'))
-            .order_by('contratista__descripcion')
-        )
+        datadict[c.descripcion] = dict()
+    
+    contratista_pibot = contratista[0].descripcion
 
-        for r in resultados:
-            print(r)
+
+    for c in contratista:
+        if contratista_pibot == c.descripcion:
+            resultados = (
+                DetallePresupuesto.objects.filter(contratista=c)
+                .values(
+                    'contratista__descripcion', 
+                    'presupuesto__pk', 
+                    'presupuesto__obra__descripcion')
+                .annotate(totalimporte=Sum('importe'))
+                .annotate(totalentregado=Sum('entregado'))
+                .order_by()
+            )
+
+            for r in resultados:
+                datadict[c.descripcion]['data'] = {
+                        "codigopresupuesto": r['presupuesto__pk'],
+                        "obra" : r['presupuesto__obra__descripcion'],
+                        "importe": round(r['totalimporte'],2),
+                        "entregado": round(r['totalentregado'],2)
+                }
+                
+        else:
+            contratista_pibot = c.descripcion
+            resultados = (
+                DetallePresupuesto.objects.filter(contratista=c)
+                .values(
+                    'contratista__descripcion', 
+                    'presupuesto__pk',
+                    'presupuesto__obra__descripcion')
+                .annotate(totalimporte=Sum('importe'))
+                .annotate(totalentregado=Sum('entregado'))
+                .order_by()
+            )
+
+            for r in resultados:
+                datadict[c.descripcion]['data'] = {
+                        "codigopresupuesto": r['presupuesto__pk'],
+                        "obra" : r['presupuesto__obra__descripcion'],
+                        "importe": round(r['totalimporte'],2),
+                        "entregado": round(r['totalentregado'],2)
+                }
+                
+
+    for nombre, datos in datadict.items():
+        print(f"Nombre: {nombre}")
+        obra = datos['data']['obra']
+        importe = datos['data']['importe']
+        print(f"Obra: {obra}")
+        print(f"Importe: {importe}\n")
+    
         
-
-
-    for p in presupuestos:
-        datadict[p.pk] = p.obra
 
     return render(
         request, 

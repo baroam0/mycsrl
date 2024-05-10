@@ -1,56 +1,100 @@
-
-{% extends 'base.html' %}
+{% extends 'base_nomenu.html' %}
+{% load humanize %}
+{% load static %}
 
 {% block content %}
 
-    <div class="container">
+    <!--style>
+    @media print{@page {size: landscape}}
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      border: 1px solid #ddd;
+      font-size: 12px;
+    }
+    
+    th, td {
+      text-align: left;
+      padding: 0px;
+      font-size: 12px;
+    }
 
-        <br>
-        
+    .tituloobra {
+        font-size: 12px;
+    }
+    
+    .fecha {
+        font-size: 10px;
+    }
+    </style-->
+
         <div class="row">
+            <div class="col-sm-1"></div>
             <div class="col-sm-2"></div>
-            <div class="col-sm-8">
-                <h3> Reporte Presupuesto.</h3>
-            </div>
             <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-3"></div>
         </div>
 
-        <hr>
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-3"></div>
+        </div>
 
-        {{presupuestos}}
+        <h4> RESUMEN PRESUPUESTO </h4>
 
+        {% for nombre, datos in presupuestos.items %}
+            <div class="row">
+                <div class="col-sm-12">{{nombre}}</div>
+            </div>
 
+            <table>
+                <thead>
+                    <tr>
+                        <th>Codigo</th>
+                        <th>Obra</th>
+                        <th>Importe</th>
+                        <th>Entregado</th>
+                        <th>Saldo</th>
+                        <th>T. Ejecutado</th>
+                        <th>Importe</th>
+                    </tr>
+                </thead>
         
-    </div>
+                <tr>
+                    <tbody>
+                        <td width="15">{{ datos.data.codigopresupuesto }}</td>
+                        <td width="15">{{ datos.data.obra }}</td>
+                        <td width="15">{{ datos.data.importe | intcomma }}</td>
+                        <td width="15">{{ datos.data.entregado | intcomma }}</td>
+                        <td width="15"></td>
+                        <td width="15"></td>
+                        <td width="15"></td>
+                    </tbody>           
+                    
+                </tr>
+            </table>
+            <hr>
+        {% endfor %}
+
+    
+            
+
+
 
 {% endblock %}
 
 
-{% block js_extra %}
-
     <script>
         $(document).ready(function () {
-            $('#id_presupuesto').select2();
-        });
-
-        function AbrirVentanaReporte(){
-            var id_presupuesto = $("#id_presupuesto").val();
-
-            if(id_presupuesto==0){
-                Swal.fire(
-                    'Por favor elige una Obra',
-                    '',
-                    'warning'
-                )
-                return false;
-            }
-
-            var urlreporte = "/detallereportepresupuestoindividual/?id=" + id_presupuesto;
-            window.open(urlreporte,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
             
-        }
+        });
 
     
     </script>
 
-{% endblock %}
