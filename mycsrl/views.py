@@ -784,7 +784,8 @@ def reporteprespuestogeneral(request):
                         "codigopresupuesto": r['presupuesto__pk'],
                         "obra" : r['presupuesto__obra__descripcion'],
                         "importe": round(r['totalimporte'],2),
-                        "entregado": round(r['totalentregado'],2)
+                        "entregado": round(r['totalentregado'],2),
+                        "saldo": round(r['totalimporte'],2) - round(r['totalentregado'],2)
                 }
                 
         else:
@@ -805,7 +806,8 @@ def reporteprespuestogeneral(request):
                         "codigopresupuesto": r['presupuesto__pk'],
                         "obra" : r['presupuesto__obra__descripcion'],
                         "importe": round(r['totalimporte'],2),
-                        "entregado": round(r['totalentregado'],2)
+                        "entregado": round(r['totalentregado'],2),
+                        "saldo": round(r['totalimporte'],2) - round(r['totalentregado'],2)
                 }
                 
 
