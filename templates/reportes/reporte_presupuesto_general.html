@@ -53,7 +53,7 @@
                 <div class="col-sm-12">{{nombre}}</div>
             </div>
 
-            <table>
+            <table class="table">
                 <thead>
                     <tr>
                         <th>Codigo</th>
@@ -68,13 +68,13 @@
         
                 <tr>
                     <tbody>
-                        <td width="15">{{ datos.data.codigopresupuesto }}</td>
-                        <td width="15">{{ datos.data.obra }}</td>
-                        <td width="15">{{ datos.data.importe | intcomma }}</td>
-                        <td width="15">{{ datos.data.entregado | intcomma }}</td>
-                        <td width="15"></td>
-                        <td width="15"></td>
-                        <td width="15"></td>
+                        <td width="10%">{{ datos.data.codigopresupuesto }}</td>
+                        <td width="15%">{{ datos.data.obra }}</td>
+                        <td width="15%">{{ datos.data.importe | intcomma }}</td>
+                        <td width="15%">{{ datos.data.entregado | intcomma }}</td>
+                        <td width="15%">{{ datos.data.saldo | intcomma }}</td>
+                        <td width="15%" style="outline: thin solid; width: 100px; padding:2px; margin:2px"> &nbsp; </td>
+                        <td width="15%" style="outline: thin solid; width: 100px; padding:2px; margin:2px"> &nbsp; </td>
                     </tbody>           
                     
                 </tr>

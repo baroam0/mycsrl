@@ -765,6 +765,9 @@ def reporteprespuestogeneral(request):
     
     contratista_pibot = contratista[0].descripcion
 
+    generaltotalimporte = 0
+    generaltotalentregado = 0
+
 
     for c in contratista:
         if contratista_pibot == c.descripcion:
@@ -787,7 +790,10 @@ def reporteprespuestogeneral(request):
                         "entregado": round(r['totalentregado'],2),
                         "saldo": round(r['totalimporte'],2) - round(r['totalentregado'],2)
                 }
-                
+
+                generaltotalimporte = generaltotalimporte + round(r['totalimporte'],2)
+                generaltotalentregado = generaltotalentregado + round(r['totalentregado'],2)
+
         else:
             contratista_pibot = c.descripcion
             resultados = (
@@ -808,17 +814,7 @@ def reporteprespuestogeneral(request):
                         "importe": round(r['totalimporte'],2),
                         "entregado": round(r['totalentregado'],2),
                         "saldo": round(r['totalimporte'],2) - round(r['totalentregado'],2)
-                }
-                
-
-    for nombre, datos in datadict.items():
-        print(f"Nombre: {nombre}")
-        obra = datos['data']['obra']
-        importe = datos['data']['importe']
-        print(f"Obra: {obra}")
-        print(f"Importe: {importe}\n")
-    
-        
+                }        
 
     return render(
         request, 
