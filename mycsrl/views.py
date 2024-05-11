@@ -752,14 +752,6 @@ def reporteprespuestogeneral(request):
 
     contratista = Contratista.objects.filter(pk__in=array_contratista)
 
-    """
-    result = (Members.objects
-    .values('designation', 'first_name', 'last_name')
-    .annotate(dcount=Count('designation'))
-    .order_by()
-    )
-    """
-
     for c in contratista:
         datadict[c.descripcion] = dict()
     
@@ -767,7 +759,6 @@ def reporteprespuestogeneral(request):
 
     generaltotalimporte = 0
     generaltotalentregado = 0
-
 
     for c in contratista:
         if contratista_pibot == c.descripcion:
@@ -791,10 +782,8 @@ def reporteprespuestogeneral(request):
                         "saldo": round(r['totalimporte'],2) - round(r['totalentregado'],2)
                 }
 
-                generaltotalimporte = generaltotalimporte + round(r['totalimporte'],2)
-                generaltotalentregado = generaltotalentregado + round(r['totalentregado'],2)
-
         else:
+
             contratista_pibot = c.descripcion
             resultados = (
                 DetallePresupuesto.objects.filter(contratista=c)
@@ -815,12 +804,24 @@ def reporteprespuestogeneral(request):
                         "entregado": round(r['totalentregado'],2),
                         "saldo": round(r['totalimporte'],2) - round(r['totalentregado'],2)
                 }        
+    
+
+    dictotales = dict()
+
+    for c in contratista:
+        dictotales[c.descripcion] = dict()
+    
+    
+    for k,v in datadict.items():
+        print(k)
+        print(v)
+
 
     return render(
         request, 
         'reportes/reporte_presupuesto_general.html',
         {
-            "presupuestos": datadict,
+             "presupuestos": datadict,
         }
     )
 
