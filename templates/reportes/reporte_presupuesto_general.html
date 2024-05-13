@@ -65,19 +65,26 @@
                         <th>Importe</th>
                     </tr>
                 </thead>
+
+                {% for d in datos %}
+
+                    <tr>
+                        <tbody>
+                            <td width="10%">{{ d.presupuesto }}</td>
+                            <td width="15%">{{ d.nombreobra }}</td>
+                            <td width="15%">$ {{ d.importe | intcomma }}</td>
+                            <td width="15%">$ {{ d.entregado | intcomma }}</td>
+                            <td width="15%">$ {{ d.saldo | intcomma }}</td>
+                            <td width="15%" style="outline: thin solid; width: 100px; padding:2px; margin:2px"> &nbsp; </td>
+                            <td width="15%" style="outline: thin solid; width: 100px; padding:2px; margin:2px"> &nbsp; </td>
+                        </tbody>           
+                        
+                    </tr>
+
+
+                {%endfor %}
         
-                <tr>
-                    <tbody>
-                        <td width="10%">{{ datos.data.codigopresupuesto }}</td>
-                        <td width="15%">{{ datos.data.obra }}</td>
-                        <td width="15%">{{ datos.data.importe | intcomma }}</td>
-                        <td width="15%">{{ datos.data.entregado | intcomma }}</td>
-                        <td width="15%">{{ datos.data.saldo | intcomma }}</td>
-                        <td width="15%" style="outline: thin solid; width: 100px; padding:2px; margin:2px"> &nbsp; </td>
-                        <td width="15%" style="outline: thin solid; width: 100px; padding:2px; margin:2px"> &nbsp; </td>
-                    </tbody>           
-                    
-                </tr>
+       
             </table>
             <hr>
         {% endfor %}

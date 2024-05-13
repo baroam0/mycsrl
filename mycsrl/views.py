@@ -734,88 +734,47 @@ def reporteobrasactivas(request):
 def reporteprespuestogeneral(request):
 
     datadict = dict()
+    #excludes = [True, None]
     obra = Obra.objects.filter(finalizada=False)
+
     presupuestos = Presupuesto.objects.filter(obra__in=obra)
     
-    detallepresupuestos = (
-        DetallePresupuesto.objects.filter(
-            presupuesto__in=presupuestos
-        )
+    detallepresupuestos = DetallePresupuesto.objects.values(
+        "presupuesto__obra__pk", 
+        "presupuesto__obra__finalizada",
+        "presupuesto__obra__descripcion", 
+        "contratista__pk",
+        "contratista__descripcion"
+    ).annotate(
+        totalimporte=Sum("importe"),
+        totalentregado=Sum("entregado")
+    ).order_by(
+        "contratista__pk"
     )
 
     array_contratista = list()
 
     for d in detallepresupuestos:
-        array_contratista.append(d.contratista.pk)
+        array_contratista.append(d["contratista__pk"])
+
+    contratistas = Contratista.objects.filter(pk__in=array_contratista).order_by("descripcion")
+    contratista_pibot = contratistas[0].descripcion
     
-    array_contratista = list(set(array_contratista))
-
-    contratista = Contratista.objects.filter(pk__in=array_contratista)
-
-    for c in contratista:
-        datadict[c.descripcion] = dict()
+    for c in contratistas:
+        datadict[c.descripcion] = list()
     
-    contratista_pibot = contratista[0].descripcion
+    for d in datadict:
+        for c in detallepresupuestos:
+            
+            if d == contratista_pibot:
+                datadict[d].append(c)
+            else:
+                contratista_pibot = d
+                datadict[d].append(c)
 
-    generaltotalimporte = 0
-    generaltotalentregado = 0
-
-    for c in contratista:
-        if contratista_pibot == c.descripcion:
-            resultados = (
-                DetallePresupuesto.objects.filter(contratista=c)
-                .values(
-                    'contratista__descripcion', 
-                    'presupuesto__pk', 
-                    'presupuesto__obra__descripcion')
-                .annotate(totalimporte=Sum('importe'))
-                .annotate(totalentregado=Sum('entregado'))
-                .order_by()
-            )
-
-            for r in resultados:
-                datadict[c.descripcion]['data'] = {
-                        "codigopresupuesto": r['presupuesto__pk'],
-                        "obra" : r['presupuesto__obra__descripcion'],
-                        "importe": round(r['totalimporte'],2),
-                        "entregado": round(r['totalentregado'],2),
-                        "saldo": round(r['totalimporte'],2) - round(r['totalentregado'],2)
-                }
-
-        else:
-
-            contratista_pibot = c.descripcion
-            resultados = (
-                DetallePresupuesto.objects.filter(contratista=c)
-                .values(
-                    'contratista__descripcion', 
-                    'presupuesto__pk',
-                    'presupuesto__obra__descripcion')
-                .annotate(totalimporte=Sum('importe'))
-                .annotate(totalentregado=Sum('entregado'))
-                .order_by()
-            )
-
-            for r in resultados:
-                datadict[c.descripcion]['data'] = {
-                        "codigopresupuesto": r['presupuesto__pk'],
-                        "obra" : r['presupuesto__obra__descripcion'],
-                        "importe": round(r['totalimporte'],2),
-                        "entregado": round(r['totalentregado'],2),
-                        "saldo": round(r['totalimporte'],2) - round(r['totalentregado'],2)
-                }        
-    
-
-    dictotales = dict()
-
-    for c in contratista:
-        dictotales[c.descripcion] = dict()
-    
-    
-    for k,v in datadict.items():
-        print(k)
-        print(v)
-
+    for d in datadict:
+        print(d, datadict[d])
+        
 
     return render(
         request, 

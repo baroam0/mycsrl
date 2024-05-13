@@ -105,33 +105,37 @@ class DetallePresupuesto(models.Model):
         return saldo
 
 
-    def gettotalimporteporobra(self, contratista_id, obra_id):
-        contratista = Contratista.objects.get(pk=contratista_id)
-        obra = Obra.objects.get(pk=obra_id)
+    def gettotalimporteporobra(self, contratista, obra):
 
-        presupuesto = Presupuesto.objects.filter(obra=obra, cerrado=False)
+        monto_importe = 0
+        monto_entregado = 0
+        saldo = 0
 
-        array_presupuesto = list()
+        contratista = Contratista.objects.get(pk=self.contratista.pk)
+        obra = Obra.objects.get(pk=obra)
+        presupuesto = Presupuesto.objects.get(obra=obra)
 
-        for p in presupuesto:
-            array_presupuesto.append(p.pk)
-        
-        array_presupuesto = list(set(array_presupuesto))
 
         detallepresupuestos = DetallePresupuesto.objects.filter(
-            presupuesto__in=array_presupuesto, 
-            contratista=contratista
+            contratista=contratista,
+            presupuesto=presupuesto
         )
 
-        montoimporte = 0
-        montoentregado = 0
+        datadict = dict()
 
         for d in detallepresupuestos:
-            montoimporte = montoimporte + d.importe
-            montoentregado = montoentregado + d.entregado
-        
-        return montoentregado, montoimporte
+            monto_importe = monto_importe + d.importe
+            monto_entregado = monto_entregado + d.entregado
 
+        saldo = monto_importe - monto_entregado
+
+        datadict["presupuesto"] = presupuesto.pk
+        datadict["nombreobra"] = obra.descripcion
+        datadict["importe"] = monto_importe
+        datadict["entregado"] = monto_entregado
+        datadict["saldo"] = saldo
+    
+        return datadict
 
     def __str__(self):
         return str(self.pk)

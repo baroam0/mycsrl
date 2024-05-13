@@ -61,8 +61,6 @@ def generarcuotas(contrato, usuario):
                 pagado=False,
                 usuario=usuario
             )
-            print(cuota)
             cuota.save()
             
-            
-
+        
