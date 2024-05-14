@@ -72,7 +72,7 @@
                         <tbody>
                             <td width="10%">{{ d.presupuesto__pk }}</td>
                             <td width="15%">{{ d.presupuesto__obra__descripcion }}</td>
-                            <td width="15%">$ {{ d.totalimporte | intcomma |floatformat:2 }}</td>
+                            <td width="15%">$ {{ d.totalimporte | intcomma }}</td>
                             <td width="15%">$ {{ d.totalentregado | intcomma }}</td>
                             <td width="15%">$ {{ d.saldogeneral | intcomma }}</td>
                             <td width="15%" style="outline: thin solid; width: 100px; padding:2px; margin:2px"> &nbsp; </td>

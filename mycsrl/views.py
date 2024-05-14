@@ -5,6 +5,9 @@ from locale import dcgettext
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import F, Sum, Func, ExpressionWrapper, DecimalField, Count
+
+from django.db.models.functions import Round
+
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from django.http import JsonResponse
@@ -748,9 +751,9 @@ def reporteprespuestogeneral(request):
         "contratista__descripcion",
         "presupuesto__pk",
     ).annotate(
-        totalimporte=Sum("importe"),
+        totalimporte=Sum('importe'),
         totalentregado=Sum("entregado"),
-        saldogeneral=F("totalimporte") - F("totalentregado")
+        saldogeneral=F("totalimporte") - F("totalentregado"),
     ).order_by(
         "contratista__pk"
     )
@@ -771,7 +774,30 @@ def reporteprespuestogeneral(request):
     for d in detallepresupuestos:
         datadict[d['contratista__descripcion']].append(d)
     
+    importegeneral = 0
+    entregadogeneral = 0
+    saldogeneral = 0
     
+    contratista = contratistas[0].descripcion
+    
+    for d in detallepresupuestos:
+        if d['contratista__descripcion'] == contratista:
+            print("¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡")
+            print(d['totalimporte'])
+            importegeneral = importegeneral + d['totalimporte']
+        else:
+            print(d['contratista__descripcion'])
+            print(importegeneral)
+            totalesgenerales[d['contratista__descripcion']].append(
+                {
+                    "importegeneral": importegeneral
+                }
+            )
+            importegeneral = 0
+            contratista = d['contratista__descripcion']
+            importegeneral = importegeneral + d['totalimporte']
+	
+    print(totalesgenerales)
 
     return render(
         request, 
