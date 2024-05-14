@@ -70,11 +70,11 @@
 
                     <tr>
                         <tbody>
-                            <td width="10%">{{ d.presupuesto }}</td>
-                            <td width="15%">{{ d.nombreobra }}</td>
-                            <td width="15%">$ {{ d.importe | intcomma }}</td>
-                            <td width="15%">$ {{ d.entregado | intcomma }}</td>
-                            <td width="15%">$ {{ d.saldo | intcomma }}</td>
+                            <td width="10%">{{ d.presupuesto__pk }}</td>
+                            <td width="15%">{{ d.presupuesto__obra__descripcion }}</td>
+                            <td width="15%">$ {{ d.totalimporte | intcomma |floatformat:2 }}</td>
+                            <td width="15%">$ {{ d.totalentregado | intcomma }}</td>
+                            <td width="15%">$ {{ d.saldogeneral | intcomma }}</td>
                             <td width="15%" style="outline: thin solid; width: 100px; padding:2px; margin:2px"> &nbsp; </td>
                             <td width="15%" style="outline: thin solid; width: 100px; padding:2px; margin:2px"> &nbsp; </td>
                         </tbody>           

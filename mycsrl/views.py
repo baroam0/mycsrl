@@ -4,7 +4,7 @@ import decimal
 from locale import dcgettext
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.db.models import F, Sum, ExpressionWrapper, DecimalField, Count
+from django.db.models import F, Sum, Func, ExpressionWrapper, DecimalField, Count
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from django.http import JsonResponse
@@ -734,6 +734,7 @@ def reporteobrasactivas(request):
 def reporteprespuestogeneral(request):
 
     datadict = dict()
+    totalesgenerales = dict()
     #excludes = [True, None]
     obra = Obra.objects.filter(finalizada=False)
 
@@ -744,10 +745,12 @@ def reporteprespuestogeneral(request):
         "presupuesto__obra__finalizada",
         "presupuesto__obra__descripcion", 
         "contratista__pk",
-        "contratista__descripcion"
+        "contratista__descripcion",
+        "presupuesto__pk",
     ).annotate(
         totalimporte=Sum("importe"),
-        totalentregado=Sum("entregado")
+        totalentregado=Sum("entregado"),
+        saldogeneral=F("totalimporte") - F("totalentregado")
     ).order_by(
         "contratista__pk"
     )
@@ -756,25 +759,19 @@ def reporteprespuestogeneral(request):
 
     for d in detallepresupuestos:
         array_contratista.append(d["contratista__pk"])
+    
+    array_contratista = list(set(array_contratista))
 
     contratistas = Contratista.objects.filter(pk__in=array_contratista).order_by("descripcion")
-    contratista_pibot = contratistas[0].descripcion
-    
+
     for c in contratistas:
         datadict[c.descripcion] = list()
+        totalesgenerales[c.descripcion] = list()
     
-    for d in datadict:
-        for c in detallepresupuestos:
-            
-            if d == contratista_pibot:
-                datadict[d].append(c)
-            else:
-                contratista_pibot = d
-                datadict[d].append(c)
-
-    for d in datadict:
-        print(d, datadict[d])
-        
+    for d in detallepresupuestos:
+        datadict[d['contratista__descripcion']].append(d)
+    
+    
 
     return render(
         request, 
