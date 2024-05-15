@@ -205,10 +205,7 @@ def recibo_new(request):
                     finalizado=False, 
                     departamento=departamento
                 )
-                print("............................")
-                print(contrato)
-                print(recibo.anio)
-                print(recibo.mes)
+             
                 
                 cuotacontrato = CuotaContrato.objects.get(
                     contrato=contrato,
@@ -222,8 +219,6 @@ def recibo_new(request):
                 messages.success(request, "Se ha grabado los datos del recibo.")
                 return redirect('/alquileres/recibo/listado')
             except Exception as e:
-                print("queeeee")
-                print(str(e))
                 messages.warning(request, str(e))
                 return redirect('/alquileres/recibo/listado')
         else:

@@ -53,7 +53,7 @@
                 <div class="col-sm-12">{{nombre}}</div>
             </div>
 
-            <table>
+            <table class="table">
                 <thead>
                     <tr>
                         <th>Codigo</th>
@@ -65,22 +65,44 @@
                         <th>Importe</th>
                     </tr>
                 </thead>
-        
-                <tr>
-                    <tbody>
-                        <td width="15">{{ datos.data.codigopresupuesto }}</td>
-                        <td width="15">{{ datos.data.obra }}</td>
-                        <td width="15">{{ datos.data.importe | intcomma }}</td>
-                        <td width="15">{{ datos.data.entregado | intcomma }}</td>
-                        <td width="15">{{ datos.data.saldo | intcomma }}</td>
-                        <td width="15"></td>
-                        <td width="15"></td>
-                        <td width="15"></td>
-                    </tbody>           
-                    
-                </tr>
+
+                {% for d in datos %}
+                        <tbody>
+                            <tr>
+                                <td width="10%">{{ d.presupuesto__pk }}</td>
+                                <td width="15%">{{ d.presupuesto__obra__descripcion }}</td>
+                                <td width="15%">$ {{ d.totalimporte | intcomma }}</td>
+                                <td width="15%">$ {{ d.totalentregado | intcomma }}</td>
+                                <td width="15%">$ {{ d.saldogeneral | intcomma }}</td>
+                                <td width="15%" style="outline: thin solid; width: 100px; padding:2px; margin:2px"> &nbsp; </td>
+                                <td width="15%" style="outline: thin solid; width: 100px; padding:2px; margin:2px"> &nbsp; </td>
+                            </tr>
+                        </tbody> 
+                {%endfor %}
             </table>
-            <hr>
+
+            {% for k,v in totales.items %}
+                {% if k == nombre %}
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td width="10%"></td>
+                                <td width="10%"></td>
+                                <td width="15%"> <b> T. IMPORTE: $ {{ v.total_importe | intcomma }} </b> </td>
+                                <td width="15%"> <b> T. ENTREGADO: $ {{ v.total_entregado | intcomma }} </b></td>
+                                <td width="15%"> <b> T. SALDO: $ {{ v.total_saldogeneral | intcomma }} </b></td>
+                                <td width="15%"> </td>
+                                <td width="10%"> </td>
+                            </tr>
+                        </tbody> 
+
+                    </table>
+                        
+                {% endif %}
+            {% endfor %}
+
+            <br>
+            
         {% endfor %}
 
     
