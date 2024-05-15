@@ -1,4 +1,5 @@
 
+from datetime import date
 from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
@@ -401,6 +402,7 @@ def listadofactura(request):
 def nuevafactura(request):
     usuario = request.user
     factura = FacturaProveedor.objects.create(
+	fecha=date.today()
         usuario=usuario,
         comprobante=None,
         ingresosbrutos=None,
