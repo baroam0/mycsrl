@@ -51,9 +51,9 @@ class Descripciondetalle(models.Model):
 
 class FacturaProveedor(models.Model):
     comprobante = models.CharField(max_length=50, blank=True, null=True)
-    fecha = models.DateField(null=True, blank=False)
+    fecha = models.DateField(null=True, blank=True)
     proveedor = models.ForeignKey(
-        Proveedor, on_delete=models.CASCADE, null=True, blank=False)
+        Proveedor, on_delete=models.CASCADE, null=True, blank=True)
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
     pagado = models.BooleanField(default=False)
     pagoparcial = models.BooleanField(default=False)

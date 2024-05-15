@@ -85,9 +85,9 @@ class DescripcionDetalleForm(forms.ModelForm):
 class FacturaProveedorForm(forms.ModelForm):
 
     comprobante = forms.CharField(label="Comprobante", required=True) 
-    fecha = forms.DateField(label="Fecha") 
+    fecha = forms.DateField(label="Fecha", required=True)
     proveedor = forms.ModelChoiceField(
-        queryset=Proveedor.objects.all(), label="Proveedor") 
+        queryset=Proveedor.objects.all(), label="Proveedor", required=True) 
     
     descuentoglobal = forms.DecimalField(label="Descuento Global")
     preciocepcionglobal = forms.DecimalField(label="Percepcion Global")
