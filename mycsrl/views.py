@@ -772,38 +772,35 @@ def reporteprespuestogeneral(request):
         totalesgenerales[c.descripcion] = list()
     
     for d in detallepresupuestos:
-        datadict[d['contratista__descripcion']].append(d)
+        datadict[d['contratista__descripcion']].append(
+            {
+                "presupuesto__obra__descripcion": d["presupuesto__obra__descripcion"],
+                "presupuesto__pk": d["presupuesto__pk"],
+                "totalimporte": round(d["totalimporte"],2),
+                "totalentregado": round(d["totalentregado"],2),
+                "saldogeneral": round(d["saldogeneral"],2),
+            }
+            
+        )
     
-    importegeneral = 0
-    entregadogeneral = 0
-    saldogeneral = 0
-    
-    contratista = contratistas[0].descripcion
-    
-    for d in detallepresupuestos:
-        if d['contratista__descripcion'] == contratista:
-            print("¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡")
-            print(d['totalimporte'])
-            importegeneral = importegeneral + d['totalimporte']
-        else:
-            print(d['contratista__descripcion'])
-            print(importegeneral)
-            totalesgenerales[d['contratista__descripcion']].append(
-                {
-                    "importegeneral": importegeneral
-                }
-            )
-            importegeneral = 0
-            contratista = d['contratista__descripcion']
-            importegeneral = importegeneral + d['totalimporte']
-	
-    print(totalesgenerales)
+    sumatoria_saldogeneral = dict()
+
+    for clave, entradas in datadict.items():
+        total_importe = sum(entry['totalimporte'] for entry in entradas)
+        total_entregado = sum(entry['totalentregado'] for entry in entradas)
+        total_saldogeneral = sum(entry['saldogeneral'] for entry in entradas)
+        sumatoria_saldogeneral[clave] = {
+            "total_importe": total_importe,
+            "total_entregado": total_entregado,
+            "total_saldogeneral": total_saldogeneral
+        }
 
     return render(
         request, 
         'reportes/reporte_presupuesto_general.html',
         {
              "presupuestos": datadict,
+             "totales": sumatoria_saldogeneral
         }
     )
 
