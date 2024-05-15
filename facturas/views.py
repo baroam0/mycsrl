@@ -402,7 +402,7 @@ def listadofactura(request):
 def nuevafactura(request):
     usuario = request.user
     factura = FacturaProveedor.objects.create(
-	fecha=date.today()
+	fecha=date.today(),
         usuario=usuario,
         comprobante=None,
         ingresosbrutos=None,
