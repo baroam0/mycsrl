@@ -180,12 +180,12 @@ class DetalleFacturaProveedor(models.Model):
         else:
             percepcion = 0
 
-        if self.factura.iva.retencion:
+        if self.factura.iva:
             iva = monto * self.factura.iva.retencion / 100
         else:
             iva = 0
         
-        if self.factura.ingresosbrutos.retencion:
+        if self.factura.ingresosbrutos:
             iibb = monto * self.factura.ingresosbrutos.retencion / 100
         else: 
             iibb = 0

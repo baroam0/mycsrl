@@ -418,9 +418,6 @@ def detallereporteingresoegresoobra(request):
         )
     )
 
-    print("qqqqqqq")
-    print(devengamientos)
-
     total_egresos = 0
 
     for r in devengamientos:
