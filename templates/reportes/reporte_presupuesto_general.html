@@ -46,15 +46,21 @@
             <div class="col-sm-3"></div>
         </div>
 
-        <h4> RESUMEN PRESUPUESTO </h4>
+
 
         {% for nombre, datos in presupuestos.items %}
-            <div class="row">
+            <!--div class="row">
                 <div class="col-sm-12">{{nombre}}</div>
-            </div>
+            </div-->
 
-            <table class="table">
+            <table class="table" style="page-break-before: always;">
+
                 <thead>
+                     <tr>
+                        <th> <h5> RESUMEN PRESUPUESTO </h5></th> </tr>
+                    <tr>
+                    <tr>
+                        <th>{{nombre}}</th> </tr>
                     <tr>
                         <th>Codigo</th>
                         <th>Obra</th>

@@ -400,6 +400,7 @@ def detallereporteingresoegresoobra(request):
     except:
         total_cobros = 0
 
+
     devengamientos = (
         DetalleFacturaProveedor.objects
         .filter(obra=obra.pk)
@@ -407,8 +408,8 @@ def detallereporteingresoegresoobra(request):
         .annotate(
             sum_custom_method=Sum(
                 ExpressionWrapper(
-                    F('preciototal') - 
-                    F('preciototal') * F('descuentoporcentaje') / 100 + 
+                    F('preciototal') -
+                    F('preciototal') * F('descuentoporcentaje') / 100 +
                     F('preciototal') * F('factura__iva__retencion') / 100 +
                     F('preciototal') * F('factura__ingresosbrutos__retencion') / 100,
                     output_field=DecimalField()
@@ -416,6 +417,9 @@ def detallereporteingresoegresoobra(request):
             )
         )
     )
+
+    print("qqqqqqq")
+    print(devengamientos)
 
     total_egresos = 0
 
