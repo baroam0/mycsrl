@@ -347,6 +347,8 @@ def detallereportesporfacturas(request):
         }.values()
     )
 
+    print(dicttotales)
+
     dicttotalempresa = list()
 
     for e in empresas:
