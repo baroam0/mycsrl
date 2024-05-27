@@ -52,7 +52,7 @@ def generarcuotas(contrato, usuario):
                     )
                 cuota.save()
         except:
-            print("Except")
+            
             cuota = CuotaContrato(
                 fecha=fecha, 
                 contrato=contrato,

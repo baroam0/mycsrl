@@ -97,17 +97,12 @@
                     </table>    
                 </div>
 
-
-
                 {% for k,v in totales.items %}
                 {% if k == nombre %}
                     <table class="table">
-
-                       
-
                         <tbody>
                             <tr>
-                                <td></td>
+                                <td> </td>
                                 <td> </td>
                                 <td> <b>  $ {{ v.total_importe | intcomma }} </b> </td>
                                 <td> <b>  $ {{ v.total_entregado | intcomma }} </b></td>
@@ -119,11 +114,23 @@
                                 <td>
                                     DEPOSITO:
                                 </td>
+                                <td> </td>
+                                <td> </td>
+                                <td> </td>
+                                <td> </td>
+                                <td> </td>
+                                <td> </td>
                             </tr>
                             <tr>
                                 <td>
                                     EFECTIVO:
                                 </td>
+                                <td> </td>
+                                <td> </td>
+                                <td> </td>
+                                <td> </td>
+                                <td> </td>
+                                <td> </td>
                             </tr>
                         </tbody> 
 
