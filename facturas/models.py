@@ -174,6 +174,9 @@ class DetalleFacturaProveedor(models.Model):
         monto = self.preciototal / self.cantidad
         monto = monto - self.descuento
         monto = monto - (monto * self.descuentoporcentaje / 100 )
+        descuentoproporcional = (float(self.factura.descuentoglobal) / float(self.factura.getsubtotalfactura()) ) * float(self.preciototal) / float(self.cantidad)
+        monto = float(monto) - descuentoproporcional
+
 
         if self.factura.preciocepcionglobal:
             percepcion = self.factura.preciocepcionglobal
@@ -181,16 +184,16 @@ class DetalleFacturaProveedor(models.Model):
             percepcion = 0
 
         if self.factura.iva.retencion:
-            iva = monto * self.factura.iva.retencion / 100
+            iva = monto * float(self.factura.iva.retencion) / 100
         else:
             iva = 0
         
         if self.factura.ingresosbrutos.retencion:
-            iibb = monto * self.factura.ingresosbrutos.retencion / 100
+            iibb = monto * float(self.factura.ingresosbrutos.retencion) / 100
         else: 
             iibb = 0
 
-        monto = monto + percepcion + iva + iibb + self.ajuste
+        monto = monto + percepcion + iva + iibb + float(self.ajuste)
         return float(round(monto,2))
 
     def getpreciototalfinal(self):
@@ -204,8 +207,12 @@ class DetalleFacturaProveedor(models.Model):
             descuentoporcentaje = self.preciototal * self.descuentoporcentaje /100
         else:
             descuentoporcentaje = 0
-        monto = float(self.preciototal) - float(descuento) - float(descuentoporcentaje)
 
+        # Calcular porcentaje de descuento para cada artículo
+        descuentoproporcional = (float(self.factura.descuentoglobal) / float(self.factura.getsubtotalfactura()) ) * float(self.preciototal)
+        
+        monto = float(self.preciototal) - descuentoproporcional - float(descuento) - float(descuentoporcentaje)
+        m = float(self.preciototal)
         if self.factura.iva:
             iva = float(self.factura.iva.retencion / 100)
             iva = monto * iva
@@ -220,7 +227,7 @@ class DetalleFacturaProveedor(models.Model):
 
         monto = float(monto) + float(iva) + float(iibb) + float(self.ajuste)
         return round(monto, 4)        
-
+        
 
     def __str__(self):
         return str(self.factura) + ' - ' + self.rubro.descripcion
