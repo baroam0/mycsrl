@@ -742,21 +742,26 @@ def reporteprespuestogeneral(request):
     #excludes = [True, None]
     obra = Obra.objects.filter(finalizada=False)
 
-    presupuestos = Presupuesto.objects.filter(obra__in=obra)
+    presupuestos = Presupuesto.objects.filter(obra__in=obra, cerrado=False)
     
-    detallepresupuestos = DetallePresupuesto.objects.values(
-        "presupuesto__obra__pk", 
-        "presupuesto__obra__finalizada",
-        "presupuesto__obra__descripcion", 
-        "contratista__pk",
-        "contratista__descripcion",
-        "presupuesto__pk",
-    ).annotate(
-        totalimporte=Sum('importe'),
-        totalentregado=Sum("entregado"),
-        saldogeneral=F("totalimporte") - F("totalentregado"),
-    ).order_by(
-        "contratista__pk"
+    detallepresupuestos = (
+        DetallePresupuesto.objects.filter(presupuesto__in=presupuestos)
+        .values(
+            "presupuesto__obra__pk", 
+            "presupuesto__obra__finalizada",
+            "presupuesto__obra__descripcion", 
+            "contratista__pk",
+            "contratista__descripcion",
+            "presupuesto__pk",
+        )
+        .annotate(
+            totalimporte=Sum('importe'),
+            totalentregado=Sum("entregado"),
+            saldogeneral=F("totalimporte") - F("totalentregado"),
+        )
+        .order_by(
+            "contratista__pk"
+        )
     )
 
     array_contratista = list()
