@@ -44,8 +44,10 @@
 <style>
   @media print{
     @page {
-      size: landscape
+      size: landscape;
+      
     }
+    footer {page-break-after: always;}
   }
 
   header {
@@ -87,4 +89,9 @@
 
 {% block js_extra %}
 {% endblock %}
+
+<footer>
+  
+</footer>
+
 </html>
