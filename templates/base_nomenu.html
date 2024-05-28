@@ -37,12 +37,25 @@
 </head>
 
 <header class="onlyprint">
-  <img style="float: right;" src="{% static "images/logo.jpg" %}" alt="" width="150" height="93">
+  <img style="float: right;" src="{% static "images/logo.jpg" %}" alt="" width="112" height="69">
 </header>
 
 
 <style>
-  @media print{@page {size: landscape}}
+  @media print{
+    @page {
+      size: landscape
+    }
+  }
+
+  header {
+        position: fixed;
+        top: 0;
+        right: 0; /* Ajusta la posición a la derecha */
+        /* otros estilos para el encabezado */
+  }
+
+  
   table {
     border-collapse: collapse;
     width: 100%;
@@ -64,10 +77,13 @@
     font-size: 14px;
   }
 </style>
+<body>
+
 {%block content %}
 
 {% endblock %}
 
+</body>
 
 {% block js_extra %}
 {% endblock %}
