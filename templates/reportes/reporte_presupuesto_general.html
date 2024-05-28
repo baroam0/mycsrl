@@ -34,6 +34,7 @@
                         </thead>
     
                         {% for d in datos %}
+				{% if d.saldogeneral != 0 %}
                                 <tbody>
                                     <tr>
                                         <td width="5%">{{ d.presupuesto__pk }}</td>
@@ -44,7 +45,7 @@
                                         <td width="10%" style="outline: thin solid;  padding:2px; margin:2px"> &nbsp; </td>
                                         <td width="10%" style="outline: thin solid; padding:2px; margin:2px"> &nbsp; </td>
                                     </tr>
-                                 
+                                 {%endif%}
                         {%endfor %}
 
                         {% for k,v in totales.items %}
