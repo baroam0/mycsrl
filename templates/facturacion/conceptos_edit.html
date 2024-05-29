@@ -34,7 +34,7 @@
                         </div>
 
                         <div class="col-2">    
-                            <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="IrListadoBanco()">
+                            <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="IrListado()">
                                 <i class="far fa-times-circle"></i>
                                 Cancelar
                             </button>
@@ -43,13 +43,8 @@
                     <hr>
                 </form>
             </div>
-            
         </div>
-        
-    </div>
-
-
-    
+    </div>    
 
 {% endblock %}
 
@@ -60,14 +55,11 @@
         $(document).ready(function () {
             $('#id_banco').select2();
         });
-
-    
     </script>
     
-    
     <script>
-        function IrListadoBanco() {
-            window.location.replace("/bancos/listado");
+        function IrListado() {
+            window.location.replace("/facturacion/conceptos/listado");
         }
     </script>
 
