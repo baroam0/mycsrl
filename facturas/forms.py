@@ -93,12 +93,6 @@ class FacturaProveedorForm(forms.ModelForm):
     preciocepcionglobal = forms.DecimalField(label="Percepcion Global")
     ajusteglobal = forms.DecimalField(label="Ajuste Global")
 
-    iva = forms.ModelChoiceField(label="Iva", queryset=Iva.objects.all())
-
-    ingresosbrutos = forms.ModelChoiceField(
-        label="Ingresos Brutos", queryset=IngresoBruto.objects.all()) 
-    
-
     def __init__(self, *args, **kwargs):
         super(FacturaProveedorForm, self).__init__(*args, **kwargs)
         for field in iter(self.fields):
@@ -110,7 +104,7 @@ class FacturaProveedorForm(forms.ModelForm):
         model = FacturaProveedor
         fields = ["fecha", "proveedor", "comprobante", 
                   "descuentoglobal", "preciocepcionglobal", 
-                  "ajusteglobal", "iva", "ingresosbrutos"]
+                  "ajusteglobal"]
 
 
 class DetalleFacturaProveedorForm(forms.ModelForm):
@@ -119,7 +113,6 @@ class DetalleFacturaProveedorForm(forms.ModelForm):
     rubro = forms.ModelChoiceField(label="Rubro", queryset=Rubro.objects.all().order_by('descripcion'))
     unidad = forms.ModelChoiceField(label="Unidad", queryset=Unidad.objects.all())
     cantidad = forms.DecimalField(label="Cantidad")
-    #preciounitario = forms.DecimalField(label="Precio Unitario")
 
     preciototal = forms.DecimalField(label="Precio Total")
 
@@ -136,6 +129,11 @@ class DetalleFacturaProveedorForm(forms.ModelForm):
 
     ajuste = forms.DecimalField(label="Ajuste", required=True)
 
+    iva = forms.ModelChoiceField(label="Iva", queryset=Iva.objects.all())
+
+    ingresosbrutos = forms.ModelChoiceField(
+        label="Ingresos Brutos", queryset=IngresoBruto.objects.all()) 
+
     def __init__(self, *args, **kwargs):
         super(DetalleFacturaProveedorForm, self).__init__(*args, **kwargs)
         for field in iter(self.fields):
@@ -147,6 +145,7 @@ class DetalleFacturaProveedorForm(forms.ModelForm):
         model = DetalleFacturaProveedor 
         fields = [
             "obra", "rubro", "descripciondetalle",
-            "unidad", "cantidad", "preciototal",
-            "descuento", "descuentoporcentaje", "ajuste", "rodado"
+            "unidad", "cantidad", "preciototal", "iva",
+            "ingresosbrutos", "descuento", "descuentoporcentaje", 
+            "ajuste", "rodado"
         ]
