@@ -15,7 +15,16 @@
                 <hr>
 
                 <div class="row">
-                    <div class="col-sm-12">{{nombre}}</div>
+                    <div class="col-sm-12"><b>{{nombre}}</b></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-1"><b></b></div>
+                    <div class="col-sm-1"><b></b></div>
+                    <div class="col-sm-3"><b> QUINCENA S/EL: $</b></div>
+                    <div class="col-sm-3"><b> QUINCENA TOTAL: $</b></div>
+                    <div class="col-sm-2"><b> DEPOSITO: $ </b></div>
+                    <div class="col-sm-2"><b> EFECTIVO: $ </b></div>
                 </div>
 
                 <div class="row">
@@ -23,6 +32,7 @@
 
                         <thead>
                             <tr>
+                                <th></th>
                                 <th>Cod.</th>
                                 <th>Obra</th>
                                 <th>Importe</th>
@@ -37,13 +47,14 @@
 				{% if d.saldogeneral != 0 %}
                                 <tbody>
                                     <tr>
+                                        <td width="6%"> &nbsp; </td>
                                         <td width="5%">{{ d.presupuesto__pk }}</td>
                                         <td width="25%">{{ d.presupuesto__obra__descripcion }}</td>
                                         <td width="15%">$ {{ d.totalimporte | intcomma }}</td>
                                         <td width="15%">$ {{ d.totalentregado | intcomma }}</td>
-                                        <td width="15%">$ {{ d.saldogeneral | intcomma }}</td>
-                                        <td width="10%" style="outline: thin solid;  padding:2px; margin:2px"> &nbsp; </td>
-                                        <td width="10%" style="outline: thin solid; padding:2px; margin:2px"> &nbsp; </td>
+                                        <td width="10%" style="text-align: right;" >$ {{ d.saldogeneral | intcomma }}</td>
+                                        <td width="8%" style="outline: thin solid;  padding:2px; margin:2px"> &nbsp; </td>
+                                        <td width="8%" style="outline: thin solid; padding:2px; margin:2px"> &nbsp; </td>
                                     </tr>
                                  {%endif%}
                         {%endfor %}
