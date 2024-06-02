@@ -240,9 +240,9 @@ def gettotalobra(obra, factura):
             total = total + d.getpreciototalfinal()
             redondeo = float(d.factura.ajusteglobal)
 
-        total = total + redondeo
+        total = float(total) + float(redondeo)
         
-        return float(round(total,4))
+        return round(total,4)
 
 
 def gettotalempresa(proveedor, empresa, fechadesde, fechahasta):

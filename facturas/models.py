@@ -90,9 +90,14 @@ class FacturaProveedor(models.Model):
         valor = 0
 
         for d in detallesfactura:
-            monto = d.preciototal - d.descuento - ( d.preciototal * d.descuentoporcentaje / 100)
-            iibb = monto * d.ingresosbrutos.retencion / 100
-            valor = valor + iibb
+            if d.ingresosbrutos:
+                monto = d.preciototal - d.descuento - ( d.preciototal * d.descuentoporcentaje / 100)
+                iibb = monto * d.ingresosbrutos.retencion / 100
+                valor = valor + iibb
+            else:
+                monto = d.preciototal - d.descuento - ( d.preciototal * d.descuentoporcentaje / 100)
+                iibb = 0
+                valor = valor + iibb
         return round(valor,2)
 
     
@@ -150,7 +155,7 @@ class DetalleFacturaProveedor(models.Model):
 
     def getpreciounitariofinal(self):
         monto = self.preciototal / self.cantidad
-        return monto
+        return round(monto,2)
     
     def getpreciototalfinal(self):
         monto = self.preciototal
