@@ -40,6 +40,7 @@
                                 <th>Saldo</th>
                                 <th>T. Ejecutado</th>
                                 <th>Importe</th>
+                                <th> &nbsp; </th>
                             </tr>
                         </thead>
     
@@ -47,14 +48,15 @@
 				{% if d.saldogeneral != 0 %}
                                 <tbody>
                                     <tr>
-                                        <td width="6%"> &nbsp; </td>
+                                        <td width="10%"> &nbsp; </td>
                                         <td width="5%">{{ d.presupuesto__pk }}</td>
                                         <td width="25%">{{ d.presupuesto__obra__descripcion }}</td>
-                                        <td width="15%">$ {{ d.totalimporte | intcomma }}</td>
-                                        <td width="15%">$ {{ d.totalentregado | intcomma }}</td>
-                                        <td width="10%" style="text-align: right;" >$ {{ d.saldogeneral | intcomma }}</td>
-                                        <td width="8%" style="outline: thin solid;  padding:2px; margin:2px"> &nbsp; </td>
-                                        <td width="8%" style="outline: thin solid; padding:2px; margin:2px"> &nbsp; </td>
+                                        <td width="10%">$ {{ d.totalimporte | intcomma }}</td>
+                                        <td width="10%">$ {{ d.totalentregado | intcomma }}</td>
+                                        <td width="10%">$ {{ d.saldogeneral | intcomma }}</td>
+                                        <td width="10%" style="outline: thin solid;  padding:2px; margin:2px"> &nbsp; </td>
+                                        <td width="10%" style="outline: thin solid; padding:2px; margin:2px"> &nbsp; </td>
+					<td width="10%"></td>
                                     </tr>
                                  {%endif%}
                         {%endfor %}
@@ -69,6 +71,7 @@
                                     <td> <b>  $ {{ v.total_saldogeneral | intcomma }} </b></td>
                                     <td> </td>
                                     <td> </td>
+				    <td> </td>
                                 </tr>
                             {% endif %}
                         {% endfor %}
