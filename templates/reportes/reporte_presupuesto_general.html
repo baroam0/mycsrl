@@ -19,12 +19,10 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-sm-1"><b></b></div>
-                    <div class="col-sm-1"><b></b></div>
-                    <div class="col-sm-3"><b> QUINCENA S/EL: $</b></div>
-                    <div class="col-sm-3"><b> QUINCENA TOTAL: $</b></div>
-                    <div class="col-sm-2"><b> DEPOSITO: $ </b></div>
-                    <div class="col-sm-2"><b> EFECTIVO: $ </b></div>
+	            <div class="col-sm-3"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; QUINCENA S/EL:</b> </div>            
+                    <div class="col-sm-3"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; QUINCENA TOTAL: $ </b></div>
+                    <div class="col-sm-3"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DEPOSITO: $ </b></div>
+                    <div class="col-sm-3"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; EFECTIVO: $ </b></div>
                 </div>
 
                 <!--div class="row"-->
@@ -63,7 +61,7 @@
 
                         {% for k,v in totales.items %}
                             {% if k == nombre %}
-                                <tr>
+                                <!--tr>
                                     <td> </td>
                                     <td> </td>
                                     <td> <b>  $ {{ v.total_importe | intcomma }} </b> </td>
@@ -72,7 +70,7 @@
                                     <td> </td>
                                     <td> </td>
 				    <td> </td>
-                                </tr>
+                                </tr-->
                             {% endif %}
                         {% endfor %}
 
