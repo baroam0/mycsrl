@@ -228,10 +228,11 @@ def reportesfacturas(request):
     )
 
 
-def gettotalobra(obra, factura):
+def gettotalobra(obra, proveedor):
         obra = Obra.objects.get(descripcion=obra)
-        factura = FacturaProveedor.objects.get(pk=factura)
-        detalles = DetalleFacturaProveedor.objects.filter(obra=obra, factura=factura, factura__pagado=False)
+        proveedor = Proveedor.objects.get(pk=proveedor)
+        factura = FacturaProveedor.objects.filter(proveedor=proveedor, pagado=False)
+        detalles = DetalleFacturaProveedor.objects.filter(obra=obra, factura__in=factura)
         total = 0
         redondeo = 0
         
@@ -306,7 +307,12 @@ def detallereportesporfacturas(request):
                     "obra": o.descripcion,
                     "data": list()
                 })
+    
+    tmpdct = dict()
+    for o in obras:
+        tmpdct[o.descripcion] = ""
  
+
     for d in datadict[proveedor.razonsocial]:
         for df in detallefacturaproveedor:
             if df.obra.empresa.descripcion == d["empresa"]:              
@@ -321,6 +327,7 @@ def detallereportesporfacturas(request):
                             "preciofinal": format(df.getpreciounitariofinal(),'.2f'),
                             "total": format(df.getpreciofinaltotalitem(),'.2f') 
                         })
+                        tmpdct[df.obra.descripcion] = gettotalobra(df.obra.descripcion, df.factura.proveedor.pk)
 
     
     dicttotales = list()
@@ -337,7 +344,6 @@ def detallereportesporfacturas(request):
                     #"total": round(gettotalobra(o.descripcion, df.factura.pk),2)
                     "total": df.modeltotalobra(o.pk, df.factura.pk)
                 })
-            
 
     dicttotales = list(
         {
@@ -356,11 +362,11 @@ def detallereportesporfacturas(request):
             }
         )
 
+    
     for d in dicttotalempresa:
         for e in dicttotales:
             if e["empresa"] == d["empresa"]:
                 d["total"] = round(d["total"] + e["total"],2)
-                
 
     return render(
         request, 
@@ -370,6 +376,7 @@ def detallereportesporfacturas(request):
             "fechahasta": fechahastatemplate,
             "datadict": datadict,
             "dictotales": dicttotales,
+            "tmpdict": tmpdct,
             "dicttotalempresa": dicttotalempresa,
             "banco": banco
         }

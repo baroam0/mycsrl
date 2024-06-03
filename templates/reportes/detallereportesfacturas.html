@@ -92,16 +92,15 @@
                             {%endfor%}
                         </table>
 
-                        {% for el in dictotales%}
-                        
-                            {% if el.obra == e.obra %}
+                        {% for ll, vv in tmpdict.items %}
+                            {% if ll == e.obra %}
                                 <div class="row">
                                     <div class="col-sm-1"></div>
                                     <div class="col-sm-1"></div>
                                     <div class="col-sm-1"></div>
                                     <div class="col-sm-1"></div>
-                                    <div class="col-sm-4 tituloobra"> <b> TOTAL {{el.obra}} : </b> </div>
-                                    <div class="col-sm-4 tituloobra"> <b> $ {{el.total | intcomma}}  </b> </div>
+                                    <div class="col-sm-4 tituloobra"> <b> TOTAL {{ll}} : </b> </div>
+                                    <div class="col-sm-4 tituloobra"> <b> $ {{vv | intcomma}}  </b> </div>
                                 </div>
                             {% endif %}
                         {% endfor %}
@@ -109,7 +108,7 @@
                 {% endfor %}
 
             {%endfor%}
-            
+
             <br>
             <hr>
 
