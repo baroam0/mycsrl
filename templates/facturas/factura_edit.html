@@ -116,7 +116,7 @@
                             <td>$ {{ detallefactura.getpreciounitario | intcomma }}</td>
                             <td>$ {{ detallefactura.getpreciounitariofinal | intcomma }}</td>
                             <!--td>$ {{ detallefactura.getpreciounitariobruto |floatformat:2 }} </td-->
-                            <td>$ {{ detallefactura.getpreciototal | intcomma }} </td>
+                            <td>$ {{ detallefactura.getpreciofinaltotalitem | intcomma }} </td>
                             <td>{{ detallefactura.usuario }}</td>
                             <td>
                                 <button type="button" class="btn btn-link btn-sm" onclick="AbrirVentanaEditar({{detallefactura.pk}})">

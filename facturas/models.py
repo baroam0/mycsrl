@@ -109,7 +109,7 @@ class FacturaProveedor(models.Model):
         return round(monto,2)
     
     def gettotalfactura(self):
-        monto = self.getsubtotalfactura() + self.getiva() + self.getiibb() + self.ajusteglobal
+        monto = self.getsubtotalfactura() + self.getiva() + self.getiibb() + self.ajusteglobal - self.descuentoglobal
         return round(monto,2)
     
     def __str__(self):
@@ -152,19 +152,45 @@ class DetalleFacturaProveedor(models.Model):
 
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
 
+    def getpreciounitario(self):
+        monto = self.preciototal / self.cantidad
+        return round(monto,2)
 
     def getpreciounitariofinal(self):
-        monto = self.preciototal / self.cantidad
+        monto = float(self.preciototal / self.cantidad)
+        if self.iva:
+            iva = monto * float(self.iva.retencion) / 100
+        else:
+            iva = 0
+        
+        if self.ingresosbrutos:
+            iibb = monto * float(self.ingresosbrutos.retencion) / 100
+        else:
+            iibb = 0
+        monto = monto + iva + iibb
+        return round(monto,2)
+    
+    def getpreciofinaltotalitem(self):
+        monto = self.getpreciounitariofinal()
+        monto = monto * float(self.cantidad)
         return round(monto,2)
     
     def getpreciototalfinal(self):
         monto = self.preciototal
         descuentoproporcional = self.factura.descuentoglobal / self.factura.getsubtotalfactura() * monto
+        monto = monto - descuentoproporcional
         return monto
     
-    def modeltotalobra(self, obra):
+    def modeltotalobra(self, idobra, idfactura):
+        obra = Obra.objects.get(pk=idobra)
+        factura = FacturaProveedor.objects.get(pk=idfactura)
+        detallesfactura = DetalleFacturaProveedor.objects.filter(obra=obra, factura=factura)
         monto = 0
-        return monto
+
+        for d in detallesfactura:
+            monto = monto + d.getpreciofinaltotalitem()
+
+        return round(monto,2)
         
 
     def __str__(self):

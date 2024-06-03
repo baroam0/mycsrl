@@ -160,7 +160,7 @@ def detallereporteporfactura(request):
                             "detalle": df.descripciondetalle.descripciondetalle,
                             "cantidad": df.cantidad,
                             "preciofinal": df.getpreciounitariofinal(),
-                            "total": format(df.getpreciototalfinal(), '.2f')
+                            "total": format(df.getpreciofinaltotalitem(), '.2f')
                         })
 
     
@@ -237,7 +237,7 @@ def gettotalobra(obra, factura):
         redondeo = 0
         
         for d in detalles:
-            total = total + d.getpreciototalfinal()
+            total = total + d.getpreciofinaltotalitem()
             redondeo = float(d.factura.ajusteglobal)
 
         total = float(total) + float(redondeo)
@@ -320,7 +320,7 @@ def detallereportesporfacturas(request):
                             "detalle": df.descripciondetalle.descripciondetalle,
                             "cantidad": df.cantidad,
                             "preciofinal": format(df.getpreciounitariofinal(),'.2f'),
-                            "total": format(df.getpreciototalfinal(),'.2f')
+                            "total": format(df.getpreciofinaltotalitem(),'.2f') 
                         })
 
     
@@ -336,7 +336,7 @@ def detallereportesporfacturas(request):
                     "obra": o.descripcion,
                     "empresa": o.empresa.descripcion,
                     #"total": round(gettotalobra(o.descripcion, df.factura.pk),2)
-                    "total": df.modeltotalobra(o.pk)
+                    "total": df.modeltotalobra(o.pk, df.factura.pk)
                 })
             
 
