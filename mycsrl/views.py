@@ -346,6 +346,17 @@ def detallereportesporfacturas(request):
         }.values()
     )
 
+    tmpdct = list()
+
+    for o in obras:
+        tmpdct.append({"obra": o.descripcion})
+
+    for e in tmpdct:
+        print(e["obra"])
+    
+    for k,v in datadict.items():
+        for e in v:
+            print(e["data"])
     dicttotalempresa = list()
 
     for e in empresas:
