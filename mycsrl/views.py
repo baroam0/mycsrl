@@ -320,9 +320,6 @@ def detallereportesporfacturas(request):
 
     
     dicttotales = list()
-    obra = ""
-    totalgeneral = 0
-    totalobra = 0
   
     for o in obras:
         for df in detallefacturaproveedor:
@@ -330,10 +327,8 @@ def detallereportesporfacturas(request):
                 dicttotales.append({
                     "obra": o.descripcion,
                     "empresa": o.empresa.descripcion,
-                    #"total": round(gettotalobra(o.descripcion, df.factura.pk),2)
                     "total": df.modeltotalobra(o.pk, df.factura.pk)
                 })
-            
 
     dicttotales = list(
         {
