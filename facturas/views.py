@@ -404,9 +404,8 @@ def nuevafactura(request):
     factura = FacturaProveedor.objects.create(
 	    fecha=date.today(),
         usuario=usuario,
-        comprobante=None,
-        ingresosbrutos=None,
-        iva=None)
+        comprobante=None, 
+    )
     factura.save()
     ultimafactura = FacturaProveedor.objects.latest('pk')
     return redirect('/facturas/editar/' + str(ultimafactura.pk))
