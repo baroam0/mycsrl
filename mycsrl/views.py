@@ -230,16 +230,12 @@ def reportesfacturas(request):
 
 def gettotalobra(obra, factura):
         obra = Obra.objects.get(descripcion=obra)
-        factura = FacturaProveedor.objects.get(pk=factura)
-        detalles = DetalleFacturaProveedor.objects.filter(obra=obra, factura=factura, factura__pagado=False)
+        factura = FacturaProveedor.objects.filter(pk__in=factura)
+        detalles = DetalleFacturaProveedor.objects.filter(obra=obra, factura__in=factura, factura__pagado=False)
         total = 0
-        redondeo = 0
         
         for d in detalles:
             total = total + d.getpreciofinaltotalitem()
-            redondeo = float(d.factura.ajusteglobal)
-
-        total = float(total) + float(redondeo)
         
         return round(total,4)
 
@@ -346,18 +342,24 @@ def detallereportesporfacturas(request):
         }.values()
     )
 
-    tmpdct = list()
+    lsttotaobra = list()
 
     for o in obras:
-        tmpdct.append({"obra": o.descripcion})
-
-    for e in tmpdct:
-        print(e["obra"])
+        lsttotaobra.append({
+            "idobra": o.pk,
+            "obra": o.descripcion,
+            "idempresa": o.empresa.pk,
+            "empresa": o.empresa.descripcion,
+            "total": 0
+        })
     
-    for k,v in datadict.items():
-        for e in v:
-            print(e["data"])
     dicttotalempresa = list()
+
+    for e in lsttotaobra:
+        for df in detallefacturaproveedor:
+            if e["obra"] == df.obra.descripcion:
+                e["total"] = gettotalobra(df.obra.descripcion, facturaproveedor)
+    print(lsttotaobra)
 
     for e in empresas:
         dicttotalempresa.append(
@@ -368,9 +370,9 @@ def detallereportesporfacturas(request):
         )
 
     for d in dicttotalempresa:
-        for e in dicttotales:
+        for e in lsttotaobra:
             if e["empresa"] == d["empresa"]:
-                d["total"] = round(d["total"] + e["total"],2)
+                d["total"] = d["total"] + e["total"]
                 
 
     return render(
@@ -382,7 +384,8 @@ def detallereportesporfacturas(request):
             "datadict": datadict,
             "dictotales": dicttotales,
             "dicttotalempresa": dicttotalempresa,
-            "banco": banco
+            "banco": banco,
+            "lstobra": lsttotaobra
         }
     )
 
