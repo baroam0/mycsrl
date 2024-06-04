@@ -173,10 +173,10 @@ class DetalleFacturaProveedor(models.Model):
 
     def getpreciounitariofinal(self):
         monto = round(float(self.preciototal / self.cantidad),2)
-      
+
         descuentoproporcional = float(self.factura.descuentoglobal) / float(self.factura.getsubtotalfactura()) * float(self.preciototal) / float(self.cantidad)
         descuentoproporcional = round(descuentoproporcional,2)
-        
+
         ajusteproporcional = float(self.factura.ajusteglobal) / float(self.factura.getsubtotalfactura()) * float(self.preciototal) / float(self.cantidad)
         ajusteproporcional = round(ajusteproporcional,2)
 
