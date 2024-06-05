@@ -87,21 +87,6 @@ def reporteporfactura(request):
 
 
 def detallereporteporfactura(request):
-    """
-    facturaproveedor = FacturaProveedor.objects.get(pk=request.GET.get("id_proveedor"))
-    detallefacturaproveedor = DetalleFacturaProveedor.objects.filter(factura=facturaproveedor).order_by('-obra')
-    proveedorbanco = ProveedorBanco.objects.filter(pk=request.GET.get("id_banco"))
-    
-    return render(
-        request, 
-        'detallereporte.html',
-        {
-            "facturaproveedor": facturaproveedor,
-            "detallefacturaproveedor": detallefacturaproveedor,
-            "banco": proveedorbanco
-        }
-    )
-    """
     
     fechadesde = formateafechaestandar(request.GET.get("id_fechadesde"))
     fechahasta = formateafechaestandar(request.GET.get("id_fechahasta"))
@@ -116,7 +101,6 @@ def detallereporteporfactura(request):
     proveedorbanco = ProveedorBanco.objects.filter(pk=request.GET.get("id_banco"))
     banco = proveedorbanco
     datadict= dict()
-    tmplist = list()
 
     obraslist = list()
     for df in detallefacturaproveedor:
@@ -159,8 +143,7 @@ def detallereporteporfactura(request):
                             "comprobante" : df.factura.comprobante,
                             "detalle": df.descripciondetalle.descripciondetalle,
                             "cantidad": df.cantidad,
-                            "preciofinal": df.getpreciounitariofinal(),
-                            #"total": format(df.getpreciofinaltotalitem(), '.2f')
+                            "preciofinal": round(df.getpreciounitariofinal(),2),
                             "total": df.getpreciofinaltotalitem()
                         })
 
@@ -200,7 +183,7 @@ def detallereporteporfactura(request):
         for e in dicttotales:
             if e["empresa"] == d["empresa"]:
                 d["total"] =  d["total"] + e["total"]
-                
+                d["total"] =  round(d["total"],2)
 
     return render(
         request, 
