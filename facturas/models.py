@@ -80,11 +80,9 @@ class FacturaProveedor(models.Model):
 
         for d in detallesfactura:
             monto = d.preciototal - d.descuento - ( d.preciototal * d.descuentoporcentaje / 100)
-            monto = round(monto,2)
             iva = monto * d.iva.retencion / 100
-            iva = round(iva,2)
             valor = valor + iva
-        return valor
+        return round(valor,2)
 
     def getiibb(self):
         detallesfactura = DetalleFacturaProveedor.objects.filter(factura=self.pk)
@@ -110,22 +108,13 @@ class FacturaProveedor(models.Model):
             monto = monto + d.preciototal
         return round(monto,2)
 
-    """
-    def gettotalfactura(self):
-        monto = self.getsubtotalfactura() + self.getiva() + self.getiibb() + self.ajusteglobal - self.descuentoglobal
-        return round(monto,2)
-    """
-
     def gettotalfactura(self):
         detallesfacturas = DetalleFacturaProveedor.objects.filter(factura=self.pk)
         monto = 0
         for d in detallesfacturas:
             valor = float(d.getpreciounitariofinal()) * float(d.cantidad)
-            valor = round(valor,2)
             monto = monto + valor
-       
-        monto = round(monto,2)
-        return monto
+        return round(monto,2)
     
     def __str__(self):
         return str(self.fecha)
@@ -168,18 +157,18 @@ class DetalleFacturaProveedor(models.Model):
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
 
     def getpreciounitario(self):
-        monto = round(float(self.preciototal / self.cantidad),2)
+        monto = float(self.preciototal / self.cantidad)
         return round(monto,2)
 
     def getpreciounitariofinal(self):
-        monto = round(float(self.preciototal / self.cantidad),2)
+        monto = float(self.preciototal / self.cantidad)
 
         descuentoproporcional = float(self.factura.descuentoglobal) / float(self.factura.getsubtotalfactura()) * float(self.preciototal) / float(self.cantidad)
-        descuentoproporcional = round(descuentoproporcional,2)
+        #descuentoproporcional = round(descuentoproporcional,2)
 
         ajusteproporcional = float(self.factura.ajusteglobal) / float(self.factura.getsubtotalfactura()) * float(self.preciototal) / float(self.cantidad)
-        ajusteproporcional = round(ajusteproporcional,2)
-
+        #ajusteproporcional = round(ajusteproporcional,2)
+        
         descuentoporcentaje = monto * float(self.descuentoporcentaje) / 100
         monto = monto - descuentoporcentaje
 
@@ -190,19 +179,18 @@ class DetalleFacturaProveedor(models.Model):
         
         if self.iva:
             iva = monto * float(self.iva.retencion) / 100
-            iva = round(iva,2)
         else:
             iva = 0
         
         if self.ingresosbrutos:
             iibb = monto * float(self.ingresosbrutos.retencion) / 100
-            iibb = round(iibb,2)
         else:
             iibb = 0
             
         monto = monto + iva + iibb
         monto = monto + float(self.ajuste)
-        return round(monto,2)
+        return monto
+        
     
     def getpreciofinaltotalitem(self):
         monto = self.getpreciounitariofinal()

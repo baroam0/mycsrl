@@ -271,7 +271,6 @@ def detallereportesporfacturas(request):
     detallefacturaproveedor = DetalleFacturaProveedor.objects.filter(factura__in = facturaproveedor).order_by("obra__descripcion")
     banco = ProveedorBanco.objects.filter(proveedor=proveedor.pk)
     datadict= dict()
-    tmplist = list()
 
     obraslist = list()
     for df in detallefacturaproveedor:
@@ -354,7 +353,7 @@ def detallereportesporfacturas(request):
         for df in detallefacturaproveedor:
             if e["obra"] == df.obra.descripcion:
                 e["total"] = gettotalobra(df.obra.descripcion, facturaproveedor)
-    print(lsttotaobra)
+
 
     for e in empresas:
         dicttotalempresa.append(
