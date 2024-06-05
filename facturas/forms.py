@@ -47,7 +47,7 @@ class UnidadForm(forms.ModelForm):
     descripcion = forms.CharField(
         label="Descripcion"
     )
-    
+
     def __init__(self, *args, **kwargs):
         super(UnidadForm, self).__init__(*args, **kwargs)
         for field in iter(self.fields):
@@ -109,7 +109,7 @@ class FacturaProveedorForm(forms.ModelForm):
 
 class DetalleFacturaProveedorForm(forms.ModelForm):
 
-    obra = forms.ModelChoiceField(label="Obra", queryset=Obra.objects.all().order_by('descripcion'))
+    obra = forms.ModelChoiceField(label="Obra", queryset=Obra.objects.filter(finalizada=False).order_by('descripcion'))
     rubro = forms.ModelChoiceField(label="Rubro", queryset=Rubro.objects.all().order_by('descripcion'))
     unidad = forms.ModelChoiceField(label="Unidad", queryset=Unidad.objects.all())
     cantidad = forms.DecimalField(label="Cantidad")

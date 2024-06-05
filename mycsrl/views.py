@@ -412,8 +412,13 @@ def detallereporteingresoegresoobra(request):
     total_egresos = 0
 
     for r in devengamientos:
-        total_egresos = total_egresos + r['sum_custom_method']
-        r['sum_custom_method'] = round(r['sum_custom_method'],2)
+        if r['sum_custom_method']:
+            total_egresos = total_egresos + r['sum_custom_method']
+            r['sum_custom_method'] = round(r['sum_custom_method'],2)
+        else:
+            valor = 0
+            total_egresos = total_egresos + valor
+            #r['sum_custom_method'] = round(r['sum_custom_method'],2)
 
     saldo = total_cobros - total_egresos
     return render(
@@ -427,7 +432,7 @@ def detallereporteingresoegresoobra(request):
             "totalcobros": round(total_cobros,2),
             "saldo": round(saldo,2)
         }
-    )   
+    )
 
 
 def helperpagado(factura_id, usuario):
