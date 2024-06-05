@@ -31,7 +31,7 @@ class Iva(models.Model):
 class Unidad(models.Model):
     descripcion = models.CharField(max_length=100, unique=True)
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
-    
+
     def __str__(self):
         return self.descripcion
     class Meta:
@@ -42,7 +42,7 @@ class Descripciondetalle(models.Model):
     descripciondetalle = models.CharField(max_length=100, unique=True)
     unidad = models.ForeignKey(Unidad, on_delete=models.CASCADE)
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
-    
+
     def __str__(self):
         return self.descripciondetalle.upper()
     class Meta:
@@ -60,13 +60,13 @@ class FacturaProveedor(models.Model):
 
     descuentoglobal = models.DecimalField(
         decimal_places=4, max_digits=20, null=False, blank=False, default=0)
-    
+
     preciocepcionglobal = models.DecimalField(
         decimal_places=4, max_digits=20, null=False, blank=False, default=0)
-    
+
     ajusteglobal = models.DecimalField(
         decimal_places=4, max_digits=20, null=False, blank=False, default=0)
-    
+
     #iva = models.ForeignKey(
     #    Iva, on_delete=models.CASCADE, null=True, default=1)
 
@@ -100,7 +100,6 @@ class FacturaProveedor(models.Model):
                 valor = valor + iibb
         return round(valor,2)
 
-    
     def getsubtotalfactura(self):
         detallesfactura = DetalleFacturaProveedor.objects.filter(factura=self.pk)
         monto = 0
@@ -115,12 +114,13 @@ class FacturaProveedor(models.Model):
             valor = float(d.getpreciounitariofinal()) * float(d.cantidad)
             monto = monto + valor
         return round(monto,2)
-    
+
     def __str__(self):
         return str(self.fecha)
-    
+
     class Meta:
         verbose_name_plural = "Facturas"
+        unique_together = ("comprobante", "proveedor")
 
 
 class DetalleFacturaProveedor(models.Model):
