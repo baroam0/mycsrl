@@ -350,7 +350,8 @@ def detallereportesporfacturas(request):
         for e in lsttotaobra:
             if e["empresa"] == d["empresa"]:
                 d["total"] = d["total"] + e["total"]
-                
+                d["total"] = round(d["total"],2)
+
 
     return render(
         request, 
@@ -400,8 +401,8 @@ def detallereporteingresoegresoobra(request):
                 ExpressionWrapper(
                     F('preciototal') -
                     F('preciototal') * F('descuentoporcentaje') / 100 +
-                    F('preciototal') * F('factura__iva__retencion') / 100 +
-                    F('preciototal') * F('factura__ingresosbrutos__retencion') / 100,
+                    F('preciototal') * F('iva__retencion') / 100 +
+                    F('preciototal') * F('ingresosbrutos__retencion') / 100,
                     output_field=DecimalField()
                 )
             )
