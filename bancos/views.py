@@ -47,7 +47,7 @@ def banco_new(request):
                 messages.warning(request, "Ha ocurrido un error.")
                 return redirect('/bancos/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/bancos/listado')
     else:
         form = BancoForm()
@@ -72,7 +72,7 @@ def banco_edit(request, pk):
             messages.success(request, "Se ha modificado los datos del banco")
             return redirect('/bancos/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/bancos/listado')
     else:
         form = BancoForm(instance=consulta)

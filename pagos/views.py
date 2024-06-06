@@ -54,7 +54,7 @@ def mediopago_new(request):
             messages.success(request, "Se ha grabado los datos.")
             return redirect('/pagos/mediopago/listado/')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/pagos/mediopago/listado/')
     else:
         form = MedioPagoForm()
@@ -78,7 +78,7 @@ def mediopago_edit(request, pk):
             messages.success(request, "Se ha modificado el rubro.")
             return redirect('/pagos/mediopago/listado/')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/pagos/mediopago/listado/')
     else:
         form = MedioPagoForm(instance=consulta)
@@ -349,7 +349,7 @@ def obra_new(request):
             messages.success(request, "SE HA GRABADO LOS DATOS DE OBRAS")
             return redirect('/pagos/obra/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/pagos/obra/listado')
     else:
         form = ObraForm()
@@ -373,7 +373,7 @@ def obra_edit(request, pk):
             messages.success(request, "SE HA GRABADO LOS DATOS DE OBRA")
             return redirect('/pagos/obra/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/pagos/obra/listado')
     else:
         form = ObraForm(instance=consulta)
@@ -426,7 +426,7 @@ def proveedor_new(request):
             ultimoproveedor = Proveedor.objects.latest("pk")
             return redirect('/pagos/proveedor/proveedoredit/' + str(ultimoproveedor.pk))
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/pagos/proveedor/listado')
     else:
         form = ProveedorForm()
@@ -451,7 +451,7 @@ def proveedor_edit(request, pk):
             messages.success(request, "Se ha grabado de los datos del proveedor.")
             return redirect('/pagos/proveedor/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/pagos/proveedor/listado')
     else:
         form = ProveedorForm(instance=consulta)
@@ -507,7 +507,7 @@ def proveedorbanco_new(request, pk):
             messages.success(request, "Se ha grabado los datos.")
             return redirect('/pagos/proveedor/proveedoredit/' + str(proveedor.pk))
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/pagos/proveedor/proveedoredit/' + str(proveedor.pk))
     else:
         form = ProveedorBancoForm()
@@ -536,7 +536,7 @@ def proveedorbanco_edit(request, pk):
             messages.success(request, "SE HA GRABADO LOS DATOS DE OBRA")
             return redirect('/pagos/proveedor/proveedoredit/' + str(proveedor.pk))
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/pagos/proveedor/proveedoredit/' + str(proveedor.pk))
     else:
         form = ProveedorBancoForm(instance=consulta)
@@ -586,7 +586,7 @@ def tipocuentabancaria_new(request):
             messages.success(request, "Se ha grabado los datos del rubro.")
             return redirect('/pagos/tiposcuentasbancarias/listado/')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/pagos/tiposcuentasbancarias/listado/')
     else:
         form = TipoCuentaForm()
@@ -610,7 +610,7 @@ def tipocuentabancaria_edit(request, pk):
             messages.success(request, "Se ha modificado el rubro.")
             return redirect('/pagos/tiposcuentasbancarias/listado/')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/pagos/tiposcuentasbancarias/listado/')
     else:
         form = TipoCuentaForm(instance=consulta)
@@ -684,7 +684,7 @@ def rubro_new(request):
             messages.success(request, "Se ha grabado los datos del rubro.")
             return redirect('/pagos/rubros/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/pagos/rubros/listado')
     else:
         form = RubroForm()
@@ -708,7 +708,7 @@ def rubro_edit(request, pk):
             messages.success(request, "Se ha modificado el rubro.")
             return redirect('/pagos/rubros/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/pagos/rubros/listado')
     else:
         form = RubroForm(instance=consulta)
@@ -758,7 +758,7 @@ def ordenpago_new(request, pk):
             messages.success(request, "Se ha grabado los datos de la orden de pago.")
             return redirect('/pagos/ordenpago/listado/' + str(pk) )
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/pagos/ordenpago/listado/' + str(pk))
     else:
         form = OrdenPagoForm()
@@ -787,7 +787,7 @@ def ordenpago_edit(request, pk):
             messages.success(request, "Se ha modificado los datos de la orden de pago.")
             return redirect('/pagos/ordenpago/listado/' + str(ordenpago.detallefactura.pk))
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/pagos/ordenpago/listado/' + str(ordenpago.detallefactura.pk))
     else:
         form = OrdenPagoForm(instance=ordenpago)

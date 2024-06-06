@@ -53,7 +53,7 @@ def edificio_new(request):
                 messages.warning(request, "Ha ocurrido un error.")
                 return redirect('/alquileres/edificio/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/alquileres/edificio/listado')
     else:
         form = EdificioForm()
@@ -78,7 +78,7 @@ def edificio_edit(request, pk):
             messages.success(request, "Se ha modificado los datos del edificio")
             return redirect('/alquileres/edificio/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/alquileres/edificio/listado')
     else:
         form = EdificioForm(instance=consulta)
@@ -127,7 +127,7 @@ def departamento_new(request):
                 messages.warning(request, "Ha ocurrido un error.")
                 return redirect('/alquileres/departamento/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/alquileres/departamento/listado')
     else:
         form = DepartamentoForm()
@@ -152,7 +152,7 @@ def departamento_edit(request, pk):
             messages.success(request, "Se ha modificado los datos del departamento")
             return redirect('/alquileres/departamento/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/alquileres/departamento/listado')
     else:
         form = DepartamentoForm(instance=consulta)
@@ -222,7 +222,7 @@ def recibo_new(request):
                 messages.warning(request, str(e))
                 return redirect('/alquileres/recibo/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/alquileres/recibo/listado')
     else:
         form = ReciboForm()
@@ -247,7 +247,7 @@ def recibo_edit(request, pk):
             messages.success(request, "Se ha modificado los datos del recibo.")
             return redirect('/alquileres/recibo/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/alquileres/recibo/listado')
     else:
         form = ReciboForm(instance=consulta)
@@ -364,7 +364,7 @@ def contrato_new(request):
                 messages.warning(request, "Ha ocurrido un error.")
                 return redirect('/alquileres/contrato/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/alquileres/contrato/listado')
     else:
         form = ContratoForm()
@@ -390,7 +390,7 @@ def contrato_edit(request, pk):
             messages.success(request, "Se ha grabado el contrato y las cuotas.")
             return redirect('/alquileres/contrato/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/alquileres/contrato/listado')
     else:
         form = ContratoForm(instance=consulta)
@@ -440,7 +440,7 @@ def cuotacontrato_new(request):
                 messages.warning(request, "Ha ocurrido un error.")
                 return redirect('/alquileres/cuotacontrato/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/alquileres/cuotacontrato/listado')
     else:
         form = CuotaContratoForm()
@@ -468,7 +468,7 @@ def cuotacontrato_edit(request, pk):
             messages.success(request, "Se ha modificado los datos de la cuota")
             return redirect('/alquileres/cuotacontrato/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/alquileres/cuotacontrato/listado')
     else:
         form = CuotaContratoForm(instance=consulta)

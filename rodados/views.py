@@ -46,7 +46,7 @@ def rodado_new(request):
             messages.success(request, "Se ha grado los datos.")
             return redirect('/rodados/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/rodados/listado')
     else:
         form = RodadoForm()
@@ -71,7 +71,7 @@ def rodado_edit(request, pk):
             messages.success(request, "SE HA GRABADO LOS DATOS DE OBRA")
             return redirect('/rodados/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/rodados/listado')
     else:
         form = RodadoForm(instance=consulta)

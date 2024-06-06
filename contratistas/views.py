@@ -48,7 +48,7 @@ def contratista_new(request):
                 messages.warning(request, "Ha ocurrido un error.")
                 return redirect('/contratistas/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/contratistas/listado')
     else:
         form = ContratistaForm()
@@ -73,7 +73,7 @@ def contratista_edit(request, pk):
             messages.success(request, "Se ha grabado los datos.")
             return redirect('/contratistas/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/contratistas/listado')
     else:
         form = ContratistaForm(instance=consulta)

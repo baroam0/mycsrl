@@ -57,7 +57,7 @@ def categoria_new(request):
                 messages.warning(request, "Ha ocurrido un error.")
                 return redirect('/personal/categoria/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/personal/categoria/listado')
     else:
         form = CategoriaForm()
@@ -82,7 +82,7 @@ def categoria_edit(request, pk):
             messages.success(request, "Se ha modificado los datos.")
             return redirect('/personal/categoria/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/personal/categoria/listado')
     else:
         form = CategoriaForm(instance=consulta)
@@ -155,7 +155,7 @@ def personal_new(request):
                 messages.warning(request, "Ha ocurrido un error.")
                 return redirect('/personal/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/personal/listado')
     else:
         form = PersonalForm()
@@ -181,7 +181,7 @@ def personal_edit(request, pk):
             messages.success(request, "Se ha modificado los datos.")
             return redirect('/personal/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/personal/listado')
     else:
         form = PersonalForm(instance=consulta)
@@ -221,7 +221,7 @@ def altabajapersonal_new(request, pk):
             return redirect('/personal/editar/' + str(pk))
             
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/personal/editar/' + str(pk))
     else:
         form = AltaBajaPersonalForm()
@@ -257,7 +257,7 @@ def altabajapersonal_edit(request, pk):
             return redirect('/personal/editar/' + str(personal.pk))
             
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/personal/editar/' + str(personal.pk))
     else:
         form = AltaBajaPersonalForm(instance=altabaja)
@@ -344,7 +344,7 @@ def quincena_new(request):
             messages.success(request, "Se ha grabado los datos.")
             return redirect('/personal/quincena/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/personal/quincena/listado')
     else:
         form = QuincenaForm()
@@ -378,7 +378,7 @@ def quincena_edit(request, pk):
             messages.success(request, "Se ha modificado los datos.")
             return redirect('/personal/categoria/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/personal/categoria/listado')
     else:
         form = QuincenaForm(instance=quincena)
@@ -429,7 +429,7 @@ def quincenadetalle_new(request, pk):
             quincenadetalle.save()
             return redirect('/personal/quincena/editar/' + str(quincena.pk))
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/personal/quincena/editar/' + str(quincena.pk))
     else:
         form = QuincenaDetalleForm()

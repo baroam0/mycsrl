@@ -63,7 +63,7 @@ def devengamiento_new(request, pk):
             messages.success(request, "Se han grabado los datos.")
             return redirect('/devengamiento/nuevo/' + str(pk))
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/devengamiento/nuevo/' + str(pk))
     else:
         form = DevengamientoForm()
@@ -107,7 +107,7 @@ def devengamiento_edit(request, pk):
             messages.success(request, "Se han grabado los datos.")
             return redirect('/devengamiento/nuevo/' + str(consulta.factura.pk))
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/devengamiento/editar/' + str(pk))
     else:
         form = DevengamientoForm(instance=consulta)
