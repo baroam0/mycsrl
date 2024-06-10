@@ -13,7 +13,9 @@ class Devengamiento(models.Model):
     mediopago = models.ForeignKey(MedioPago, on_delete=models.CASCADE)  
     numerocheque = models.CharField(max_length=200, null=True, blank=True)    
     banco = models.ForeignKey(
-        Banco, on_delete=models.CASCADE, null=True, blank=True)
+        Banco, on_delete=models.CASCADE, 
+        null=True, 
+        blank=True)
     monto = models.DecimalField(max_digits=15, decimal_places=2, null=False, blank=False)
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
 
@@ -42,6 +44,6 @@ class Devengamiento(models.Model):
     
     class Meta:
         verbose_name_plural = "Devengamientos"
-        unique_together = ('numerocheque', 'banco')
+        #unique_together = ('numerocheque', 'banco')
 
 # Create your models here.
