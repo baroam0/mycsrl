@@ -66,7 +66,7 @@ def nuevoingresobruto(request):
             messages.success(request, "Se ha grabado los datos.")
             return redirect('/facturas/ingresobruto/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/facturas/ingresobruto/listado')
     else:
         form = IngresoBrutoForm()
@@ -91,7 +91,7 @@ def editaringresobruto(request, pk):
             messages.success(request, "Se ha modificado los datos.")
             return redirect('/facturas/ingresobruto/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/facturas/ingresobruto/listado')
     else:
         form = IngresoBrutoForm(instance=consulta)
@@ -141,7 +141,7 @@ def nuevoiva(request):
             messages.success(request, "Se ha grabado los datos.")
             return redirect('/facturas/iva/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/facturas/iva/listado')
     else:
         form = IvaForm()
@@ -166,7 +166,7 @@ def editariva(request, pk):
             messages.success(request, "Se ha modificado los datos.")
             return redirect('/facturas/iva/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/facturas/iva/listado')
     else:
         form = IvaForm(instance=consulta)
@@ -216,7 +216,7 @@ def nuevadescripciondetalle(request):
             messages.success(request, "Se ha grabado los datos.")
             return redirect('/facturas/descripciondetalle/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/facturas/descripciondetalle/listado')
     else:
         form = DescripcionDetalleForm()
@@ -241,7 +241,7 @@ def editardescripciondetalle(request, pk):
             messages.success(request, "Se ha modificado los datos.")
             return redirect('/facturas/descripciondetalle/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/facturas/descripciondetalle/listado')
     else:
         form = DescripcionDetalleForm(instance=consulta)
@@ -290,7 +290,7 @@ def nuevaunidad(request):
             messages.success(request, "Se ha grabado los datos.")
             return redirect('/facturas/unidades/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/facturas/unidades/listado')
     else:
         form = UnidadForm()
@@ -315,7 +315,7 @@ def editarunidad(request, pk):
             messages.success(request, "Se ha modificado los datos.")
             return redirect('/facturas/unidades/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/facturas/unidades/listado')
     else:
         form = UnidadForm(instance=consulta)
@@ -428,7 +428,7 @@ def editarfactura(request, pk):
             messages.success(request, "Se ha modificado los datos.")
             return redirect('/facturas/editar/' + str(pk))
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/facturas/editar/' + str(pk))
     else:
         form = FacturaProveedorForm(instance=factura)
@@ -460,7 +460,7 @@ def nuevodetallefactura(request,pk):
             messages.success(request, "Se ha grabado los datos.")
             return redirect('/facturas/editar/' + str(factura.pk))
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/facturas/editar/' + str(factura.pk))
     else:
         form = DetalleFacturaProveedorForm()
@@ -489,7 +489,7 @@ def editardetallefactura(request, pk):
             messages.success(request, "Se ha modificado los datos.")
             return redirect('/facturas/editar/' + str(factura.pk))
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/facturas/editar/' + str(factura.pk))
     else:
         form = DetalleFacturaProveedorForm(instance=detallefactura)

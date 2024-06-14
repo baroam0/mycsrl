@@ -61,7 +61,7 @@ def presupuesto_new(request):
                 messages.warning(request, "Ha ocurrido un error.")
                 return redirect('/presupuesto/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/presupuesto/listado')
     else:
         form = PresupuestoForm()
@@ -87,7 +87,7 @@ def presupuesto_edit(request, pk):
             messages.success(request, "Se ha modificado los datos del presupuesto")
             return redirect('/presupuesto/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/presupuesto/listado')
     else:
         form = PresupuestoForm(instance=consulta)
@@ -127,7 +127,7 @@ def detallepresupuesto_new(request, pk):
                 messages.warning(request, "Ha ocurrido un error.")
                 return redirect('/presupuesto/editar/' + str(pk))
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/bancos/listado')
     else:
         form = DetallePresupuestoForm()
@@ -159,7 +159,7 @@ def detallepresupuesto_edit(request, pk):
             messages.success(request, "Se ha modificado los datos del presupuesto")
             return redirect('/presupuesto/editar/' + str(consulta.presupuesto.pk))
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/prespupuesto/editar/' + str(consulta.presupuesto.pk))
     else:
         form = DetallePresupuestoForm(instance=consulta)

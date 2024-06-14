@@ -53,7 +53,7 @@ def codingreso_new(request):
                 messages.warning(request, "Ha ocurrido un error.")
                 return redirect('/facturacion/codingreso/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/facturacion/codingreso/listado')
     else:
         form = CodIngresoForm()
@@ -78,7 +78,7 @@ def codingreso_edit(request, pk):
             messages.success(request, "Se ha modificado los datos.")
             return redirect('/facturacion/codingreso/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/facturacion/codingreso/listado')
     else:
         form = CodIngresoForm(instance=consulta)
@@ -132,7 +132,7 @@ def concepto_new(request):
                 messages.warning(request, "Ha ocurrido un error.")
                 return redirect('/facturacion/conceptos/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/facturacion/conceptos/listado')
     else:
         form = ConceptoForm()
@@ -157,7 +157,7 @@ def concepto_edit(request, pk):
             messages.success(request, "Se ha modificado los datos.")
             return redirect('/facturacion/conceptos/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/facturacion/conceptos/listado')
     else:
         form = ConceptoForm(instance=consulta)
@@ -212,7 +212,7 @@ def facturacion_new(request):
                 messages.warning(request, "Ha ocurrido un error.")
                 return redirect('/facturacion/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/facturacion/listado')
     else:
         form = FacturacionForm()
@@ -241,7 +241,7 @@ def facturacion_edit(request, pk):
             messages.success(request, "Se ha modificado los datos.")
             return redirect('/facturacion/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/bancos/listado')
     else:
         form = FacturacionForm(instance=consulta)
@@ -280,7 +280,7 @@ def detallefacturacion_new(request, pk):
                 messages.warning(request, "Ha ocurrido un error.")
                 return redirect('/facturacion/editar/' + str(facturacion.pk))
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/facturacion/listado')
     else:
         form = DetalleFacturacionForm()
@@ -310,7 +310,7 @@ def detallefacturacion_edit(request, pk):
             messages.success(request, "Se ha modificado los datos.")
             return redirect('/facturacion/editar/' + str(consulta.facturacion.pk))
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/facturacion/editar/' + str(consulta.facturacion.pk))
     else:
         form = DetalleFacturacionForm(instance=consulta)

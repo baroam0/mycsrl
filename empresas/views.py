@@ -47,7 +47,7 @@ def empresa_new(request):
                 messages.warning(request, "Ha ocurrido un error.")
                 return redirect('/empresas/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/empresas/listado')
     else:
         form = EmpresaForm()
@@ -72,7 +72,7 @@ def empresa_edit(request, pk):
             messages.success(request, "Se ha modificado los datos de la empresa.")
             return redirect('/empresas/listado')
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/empresas/listado')
     else:
         form = EmpresaForm(instance=consulta)

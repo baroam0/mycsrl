@@ -16,6 +16,7 @@ from .models import Devengamiento
 
 from facturas.models import FacturaProveedor, DetalleFacturaProveedor
 from mycsrl.views import helperpagado
+from .helper import verificacheque, verificarchequeeditar
 
 
 @login_required(login_url='/login')
@@ -40,7 +41,6 @@ def listadodevengamiento(request, pk):
 @login_required(login_url='/login')
 def devengamiento_new(request, pk):
     factura = FacturaProveedor.objects.get(pk=pk)
-    detallefacturas = DetalleFacturaProveedor.objects.filter(factura=factura)
     devengamientos = Devengamiento.objects.filter(factura=factura)
 
     totalfactura = factura.gettotalfactura()
@@ -58,12 +58,19 @@ def devengamiento_new(request, pk):
             devengamiento = form.save(commit=False)
             devengamiento.usuario = usuario
             devengamiento.factura = factura
-            devengamiento.save()
-            helperpagado(factura.pk, usuario)
-            messages.success(request, "Se han grabado los datos.")
-            return redirect('/devengamiento/nuevo/' + str(pk))
+            
+            verificar = verificacheque(form["numerocheque"].value(),form.data["banco"])
+
+            if verificar:
+                messages.warning(request, "Ya existe un pago con ese numero de cheque")
+                return redirect('/devengamiento/nuevo/' + str(pk))
+            else:
+                devengamiento.save()
+                helperpagado(factura.pk, usuario)
+                messages.success(request, "Se han grabado los datos.")
+                return redirect('/devengamiento/nuevo/' + str(pk))
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/devengamiento/nuevo/' + str(pk))
     else:
         form = DevengamientoForm()
@@ -84,7 +91,8 @@ def devengamiento_new(request, pk):
 @login_required(login_url='/login')
 def devengamiento_edit(request, pk):
     consulta = Devengamiento.objects.get(pk=pk)
-    detallefacturas = DetalleFacturaProveedor.objects.filter(factura=consulta.factura.pk)
+    factura = FacturaProveedor.objects.get(pk=consulta.factura.pk)
+    #detallefacturas = DetalleFacturaProveedor.objects.filter(factura=consulta.factura.pk)
     devengamientos = Devengamiento.objects.filter(factura=consulta.factura.pk)
     factura = FacturaProveedor.objects.get(pk=consulta.factura.pk)
 
@@ -102,12 +110,17 @@ def devengamiento_edit(request, pk):
             devengamiento = form.save(commit=False)
             usuario = request.user
             devengamiento.usuario = usuario
-            devengamiento.save()
-            helperpagado(consulta.factura.pk, usuario)
-            messages.success(request, "Se han grabado los datos.")
-            return redirect('/devengamiento/nuevo/' + str(consulta.factura.pk))
+            verificar = verificarchequeeditar(form["numerocheque"].value(), form.data["banco"], pk)
+            if verificar:
+                messages.warning(request, "Ya existe un pago con ese numero de cheque")
+                return redirect('/devengamiento/editar/' + str(pk))
+            else:
+                devengamiento.save()
+                helperpagado(consulta.factura.pk, usuario)
+                messages.success(request, "Se han grabado los datos.")
+                return redirect('/devengamiento/nuevo/' + str(consulta.factura.pk))
         else:
-            messages.warning(request, form.errors)
+            messages.warning(request, form.errors["__all__"])
             return redirect('/devengamiento/editar/' + str(pk))
     else:
         form = DevengamientoForm(instance=consulta)
@@ -116,7 +129,7 @@ def devengamiento_edit(request, pk):
             'devengamientos/devengamiento_edit.html',
             {
                 "form": form,
-                "pk": consulta.factura.pk,
+                "pk": factura,
                 "devengamientos": devengamientos,
                 "totalfactura": totalfactura,
                 "totaldevengado": totaldevengado,
@@ -144,7 +157,6 @@ def devengamiento_delete(request, pk):
                 "detalle": devengamiento
             }
         )
-
 
 
 
