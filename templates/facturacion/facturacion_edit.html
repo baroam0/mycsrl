@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load humanize %}
+
 {% block content %}
 
     <div class="container">
@@ -49,7 +51,7 @@
 
                 <hr>
 
-                <h5>Total: $ {{facturacion.totalfacturacion}} </h5>
+                <h5>Total: $ {{facturacion.totalfacturacion | intcomma }} </h5>
 
                 <table class="table table-hover">
                     <thead>

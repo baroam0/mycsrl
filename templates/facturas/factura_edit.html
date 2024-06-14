@@ -114,7 +114,7 @@
                             <td>{{ detallefactura.cantidad }} </td>
                             <td>{{ detallefactura.unidad.descripcion }}</td>
                             <td>$ {{ detallefactura.getpreciounitario | intcomma }}</td>
-                            <td>$ {{ detallefactura.getpreciounitariofinal | intcomma }}</td>
+                            <td>$ {{ detallefactura.getpreciounitariofinal | floatformat:2 }}</td>
                             <!--td>$ {{ detallefactura.getpreciounitariobruto |floatformat:2 }} </td-->
                             <td>$ {{ detallefactura.getpreciofinaltotalitem | intcomma }} </td>
                             <td>{{ detallefactura.usuario }}</td>
