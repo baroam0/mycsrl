@@ -46,15 +46,15 @@
 				{% if d.saldogeneral != 0 %}
                                 <tbody>
                                     <tr>
-                                        <td width="10%"> &nbsp; </td>
+                                        <td width="5%"> &nbsp; </td>
                                         <td width="5%">{{ d.presupuesto__pk }}</td>
                                         <td width="25%">{{ d.presupuesto__obra__descripcion }}</td>
-                                        <td width="10%">$ {{ d.totalimporte | intcomma }}</td>
-                                        <td width="10%">$ {{ d.totalentregado | intcomma }}</td>
-                                        <td width="10%">$ {{ d.saldogeneral | intcomma }}</td>
+                                        <td width="12%">$ {{ d.totalimporte | intcomma }}</td>
+                                        <td width="12%">$ {{ d.totalentregado | intcomma }}</td>
+                                        <td width="12%">$ {{ d.saldogeneral | intcomma }}</td>
                                         <td width="10%" style="outline: thin solid;  padding:2px; margin:2px"> &nbsp; </td>
                                         <td width="10%" style="outline: thin solid; padding:2px; margin:2px"> &nbsp; </td>
-					<td width="10%"></td>
+					<td width="9%"></td>
                                     </tr>
                                  {%endif%}
                         {%endfor %}
