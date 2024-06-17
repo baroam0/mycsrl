@@ -650,9 +650,12 @@ def detallereporteingresoobra(request):
     obra = Obra.objects.get(pk=request.GET.get("id_obra"))
     texto = request.GET.get("id_texto")
 
-    resultados = Facturacion.objects.filter(obra=obra)
-
-    total = resultados[0].totalfacturacionporobra(obra.pk)
+    try:
+        resultados = Facturacion.objects.filter(obra=obra)
+        total = resultados[0].totalfacturacionporobra(obra.pk)
+    except:
+        resultados = None
+        total = None
 
     return render(
         request, 
@@ -683,29 +686,32 @@ def detallereporteegresoobra(request):
     obra = Obra.objects.get(pk=request.GET.get("id_obra"))
     texto = request.GET.get("id_texto")
 
-    resultados = (
-        DetalleFacturaProveedor.objects
-        .filter(obra=obra.pk)
-        .values('rubro__descripcion')
-        .annotate(
-            sum_custom_method=Sum(
-                ExpressionWrapper(
-                    F('preciototal') - 
-                    F('preciototal') * F('descuentoporcentaje') / 100 + 
-                    F('preciototal') * F('factura__iva__retencion') / 100 +
-                    F('preciototal') * F('factura__ingresosbrutos__retencion') / 100 +
-                    F('factura__ajusteglobal'),
-                    output_field=DecimalField()
+    try:
+
+        resultados = (
+            DetalleFacturaProveedor.objects
+            .filter(obra=obra.pk)
+            .values('rubro__descripcion')
+            .annotate(
+                sum_custom_method=Sum(
+                    ExpressionWrapper(
+                        F('preciototal') - 
+                        F('preciototal') * F('descuentoporcentaje') / 100 + 
+                        F('preciototal') * F('iva__retencion') / 100 +
+                        F('preciototal') * F('ingresosbrutos__retencion') / 100 +
+                        F('factura__ajusteglobal'),
+                        output_field=DecimalField()
+                    )
                 )
             )
         )
-    )
+        total_egresos = 0
 
-    total_egresos = 0
-
-    for r in resultados:
-        total_egresos = total_egresos + r['sum_custom_method']
-        r['sum_custom_method'] = round(r['sum_custom_method'],2)
+        for r in resultados:
+            total_egresos = float(total_egresos) + float(r['sum_custom_method'])
+            r['sum_custom_method'] = round(r['sum_custom_method'],2)
+    except:
+        resultados = None
     
     return render(
         request, 

@@ -65,7 +65,7 @@
                         <td>{{ resultado.fecha | date:"d-m-Y" }}  </td>
                         <td>{{ resultado.comprobante}}</td>
                         <td>{{ resultado.descripcion}}</td>
-                        <td>{{ resultado.codingreso}}</td> 
+                        <td>{{ resultado.codingreso}}</td>
                         <td>$ {{ resultado.totalfacturacion |intcomma }} </td>
                     </tr>
                 {% endfor %}
@@ -73,8 +73,13 @@
                         <td><b> SUMA </b> </td>
                         <td></td>
                         <td></td>
-                        <td></td> 
-                        <td> <b> $ {{ total | intcomma }} </b> </td>
+                        <td></td>
+                        {% if total %}
+                            <td> <b> $ {{ total | intcomma }} </b> </td>
+                        {% else %}
+                            <td> <b> $ 00,00 </b> </td>
+                        {% endif %} 
+                       
                     </tr>             
                 </tbody>
         </table>
