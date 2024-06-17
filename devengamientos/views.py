@@ -58,9 +58,12 @@ def devengamiento_new(request, pk):
             devengamiento = form.save(commit=False)
             devengamiento.usuario = usuario
             devengamiento.factura = factura
-            
-            verificar = verificacheque(form["numerocheque"].value(),form.data["banco"])
 
+            try:
+                verificar = verificacheque(form["numerocheque"].value(),form.data["banco"])
+            except:
+                verificar = False
+            
             if verificar:
                 messages.warning(request, "Ya existe un pago con ese numero de cheque")
                 return redirect('/devengamiento/nuevo/' + str(pk))
