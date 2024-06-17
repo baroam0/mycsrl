@@ -113,7 +113,11 @@ def devengamiento_edit(request, pk):
             devengamiento = form.save(commit=False)
             usuario = request.user
             devengamiento.usuario = usuario
-            verificar = verificarchequeeditar(form["numerocheque"].value(), form.data["banco"], pk)
+            try:
+                verificar = verificarchequeeditar(form["numerocheque"].value(), form.data["banco"], pk)
+            except:
+                verificar = False
+
             if verificar:
                 messages.warning(request, "Ya existe un pago con ese numero de cheque")
                 return redirect('/devengamiento/editar/' + str(pk))
