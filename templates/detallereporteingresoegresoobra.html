@@ -55,8 +55,13 @@
                     <td></td>
                     <td>{{ devengamiento.rubro__descripcion }}  </td>
                     <td></td>
-                    <td>$ 00,00 </td>
-                    <td>$ {{ devengamiento.sum_custom_method | intcomma }}  </td>
+                    <td> </td>
+                    {% if devengamiento.sum_custom_method %}
+                        <td>$ {{ devengamiento.sum_custom_method | intcomma }}  </td>
+                    {% else %}
+                    <td>  </td>
+                    {% endif %}
+                    
                 </tr>
                 {% endfor %}
 
@@ -65,7 +70,7 @@
                     <td> <b> Suma EGRESOS </b> </td>
                     <td> </td>
                     <td> </td>
-                    <td>$ {{totalpagos | intcomma}}  </td>
+                    <td> <b> $ {{totalpagos | intcomma}} </b> </td>
                 </tr>
 
                 <tr>
@@ -83,7 +88,11 @@
                         <td>  </td>
                         <td>{{ cobro.descripcion }}  </td>
                         <td>  </td>
-                        <td>$ {{ cobro.totalfacturacion | intcomma }}</td>
+                        {% if cobro.totalfacturacion %}
+                            <td>$ {{ cobro.totalfacturacion | intcomma }}</td>
+                        {% else %}
+                            <td>$ 00,00 </td>
+                        {% endif %}
                         <td>  </td>
                     </tr>
                 {% endfor %}
@@ -92,7 +101,7 @@
                     <td> </td>
                     <td> <b> Suma INGRESOS </b> </td>
                     <td> </td>
-                    <td>$ {{totalcobros | intcomma }}</td>
+                    <td> <b> $ {{totalcobros | intcomma }} </b> </td>
                     <td> </td>
                     <td> </td>
                 </tr>
