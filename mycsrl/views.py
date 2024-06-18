@@ -1,6 +1,8 @@
 
 import decimal
 
+import time
+
 from locale import dcgettext
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -332,12 +334,17 @@ def detallereportesporfacturas(request):
     
     dicttotalempresa = list()
 
+    inicio = time.time()
+
     for e in lsttotaobra:
         for df in detallefacturaproveedor:
             if e["obra"] == df.obra.descripcion:
                 e["total"] = gettotalobra(df.obra.descripcion, facturaproveedor)
 
-
+    fin = time.time()
+    tiempo_ejecucion = fin - inicio
+    print(f"Tiempo de ejecución: {tiempo_ejecucion:.6f} segundos")
+    
     for e in empresas:
         dicttotalempresa.append(
             {
