@@ -516,7 +516,8 @@ def detallereportesgastosporobra(request):
     #totalgasto = obra.getgastoporobra()
         
     for df in detallesfacturas:
-        totalgasto = totalgasto + df.getpreciototalfinal()      
+        #totalgasto = totalgasto + df.getpreciototalfinal()      
+        totalgasto = totalgasto + df.getpreciofinaltotalitem()
     
 
     #valor = float(totalgasto) - float(descuento) + float(ajuste)

@@ -35,12 +35,12 @@
                     <tbody>
                         {% for detalle in detallesfacturas%}                   
                         <tr>
-                                <td>{{ detalle.factura.fecha | date:"d-m-Y" }}  </td>
+                                <td style="width: 10%;">{{ detalle.factura.fecha | date:"d-m-Y" }}  </td>
                                 <td>{{ detalle.factura.proveedor}}</td>
                                 <td>{{ detalle.factura.comprobante}}</td> 
                                 <td>{{ detalle.descripciondetalle }} </td>
                                 <td>{{ detalle.cantidad | intcomma }} </td>
-                                <td>$ {{ detalle.getpreciototalfinal | intcomma }} </td>
+                                <td>$ {{ detalle.getpreciototalfinal | floatformat:2 }} </td>
                                 {%if detalle.factura.pagado %}
                                     <td> SI </td>
                                 {% else %}
