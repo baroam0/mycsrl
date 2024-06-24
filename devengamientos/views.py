@@ -5,7 +5,7 @@ from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.http import HttpResponseRedirect
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
 from bancos.models import Banco
@@ -166,11 +166,10 @@ def devengamiento_delete(request, pk):
         )
 
 
-
 @login_required(login_url='/login')
 def devengamiento_por_lote(request):
     bancos = Banco.objects.all()
-    facturas = FacturaProveedor.objects.filter(pagado=False)
+    facturas = FacturaProveedor.objects.filter(pagado=False).order_by('proveedor__razonsocial')
     mediospago = MedioPago.objects.all()
 
     return render(
@@ -182,6 +181,15 @@ def devengamiento_por_lote(request):
                 "mediospago": mediospago
             }
         )
+
+
+def ajaxConsultaValorFactura(request,pk):
+    consulta = FacturaProveedor.objects.get(pk=pk)
+           
+    data = {
+        'total': consulta.gettotalfactura()
+    }
+    return JsonResponse(data)
 
 
 # Create your views here.

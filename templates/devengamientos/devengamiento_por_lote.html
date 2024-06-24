@@ -29,8 +29,7 @@
         <form>
 
             <div class="form-inline">
-                <div class="col-4">
-
+                <div class="col-3">
                     <select id="selectmediospago" class="form-control">
                         <option value=0>---------------</option>
                         {% for mediopago in mediospago %}
@@ -39,8 +38,8 @@
                     </select>
 
                 </div>
-                <div class="col-4">
 
+                <div class="col-3">
                     <select id="selectbanco" class="form-control">
                         <option value=0>---------------</option>
                         {% for banco in bancos %}
@@ -49,34 +48,37 @@
                     </select>
                 
                 </div>
-                <div class="col-4">
-                    
-                    <input type="number" class="form-control" id="txtnumerocheque" name="txtnumerocheque" placeholder="Numero cheque">
-                
-                </div>                
-            </div>
 
+                <div class="col-3">
+                    <input type="number" class="form-control" id="txtnumerocheque" name="txtnumerocheque" placeholder="Numero cheque">
+                </div>
+                
+                <div class="col-3">
+                    <input type="number" class="form-control" id="txtmonto" name="txtmonto" placeholder="Monto....">
+                </div>
+            </div>
+            
             <br>
 
             <div class="form-inline">
-                <div class="col-4">
-                    <input type="number" class="form-control" id="txtmonto" name="txtmonto" placeholder="Monto....">
+                <div class="col-3">
+                    <label id="lblsaldo" name="lblsaldo">
+                    </label>
                 </div>
-                <div class="col-4">
-                    <label id="lblsaldo"></label>
+
+                <div class="col-3">
                 </div>
-                <div class="col-4">
-                    <select id="selectfactura" class="form-control">
-                        <option value=0>---------------</option>
-                        {% for factura in facturas%}
-                            <option value={{factura.pk}}> {{factura.proveedor.nombrefantasia}} - {{ factura.comprobante }} </option>
-                        {%endfor%}
-                    </select>
-                    
-                    <button type="button" class="btn btn-default" title="Nuevo Banco!" onclick="AgregaFila()">
-                        <i class="fas fa-plus"></i>
+
+                <div class="col-3">
+                </div>
+
+                <div class="col-3">
+                    <button type="button" class="btn btn-default" id="btnpagar" onclick="manejaBoton()">
+                        <i class="fas fa-hand-holding-usd"></i>
+                        Pagar
                     </button>
-                </div>                
+                </div>
+                
             </div>
 
             <br>
@@ -92,6 +94,25 @@
                 </thead>
 
                 <tbody>
+                    {% for factura in facturas%}
+                        <tr>
+                            <td>
+                                {{factura.proveedor.nombrefantasia}}
+                            </td>
+                            <td>
+                                {{factura.comprobante}}
+                            </td>
+                            <td>
+                                {{factura.gettotalfactura}}
+                            </td>
+
+                            <td>
+                                <div class="form-check">
+                                    <input id="{{factura.pk}}" onclick="agregarElemento(this)" type="checkbox" class="form-check-input" id="exampleCheck1">
+                                </div>
+                            </td>
+                        </tr>
+                    {%endfor%}
                 </tbody>
             </table>
 
@@ -106,20 +127,117 @@
     
     <script>
 
+        var miArray = [];
 
-        function AgregaFila(){
-            var factura = $("#selectfactura").val();
-            $("#proveedorTabla tbody").append("<tr><td>Nueva fila al final</td></tr>");
+        var montos = $("#txtmonto").val();
 
+        function ajaxConsultaValorFactura(id){
+            $.ajax({
+                type: "GET",
+                url: "/devengamiento/ajaxconsultafactura/" + id,
+                dataType: "json",
+                success: function (response) {
+                    console.log(montos);
+                    montos = parseFloat(montos) - parseFloat(response.total);
+                }
+            });
         }
+
+
+        function ajaxQuitaValorFactura(id){
+            $.ajax({
+                type: "GET",
+                url: "/devengamiento/ajaxconsultafactura/" + id,
+                dataType: "json",
+                success: function (response) {
+                    montos = montos + response.total;     
+                }
+            });
+        }
+
+
+        function agregarElemento(el) {
+            if (el.checked) {
+                miArray.push(el.id);
+                ajaxConsultaValorFactura(el.id);
+            } else {
+                var elementoAEliminar = el.id;
+                var indice = miArray.indexOf(elementoAEliminar);
+                miArray.splice(indice, 1);
+                ajaxQuitaValorFactura(el.id)
+            }
+        }
+
+     
+        function manejaBoton(){
+            var banco = $("#selectbanco").val(); 
+            var mediopago = $("#selectmediospago").val();
+            var monto = $("#txtmonto").val();
+            var numerocheque = $("#txtnumerocheque").val();
+
+            if(mediopago==0){
+                Swal.fire(
+                    'Debe seleccionar un medio de pago.',
+                    '',
+                    'warning'
+                )
+                return false; 
+            }
+
+            if(mediopago==2){
+                if(banco==0){
+                    Swal.fire(
+                        'Debe seleccionar un banco.',
+                        '',
+                        'warning'
+                    );
+                    return false; 
+                }
+            }
+
+            if(numerocheque==0 || numerocheque==""){
+                if(mediopago==2){
+                        Swal.fire(
+                        'El numero de cheque no puede estar vacio si el medio de pago es CHEQUE.',
+                        '',
+                        'warning'
+                    )
+                    return false;
+                }
+            }
+
+            if(monto=="" || monto==0){
+                Swal.fire(
+                    'El monto no puede estar vacio o ser 0.',
+                    '',
+                    'warning'
+                )
+                return false;    
+            }
+
+            console.log(miArray)
+
+            if(miArray.length === 0){
+                Swal.fire(
+                    'Debe elegiar al menos una factura.',
+                    '',
+                    'warning'
+                )
+                return false;
+            }else{
+                alert("Ahora si");
+            }   
+        }
+
+        
+        
         
         $(document).ready(function () {
-            $("#selectfactura").select2();
-
+            
             $('#txtmonto').on('change keyup', function (e) { 
-                $("#lblsaldo").text("some value");
+                //$("#lblsaldo").text("some value");
             })
-
+            
         });
 
     </script>
