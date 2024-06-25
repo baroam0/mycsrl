@@ -25,7 +25,9 @@
                             <th>COMPROBANTE</th>
                             <th>DESCRIPCION</th>
                             <th>CANTIDAD</th>
+                            <th>PRECIO BRUTO</th>
                             <th>PRECIO FINAL</th>
+                            <th>PRECIO TOTAL</th>
                             <th>PAGADO</th>
                             <!--th>Pagado Parcial</th-->
                         </tr>
@@ -40,17 +42,13 @@
                                 <td>{{ detalle.factura.comprobante}}</td> 
                                 <td>{{ detalle.descripciondetalle }} </td>
                                 <td>{{ detalle.cantidad | intcomma }} </td>
-                                <td>$ {{ detalle.getpreciototalfinal | floatformat:2 }} </td>
+                                <td>$ {{ detalle.getpreciounitario | floatformat:2 }} </td>
+                                <td>$ {{ detalle.getpreciounitariofinal | floatformat:2 }} </td>
+                                <td>$ {{ detalle.getpreciofinaltotalitem | floatformat:2 }} </td>
                                 {%if detalle.factura.pagado %}
                                     <td> SI </td>
                                 {% else %}
                                     <td> NO </td>
-                                {% endif %}
-
-                                {%if detalle.factura.pagoparcial %}
-                                    <!--td> SI </td-->
-                                {% else %}
-                                    <!--td> NO </td-->
                                 {% endif %}
                         </tr>
                         {% endfor %}             
