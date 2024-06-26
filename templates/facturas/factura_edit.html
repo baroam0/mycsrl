@@ -114,7 +114,7 @@
                             <td>{{ detallefactura.cantidad }} </td>
                             <td>{{ detallefactura.unidad.descripcion }}</td>
                             <td>$ {{ detallefactura.getpreciounitario | intcomma }}</td>
-                            <td>$ {{ detallefactura.getpreciounitariofinal | floatformat:2 }}</td>
+                            <td>$ {{ detallefactura.getpreciounitariofinal | floatformat:2|intcomma }}</td>
                             <!--td>$ {{ detallefactura.getpreciounitariobruto |floatformat:2 }} </td-->
                             <td>$ {{ detallefactura.getpreciofinaltotalitem | intcomma }} </td>
                             <td>{{ detallefactura.usuario }}</td>
@@ -386,7 +386,8 @@
 
         function BorrarDetalle(pk){
             var urldetallefactura = "/facturas/delete/" + pk;
-            window.open(urldetallefactura,"Ratting","width=700,height=400,left=100,top=100,toolbar=0,status=0,");
+            //window.open(urldetallefactura,"Ratting","width=700,height=400,left=100,top=100,toolbar=0,status=0,");
+            window.location.replace(urldetallefactura);
         }
 
     </script>
