@@ -129,7 +129,7 @@
 
         var miArray = [];
 
-        var montos = $("#txtmonto").val();
+        var montos = 0;
 
         function ajaxConsultaValorFactura(id){
             $.ajax({
@@ -137,8 +137,10 @@
                 url: "/devengamiento/ajaxconsultafactura/" + id,
                 dataType: "json",
                 success: function (response) {
-                    console.log(montos);
-                    montos = parseFloat(montos) - parseFloat(response.total);
+                    montos = montos + response.total;
+                    var aa = $("#txtmonto").val();
+                    montos = aa - montos;
+                    $("#lblsaldo").text("$ " + montos.toFixed(2));
                 }
             });
         }
@@ -150,7 +152,8 @@
                 url: "/devengamiento/ajaxconsultafactura/" + id,
                 dataType: "json",
                 success: function (response) {
-                    montos = montos + response.total;     
+                    montos = montos - response.total;
+                    $("#lblsaldo").text("$ " + montos.toFixed(2));
                 }
             });
         }
@@ -215,8 +218,6 @@
                 return false;    
             }
 
-            console.log(miArray)
-
             if(miArray.length === 0){
                 Swal.fire(
                     'Debe elegiar al menos una factura.',
@@ -229,13 +230,12 @@
             }   
         }
 
-        
-        
-        
+                
         $(document).ready(function () {
             
             $('#txtmonto').on('change keyup', function (e) { 
                 //$("#lblsaldo").text("some value");
+                $("#lblsaldo").text(0);
             })
             
         });
