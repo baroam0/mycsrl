@@ -790,6 +790,7 @@ def reporteprespuestogeneral(request):
     for d in detallepresupuestos:
         datadict[d['contratista__descripcion']].append(
             {
+                "presupuesto__obra__pk": d["presupuesto__obra__pk"],
                 "presupuesto__obra__descripcion": d["presupuesto__obra__descripcion"],
                 "presupuesto__pk": d["presupuesto__pk"],
                 "totalimporte": round(d["totalimporte"],2),
