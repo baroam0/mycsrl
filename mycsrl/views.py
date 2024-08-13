@@ -497,6 +497,8 @@ def detallereportesgastosporobra(request):
     obra = Obra.objects.get(pk=request.GET.get("id_obra"))
     detallesfacturas = DetalleFacturaProveedor.objects.filter(obra=obra)
 
+    presupuestos = Presupuesto.objects.filter(obra__in=obra)
+
     totalgasto = 0
 
     facturalist = list()
@@ -519,6 +521,10 @@ def detallereportesgastosporobra(request):
         #totalgasto = totalgasto + df.getpreciototalfinal()      
         totalgasto = totalgasto + df.getpreciofinaltotalitem()
     
+    totalentregado = 0
+    for pr in presupuestos:
+        totalentregado = pr.gettotalentregado()
+
 
     #valor = float(totalgasto) - float(descuento) + float(ajuste)
     return render(
