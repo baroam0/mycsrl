@@ -23,6 +23,7 @@
                             <th>FECHA</th>
                             <th>PROVEEDOR</th>
                             <th>COMPROBANTE</th>
+			    <th>RUBRO</th>
                             <th>DESCRIPCION</th>
                             <th>CANTIDAD</th>
                             <th>PRECIO NETO</th>
@@ -39,6 +40,7 @@
                                 <td style="width: 10%;">{{ detalle.factura.fecha | date:"d-m-Y" }}  </td>
                                 <td>{{ detalle.factura.proveedor}}</td>
                                 <td>{{ detalle.factura.comprobante}}</td> 
+                                <td>{{ detalle.rubro.descripcion }}</td>
                                 <td>{{ detalle.descripciondetalle }} </td>
                                 <td>{{ detalle.cantidad | intcomma }} </td>
                                 <td>$ {{ detalle.getpreciounitario | floatformat:2 }} </td>

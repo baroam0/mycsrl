@@ -496,7 +496,7 @@ def detallereportesgastosporobra(request):
 
     obra = Obra.objects.get(pk=request.GET.get("id_obra"))
 
-    detallesfacturas = DetalleFacturaProveedor.objects.filter(obra=obra)
+    detallesfacturas = DetalleFacturaProveedor.objects.filter(obra=obra).order_by('rubro')
 
     presupuesto = Presupuesto.objects.get(obra=obra)
 
