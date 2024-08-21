@@ -7,7 +7,7 @@ from pagos.models import Obra
 from usuariosadm.models import UserAdm
 
 class Presupuesto(models.Model):
-    obra = models.ForeignKey(Obra, on_delete=models.CASCADE)
+    obra = models.ForeignKey(Obra, on_delete=models.CASCADE, unique=True)
     cerrado = models.BooleanField(default=False)
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
 
@@ -44,7 +44,7 @@ class Presupuesto(models.Model):
 
     class Meta: 
         verbose_name_plural = "Presupuestos"
-        unique_together = ['id','obra']
+        #unique_together = ['id','obra']
 
 
 class DetallePresupuesto(models.Model):

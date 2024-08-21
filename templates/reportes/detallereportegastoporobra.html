@@ -32,8 +32,7 @@
                             <!--th>Pagado Parcial</th-->
                         </tr>
                     </thead>
-                    
-                    
+    
                     <tbody>
                         {% for detalle in detallesfacturas%}                   
                         <tr>
@@ -56,8 +55,31 @@
                 </table>
         
                 <h5>Total Gasto: $ {{ totalgasto | intcomma }}</h5>
+
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>CONTRATISTA</th>
+                            <th>MONTO ENTREGADO </th>
+                        </tr>
+                    </thead>
+    
+                    <tbody>
+                        {% for p in presupuestos %}                   
+                        <tr>
+                            <td>{{ p.contratista }}</td>
+                            <td> $ {{ p.entregado | intcomma }}</td> 
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+        
+                <h5>Total Entregado: $ {{ totalentregado | intcomma }}</h5>
                 
-        <hr>
+                <hr>
+                <h4>Total: $ {{ total | intcomma }}</h4>
+                <hr>   
 
     </div>
 

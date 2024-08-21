@@ -495,9 +495,12 @@ def detallereportesgastosporobra(request):
     """Funcion para reporte de gastos por facturas"""
 
     obra = Obra.objects.get(pk=request.GET.get("id_obra"))
+
     detallesfacturas = DetalleFacturaProveedor.objects.filter(obra=obra)
 
-    presupuestos = Presupuesto.objects.filter(obra__in=obra)
+    presupuesto = Presupuesto.objects.get(obra=obra)
+
+    detallespresupuestos = DetallePresupuesto.objects.filter(presupuesto=presupuesto)
 
     totalgasto = 0
 
@@ -510,30 +513,33 @@ def detallereportesgastosporobra(request):
 
     descuento  = 0
     ajuste = 0
+
     for i in facturas:
         descuento = descuento + i.descuentoglobal
         ajuste = ajuste + i.ajusteglobal
 
-
-    #totalgasto = obra.getgastoporobra()
-        
     for df in detallesfacturas:
-        #totalgasto = totalgasto + df.getpreciototalfinal()      
         totalgasto = totalgasto + df.getpreciofinaltotalitem()
     
     totalentregado = 0
-    for pr in presupuestos:
-        totalentregado = pr.gettotalentregado()
 
+    for dp in detallespresupuestos:
+        totalentregado = totalentregado + dp.entregado
+    
+    total = float(totalgasto) + float(totalentregado)
 
-    #valor = float(totalgasto) - float(descuento) + float(ajuste)
+    queryset = DetallePresupuesto.objects.filter(presupuesto=presupuesto).values('contratista__descripcion').annotate(total_entregado=Sum('entregado'))
+
     return render(
         request, 
         'reportes/detallereportegastoporobra.html',
         {
             "obra": obra,
             "detallesfacturas": detallesfacturas,
-            "totalgasto": round(totalgasto,4)
+            "totalgasto": round(totalgasto,4),
+            "presupuestos": detallespresupuestos,
+            "totalentregado": totalentregado,
+            "total": total
         }
     )   
 
