@@ -520,12 +520,12 @@ def detallereportesgastosporobra(request):
 
     for df in detallesfacturas:
         totalgasto = totalgasto + df.getpreciofinaltotalitem()
-    
+
     totalentregado = 0
 
     for dp in detallespresupuestos:
         totalentregado = totalentregado + dp.entregado
-    
+
     total = float(totalgasto) + float(totalentregado)
 
     queryset = DetallePresupuesto.objects.filter(presupuesto=presupuesto).values('contratista__descripcion').annotate(total_entregado=Sum('entregado'))
@@ -539,9 +539,9 @@ def detallereportesgastosporobra(request):
             "totalgasto": round(totalgasto,4),
             "presupuestos": detallespresupuestos,
             "totalentregado": totalentregado,
-            "total": total
+            "total": round(total,2)
         }
-    )   
+    )
 
 
 def reportecontratista(request):

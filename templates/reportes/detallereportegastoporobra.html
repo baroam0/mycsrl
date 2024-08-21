@@ -56,10 +56,13 @@
         
                 <h5>Total Gasto: $ {{ totalgasto | intcomma }}</h5>
 
-
+		<br>
+	        <hr>
+		<h5>PRESUPUESTOS</h5>
                 <table>
                     <thead>
                         <tr>
+			    <th>FECHA</th>
                             <th>CONTRATISTA</th>
                             <th>MONTO ENTREGADO </th>
                         </tr>
@@ -68,6 +71,7 @@
                     <tbody>
                         {% for p in presupuestos %}                   
                         <tr>
+			    <td> {{ p.fecha | date:"d-m-Y" }}</td>
                             <td>{{ p.contratista }}</td>
                             <td> $ {{ p.entregado | intcomma }}</td> 
                         </tr>
