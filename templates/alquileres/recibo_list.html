@@ -54,6 +54,8 @@
                     <tr>
                         <th>Nro</th>
                         <th>Descripcion</th>
+			<th>Mes</th>
+			<th>Año</th>
                         <th>Monto</th>
                         <th>Monto Final</th>
                         <th>Usuario</th>
@@ -70,6 +72,8 @@
                             {{ resultado.departamento.descripcion.upper }} -
                             {{ resultado.apellido.upper }}, {{ resultado.nombre.upper }}
                         </td>
+			<td> {{resultado.mes}} </td>
+			<td> {{resultado.anio}} </td>
                         <td>$ {{ resultado.departamento.monto | intcomma }}  </td>
                         <td>$ {{ resultado.monto_calculado | intcomma }}  </td>
                         <td>{{ resultado.usuario }}</td>
