@@ -495,45 +495,73 @@ def detallereportesgastosporobra(request):
     """Funcion para reporte de gastos por facturas"""
 
     obra = Obra.objects.get(pk=request.GET.get("id_obra"))
-
     detallesfacturas = DetalleFacturaProveedor.objects.filter(obra=obra).order_by('rubro')
-
     presupuesto = Presupuesto.objects.get(obra=obra)
-
     detallespresupuestos = DetallePresupuesto.objects.filter(presupuesto=presupuesto)
-
     totalgasto = 0
 
-    facturalist = list()
+    facturas = FacturaProveedor.objects.filter(pk__in=detallesfacturas)
 
-    for i in detallesfacturas:
-        facturalist.append(i.factura.pk)
-
-    facturas = FacturaProveedor.objects.filter(pk__in=facturalist)
-
-    descuento  = 0
+    descuento = 0
     ajuste = 0
 
     for i in facturas:
         descuento = descuento + i.descuentoglobal
         ajuste = ajuste + i.ajusteglobal
 
+    list_rubros = list()
     for df in detallesfacturas:
         totalgasto = totalgasto + df.getpreciofinaltotalitem()
-
+        list_rubros.append(df.rubro.descripcion)
     totalentregado = 0
+
+    list_rubros = list(set(list_rubros))
+    dict_master = dict()
+    for e in list_rubros:
+        dict_master[e] = list()
 
     for dp in detallespresupuestos:
         totalentregado = totalentregado + dp.entregado
-
     total = float(totalgasto) + float(totalentregado)
 
-    queryset = DetallePresupuesto.objects.filter(presupuesto=presupuesto).values('contratista__descripcion').annotate(total_entregado=Sum('entregado'))
+    for d in dict_master:
+        for df in detallesfacturas:
+            if d == df.rubro.descripcion:
+                tmplist = dict()
+                tmplist["fecha"] = df.factura.fecha.strftime("%d-%m-%Y")
+                tmplist["razonsocial"] = df.factura.proveedor.razonsocial.upper()
+                tmplist["comprobante"] = df.factura.comprobante
+                tmplist["descripciondetalle"] = df.descripciondetalle.descripciondetalle.upper()
+                tmplist["cantidad"] = df.cantidad
+                tmplist["preciounitario"] = df.getpreciounitario()
+                tmplist["preciofinal"] = df.getpreciounitariofinal()
+                tmplist["preciototal"] = df.getpreciofinaltotalitem()
+                dict_master[d].append(tmplist)
+                tmplist = dict()
+            else:
+                tmplist = dict()
+                tmplist["fecha"] = df.factura.fecha.strftime("%d-%m-%Y")
+                tmplist["razonsocial"] = df.factura.proveedor.razonsocial.upper()
+                tmplist["comprobante"] = df.factura.comprobante
+                tmplist["descripciondetalle"] = df.descripciondetalle.descripciondetalle.upper()
+                tmplist["cantidad"] = df.cantidad
+                tmplist["preciounitario"] = df.getpreciounitario()
+                tmplist["preciofinal"] = df.getpreciounitariofinal()
+                tmplist["preciototal"] = df.getpreciofinaltotalitem()
+                dict_master[d].append(tmplist)
+                tmplist = dict()                              
+
+    for e in dict_master:
+        for ee in dict_master[e]:
+            print(ee)
+
+    #queryset = DetallePresupuesto.objects.filter(presupuesto=presupuesto).values('contratista__descripcion').annotate(total_entregado=Sum('entregado'))
 
     return render(
         request, 
         'reportes/detallereportegastoporobra.html',
         {
+            "dictmaster": dict_master,
             "obra": obra,
             "detallesfacturas": detallesfacturas,
             "totalgasto": round(totalgasto,4),
