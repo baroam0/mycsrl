@@ -35,14 +35,28 @@
                     <tbody>
                         {% for key, value in dictmaster.items %} 
                             <tr>
-                                <td> <b> {{key.upper}} </b> </td>
+                                <td> </td>
+                                <td> <b> <u> {{key.upper}} </u> </b> </td>
+                                <td> </td>
+                                <td> </td>
+                                <td> </td>
+                                <td> </td>
+                                <td> </td>
+                                <td> </td>
+                                <td> </td>
                             </tr>
                             {% for v in value%}
-                                
                                     <tr>
                                         <td> {{v.fecha}} </td>
+                                        <td> {{v.razonsocial}} </td>
+                                        <td> {{v.comprobante}} </td>
+                                        <td> {{v.descripciondetalle}} </td>
+                                        <td> {{v.cantidad}} </td>
+                                        <td> {{v.preciounitario | intcomma}} </td>
+                                        <td> {{v.preciofinal | intcomma}} </td>
+                                        <td> {{v.preciototal | intcomma}} </td>
+                                        <td> {{v.pagado}} </td>
                                     </tr>
-                                
                             {% endfor %}
 
                         {% endfor %}

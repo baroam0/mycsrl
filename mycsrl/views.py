@@ -533,9 +533,13 @@ def detallereportesgastosporobra(request):
                 tmplist["comprobante"] = df.factura.comprobante
                 tmplist["descripciondetalle"] = df.descripciondetalle.descripciondetalle.upper()
                 tmplist["cantidad"] = df.cantidad
-                tmplist["preciounitario"] = df.getpreciounitario()
-                tmplist["preciofinal"] = df.getpreciounitariofinal()
-                tmplist["preciototal"] = df.getpreciofinaltotalitem()
+                tmplist["preciounitario"] = round(df.getpreciounitario(),2)
+                tmplist["preciofinal"] = round(df.getpreciounitariofinal(),2)
+                tmplist["preciototal"] = round(df.getpreciofinaltotalitem(),2)
+                if df.factura.pagado:
+                    tmplist["pagado"] = "SI"
+                else:
+                    tmplist["pagado"] = "NO"
                 dict_master[d].append(tmplist)
                 tmplist = dict()
             else:
@@ -545,9 +549,13 @@ def detallereportesgastosporobra(request):
                 tmplist["comprobante"] = df.factura.comprobante
                 tmplist["descripciondetalle"] = df.descripciondetalle.descripciondetalle.upper()
                 tmplist["cantidad"] = df.cantidad
-                tmplist["preciounitario"] = df.getpreciounitario()
-                tmplist["preciofinal"] = df.getpreciounitariofinal()
-                tmplist["preciototal"] = df.getpreciofinaltotalitem()
+                tmplist["preciounitario"] = round(df.getpreciounitario(),2)
+                tmplist["preciofinal"] = round(df.getpreciounitariofinal(),2)
+                tmplist["preciototal"] = round(df.getpreciofinaltotalitem(),2)
+                if df.factura.pagado:
+                    tmplist["pagado"] = "SI"
+                else:
+                    tmplist["pagado"] = "NO"
                 dict_master[d].append(tmplist)
                 tmplist = dict()                              
 
