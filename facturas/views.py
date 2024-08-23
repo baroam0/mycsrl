@@ -186,9 +186,9 @@ def editariva(request, pk):
 def listadodescripciondetalle(request):
     if "txtBuscar" in request.GET:
         parametro = request.GET.get('txtBuscar')
-        unidades =  Descripciondetalle.objects.filter(descripciondetalle__contains=parametro)
+        unidades =  Descripciondetalle.objects.filter(descripciondetalle__contains=parametro).order_by('descripciondetalle')
     else:
-        unidades = Descripciondetalle.objects.all()
+        unidades = Descripciondetalle.objects.all().order_by('descripciondetalle')
     paginador = Paginator(unidades, 20)
 
     if "page" in request.GET:
