@@ -516,9 +516,13 @@ def detallereportesgastosporobra(request):
     totalentregado = 0
 
     list_rubros = list(set(list_rubros))
+    
     dict_master = dict()
+    dict_subtotales = dict()
     for e in list_rubros:
         dict_master[e] = list()
+        dict_subtotales[e] = 0
+
 
     for dp in detallespresupuestos:
         totalentregado = totalentregado + dp.entregado
@@ -541,28 +545,12 @@ def detallereportesgastosporobra(request):
                 else:
                     tmplist["pagado"] = "NO"
                 dict_master[d].append(tmplist)
+                dict_subtotales[d] = round(dict_subtotales[d],2) + round(df.getpreciofinaltotalitem(),2)
                 tmplist = dict()
-            else:
-                tmplist = dict()
-                tmplist["fecha"] = df.factura.fecha.strftime("%d-%m-%Y")
-                tmplist["razonsocial"] = df.factura.proveedor.razonsocial.upper()
-                tmplist["comprobante"] = df.factura.comprobante
-                tmplist["descripciondetalle"] = df.descripciondetalle.descripciondetalle.upper()
-                tmplist["cantidad"] = df.cantidad
-                tmplist["preciounitario"] = round(df.getpreciounitario(),2)
-                tmplist["preciofinal"] = round(df.getpreciounitariofinal(),2)
-                tmplist["preciototal"] = round(df.getpreciofinaltotalitem(),2)
-                if df.factura.pagado:
-                    tmplist["pagado"] = "SI"
-                else:
-                    tmplist["pagado"] = "NO"
-                dict_master[d].append(tmplist)
-                tmplist = dict()                              
 
-    for e in dict_master:
-        for ee in dict_master[e]:
-            print(ee)
-
+    for d in dict_subtotales:
+        dict_subtotales[d] = round(dict_subtotales[d],2)
+    print(dict_subtotales)
     #queryset = DetallePresupuesto.objects.filter(presupuesto=presupuesto).values('contratista__descripcion').annotate(total_entregado=Sum('entregado'))
 
     return render(
@@ -575,6 +563,7 @@ def detallereportesgastosporobra(request):
             "totalgasto": round(totalgasto,4),
             "presupuestos": detallespresupuestos,
             "totalentregado": totalentregado,
+            "subtotales": dict_subtotales,
             "total": round(total,2)
         }
     )

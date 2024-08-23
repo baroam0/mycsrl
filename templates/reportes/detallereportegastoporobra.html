@@ -58,12 +58,27 @@
                                         <td> {{v.pagado}} </td>
                                     </tr>
                             {% endfor %}
-
+                            
+                            {%for keysub, valuesub in subtotales.items %}
+                                {% if keysub == key %}
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td> <b> <u> {{ keysub.upper }} </u> </b> </td></td>
+                                        <td> <b> <u> $ {{valuesub | intcomma }} </u> </b> </td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                {% endif %}
+                            {%endfor%}
                         {% endfor %}
                     </tbody>
                 </table>
-        
-                <h5>Total Gasto: $ {{ totalgasto | intcomma }}</h5>
+
+                <h5>Total Gasto: <b> <u> $ {{ totalgasto | intcomma }} </u> </b> </h5>
 
 		<br>
 	        <hr>
@@ -71,7 +86,7 @@
                 <table>
                     <thead>
                         <tr>
-			    <th>FECHA</th>
+			                <th>FECHA</th>
                             <th>CONTRATISTA</th>
                             <th>MONTO ENTREGADO </th>
                         </tr>
@@ -88,10 +103,10 @@
                     </tbody>
                 </table>
         
-                <h5>Total Entregado: $ {{ totalentregado | intcomma }}</h5>
+                <h5>Total Entregado: <b> <u> $ {{ totalentregado | intcomma }} </b> </u></h5>
                 
                 <hr>
-                <h4>Total: $ {{ total | intcomma }}</h4>
+                <h4>Total: <b> <u> $ {{ total | intcomma }} </b> </u></h4>
                 <hr>   
 
     </div>
