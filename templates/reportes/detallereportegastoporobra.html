@@ -64,7 +64,7 @@
                                     <tr>
                                         <td></td>
                                         <td></td>
-                                        <td> <b> <u> {{ keysub.upper }} </u> </b> </td></td>
+                                        <td> <b> <u> {{ keysub.upper }} </u> </b> </td>
                                         <td> <b> <u> $ {{valuesub | intcomma }} </u> </b> </td>
                                         <td></td>
                                         <td></td>
@@ -81,25 +81,49 @@
                 <h5>Total Gasto: <b> <u> $ {{ totalgasto | intcomma }} </u> </b> </h5>
 
 		<br>
-	        <hr>
+	    <hr>
 		<h5>PRESUPUESTOS</h5>
                 <table>
                     <thead>
                         <tr>
 			                <th>FECHA</th>
                             <th>CONTRATISTA</th>
+                            <th>DESCRIPCION</th>
                             <th>MONTO ENTREGADO </th>
                         </tr>
                     </thead>
     
                     <tbody>
-                        {% for p in presupuestos %}                   
-                        <tr>
-			    <td> {{ p.fecha | date:"d-m-Y" }}</td>
-                            <td>{{ p.contratista }}</td>
-                            <td> $ {{ p.entregado | intcomma }}</td> 
-                        </tr>
+
+                        {% for key, value in dictcontratistas.items %} 
+                            <tr>
+                                <td> </td>
+                                <td> <b> <u> {{key.upper}} </u> </b> </td>
+                                <td> </td>
+                                <td> </td>
+                            </tr>
+
+                            {% for v in value%}
+                                    <tr>
+                                        <td> {{v.fecha}} </td>
+                                        <td>  </td>
+                                        <td> {{v.motivo}} </td>
+                                        <td> {{v.monto | intcomma}} </td>
+                                    </tr>
+                            {% endfor %}
+                            
+                            {%for keysub, valuesub in dictsubtotalescontratistas.items %}
+                                {% if keysub == key %}
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td> <b> <u> {{ keysub.upper }} </u> </b></td>                                        
+                                        <td> <b> <u> $ {{valuesub | intcomma }} </u> </b> </td>
+                                    </tr>
+                                {% endif %}
+                            {%endfor%}
                         {% endfor %}
+
                     </tbody>
                 </table>
         

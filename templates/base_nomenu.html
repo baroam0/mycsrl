@@ -47,13 +47,14 @@
       size: landscape;
       
     }
-    header { position: fixed;
-	     top:0;
-	     left:0;
-             right:0;
-             page-break-before:alwars;
-             height:50;
+    
+    header {
+      position: static; /* Esto asegura que el header no se quede fijo al imprimir */
+      top: 0;
+      z-index: 1000;
+      background-color: #fff;
     }
+
     footer {page-break-after: always;}
   }
 
