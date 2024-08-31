@@ -497,7 +497,7 @@ def detallereportesgastosporobra(request):
     obra = Obra.objects.get(pk=request.GET.get("id_obra"))
     detallesfacturas = DetalleFacturaProveedor.objects.filter(obra=obra).order_by('rubro')
     presupuesto = Presupuesto.objects.get(obra=obra)
-    detallespresupuestos = DetallePresupuesto.objects.filter(presupuesto=presupuesto)
+    detallespresupuestos = DetallePresupuesto.objects.filter(presupuesto=presupuesto).order_by('contratista__descripcion')
     totalgasto = 0
 
     facturas = FacturaProveedor.objects.filter(pk__in=detallesfacturas)
@@ -523,11 +523,6 @@ def detallereportesgastosporobra(request):
         dict_master[e] = list()
         dict_subtotales[e] = 0
 
-
-    for dp in detallespresupuestos:
-        totalentregado = totalentregado + dp.entregado
-    total = float(totalgasto) + float(totalentregado)
-
     for d in dict_master:
         for df in detallesfacturas:
             if d == df.rubro.descripcion:
@@ -550,18 +545,46 @@ def detallereportesgastosporobra(request):
 
     for d in dict_subtotales:
         dict_subtotales[d] = round(dict_subtotales[d],2)
-    print(dict_subtotales)
-    #queryset = DetallePresupuesto.objects.filter(presupuesto=presupuesto).values('contratista__descripcion').annotate(total_entregado=Sum('entregado'))
+
+    list_contratistas = list()
+    for dp in detallespresupuestos:
+        list_contratistas.append(dp.contratista.descripcion)
+
+    list_contratistas = list(set(list_contratistas))
+    dict_contratistas = dict()
+    dict_subtotales_contratistas = dict()
+    for l in list_contratistas:
+        dict_contratistas[l] = list()
+        dict_subtotales_contratistas[l] = 0
+
+    for c in dict_contratistas:
+        for dp in detallespresupuestos:
+            if c == dp.contratista.descripcion:
+                tmplist = dict()
+                tmplist["fecha"] = dp.fecha.strftime("%d-%m-%Y")
+                tmplist["descripcion"] = c
+                tmplist["motivo"] = dp.descripcion
+                tmplist["monto"] = dp.entregado
+                totalentregado = totalentregado + dp.entregado
+                dict_contratistas[c].append(tmplist)
+                dict_subtotales_contratistas[c] = round(dict_subtotales_contratistas[c],2) + round(tmplist["monto"],2)
+                tmplist = dict()
+    
+    print(dict_subtotales_contratistas)
+
+    total = float(totalgasto) + float(totalentregado)
+
 
     return render(
         request, 
-        'reportes/detallereportegastoporobra.html',
-        {
+        'reportes/detallereportegastoporobra.html',  
+        { 
             "dictmaster": dict_master,
+            "dictcontratistas": dict_contratistas,
+            "dictsubtotalescontratistas":dict_subtotales_contratistas,
             "obra": obra,
             "detallesfacturas": detallesfacturas,
             "totalgasto": round(totalgasto,4),
-            "presupuestos": detallespresupuestos,
             "totalentregado": totalentregado,
             "subtotales": dict_subtotales,
             "total": round(total,2)
