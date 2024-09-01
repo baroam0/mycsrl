@@ -496,7 +496,12 @@ def detallereportesgastosporobra(request):
 
     obra = Obra.objects.get(pk=request.GET.get("id_obra"))
     detallesfacturas = DetalleFacturaProveedor.objects.filter(obra=obra).order_by('rubro')
-    presupuesto = Presupuesto.objects.get(obra=obra)
+
+    try:
+        presupuesto = Presupuesto.objects.get(obra=obra)
+    except:
+        presupuesto = Presupuesto.objects.none()
+    
     detallespresupuestos = DetallePresupuesto.objects.filter(presupuesto=presupuesto).order_by('contratista__descripcion')
     totalgasto = 0
 
@@ -523,12 +528,18 @@ def detallereportesgastosporobra(request):
         dict_master[e] = list()
         dict_subtotales[e] = 0
 
+
     for d in dict_master:
         for df in detallesfacturas:
             if d == df.rubro.descripcion:
                 tmplist = dict()
                 tmplist["fecha"] = df.factura.fecha.strftime("%d-%m-%Y")
-                tmplist["razonsocial"] = df.factura.proveedor.razonsocial.upper()
+                print(df.factura.pk)
+                print(df.factura.comprobante)
+                if df.factura.proveedor.razonsocial:
+                    tmplist["razonsocial"] = df.factura.proveedor.razonsocial.upper()
+                else:
+                    tmplist["razonsocial"] = ""
                 tmplist["comprobante"] = df.factura.comprobante
                 tmplist["descripciondetalle"] = df.descripciondetalle.descripciondetalle.upper()
                 tmplist["cantidad"] = df.cantidad
@@ -547,8 +558,10 @@ def detallereportesgastosporobra(request):
         dict_subtotales[d] = round(dict_subtotales[d],2)
 
     list_contratistas = list()
-    for dp in detallespresupuestos:
-        list_contratistas.append(dp.contratista.descripcion)
+
+    if detallespresupuestos == None:
+        for dp in detallespresupuestos:
+            list_contratistas.append(dp.contratista.descripcion)
 
     list_contratistas = list(set(list_contratistas))
     dict_contratistas = dict()
