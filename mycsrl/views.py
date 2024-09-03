@@ -534,12 +534,7 @@ def detallereportesgastosporobra(request):
             if d == df.rubro.descripcion:
                 tmplist = dict()
                 tmplist["fecha"] = df.factura.fecha.strftime("%d-%m-%Y")
-                print(df.factura.pk)
-                print(df.factura.comprobante)
-                if df.factura.proveedor.razonsocial:
-                    tmplist["razonsocial"] = df.factura.proveedor.razonsocial.upper()
-                else:
-                    tmplist["razonsocial"] = ""
+                tmplist["razonsocial"] = df.factura.proveedor.razonsocial.upper()
                 tmplist["comprobante"] = df.factura.comprobante
                 tmplist["descripciondetalle"] = df.descripciondetalle.descripciondetalle.upper()
                 tmplist["cantidad"] = df.cantidad
@@ -559,13 +554,14 @@ def detallereportesgastosporobra(request):
 
     list_contratistas = list()
 
-    if detallespresupuestos == None:
+    if detallespresupuestos != None:
         for dp in detallespresupuestos:
             list_contratistas.append(dp.contratista.descripcion)
 
     list_contratistas = list(set(list_contratistas))
     dict_contratistas = dict()
     dict_subtotales_contratistas = dict()
+
     for l in list_contratistas:
         dict_contratistas[l] = list()
         dict_subtotales_contratistas[l] = 0
