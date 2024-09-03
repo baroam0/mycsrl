@@ -84,17 +84,24 @@
                 url: "/alquileres/cuotacontrato/ajax-deudas/",
                 data: {
                     departamento: id_departamento,
-                    fecha: fecha
+                    fecha: fecha,
+                    mes: valor_mes,
+                    anio: valor_anio
                 },
                 success: function (response) {
                     //busco el monto correspodiente a la cuota
 
                     $.each(response, function(key, value) {
-                        console.log(value.pagado);
-                        if(value.pagado===false){
+                        console.log(response);
+                        if(response.ultimorecibo==""){
+
+                        }else{
                             var mensaje = '<div id="alertas" class="alert alert-warning" style="display: block;">' + value.cuota + "- $ " + value.monto  + '</div>';
                             $('#alertas').append(mensaje);
                         }
+
+                        $('#id_montofinal').val(response.monto);
+                        
                     });
 
                 }
@@ -114,7 +121,9 @@
                     url: "/alquileres/cuotacontrato/ajax-deudas/",
                     data: {
                         departamento: id_departamento,
-                        fecha: fecha
+                        fecha: fecha,
+                        mes: valor_mes,
+                        anio: valor_anio
                     },
                     success: function (response) {
                         //busco el monto correspodiente a la cuota
