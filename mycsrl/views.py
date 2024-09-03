@@ -579,10 +579,7 @@ def detallereportesgastosporobra(request):
                 dict_subtotales_contratistas[c] = round(dict_subtotales_contratistas[c],2) + round(tmplist["monto"],2)
                 tmplist = dict()
     
-    print(dict_subtotales_contratistas)
-
     total = float(totalgasto) + float(totalentregado)
-
 
     return render(
         request, 
