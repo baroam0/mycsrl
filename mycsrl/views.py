@@ -499,12 +499,12 @@ def detallereportesgastosporobra(request):
 
     try:
         presupuesto = Presupuesto.objects.get(obra=obra)
+        detallespresupuestos = DetallePresupuesto.objects.filter(presupuesto=presupuesto).order_by('contratista__descripcion')
     except:
         presupuesto = Presupuesto.objects.none()
+        detallespresupuestos = None
     
-    detallespresupuestos = DetallePresupuesto.objects.filter(presupuesto=presupuesto).order_by('contratista__descripcion')
     totalgasto = 0
-
     facturas = FacturaProveedor.objects.filter(pk__in=detallesfacturas)
 
     descuento = 0
@@ -552,9 +552,9 @@ def detallereportesgastosporobra(request):
     for d in dict_subtotales:
         dict_subtotales[d] = round(dict_subtotales[d],2)
 
-    list_contratistas = list()
+    list_contratistas = list()    
 
-    if detallespresupuestos != None:
+    if detallespresupuestos:
         for dp in detallespresupuestos:
             list_contratistas.append(dp.contratista.descripcion)
 
