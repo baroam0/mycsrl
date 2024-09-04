@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.http import JsonResponse
+from django.core.serializers import serialize
 from django.shortcuts import render, redirect
 
 from .forms import EdificioForm, DepartamentoForm, ReciboForm, ContratoForm, CuotaContratoForm
@@ -269,7 +270,7 @@ def calcula_monto(fecha_recibo,fecha_limite, departamento):
         #monto = float(monto) + float(monto) * float(interes) /100
         monto = float(departamento.monto) + float(departamento.monto) * float(interes) /100
     else:
-        monto = None
+        monto = float(departamento.monto)
     
     return monto
 
@@ -500,6 +501,38 @@ def cuotacontrato_delete(request, pk):
 
 
 def ajax_mostrar_deudas(request):
+    fecha_str = request.GET.get('fecha')
+    fecha = datetime.strptime(fecha_str, "%d/%m/%Y")    
+    mes = request.GET.get('mes')
+    anio = request.GET.get('anio')
+
+    iddepartamento = int(request.GET.get('departamento'))
+    departamento = Departamento.objects.get(pk=iddepartamento)
+
+    fecha_vencimiento_str = str(departamento.edificio.dialimite) + "/" + str(mes) + "/" + str(anio)
+    fecha_vencimiento = datetime.strptime(fecha_vencimiento_str, "%d/%m/%Y")
+
+    monto = calcula_monto(fecha_str, fecha_vencimiento, departamento)
+
+    recibos = Recibo.objects.all().order_by("fecha")
+    if recibos:
+        recibos[:1]
+        recibos = serialize('json', recibos)
+    else:
+        recibos = ""
+    
+    data = {
+        "ultimorecibo": recibos,
+        "monto": monto
+    }
+
+    print(data)
+
+    return JsonResponse(data, safe=False)
+
+
+"""
+def ajax_mostrar_deudas(request):
     fecha = request.GET.get('fecha')
             
     iddepartamento = int(request.GET.get('departamento'))
@@ -553,6 +586,6 @@ def ajax_mostrar_deudas(request):
         }
 
     return JsonResponse(data, safe=False)
-
+"""
 
 # Create your views here.
