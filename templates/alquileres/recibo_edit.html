@@ -20,14 +20,10 @@
                 <form  method="POST">{% csrf_token %}
                     {{ form.as_p }}
 
-                    {% if editar %}
+                    
                         
-                    {% else %}
-                        <p>
-                            <label for="id_montofinal">Monto Final: </label> 
-                            <input type="number" name="montocalculado" step="any" class="form-control" id="id_montofinal" disabled>
-                        </p>
-                    {% endif %}
+                    
+               
 
                     <hr>
 
@@ -103,11 +99,11 @@
                         var mes = data[0].fields.mes;
                         var anio = data[0].fields.anio;
                         var montorecibo = data[0].fields.monto_calculado;
-                        var mensaje = '<div id="alertas" class="alert alert-warning" style="display: block;"> ULTIMA CUOTA PAGADA:' + mes + "-" + anio + "- $ "  + montorecibo + '</div>';
+                        var mensaje = '<div id="alertas" class="alert alert-warning" style="display: block;"> ULTIMA CUOTA PAGADA:' + mes + "-" + anio + "- $ "  + montorecibo + "- Base:$ " + response.montodepartamento  + '</div>';
                         $('#alertas').append(mensaje);
                     }
 
-                    $('#id_montofinal').val(response.monto);
+                    $('#id_monto_calculado').val(response.monto);
 
                 }
             });
