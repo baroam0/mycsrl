@@ -111,6 +111,34 @@ class ReciboForm(forms.ModelForm):
         fields = ["fecha", "departamento", "mes", "anio"]
 
 
+class ReciboManualForm(forms.ModelForm):
+    fecha = forms.DateField(label="Fecha")
+
+    departamento = forms.ModelChoiceField(
+        label="Departamento",
+        queryset=Departamento.objects.all(),
+        required=True
+    )
+
+    mes = forms.ChoiceField(choices=MESES)
+    anio = forms.ChoiceField(choices=yearstuple())
+    monto_calculado = forms.DecimalField(
+        label="Monto",
+        required=True
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(ReciboManualForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+
+    class Meta:
+        model = Recibo
+        fields = ["fecha", "departamento", "mes", "anio", "monto_calculado"]
+
+
 
 class ContratoForm(forms.ModelForm):
 

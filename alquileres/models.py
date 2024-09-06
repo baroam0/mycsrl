@@ -74,9 +74,9 @@ class Departamento(models.Model):
     )
 
     descripcion = models.CharField(max_length=250, unique=True)
-    inquilino_apellido = models.CharField(max_length=150)
-    inquilino_nombre = models.CharField(max_length=150)
-    inquilino_dni = models.IntegerField()
+    inquilinoapellido = models.CharField(max_length=150)
+    inquilinonombre = models.CharField(max_length=150)
+    inquilinodni = models.IntegerField()
 
     monto = models.DecimalField(
         max_digits=10, 
@@ -115,33 +115,13 @@ class Recibo(models.Model):
         blank=True
     )
 
-    apellido = models.CharField(max_length=300, null=True, blank=True)
-    nombre = models.CharField(max_length=300, null=True, blank=True)
+    #apellido = models.CharField(max_length=300, null=True, blank=True)
+    #nombre = models.CharField(max_length=300, null=True, blank=True)
 
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.departamento.edificio.descripcion + '-' + self.departamento.descripcion + str(self.pk)
-    
-    def save(self, *args, **kwargs):
-        
-        str_d = str(self.anio) + "/" + str(self.mes) + "/" + str(self.departamento.edificio.dialimite)
-        date_format = "%Y/%m/%d"
-        fecha_limite = datetime.strptime(str_d, date_format)
-
-        diferencia = self.fecha - fecha_limite.date()
-        cantidad_dias = diferencia.days
-
-        if cantidad_dias > 0:
-            interes = float(self.departamento.edificio.interespordia) * float(cantidad_dias)
-            self.monto_calculado = float(self.departamento.monto) + float(self.departamento.monto) * interes /100
-        else:
-            self.monto_calculado = self.departamento.monto
-            
-        self.apellido = self.departamento.inquilino_apellido
-        self.nombre = self.departamento.inquilino_nombre
-
-        super(Recibo, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name_plural = "Recibos"    

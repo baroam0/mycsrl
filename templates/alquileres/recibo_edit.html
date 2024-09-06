@@ -20,11 +20,14 @@
                 <form  method="POST">{% csrf_token %}
                     {{ form.as_p }}
 
-                    <p>
-                        <label for="id_montofinal">Monto Final: </label> 
-                        <input type="number" name="montocalculado" step="any" class="form-control" id="id_montofinal" disabled>
-                    </p>
-
+                    {% if editar %}
+                        
+                    {% else %}
+                        <p>
+                            <label for="id_montofinal">Monto Final: </label> 
+                            <input type="number" name="montocalculado" step="any" class="form-control" id="id_montofinal" disabled>
+                        </p>
+                    {% endif %}
 
                     <hr>
 
@@ -44,7 +47,7 @@
                                 <i class="far fa-times-circle"></i>
                                 Cancelar
                             </button>
-                        </div>                        
+                        </div>
                     </div>
                     <hr>
                 </form>
@@ -91,18 +94,20 @@
                 success: function (response) {
                     //busco el monto correspodiente a la cuota
 
-                    $.each(response, function(key, value) {
-                        console.log(response);
-                        if(response.ultimorecibo==""){
+                    if(response.ultimorecibo==0){
+                        console.log("Pasa aca");
+                        var mensaje = '<div id="alertas" class="info alert-info" style="display: block;"> &nbsp;&nbsp; SIN NOVEDAD. </div>';
+                        $('#alertas').append(mensaje);
+                    }else{
+                        var data = JSON.parse(response.ultimorecibo);
+                        var mes = data[0].fields.mes;
+                        var anio = data[0].fields.anio;
+                        var montorecibo = data[0].fields.monto_calculado;
+                        var mensaje = '<div id="alertas" class="alert alert-warning" style="display: block;"> ULTIMA CUOTA PAGADA:' + mes + "-" + anio + "- $ "  + montorecibo + '</div>';
+                        $('#alertas').append(mensaje);
+                    }
 
-                        }else{
-                            var mensaje = '<div id="alertas" class="alert alert-warning" style="display: block;">' + value.cuota + "- $ " + value.monto  + '</div>';
-                            $('#alertas').append(mensaje);
-                        }
-
-                        $('#id_montofinal').val(response.monto);
-                        
-                    });
+                    $('#id_montofinal').val(response.monto);
 
                 }
             });
@@ -146,17 +151,17 @@
             TranslateDatepickerToEs($("#id_fecha"));
 
             $('#id_departamento').on('change', function() {
-                getDatosRecibo();
+                //getDatosRecibo();
                 getCuotasAdeudadas();
             });
 
             $('#id_mes').on('change', function() {
-                getDatosRecibo();
+                //getDatosRecibo();
                 getCuotasAdeudadas();
             });
 
             $('#id_anio').on('change', function() {
-                getDatosRecibo();
+                //getDatosRecibo();
                 getCuotasAdeudadas();
             });
         });

@@ -6,11 +6,16 @@ from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.db.models import Q
 from django.http import JsonResponse
 from django.core.serializers import serialize
 from django.shortcuts import render, redirect
 
-from .forms import EdificioForm, DepartamentoForm, ReciboForm, ContratoForm, CuotaContratoForm
+from .forms import (
+    EdificioForm, DepartamentoForm, ReciboForm, 
+    ReciboManualForm, ContratoForm, CuotaContratoForm
+    )
+
 from .models import Departamento, Edificio, Recibo, Contrato, CuotaContrato
 
 from .helper import generarcuotas, grabarpagocuotacontrato
@@ -167,10 +172,14 @@ def departamento_edit(request, pk):
 @login_required(login_url='/login')
 def listadorecibo(request):
     if "txtBuscar" in request.GET:
-        parametro = request.GET.get('txtBuscar')
+        parametro = request.GET.get('txtBuscar')        
+
         recibos = Recibo.objects.filter(
-            departamento__descripcion__contains=parametro
+            Q(pk__icontains=parametro) |
+            Q(departamento__descripcion__icontains=parametro)
         ).order_by('-fecha')
+
+
     else:
         recibos = Recibo.objects.all().order_by('-fecha')
     paginador = Paginator(recibos, 20)
@@ -199,26 +208,8 @@ def recibo_new(request):
             try:
                 recibo.save()
                 recibo = Recibo.objects.latest("pk")
-                departamento = Departamento.objects.get(pk=recibo.departamento.pk)
-                #fecha = datetime.today()
-
-                contrato = Contrato.objects.get(
-                    finalizado=False, 
-                    departamento=departamento
-                )
-             
-                
-                cuotacontrato = CuotaContrato.objects.get(
-                    contrato=contrato,
-                    mes=recibo.mes,
-                    anio=recibo.anio
-                )
-                cuotacontrato.usuario = usuario
-                cuotacontrato.pagado = True
-                cuotacontrato.save()
-
                 messages.success(request, "Se ha grabado los datos del recibo.")
-                return redirect('/alquileres/recibo/listado')
+                return redirect('/alquileres/recibo/listado/?txtBuscar=' + str(recibo.pk))
             except Exception as e:
                 messages.warning(request, str(e))
                 return redirect('/alquileres/recibo/listado')
@@ -249,13 +240,40 @@ def recibo_edit(request, pk):
             return redirect('/alquileres/recibo/listado')
         else:
             messages.warning(request, form.errors["__all__"])
-            return redirect('/alquileres/recibo/listado')
+            return redirect('/alquileres/recibo/listado/?txtBuscar=' + str(consulta.pk))
     else:
         form = ReciboForm(instance=consulta)
         return render(
             request,
             'alquileres/recibo_edit.html',
             {"form": form}
+        )
+
+
+@login_required(login_url='/login')
+def recibo_edit_manual(request, pk):
+    consulta = Recibo.objects.get(pk=pk)
+
+    editar = True
+
+    if request.POST:
+        form = ReciboManualForm(request.POST, instance=consulta)
+        if form.is_valid():
+            recibo = form.save(commit=False)
+            usuario = request.user
+            recibo.usuario = usuario
+            recibo.save()
+            messages.success(request, "Se ha modificado los datos del recibo.")
+            return redirect('/alquileres/recibo/listado')
+        else:
+            messages.warning(request, form.errors["__all__"])
+            return redirect('/alquileres/recibo/listado/?txtBuscar=' + str(consulta.pk))
+    else:
+        form = ReciboManualForm(instance=consulta)
+        return render(
+            request,
+            'alquileres/recibo_edit.html',
+            {"form": form, "editar": editar}
         )
 
 
@@ -514,78 +532,18 @@ def ajax_mostrar_deudas(request):
 
     monto = calcula_monto(fecha_str, fecha_vencimiento, departamento)
 
-    recibos = Recibo.objects.all().order_by("fecha")
+    recibos = Recibo.objects.filter(departamento=departamento).order_by("fecha")
     if recibos:
         recibos[:1]
         recibos = serialize('json', recibos)
     else:
-        recibos = ""
+        recibos = 0
     
     data = {
         "ultimorecibo": recibos,
         "monto": monto
     }
 
-    print(data)
-
     return JsonResponse(data, safe=False)
-
-
-"""
-def ajax_mostrar_deudas(request):
-    fecha = request.GET.get('fecha')
-            
-    iddepartamento = int(request.GET.get('departamento'))
-    departamento = Departamento.objects.get(pk=iddepartamento)
-
-    try:
-        contrato = Contrato.objects.get(departamento=departamento, finalizado=False)
-
-        montodepartamento = contrato.departamento.monto
-
-        cuotascontrato = CuotaContrato.objects.filter(
-            contrato=contrato,
-            pagado=False
-        )
-
-        tmp_data = list()
-        tmp_dict = dict()
-
-        for c in cuotascontrato:            
-            fechalimite = datetime(c.anio, c.mes, c.contrato.departamento.edificio.dialimite)
-            monto = calcula_monto(fecha, fechalimite, c.contrato.departamento)
-
-            if monto:
-                tmp_dict = {
-                    "cuota": str(c.mes) + "-" + str(c.anio),
-                    "monto": monto,
-                    "montodepartamento": montodepartamento,
-                    "pagado": c.pagado
-                }
-                tmp_data.append(tmp_dict)
-                tmp_dict = dict()
-            else:
-                tmp_dict = {
-                    "cuota": str(c.mes) + "-" + str(c.anio),
-                    "monto": c.contrato.departamento.monto,
-                    "montodepartamento": montodepartamento,
-                    "pagado": c.pagado
-                }
-                tmp_data.append(tmp_dict)
-                tmp_dict = dict()
-
-        data = tmp_data
-
-    except Exception as e:
-        
-        data = {
-            "cuota": None,
-            "monto": None,
-            "montodepartamento": None,
-            "pagado": None
-        }
-
-    return JsonResponse(data, safe=False)
-"""
 
 # Create your views here.

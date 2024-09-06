@@ -41,7 +41,7 @@
 
     <div class="div-center">
 
-    Recibí del Sr/a <b> {{recibo.apellido.upper}}, {{recibo.nombre.upper}} </b>, la suma de <b> PESOS: 
+    Recibí del Sr/a <b> {{recibo.departamento.inquilinoapellido.upper}}, {{recibo.departamento.inquilinonombre.upper}} </b> la suma de <b> PESOS: 
     {{montoletras}} </b>, en concepto del pago del alquiler del <b> {{recibo.departamento.descripcion.upper}} </b>, correspondiente al mes
     de {{mes}} / {{recibo.anio}} y expensas.
     </div>
@@ -63,8 +63,8 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-4 fecha">
-           
+        <div class="col-sm-4">
+            <h5>Recibo Nº {{recibo.pk}}</h5>
         </div>
 
         <div class="col-sm-4">
@@ -133,8 +133,8 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-4 fecha">
-           
+        <div class="col-sm-4">
+            <h5>Recibo Nº {{recibo.pk}}</h5>
         </div>
 
         <div class="col-sm-4">
