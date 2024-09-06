@@ -544,66 +544,6 @@ def ajax_mostrar_deudas(request):
         "monto": monto
     }
 
-    print(data)
-
     return JsonResponse(data, safe=False)
-
-
-"""
-def ajax_mostrar_deudas(request):
-    fecha = request.GET.get('fecha')
-            
-    iddepartamento = int(request.GET.get('departamento'))
-    departamento = Departamento.objects.get(pk=iddepartamento)
-
-    try:
-        contrato = Contrato.objects.get(departamento=departamento, finalizado=False)
-
-        montodepartamento = contrato.departamento.monto
-
-        cuotascontrato = CuotaContrato.objects.filter(
-            contrato=contrato,
-            pagado=False
-        )
-
-        tmp_data = list()
-        tmp_dict = dict()
-
-        for c in cuotascontrato:            
-            fechalimite = datetime(c.anio, c.mes, c.contrato.departamento.edificio.dialimite)
-            monto = calcula_monto(fecha, fechalimite, c.contrato.departamento)
-
-            if monto:
-                tmp_dict = {
-                    "cuota": str(c.mes) + "-" + str(c.anio),
-                    "monto": monto,
-                    "montodepartamento": montodepartamento,
-                    "pagado": c.pagado
-                }
-                tmp_data.append(tmp_dict)
-                tmp_dict = dict()
-            else:
-                tmp_dict = {
-                    "cuota": str(c.mes) + "-" + str(c.anio),
-                    "monto": c.contrato.departamento.monto,
-                    "montodepartamento": montodepartamento,
-                    "pagado": c.pagado
-                }
-                tmp_data.append(tmp_dict)
-                tmp_dict = dict()
-
-        data = tmp_data
-
-    except Exception as e:
-        
-        data = {
-            "cuota": None,
-            "monto": None,
-            "montodepartamento": None,
-            "pagado": None
-        }
-
-    return JsonResponse(data, safe=False)
-"""
 
 # Create your views here.
