@@ -53,9 +53,10 @@
                 <thead>
                     <tr>
                         <th>Nro</th>
+                        <th>Fecha</th>
                         <th>Descripcion</th>
-			<th>Mes</th>
-			<th>Año</th>
+			            <th>Mes</th>
+			            <th>Año</th>
                         <th>Monto</th>
                         <th>Monto Final</th>
                         <th>Usuario</th>
@@ -67,10 +68,11 @@
                     {% for resultado in resultados %}
                     <tr>
                         <td>{{ resultado.pk }}  </td>
+                        <td>{{ resultado.fecha| date:"d-m-Y" }}  </td>
                         <td>
                             {{ resultado.departamento.edificio.descripcion.upper }} -
                             {{ resultado.departamento.descripcion.upper }} -
-                            {{ resultado.apellido.upper }}, {{ resultado.nombre.upper }}
+                            {{ resultado.departamento.inquilinoapellido.upper }}, {{ resultado.departamento.inquinilinonombre.upper }}
                         </td>
 			<td> {{resultado.mes}} </td>
 			<td> {{resultado.anio}} </td>
