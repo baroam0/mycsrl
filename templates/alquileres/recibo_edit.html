@@ -18,13 +18,8 @@
             <div class="col-12">
                 <hr>
                 <form  method="POST">{% csrf_token %}
-                    {{ form.as_p }}
-
-                    
-                        
-                    
-               
-
+                    {{ form.as_p }}                                                 
+             
                     <hr>
 
                     <div class="row">
@@ -91,15 +86,14 @@
                     //busco el monto correspodiente a la cuota
 
                     if(response.ultimorecibo==0){
-                        console.log("Pasa aca");
-                        var mensaje = '<div id="alertas" class="info alert-info" style="display: block;"> &nbsp;&nbsp; SIN NOVEDAD. </div>';
+                        var mensaje = '<div id="alertas" class="info alert-info" style="display: block;"> &nbsp;&nbsp; SIN NOVEDAD. Base: $ ' + response.montodepartamento + '</div>';
                         $('#alertas').append(mensaje);
                     }else{
                         var data = JSON.parse(response.ultimorecibo);
                         var mes = data[0].fields.mes;
                         var anio = data[0].fields.anio;
                         var montorecibo = data[0].fields.monto_calculado;
-                        var mensaje = '<div id="alertas" class="alert alert-warning" style="display: block;"> ULTIMA CUOTA PAGADA:' + mes + "-" + anio + "- $ "  + montorecibo + "- Base:$ " + response.montodepartamento  + '</div>';
+                        var mensaje = '<div id="alertas" class="alert alert-warning" style="display: block;"> ULTIMA CUOTA PAGADA:' + mes + "-" + anio + "- $ "  + montorecibo + "- Base: $ " + response.montodepartamento  + '</div>';
                         $('#alertas').append(mensaje);
                     }
 
