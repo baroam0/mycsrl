@@ -3,7 +3,7 @@
 
 # Variables
 archivo_a_copiar="/home/abarrios/proyectos/mycsrl/db.sqlite3"  # Cambia esto por la ruta de tu archivo
-directorio_respaldo="/home/abarrios/bck"    # Cambia esto por la ruta del directorio de respaldo
+directorio_respaldo="/home/abarrios/bck/bk_db.sqlite"    # Cambia esto por la ruta del directorio de respaldo
 nombre_del_commit="Backup del archivo $(date +'%Y-%m-%d %H:%M:%S')"
 
 # Copiar el archivo
