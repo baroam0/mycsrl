@@ -18,5 +18,6 @@ git add .
 
 # Realizar el commit
 git commit -m "$nombre_del_commit"
+git push
 
 echo "Copia y commit realizados con éxito."
