@@ -201,7 +201,7 @@ def listadorecibo(request):
 def recibo_new(request):
     if request.POST:
         usuario = request.user
-        form = ReciboForm(request.POST)
+        form = ReciboManualForm(request.POST)
         if form.is_valid():
             recibo = form.save(commit=False)
             recibo.usuario = usuario
@@ -217,7 +217,7 @@ def recibo_new(request):
             messages.warning(request, form.errors["__all__"])
             return redirect('/alquileres/recibo/listado')
     else:
-        form = ReciboForm()
+        form = ReciboManualForm()
         return render(
             request,
             'alquileres/recibo_edit.html',
@@ -541,7 +541,8 @@ def ajax_mostrar_deudas(request):
     
     data = {
         "ultimorecibo": recibos,
-        "monto": monto
+        "monto": monto,
+        "montodepartamento": departamento.monto
     }
 
     return JsonResponse(data, safe=False)
