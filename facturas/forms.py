@@ -86,9 +86,12 @@ class FacturaProveedorForm(forms.ModelForm):
 
     comprobante = forms.CharField(label="Comprobante", required=True) 
     fecha = forms.DateField(label="Fecha", required=True)
+
     proveedor = forms.ModelChoiceField(
-        queryset=Proveedor.objects.all(), label="Proveedor", required=True) 
-    
+        queryset=Proveedor.objects.all().order_by('razonsocial'), 
+        label="Proveedor", 
+        required=True) 
+  
     descuentoglobal = forms.DecimalField(label="Descuento Global")
     preciocepcionglobal = forms.DecimalField(label="Percepcion Global")
     ajusteglobal = forms.DecimalField(label="Ajuste Global")
@@ -111,20 +114,22 @@ class DetalleFacturaProveedorForm(forms.ModelForm):
 
     obra = forms.ModelChoiceField(label="Obra", queryset=Obra.objects.filter(finalizada=False).order_by('descripcion'))
     rubro = forms.ModelChoiceField(label="Rubro", queryset=Rubro.objects.all().order_by('descripcion'))
-    unidad = forms.ModelChoiceField(label="Unidad", queryset=Unidad.objects.all())
+    unidad = forms.ModelChoiceField(label="Unidad", queryset=Unidad.objects.all().order_by('descripcion'))
     cantidad = forms.DecimalField(label="Cantidad")
 
     preciototal = forms.DecimalField(label="Precio Total")
 
     descripciondetalle = forms.ModelChoiceField(
-        label="Detalle", queryset=Descripciondetalle.objects.all(),
+        label="Detalle", 
+        queryset=Descripciondetalle.objects.all().order_by('descripciondetalle')
     )
 
     descuento = forms.DecimalField(label="Descuento", required=False)
     descuentoporcentaje = forms.DecimalField(label="Descuento con Porcentaje")
 
     rodado = forms.ModelChoiceField(
-        label="Rodado", queryset=Rodado.objects.all(), required=False
+        label="Rodado", queryset=Rodado.objects.all().order_by('dominio'), 
+        required=False
     )
 
     ajuste = forms.DecimalField(label="Ajuste", required=True)
