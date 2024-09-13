@@ -399,6 +399,7 @@ def detallereporteingresoegresoobra(request):
         total_cobros = 0
 
 
+    """
     devengamientos = (
         DetalleFacturaProveedor.objects
         .filter(obra=obra.pk)
@@ -416,8 +417,6 @@ def detallereporteingresoegresoobra(request):
         )
     )
 
-    total_egresos = 0
-
     for r in devengamientos:
         if r['sum_custom_method']:
             total_egresos = total_egresos + r['sum_custom_method']
@@ -426,6 +425,29 @@ def detallereporteingresoegresoobra(request):
             valor = 0
             total_egresos = total_egresos + valor
             #r['sum_custom_method'] = round(r['sum_custom_method'],2)
+
+    """
+
+    devengamientos = DetalleFacturaProveedor.objects.filter(obra=obra.pk).order_by("rubro__descripcion")
+
+    list_rubros = list()
+
+    for d in devengamientos:
+        list_rubros.append(d.rubro.descripcion)
+    
+    list_rubros = list(set(list_rubros))
+
+    dict_rubros = dict()
+
+    for l in list_rubros:
+        dict_rubros[l] = 0
+
+    for d in dict_rubros:
+        for dv in devengamientos:
+            if dv.rubro.descripcion == d:
+                dict_rubros[d] = dict_rubros[d] + dv.getpreciofinaltotalitem()
+    
+    total_egresos = 0
 
     saldo = total_cobros - total_egresos
     return render(
