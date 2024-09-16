@@ -50,17 +50,13 @@
                     <td></td>
                 </tr>
 
-                {% for devengamiento in devengamientos %}
+                {% for k,v in dictrubros.items %}
                 <tr>
                     <td></td>
-                    <td>{{ devengamiento.rubro__descripcion }}  </td>
+                    <td>{{ k }}  </td>
                     <td></td>
                     <td> </td>
-                    {% if devengamiento.sum_custom_method %}
-                        <td>$ {{ devengamiento.sum_custom_method | intcomma }}  </td>
-                    {% else %}
-                    <td>  </td>
-                    {% endif %}
+                    <td> $ {{v | intcomma }}  </td>
                     
                 </tr>
                 {% endfor %}
@@ -72,6 +68,35 @@
                     <td> </td>
                     <td> <b> $ {{totalpagos | intcomma}} </b> </td>
                 </tr>
+
+                <!--tr></tr>
+                    <td>
+                        <b>PRESUPUESTOS</b>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+                {% for presupuesto in presupuestos %}
+                <tr>
+                    <td></td>
+                    <td>{{ presupuesto.contratista__descripcion }} </td>
+                    <td> </td>
+                    <td> $ {{presupuesto.total_importe | intcomma }} </td>
+                    <td> $ {{presupuesto.total_entregado | intcomma }} </td>
+                </tr>
+                {% endfor %}
+
+                <tr>
+                    <td> </td>
+                    <td> <b> Suma PRESUPUESTOS </b> </td>
+                    <td> </td>
+                    <td> <b> $ {{ totalpresupuesto | intcomma }} </b> </td>
+                    <td> <b> $ {{ totalpresupuestoentregado | intcomma }} </b> </td>
+                </tr-->
+
 
                 <tr>
                     <td>
