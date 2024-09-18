@@ -397,7 +397,7 @@ def detallereporteingresoegresoobra(request):
         total_cobros = cobros[0].totalfacturacionporobra(obra.pk)
     except:
         total_cobros = 0
-    
+
     total_presupuesto = 0
     try:
         presupuesto = Presupuesto.objects.get(obra=obra)
@@ -405,13 +405,12 @@ def detallereporteingresoegresoobra(request):
     except:
         presupuesto = Presupuesto.objects.none()
         detallespresupuestos = None
-    
+
     presupuesto = Presupuesto.objects.get(obra=obra)
     detallespresupuestos = DetallePresupuesto.objects.filter(presupuesto=presupuesto).order_by('contratista__descripcion')
-    
+
     sumatoriadetallepresupuestos = detallespresupuestos.values('contratista__descripcion').annotate(
-        total_entregado=Sum('entregado'),
-        total_importe=Sum('importe')
+        total_entregado=Sum('entregado')
     )
 
     devengamientos = DetalleFacturaProveedor.objects.filter(obra=obra.pk).order_by("rubro__descripcion")
@@ -420,7 +419,7 @@ def detallereporteingresoegresoobra(request):
 
     for d in devengamientos:
         list_rubros.append(d.rubro.descripcion)
-    
+
     list_rubros = list(set(list_rubros))
 
     dict_rubros = dict()
@@ -432,20 +431,18 @@ def detallereporteingresoegresoobra(request):
         for dv in devengamientos:
             if dv.rubro.descripcion == d:
                 dict_rubros[d] = round(dict_rubros[d],2) + round(dv.getpreciofinaltotalitem(),2)
-    
+
     total_egresos = 0
 
     for d in dict_rubros:
         total_egresos = total_egresos + round(dict_rubros[d],2)
-    
-    total_presupuesto = 0
+
     total_presupuesto_entregado = 0
 
     for d in sumatoriadetallepresupuestos:
-        total_presupuesto = total_presupuesto + d["total_importe"]
         total_presupuesto_entregado = total_presupuesto_entregado + d["total_entregado"]
 
-    saldo = float(total_cobros) + float(total_presupuesto) - float(total_presupuesto_entregado) - float(total_egresos)
+    saldo = float(total_cobros) - float(total_presupuesto_entregado) - float(total_egresos)
 
     return render(
         request, 
