@@ -413,6 +413,9 @@ def detallereporteingresoegresoobra(request):
         total_entregado=Sum('entregado')
     )
 
+    for s in sumatoriadetallepresupuestos:
+        s["total_entregado"] = round(s["total_entregado"],2)
+
     devengamientos = DetalleFacturaProveedor.objects.filter(obra=obra.pk).order_by("rubro__descripcion")
 
     list_rubros = list()
@@ -436,6 +439,7 @@ def detallereporteingresoegresoobra(request):
 
     for d in dict_rubros:
         total_egresos = total_egresos + round(dict_rubros[d],2)
+        dict_rubros[d] = round(dict_rubros[d], 2)
 
     total_presupuesto_entregado = 0
 
@@ -779,42 +783,37 @@ def detallereporteegresoobra(request):
 
     obra = Obra.objects.get(pk=request.GET.get("id_obra"))
     texto = request.GET.get("id_texto")
+    devengamientos = DetalleFacturaProveedor.objects.filter(obra=obra.pk).order_by("rubro__descripcion")
+    list_rubros = list()
 
-    try:
+    for d in devengamientos:
+        list_rubros.append(d.rubro.descripcion)
 
-        resultados = (
-            DetalleFacturaProveedor.objects
-            .filter(obra=obra.pk)
-            .values('rubro__descripcion')
-            .annotate(
-                sum_custom_method=Sum(
-                    ExpressionWrapper(
-                        F('preciototal') - 
-                        F('preciototal') * F('descuentoporcentaje') / 100 + 
-                        F('preciototal') * F('iva__retencion') / 100 +
-                        F('preciototal') * F('ingresosbrutos__retencion') / 100 +
-                        F('factura__ajusteglobal'),
-                        output_field=DecimalField()
-                    )
-                )
-            )
-        )
-        total_egresos = 0
+    list_rubros = list(set(list_rubros))
+    dict_rubros = dict()
 
-        for r in resultados:
-            total_egresos = float(total_egresos) + float(r['sum_custom_method'])
-            r['sum_custom_method'] = round(r['sum_custom_method'],2)
-    except:
-        resultados = None
-    
+    for l in list_rubros:
+        dict_rubros[l] = 0
+
+    for d in dict_rubros:
+        for dv in devengamientos:
+            if dv.rubro.descripcion == d:
+                dict_rubros[d] = round(dict_rubros[d], 2) + round(dv.getpreciofinaltotalitem(), 2)
+
+    total = 0
+
+    for d in dict_rubros:
+        dict_rubros[d] = round(dict_rubros[d], 2)
+        total = total + round(dict_rubros[d], 2)
+
     return render(
         request, 
         'reportes/detalleegresoporobra.html',
         {
             "obra": obra,
-            "resultados": resultados,
+            "resultados": dict_rubros,
             "texto": texto,
-            "total_egresos": round(total_egresos,2)
+            "total": round(total,2)
         }
     )
 

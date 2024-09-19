@@ -56,7 +56,7 @@
                     <td>{{ k }}  </td>
                     <td></td>
                     <td> </td>
-                    <td> $ {{v  | floatformat:2|intcomma  }}  </td>
+                    <td> $ {{v |intcomma  }}  </td>
                     
                 </tr>
                 {% endfor %}
@@ -85,7 +85,7 @@
                     <td>{{ presupuesto.contratista__descripcion }} </td>
                     <td> </td>
                     <td> </td>
-                    <td> $ {{presupuesto.total_entregado |floatformat:2|intcomma }} </td>
+                    <td> $ {{presupuesto.total_entregado|intcomma }} </td>
                 </tr>
                 {% endfor %}
 
