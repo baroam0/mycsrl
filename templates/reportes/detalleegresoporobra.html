@@ -48,10 +48,10 @@
                 </thead>
 
                 <tbody>
-                    {% for resultado in resultados %}
+                    {% for k,v in resultados.items %}
                     <tr>
-                        <td>{{ resultado.rubro__descripcion }}  </td>
-                        <td>$ {{ resultado.sum_custom_method | intcomma }}</td>    
+                        <td>{{ k }}  </td>
+                        <td>$ {{ v | intcomma }}</td>
                     </tr>
                     {% endfor %}
                     

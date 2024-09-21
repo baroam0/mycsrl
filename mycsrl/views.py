@@ -781,38 +781,41 @@ def detallereporteegresoobra(request):
     texto = request.GET.get("id_texto")
 
     try:
+        resultados = DetalleFacturaProveedor.objects.filter(obra=obra.pk)
 
-        resultados = (
-            DetalleFacturaProveedor.objects
-            .filter(obra=obra.pk)
-            .values('rubro__descripcion')
-            .annotate(
-                sum_custom_method=Sum(
-                    ExpressionWrapper(
-                        F('preciototal') - 
-                        F('preciototal') * F('descuentoporcentaje') / 100 + 
-                        F('preciototal') * F('iva__retencion') / 100 +
-                        F('preciototal') * F('ingresosbrutos__retencion') / 100 +
-                        F('factura__ajusteglobal'),
-                        output_field=DecimalField()
-                    )
-                )
-            )
-        )
-        total_egresos = 0
+
+        list_rubros = list()
 
         for r in resultados:
-            total_egresos = float(total_egresos) + float(r['sum_custom_method'])
-            r['sum_custom_method'] = round(r['sum_custom_method'],2)
+           list_rubros.append(r.rubro.descripcion)
+
+        list_rubros = list(set(list_rubros))
+
+        dict_rubros = dict()
+
+        for l in list_rubros:
+           dict_rubros[l] = 0
+
+        for d in dict_rubros:
+           for r in resultados:
+                if d == r.rubro.descripcion:
+                    dict_rubros[d] = dict_rubros[d]  + r.getpreciofinaltotalitem()
+
+        total_egresos = 0
+        for d in dict_rubros:
+            dict_rubros[d] = round(dict_rubros[d],2)
+            total_egresos = total_egresos + dict_rubros[d]
+
     except:
         resultados = None
-    
+        total_egresos = 0
+
     return render(
         request, 
         'reportes/detalleegresoporobra.html',
         {
             "obra": obra,
-            "resultados": resultados,
+            "resultados": dict_rubros,
             "texto": texto,
             "total_egresos": round(total_egresos,2)
         }
