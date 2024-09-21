@@ -51,13 +51,13 @@
                     {% for k,v in resultados.items %}
                     <tr>
                         <td>{{ k }}  </td>
-                        <td>$ {{ v | intcomma }}</td>
+                        <td>$ {{ v |intcomma }}</td>
                     </tr>
                     {% endfor %}
                     
                     <tr>
                         <td><b> SUMA EGRESOS </b> </td>     
-                        <td> <b> $ {{ total_egresos | intcomma }} </b> </td>
+                        <td> <b> $ {{ total|intcomma }} </b> </td>
                     </tr>             
                 </tbody>
             </table>

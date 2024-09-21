@@ -413,6 +413,9 @@ def detallereporteingresoegresoobra(request):
         total_entregado=Sum('entregado')
     )
 
+    for s in sumatoriadetallepresupuestos:
+        s["total_entregado"] = round(s["total_entregado"],2)
+
     devengamientos = DetalleFacturaProveedor.objects.filter(obra=obra.pk).order_by("rubro__descripcion")
 
     list_rubros = list()
@@ -436,6 +439,7 @@ def detallereporteingresoegresoobra(request):
 
     for d in dict_rubros:
         total_egresos = total_egresos + round(dict_rubros[d],2)
+        dict_rubros[d] = round(dict_rubros[d], 2)
 
     total_presupuesto_entregado = 0
 
@@ -779,36 +783,28 @@ def detallereporteegresoobra(request):
 
     obra = Obra.objects.get(pk=request.GET.get("id_obra"))
     texto = request.GET.get("id_texto")
+    devengamientos = DetalleFacturaProveedor.objects.filter(obra=obra.pk).order_by("rubro__descripcion")
+    list_rubros = list()
 
-    try:
-        resultados = DetalleFacturaProveedor.objects.filter(obra=obra.pk)
+    for d in devengamientos:
+        list_rubros.append(d.rubro.descripcion)
 
+    list_rubros = list(set(list_rubros))
+    dict_rubros = dict()
 
-        list_rubros = list()
+    for l in list_rubros:
+        dict_rubros[l] = 0
 
-        for r in resultados:
-           list_rubros.append(r.rubro.descripcion)
+    for d in dict_rubros:
+        for dv in devengamientos:
+            if dv.rubro.descripcion == d:
+                dict_rubros[d] = round(dict_rubros[d], 2) + round(dv.getpreciofinaltotalitem(), 2)
 
-        list_rubros = list(set(list_rubros))
+    total = 0
 
-        dict_rubros = dict()
-
-        for l in list_rubros:
-           dict_rubros[l] = 0
-
-        for d in dict_rubros:
-           for r in resultados:
-                if d == r.rubro.descripcion:
-                    dict_rubros[d] = dict_rubros[d]  + r.getpreciofinaltotalitem()
-
-        total_egresos = 0
-        for d in dict_rubros:
-            dict_rubros[d] = round(dict_rubros[d],2)
-            total_egresos = total_egresos + dict_rubros[d]
-
-    except:
-        resultados = None
-        total_egresos = 0
+    for d in dict_rubros:
+        dict_rubros[d] = round(dict_rubros[d], 2)
+        total = total + round(dict_rubros[d], 2)
 
     return render(
         request, 
@@ -817,7 +813,7 @@ def detallereporteegresoobra(request):
             "obra": obra,
             "resultados": dict_rubros,
             "texto": texto,
-            "total_egresos": round(total_egresos,2)
+            "total": round(total,2)
         }
     )
 
