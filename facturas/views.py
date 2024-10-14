@@ -435,7 +435,7 @@ def editarfactura(request, pk):
         formdetallefactura = DetalleFacturaProveedorForm()
         return render(
             request,
-            'facturas/factura_edit.html',
+            'facturas/factura_edit2.html',
             {
                 "factura": factura,
                 "form": form,
