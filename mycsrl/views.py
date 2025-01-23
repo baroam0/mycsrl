@@ -100,7 +100,11 @@ def detallereporteporfactura(request):
     detallefacturaproveedor = DetalleFacturaProveedor.objects.filter(factura=facturaproveedor).order_by('-obra')
     
     #banco = ProveedorBanco.objects.filter(proveedor=proveedor.pk)
-    proveedorbanco = ProveedorBanco.objects.filter(pk=request.GET.get("id_banco"))
+    if request.GET.get("id_banco"):
+        proveedorbanco = ProveedorBanco.objects.filter(pk=request.GET.get("id_banco"))
+    else:
+        proveedorbanco = ProveedorBanco.objects.filter(proveedor=proveedor).first()
+
     banco = proveedorbanco
     datadict= dict()
 

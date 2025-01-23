@@ -107,21 +107,28 @@
                     </table>
                     
                     <div class="row">
-                        <div class="col-4">
+                        <div class="col-3">
                             <button class="btn btn-primary" id="btn-guardar" type="submit">
                                 <i class="fas fa-check"></i>
                                 Aceptar
                             </button>
                         </div>
                         
-                        <div class="col-4">
+                        <div class="col-3">
                             <button class="btn btn-secondary" id="btn-nuevo" type="button" onclick="AbrirVentana({{pk}})">
                                 <i class="fas fa-plus"></i>
                                 Agregar Item
                             </button>
                         </div>
 
-                        <div class="col-4">    
+                        <div class="col-3">
+                            <button class="btn btn-secondary" id="btn-resumen" type="button" onclick="Resumen({{pk}})">
+                                <i class="fas fa-file-alt"></i>
+                                Resumen
+                            </button>
+                        </div>
+
+                        <div class="col-3">    
                             <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="Volver()">
                                 <i class="far fa-times-circle"></i>
                                 Cancelar
@@ -445,6 +452,16 @@
             var urldetallefactura = "/facturas/delete/" + pk;
             //window.open(urldetallefactura,"Ratting","width=700,height=400,left=100,top=100,toolbar=0,status=0,");
             window.location.replace(urldetallefactura);
+        }
+
+        function Resumen(pk) {
+            var fecha = new Date();
+            var  dia = fecha.getDate().toString().padStart(2, '0');
+            var mes = (fecha.getMonth() + 1).toString().padStart(2, '0'); // Los meses en JavaScript comienzan en 0
+            var anio = fecha.getFullYear();
+            var fechaDesde = dia + "/" + mes + "/" + anio;
+            var urldetallefactura = "/detallereporte/?id_proveedor=" + pk + "&id_banco=&id_fechadesde=" + fechaDesde + "&id_fechahasta="+fechaDesde;
+            window.open(urldetallefactura,"Ratting","width=1000,height=850,left=100,top=100,toolbar=0,status=0,");
         }
 
     </script>
