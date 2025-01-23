@@ -117,12 +117,10 @@ class FacturaProveedor(models.Model):
 
     def __str__(self):
         return str(self.fecha)
-
-    """
+    
     def save(self, *args, **kwargs):
         self.comprobante = self.comprobante.replace(" ", "")
         super(FacturaProveedor, self).save(*args, **kwargs)
-    """
         
     class Meta:
         verbose_name_plural = "Facturas"
