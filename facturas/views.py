@@ -418,17 +418,44 @@ def editarfactura(request, pk):
         factura=factura
     )
 
+    proveedores = Proveedor.objects.all()
+
     if request.POST:
         form = FacturaProveedorForm(request.POST, instance=factura)
+        usuario = request.user
+
+        selected_options = str(form.data['proveedor'])
+
+        try:
+            if selected_options.isdigit():
+                consultaproveedor = Proveedor.objects.get(
+                    pk=int(selected_options)
+                )
+            else:
+                consultaproveedor = Proveedor.objects.get(
+                    razonsocial=selected_options
+                )
+
+        except Proveedor.DoesNotExist:
+            consultaproveedor = Proveedor.objects.create(
+                nombrefantasia=selected_options,
+                razonsocial=selected_options,
+                domicilio="-",
+                usuario=usuario,
+                cuit=""
+            )
+
         if form.is_valid():
-            factura = form.save(commit=False)
-            usuario = request.user
-            factura.usuario = usuario
+            facturaform = form.save(commit=False)
+            facturaform.usuario = usuario
+            facturaform.save()
+            factura.proveedor = consultaproveedor
             factura.save()
             messages.success(request, "Se ha modificado los datos.")
             return redirect('/facturas/editar/' + str(pk))
         else:
-            messages.warning(request, form.errors["__all__"])
+            print(form.errors)
+            messages.warning(request, form.errors)
             return redirect('/facturas/editar/' + str(pk))
     else:
         form = FacturaProveedorForm(instance=factura)
@@ -442,6 +469,7 @@ def editarfactura(request, pk):
                 "detallesfactura": detallesfactura,
                 "formdetallefactura": formdetallefactura,
                 "pk": pk,
+                "proveedores": proveedores
             }
         )
 

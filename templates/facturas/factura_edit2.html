@@ -32,16 +32,24 @@
                 <form role=form method="POST">{% csrf_token %}
                     <div class="row">
                       <div class="col-sm-6">
-                        <!-- text input -->
                         <div class="form-group">
-                          <label>Fecha</label>
+                          <label for="id_fecha">Fecha</label>
                             {{form.fecha}}
                         </div>
                       </div>
                       <div class="col-sm-6">
                         <div class="form-group">
-                          <label>Proveedor</label>
-                            {{form.proveedor}}
+                          <label for="id_proveedor">Proveedor</label>
+                          <select class="form-control" id="id_proveedor" name="proveedor">
+                            <option value="0">"------------------"</option>
+                            {% for proveedor in proveedores %}
+                                {%if proveedor.pk == factura.proveedor.pk%}
+                                    <option value={{proveedor.pk}} selected> {{ proveedor.razonsocial.upper}} </option>
+                                {%else%}
+                                    <option value={{proveedor.pk}}> {{ proveedor.razonsocial.upper}} </option>
+                                {%endif%}
+                            {% endfor %}
+                          </select>
                         </div>
                       </div>
                     </div>
@@ -73,12 +81,30 @@
                         <div class="col-sm-6">
                           <div class="form-group">
                             <label>Ajuste global</label>
-                              {{form.descuentoglobal}}
+                              {{form.ajusteglobal}}
                           </div>
                         </div>
                     </div>
                     
                     <br>
+
+                    <table class="table ">
+                        <thead>
+                            <tr>
+                            </tr>
+                        </thead>
+        
+                        <tbody>
+                            <tr>
+                                <td><h5>Subtotal: $ {{factura.getsubtotalfactura | intcomma }}</h5></td>
+                                <td><h5>Descuento: $ {{factura.descuentoglobal | intcomma}}</h5></td>
+                                <td><h5>IVA: $ {{factura.getiva | intcomma}}</h5></td>
+                                <td><h5>Ingresos Brutos: $ {{factura.getiibb | intcomma}}</h5></td>
+                                <td><h5>Total: $ {{ factura.gettotalfactura | intcomma}}</h5></td>
+                            </tr>
+                        </tbody>
+        
+                    </table>
                     
                     <div class="row">
                         <div class="col-4">
@@ -107,23 +133,7 @@
             </div>
 
 
-            <table class="table ">
-                <thead>
-                    <tr>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    <tr>
-                        <td><h5>Subtotal: $ {{factura.getsubtotalfactura | intcomma }}</h5></td>
-                        <td><h5>Descuento: $ {{factura.descuentoglobal | intcomma}}</h5></td>
-                        <td><h5>IVA: $ {{factura.getiva | intcomma}}</h5></td>
-                        <td><h5>Ingresos Brutos: $ {{factura.getiibb | intcomma}}</h5></td>
-                        <td><h5>Total: $ {{ factura.gettotalfactura | intcomma}}</h5></td>
-                    </tr>
-                </tbody>
-
-            </table>
+          
 
 
             
@@ -247,7 +257,16 @@
 
         $(document).ready(function () {
             TranslateDatepickerToEs($("#id_fecha"));
-            $("#id_proveedor").select2();
+            //$("#id_proveedor").select2();
+
+            $('#id_proveedor').select2(
+                { 
+                    tags: true, 
+                    placeholder: "Selecciona o agrega una opcion", 
+                    allowClear: true 
+                }
+            );
+
         });
 
 

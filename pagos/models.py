@@ -59,7 +59,7 @@ class Proveedor(models.Model):
 
     def __str__(self):
         #return self.nombrefantasia.upper() + " - " + self.razonsocial.upper() 
-        return self.razonsocial.upper() 
+        return self.razonsocial.upper()
 
     class Meta:
         verbose_name_plural = "Proveedores"
