@@ -1,12 +1,14 @@
 
+from datetime import datetime
+import json
+
 from django.shortcuts import render
-
 from django.contrib import messages
-
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
 
 from bancos.models import Banco
 from pagos.models import MedioPago
@@ -191,5 +193,74 @@ def ajaxConsultaValorFactura(request,pk):
     }
     return JsonResponse(data)
 
+
+@csrf_exempt
+def ajaxPagarPorLote(request):
+
+    if request.method == "POST":
+        usuario = request.user
+        try:
+            datos = json.loads(request.body)
+            
+            arrayfacturas = datos.get('facturas', [])
+            banco = datos.get('banco')
+            cheque = datos.get('numerocheque')
+            fecha = datetime.today()
+            mediopago = datos.get('mediopago')
+            
+            monto = float(datos.get('monto'))
+
+            if banco != "" or banco != 0:
+                consultabanco = Banco.objects.get(pk=banco)
+            else:
+                consultabanco = None
+
+            consultamediopago = MedioPago.objects.get(pk=mediopago)
+
+            facturas = FacturaProveedor.objects.filter(pk__in=arrayfacturas)
+
+            saldo = float(monto)
+
+            for factura in facturas:
+                if saldo > 0:
+                    if float(factura.gettotalfactura()) < saldo:
+                        saldo = saldo - float(factura.gettotalfactura())
+
+                        devengamiento = Devengamiento.objects.create(
+                            fecha = fecha,
+                            factura = factura,
+                            mediopago = consultamediopago,
+                            numerocheque = cheque,
+                            banco = consultabanco,
+                            monto = float(factura.gettotalfactura()),
+                            usuario = usuario
+                        )
+                        devengamiento.save()
+                        helperpagado(factura.pk, usuario)
+                    else:
+                        devengamiento = Devengamiento.objects.create(
+                            fecha = fecha,
+                            factura = factura,
+                            mediopago = consultamediopago,
+                            numerocheque = cheque,
+                            banco = consultabanco,
+                            monto = saldo,
+                            usuario = usuario
+                        )
+                        devengamiento.save()
+                        helperpagado(factura.pk, usuario)
+            data = {
+                "msg":"Se ha actulizado los pagos",
+                "detail": "",
+                "status" : 500
+            }
+        except Exception as e:
+            data = {
+                "msg":"Error en el servidor",
+                "detail": str(e),
+                "status" : 500
+            }
+    
+    return JsonResponse(data)
 
 # Create your views here.

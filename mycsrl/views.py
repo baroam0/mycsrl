@@ -472,7 +472,6 @@ def detallereporteingresoegresoobra(request):
 
 def helperpagado(factura_id, usuario):
     factura = FacturaProveedor.objects.get(pk=factura_id)
-    devengamientos = Devengamiento.objects.filter(factura=factura)
     detallefacturas = DetalleFacturaProveedor.objects.filter(factura=factura)
     devengamientos = Devengamiento.objects.filter(factura=factura)
 

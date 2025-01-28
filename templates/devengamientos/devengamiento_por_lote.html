@@ -61,15 +61,19 @@
             <br>
 
             <div class="form-inline">
-                <div class="col-3">
-                    <label id="lblsaldo" name="lblsaldo">
+                <div class="col-3"> 
+                    <label id="lblmonto" name="lblmonto">
                     </label>
                 </div>
 
                 <div class="col-3">
+                    <label id="lbltotalfacturas" name="lbltotalfacturas">
+                    </label>
                 </div>
 
                 <div class="col-3">
+                    <label id="lbldiferencia" name="lbldiferencia">
+                    </label>
                 </div>
 
                 <div class="col-3">
@@ -128,50 +132,88 @@
     <script>
 
         var miArray = [];
+        var miArrayMontos = [];
 
         var montos = 0;
 
-        function ajaxConsultaValorFactura(id){
+        var valor = 0;
+
+        function ajaxConsultaValorFactura(id, callback) {
             $.ajax({
                 type: "GET",
                 url: "/devengamiento/ajaxconsultafactura/" + id,
                 dataType: "json",
                 success: function (response) {
-                    montos = montos + response.total;
-                    var aa = $("#txtmonto").val();
-                    montos = aa - montos;
-                    $("#lblsaldo").text("$ " + montos.toFixed(2));
+                    callback(response.total); // Llama al callback con el valor obtenido
+                }
+            });
+        }
+
+        function ajaxPagarPorLote() {
+            var datos = {
+                facturas: miArray,
+                mediopago: $("#selectmediospago").val(),
+                banco: $("#selectbanco").val(),
+                numerocheque: $("#txtnumerocheque").val(),
+                monto: $("#txtmonto").val(),
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "/devengamiento/ajaxpagarporlote/",
+                data: JSON.stringify(datos),
+                dataType: "json",
+                success: function(respuesta) {
+                    console.log("Respuesta del servidor:", respuesta);
+                },
+                error: function(error) {
+                    console.error("Error:", error);
                 }
             });
         }
 
 
-        function ajaxQuitaValorFactura(id){
-            $.ajax({
-                type: "GET",
-                url: "/devengamiento/ajaxconsultafactura/" + id,
-                dataType: "json",
-                success: function (response) {
-                    montos = montos - response.total;
-                    $("#lblsaldo").text("$ " + montos.toFixed(2));
-                }
-            });
+        function sumarArray(numeros) {
+            var acumulador = 0;
+            numeros.forEach(elemento => acumulador += elemento);
+            return acumulador;
         }
 
 
         function agregarElemento(el) {
+            var diferencia = 0;
             if (el.checked) {
                 miArray.push(el.id);
-                ajaxConsultaValorFactura(el.id);
+                ajaxConsultaValorFactura(el.id, function(valor) {
+                    miArrayMontos.push(valor);
+                    var saldo = sumarArray(miArrayMontos);
+                    $("#lbltotalfacturas").text("Total Facturas a pagar $ " + saldo.toFixed(2));
+                    $("#lblmonto").text("Monto: $ " + $("#txtmonto").val());
+                    diferencia = $("#txtmonto").val() - saldo.toFixed(2);
+                    $("#lbldiferencia").text("Diferencia: $ " + diferencia.toFixed(2));
+                });
+
             } else {
                 var elementoAEliminar = el.id;
                 var indice = miArray.indexOf(elementoAEliminar);
                 miArray.splice(indice, 1);
-                ajaxQuitaValorFactura(el.id)
+
+                ajaxConsultaValorFactura(el.id, function(valor) {
+                    var elementoMontoAEliminar = valor;
+                    var indicemonto = miArrayMontos.indexOf(elementoMontoAEliminar);
+                    miArrayMontos.splice(indicemonto, 1);
+
+                    var saldo = sumarArray(miArrayMontos);
+                    $("#lbltotalfacturas").text("Total Facturas a pagar $ " + saldo.toFixed(2));
+                    $("#lblmonto").text("Monto: $ " + $("#txtmonto").val());
+                    
+                    diferencia = $("#txtmonto").val() - saldo.toFixed(2);
+                    $("#lbldiferencia").text("Diferencia: $ " + diferencia.toFixed(2));
+                });
             }
         }
 
-     
+
         function manejaBoton(){
             var banco = $("#selectbanco").val(); 
             var mediopago = $("#selectmediospago").val();
@@ -226,15 +268,14 @@
                 )
                 return false;
             }else{
-                alert("Ahora si");
-            }   
+                ajaxPagarPorLote();
+            } 
         }
 
                 
         $(document).ready(function () {
             
             $('#txtmonto').on('change keyup', function (e) { 
-                //$("#lblsaldo").text("some value");
                 $("#lblsaldo").text(0);
             })
             

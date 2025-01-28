@@ -21,7 +21,7 @@ from django.urls import include, path
 from .views import (
     listadodevengamiento, devengamiento_new, devengamiento_edit, 
     devengamiento_delete, devengamiento_por_lote,
-    ajaxConsultaValorFactura
+    ajaxConsultaValorFactura, ajaxPagarPorLote
     )
 
 urlpatterns = [
@@ -31,4 +31,5 @@ urlpatterns = [
     path('delete/<int:pk>', devengamiento_delete, name='devengamiento_delete'),
     path('pagoporlote/', devengamiento_por_lote, name='devengamiento_por_lote'),
     path('ajaxconsultafactura/<int:pk>', ajaxConsultaValorFactura, name='ajaxconsultavalorfactura'),
+    path('ajaxpagarporlote/', ajaxPagarPorLote, name='ajaxpagarporlote')
 ]
