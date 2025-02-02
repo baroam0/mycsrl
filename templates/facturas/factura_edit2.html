@@ -140,8 +140,127 @@
             </div>
 
 
-          
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                    </tr>
 
+                    <tr>
+                    </tr>
+
+                    <tr>
+                    </tr>
+
+                    <tr>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+                    <tr>                        
+                        <td>
+                            <label for="id_obra">Obra</label>
+                            <select id="id_obra" class="form-control">
+                            {% for obra in obras %}
+                                <option value={{obra.pk}}>
+                                    {{obra.descripcion}}
+                                </option>
+                            {% endfor %} 
+                            </select>
+                        </td>
+                        <td>
+                            <label for="id_rubro">Rubro</label>
+                            <select id="id_rubro" class="form-control">
+                                {% for rubro in rubros %}
+                                    <option value={{rubro.pk}}>
+                                        {{rubro.descripcion}}
+                                    </option>
+                                {% endfor %} 
+                            </select>
+                        </td>
+                        <td>
+                            <label for="id_detalle">Detalle</label>
+                            <select id="id_detalle">
+                                {% for descripciondetalle in descripciondetalles %}
+                                    <option value={{descripciondetalle.pk}}>
+                                        {{descripciondetalle.descripciondetalle}}
+                                    </option>
+                                {% endfor %} 
+                            </select>
+                        </td>
+                        <td>
+                            <label for="id_unidad">Unidad</label>
+                            <select id="id_unidad">
+                                {% for unidad in unidades %}
+                                    <option value={{unidad.pk}}>
+                                        {{unidad.descripcion}}
+                                    </option>
+                                {% endfor %} 
+                            </select>
+                             
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="id_cantidad">Cantidad</label>
+                            <input id="id_cantidad" type="number" placeholder="Cantidad">
+                        </td>
+                        
+                        <td> 
+                            <label for="id_preciototal">Precio Total</label>
+                            <input id="id_preciototal" type="number" placeholder="Precio Total">
+                        </td>
+
+                        <td>
+                            <label for="id_iva">Iva</label>
+                            <select id="id_iva">
+                                {% for iva in ivas %}
+                                    <option value={{iva.pk}}>
+                                        {{iva.retencion}}
+                                    </option>
+                                {% endfor %} 
+                            </select>
+                        </td>
+                        <td>
+                            <label for="id_iibb">Iva</label>
+                            <select id="id_iibb">
+                                {% for ingresobruto in ingresosbrutos %}
+                                    <option value={{ingresobruto.pk}}>
+                                        {{ingresobruto.retencion}}
+                                    </option>
+                                {% endfor %} 
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        
+
+                        <td>
+                            <input type="number" placeholder="Descuento">
+                        </td>
+                        
+                        <td>
+                            <input type="number" placeholder="Descuento pocentaje">
+                        </td>
+                        
+                        <td>
+                            <input type="number" placeholder="Ajuste">
+                        </td>
+
+                        <td>
+                            <label for="id_rodado">Rodado</label>
+                            <select id="id_rodado">
+                                <option value=0>--------</option>
+                                {% for rodado in rodados %}
+                                    <option value={{rodado.pk}}>
+                                        {{rodado.dominio}} - {{rodado.descripcion}}
+                                    </option>
+                                {% endfor %} 
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
             
             <table class="table table-hover">
@@ -264,7 +383,9 @@
 
         $(document).ready(function () {
             TranslateDatepickerToEs($("#id_fecha"));
-            //$("#id_proveedor").select2();
+            $("#id_detalle").select2();
+            $("#id_obra").select2();
+            $("#id_rubro").select2();
 
             $('#id_proveedor').select2(
                 { 

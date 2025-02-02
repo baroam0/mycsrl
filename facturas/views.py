@@ -11,6 +11,8 @@ from django.db.models import F, Q
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 
+from rodados.models import Rodado
+
 from .forms import (
     UnidadForm, FacturaProveedorForm, DetalleFacturaProveedorForm, 
     IvaForm, IngresoBrutoForm, DescripcionDetalleForm
@@ -413,12 +415,18 @@ def nuevafactura(request):
 
 @login_required(login_url='/login')
 def editarfactura(request, pk):
+    descripciondetalles = Descripciondetalle.objects.all()
     factura = FacturaProveedor.objects.get(pk=pk)
     detallesfactura = DetalleFacturaProveedor.objects.filter(
         factura=factura
     )
-
+    ingresosbrutos = IngresoBruto.objects.all()
+    ivas = Iva.objects.all()
+    obras = Obra.objects.all()
     proveedores = Proveedor.objects.all()
+    rodados = Rodado.objects.all()
+    rubros = Rubro.objects.all()
+    unidades = Unidad.objects.all()
 
     if request.POST:
         form = FacturaProveedorForm(request.POST, instance=factura)
@@ -460,16 +468,24 @@ def editarfactura(request, pk):
     else:
         form = FacturaProveedorForm(instance=factura)
         formdetallefactura = DetalleFacturaProveedorForm()
+
         return render(
             request,
             'facturas/factura_edit2.html',
             {
+                "descripciondetalles" : descripciondetalles,
                 "factura": factura,
                 "form": form,
                 "detallesfactura": detallesfactura,
                 "formdetallefactura": formdetallefactura,
+                "ingresosbrutos": ingresosbrutos,
+                "ivas": ivas,
+                "obras": obras,
                 "pk": pk,
-                "proveedores": proveedores
+                "proveedores": proveedores,
+                "rodados": rodados,
+                "rubros": rubros,
+                "unidades": unidades
             }
         )
 
