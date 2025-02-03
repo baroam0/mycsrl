@@ -24,8 +24,7 @@
             {% endfor %}
         {% endif %}
 
-        <div class="row">
-            
+        <div class="row">  
             <div class="col-12">
                 <hr>
 
@@ -133,134 +132,98 @@
                                 <i class="far fa-times-circle"></i>
                                 Cancelar
                             </button>
-                        </div>                        
+                        </div>
                     </div>
                     <br>
                 </form>
             </div>
 
+        </div>
 
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                    </tr>
 
-                    <tr>
-                    </tr>
 
-                    <tr>
-                    </tr>
+        <div class="row">  
+            <div class="col-12">
+                <hr>
 
-                    <tr>
-                    </tr>
-
-                </thead>
-
-                <tbody>
-                    <tr>                        
-                        <td>
-                            <label for="id_obra">Obra</label>
-                            <select id="id_obra" class="form-control">
+                <form role=form method="POST">{% csrf_token %}
+                    <div class="row">
+                      <div class="col-sm-3">
+                        <div class="form-group">
+                          <label for="id_obra">Obra</label>
+                          <select class="form-control" id="id_obra" name="obra">
+                            <option value="0">"------------------"</option>
                             {% for obra in obras %}
-                                <option value={{obra.pk}}>
-                                    {{obra.descripcion}}
-                                </option>
-                            {% endfor %} 
-                            </select>
-                        </td>
-                        <td>
-                            <label for="id_rubro">Rubro</label>
-                            <select id="id_rubro" class="form-control">
-                                {% for rubro in rubros %}
-                                    <option value={{rubro.pk}}>
-                                        {{rubro.descripcion}}
-                                    </option>
-                                {% endfor %} 
-                            </select>
-                        </td>
-                        <td>
-                            <label for="id_detalle">Detalle</label>
-                            <select id="id_detalle">
-                                {% for descripciondetalle in descripciondetalles %}
-                                    <option value={{descripciondetalle.pk}}>
-                                        {{descripciondetalle.descripciondetalle}}
-                                    </option>
-                                {% endfor %} 
-                            </select>
-                        </td>
-                        <td>
-                            <label for="id_unidad">Unidad</label>
-                            <select id="id_unidad">
-                                {% for unidad in unidades %}
-                                    <option value={{unidad.pk}}>
-                                        {{unidad.descripcion}}
-                                    </option>
-                                {% endfor %} 
-                            </select>
-                             
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label for="id_cantidad">Cantidad</label>
-                            <input id="id_cantidad" type="number" placeholder="Cantidad">
-                        </td>
-                        
-                        <td> 
-                            <label for="id_preciototal">Precio Total</label>
-                            <input id="id_preciototal" type="number" placeholder="Precio Total">
-                        </td>
+                                {%if obra.pk == factura.proveedor.pk%}
+                                    <option value={{obra.pk}} selected> {{ obra.descripcion.upper}} </option>
+                                {%else%}
+                                    <option value={{obra.pk}}> {{ obra.descripcion.upper}} </option>
+                                {%endif%}
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <label for="id_proveedor">Proveedor</label>
+                          <select class="form-control" id="id_proveedor" name="proveedor">
+                            <option value="0">"------------------"</option>
+                            {% for proveedor in proveedores %}
+                                {%if proveedor.pk == factura.proveedor.pk%}
+                                    <option value={{proveedor.pk}} selected> {{ proveedor.razonsocial.upper}} </option>
+                                {%else%}
+                                    <option value={{proveedor.pk}}> {{ proveedor.razonsocial.upper}} </option>
+                                {%endif%}
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
 
-                        <td>
-                            <label for="id_iva">Iva</label>
-                            <select id="id_iva">
-                                {% for iva in ivas %}
-                                    <option value={{iva.pk}}>
-                                        {{iva.retencion}}
-                                    </option>
-                                {% endfor %} 
-                            </select>
-                        </td>
-                        <td>
-                            <label for="id_iibb">Iva</label>
-                            <select id="id_iibb">
-                                {% for ingresobruto in ingresosbrutos %}
-                                    <option value={{ingresobruto.pk}}>
-                                        {{ingresobruto.retencion}}
-                                    </option>
-                                {% endfor %} 
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <!-- text input -->
+                        <div class="form-group">
+                          <label>Comprobante</label>
+                            {{form.comprobante}}
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <label>Descuento global</label>
+                            {{form.descuentoglobal}}
+                        </div>
+                      </div>
+                    </div>
 
-                        <td>
-                            <input type="number" placeholder="Descuento">
-                        </td>
-                        
-                        <td>
-                            <input type="number" placeholder="Descuento pocentaje">
-                        </td>
-                        
-                        <td>
-                            <input type="number" placeholder="Ajuste">
-                        </td>
+                    <div class="row">
+                        <div class="col-sm-6">
+                          <!-- text input -->
+                          <div class="form-group">
+                            <label>Precepcion global</label>
+                              {{form.preciocepcionglobal}}
+                          </div>
+                        </div>
+                        <div class="col-sm-6">
+                          <div class="form-group">
+                            <label>Ajuste global</label>
+                              {{form.ajusteglobal}}
+                          </div>
+                        </div>
+                    </div>
+                    
+                    <br>
 
-                        <td>
-                            <label for="id_rodado">Rodado</label>
-                            <select id="id_rodado">
-                                <option value=0>--------</option>
-                                {% for rodado in rodados %}
-                                    <option value={{rodado.pk}}>
-                                        {{rodado.dominio}} - {{rodado.descripcion}}
-                                    </option>
-                                {% endfor %} 
-                            </select>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                 
+                    
+                    
+                    <br>
+                </form>
+            </div>
+
+
+           
+        
 
             
             <table class="table table-hover">
@@ -309,33 +272,7 @@
 
         </div>
 
-        <div class="modal fade" id="modal-default">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h4 class="modal-title">Items de Factura</h4>
-                  <!--button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button-->
-                </div>
-
-                <div class="modal-body">
-                    <div id="form-new-detail">
-                        <form  method="POST">
-                        </form>
-                    </div>
-                </div>
-
-                <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-primary" onclick="SaveDataModal();">Guardar</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                </div>
-              </div>
-              <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-          </div>
-          <!-- /.modal -->
+        
 
     </div>
 
@@ -349,43 +286,16 @@
         var actualizacion = null;
 
         var id_detallefactura = null;
-
-        function LoadEmptyDetailForm(){
-            $.ajax({
-                url: '/facturas/ajax/showdetailform/',
-                type: 'GET',
-                success: function(response){
-                    $('#form-new-detail').html('');
-                    $('#form-new-detail').html(response.form_html);
-                    //$('#id_obra').select2();
-                    //$('#id_rubro').select2();
-                },
-                error: function(error){
-                    console.log(error);
-                }
-            })
-        }
-
-        function LoadDetailForm(pk){
-            $.ajax({
-                url: '/facturas/ajax/cargarfacturadetail/' + pk,
-                type: 'GET',
-                success: function(response){
-                    $('#form-new-detail').html(response.form_html);
-                    //$('#id_obra').select2();
-                },
-                error: function(error){
-                    console.log(error);
-                }
-            })
-
-        }
-
+       
         $(document).ready(function () {
             TranslateDatepickerToEs($("#id_fecha"));
             $("#id_detalle").select2();
+            $("#id_iibb").select2();
+            $("#id_iva").select2();
             $("#id_obra").select2();
+            $("#id_rodado").select2();
             $("#id_rubro").select2();
+            $("#id_unidad").select2();
 
             $('#id_proveedor').select2(
                 { 
@@ -396,156 +306,6 @@
             );
 
         });
-
-
-        function OpenModalNew(){
-            actualizacion = false;
-            $('#modal-default').modal('show');
-            LoadEmptyDetailForm();
-        }
-
-
-        function OpenDataModal(pk){
-            actualizacion = true;
-            $('#modal-default').modal('show');   
-            LoadEmptyDetailForm();
-            LoadDetailForm(pk);
-            id_detallefactura = pk;
-        }
-
-
-        function SaveNewData(){
-            var id_facturaproveedor = {{pk}};
-            var id_fecha = $("#id_fecha").val();
-            var id_proveedor = $("#id_proveedor").val();
-            var comprobante = $("#id_comprobante").val();
-
-            var descripcion = $("#id_descripcion").val();
-
-            var id_obra = $("#id_obra").val();
-            var id_rubro = $("#id_rubro").val();
-            var id_unidad = $("#id_unidad").val();
-            var id_cantidad = $("#id_cantidad").val();
-            var id_preciounitario = $("#id_preciounitario").val();
-            var id_iva = $("#id_iva").val();
-            var id_ingresosbrutos = $("#id_ingresosbrutos").val(); 
-            var id_descuento = $("#id_descuento").val();
-            var id_descuentoporcentaje = $("#id_descuentoporcentaje").val();
-
-            var data = {
-                "id_factura": id_facturaproveedor,
-                "fecha": id_fecha,
-                "id_proveedor": id_proveedor , 
-                "comprobante": comprobante, 
-                "id_obra": id_obra, 
-                "id_rubro": id_rubro, 
-                "descripcion": descripcion,
-                "id_unidad": id_unidad,
-                "cantidad": id_cantidad, 
-                "preciounitario": id_preciounitario,
-                "iva": id_iva, 
-                "ingresosbrutos": id_ingresosbrutos, 
-                "descuento": id_descuento, 
-                "descuentoporcentaje": id_descuentoporcentaje,
-            }
-
-            var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
-
-            $.ajax({
-                type: "POST",
-                url: "/facturas/ajax/savenewdetail/",
-                dataType: 'json',
-                //data: JSON.stringify(data),
-                data: data,
-                beforeSend: function (xhr){
-                    xhr.setRequestHeader('X-CSRFToken', csrftoken);
-                },
-                success: function (response) {
-                    if(response.status == 200){
-                        window.location.replace("/facturas/editar/" + response.pk);
-                    }else{
-                        alert(response.message)
-                    }
-                },
-                error: function (xhr, errmsg, err) {
-                    console.log(xhr.status + ": " + xhr.responseText);
-                }
-            });
-        }
-
-
-        function UpdateData(id_detallefactura){
-            var id_facturaproveedor = {{pk}};
-            var id_fecha = $("#id_fecha").val();
-            var id_proveedor = $("#id_proveedor").val();
-            var comprobante = $("#id_comprobante").val();
-
-            var descripcion = $("#id_descripcion").val();
-
-            var id_obra = $("#id_obra").val();
-            var id_rubro = $("#id_rubro").val();
-            var id_unidad = $("#id_unidad").val();
-            var id_cantidad = $("#id_cantidad").val();
-            var id_preciounitario = $("#id_preciounitario").val();
-            var id_iva = $("#id_iva").val();
-            var id_ingresosbrutos = $("#id_ingresosbrutos").val(); 
-            var id_descuento = $("#id_descuento").val();
-            var id_descuentoporcentaje = $("#id_descuentoporcentaje").val();
-
-            var data = {
-                "id_factura": id_facturaproveedor,
-                "id_detallefactura": id_detallefactura,
-                "fecha": id_fecha,
-                "id_proveedor": id_proveedor , 
-                "comprobante": comprobante, 
-                "id_obra": id_obra, 
-                "id_rubro": id_rubro, 
-                "descripcion": descripcion,
-                "id_unidad": id_unidad,
-                "cantidad": id_cantidad, 
-                "preciounitario": id_preciounitario,
-                "iva": id_iva, 
-                "ingresosbrutos": id_ingresosbrutos, 
-                "descuento": id_descuento, 
-                "descuentoporcentaje": id_descuentoporcentaje,
-            }
-            
-            var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
-
-            $.ajax({
-                type: "POST",
-                url: "/facturas/ajax/updatedetail/",
-                dataType: 'json',
-                //data: JSON.stringify(data),
-                data: data,
-                beforeSend: function (xhr){
-                    xhr.setRequestHeader('X-CSRFToken', csrftoken);
-                },
-                success: function (response) {
-                    if(response.status == 200){
-                        window.location.replace("/facturas/editar/" + response.pk);
-                    }else{
-                        alert(response.message)
-                    }
-                },
-                error: function (xhr, errmsg, err) {
-                    console.log(xhr.status + ": " + xhr.responseText);
-                }
-            });
-            
-            id_detallefactura = null;
-        }
-
-
-        function SaveDataModal(){
-            if(actualizacion===true){
-                UpdateData(id_detallefactura);
-                actualizacion = null;
-            }else{
-                SaveNewData();
-                actualizacion = null;
-            }
-        }
 
 
         function Volver() {
@@ -574,6 +334,7 @@
             //window.open(urldetallefactura,"Ratting","width=700,height=400,left=100,top=100,toolbar=0,status=0,");
             window.location.replace(urldetallefactura);
         }
+
 
         function Resumen(pk) {
             var fecha = new Date();
