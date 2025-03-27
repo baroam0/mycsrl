@@ -4,9 +4,7 @@
 
 {% block content %}
 
-    <div >
-
-        <br>
+    <div>
         <div class="row">
             <div class="col-sm-3"></div>
             <div class="col-sm-6">
@@ -14,7 +12,6 @@
             </div>
             <div class="col-sm-3"></div>
         </div>
-
 
         {% if messages %}
             {% for message in messages %}
@@ -114,7 +111,8 @@
                         </div>
                         
                         <div class="col-3">
-                            <button class="btn btn-secondary" id="btn-nuevo" type="button" onclick="AbrirVentana({{pk}})">
+                            <!--button class="btn btn-secondary" id="btn-nuevo" type="button" onclick="AbrirVentana({{pk}})"-->
+                            <button class="btn btn-secondary" id="btn-nuevo" type="button" onclick="HabilitarDetalleItem(0)">
                                 <i class="fas fa-plus"></i>
                                 Agregar Item
                             </button>
@@ -137,95 +135,9 @@
                     <br>
                 </form>
             </div>
-
         </div>
 
-
-
-        <div class="row">  
-            <div class="col-12">
-                <hr>
-
-                <form role=form method="POST">{% csrf_token %}
-                    <div class="row">
-                      <div class="col-sm-3">
-                        <div class="form-group">
-                          <label for="id_obra">Obra</label>
-                          <select class="form-control" id="id_obra" name="obra">
-                            <option value="0">"------------------"</option>
-                            {% for obra in obras %}
-                                {%if obra.pk == factura.proveedor.pk%}
-                                    <option value={{obra.pk}} selected> {{ obra.descripcion.upper}} </option>
-                                {%else%}
-                                    <option value={{obra.pk}}> {{ obra.descripcion.upper}} </option>
-                                {%endif%}
-                            {% endfor %}
-                          </select>
-                        </div>
-                      </div>
-                      <div class="col-sm-6">
-                        <div class="form-group">
-                          <label for="id_proveedor">Proveedor</label>
-                          <select class="form-control" id="id_proveedor" name="proveedor">
-                            <option value="0">"------------------"</option>
-                            {% for proveedor in proveedores %}
-                                {%if proveedor.pk == factura.proveedor.pk%}
-                                    <option value={{proveedor.pk}} selected> {{ proveedor.razonsocial.upper}} </option>
-                                {%else%}
-                                    <option value={{proveedor.pk}}> {{ proveedor.razonsocial.upper}} </option>
-                                {%endif%}
-                            {% endfor %}
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="row">
-                      <div class="col-sm-6">
-                        <!-- text input -->
-                        <div class="form-group">
-                          <label>Comprobante</label>
-                            {{form.comprobante}}
-                        </div>
-                      </div>
-                      <div class="col-sm-6">
-                        <div class="form-group">
-                          <label>Descuento global</label>
-                            {{form.descuentoglobal}}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-sm-6">
-                          <!-- text input -->
-                          <div class="form-group">
-                            <label>Precepcion global</label>
-                              {{form.preciocepcionglobal}}
-                          </div>
-                        </div>
-                        <div class="col-sm-6">
-                          <div class="form-group">
-                            <label>Ajuste global</label>
-                              {{form.ajusteglobal}}
-                          </div>
-                        </div>
-                    </div>
-                    
-                    <br>
-
-                 
-                    
-                    
-                    <br>
-                </form>
-            </div>
-
-
-           
-        
-
-            
+        <div class="row">
             <table class="table table-hover">
                 <thead>
                     <tr>
@@ -256,7 +168,7 @@
                             <td>$ {{ detallefactura.getpreciofinaltotalitem | intcomma }} </td>
                             <td>{{ detallefactura.usuario }}</td>
                             <td>
-                                <button type="button" class="btn btn-link btn-sm" onclick="AbrirVentanaEditar({{detallefactura.pk}})">
+                                <button type="button" class="btn btn-link btn-sm" onclick="cargarDetalleItemFactura({{detallefactura.pk}})">
                                     <i class="fas fa-pencil-alt"></i>
                                 </button>
 
@@ -270,9 +182,146 @@
                 </tbody>
             </table>
 
-        </div>
+            <div class="col-12">
+                <hr>
+                <form id="form-detalleitem" role=form method="POST">{% csrf_token %}
 
-        
+                    <div class="row">
+                        <div class="col-sm-6">
+                        <div class="form-group">
+                          <label for="id_obra">Obra</label>
+                          <select class="form-control" id="id_obra" name="obra">
+                            {% for obra in obras %}
+                              <option value={{obra.pk}}> {{ obra.descripcion.upper}} </option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <label for="id_proveedor">Rubro </label>
+                          <select class="form-control" id="id_rubro" name="rubro">
+                            {% for rubro in rubros %}
+                              <option value={{rubro.pk}}> {{ rubro.descripcion.upper}} </option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <label for="id_detalleitem">Detalle</label>
+                            <input class="form-control" id="id_detalleitem" name="detalleitem" type="text">
+                        </div>
+                      </div>
+
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <label for="id_unidad">Unidad </label>
+                          <select class="form-control" id="id_unidad" name="unidad">
+                            {% for unidad in unidades %}
+                              <option value={{unidad.pk}}> {{ unidad.descripcion.upper}} </option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <label for="id_cantidad">Cantidad</label>
+                            <input class="form-control" id="id_cantidad" name="cantidad" type="number">
+                        </div>
+                      </div>
+                      
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <label for="id_preciototal">Precio total</label>
+                            <input class="form-control" id="id_preciototal" name="preciototal" type="number">
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <label for="id_iva"> IVA </label>
+                          <select class="form-control" id="id_iva" name="iva">
+                            {% for iva in ivas %}
+                              <option value={{iva.pk}}> {{ iva.retencion }} </option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+                      
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <label for="id_descuentos"> Descuentos </label>
+                            <input class="form-control" id="id_descuentos" name="descuentos" type="number">
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <label for="id_porcentajedescuentos"> Porcentaje Descuentos </label>
+                            <input class="form-control" id="id_porcentajedescuentos" name="porcentajedescuentos" type="number">
+                        </div>
+                      </div>
+                      
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <label for="id_Ajuste"> Ajuste </label>
+                            <input class="form-control" id="id_Ajuste" name="Ajuste" type="number">
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div class="row">
+                      <div class="col-sm-12">
+                          <label for="id_rodado"> Rodado </label>
+                          <select class="form-control" id="id_rodado" name="rodado">
+                            {% for rodado in rodados %}
+                              <option value={{rodado.pk}}> {{ rodado.dominio }} - {{ rodado.descripcion }} </option>
+                            {% endfor %}
+                          </select>
+                      </div>
+                    </div>
+                </form>
+
+                <br>
+
+                <div class="row">
+                  <div class="col-4">
+                      <button class="btn btn-primary" id="btn-guardar" onclick="guardarDetalleItem()"">
+                          <i class="fas fa-check"></i>
+                          Guardar Detalle
+                      </button>
+                  </div>
+                  
+                  <div class="col-4">
+                  </div>
+
+                  <div class="col-4">    
+                      <button type="button" class="btn btn-danger" id="btn-cancelar" onclick="cancelarDetallerItem()">
+                          <i class="far fa-times-circle"></i>
+                          Cancelar Detalle
+                      </button>
+                  </div>
+              </div>
+
+
+            </div>
+        </div>
 
     </div>
 
@@ -284,6 +333,10 @@
     <script>
 
         var actualizacion = null;
+
+        var editarDetalleItem = 0;
+
+        var idFactura = {{pk}};
 
         var id_detallefactura = null;
        
@@ -305,7 +358,107 @@
                 }
             );
 
+            limpiarDetalleItem();
+            DeshabilitarDetalleItem();
+            
         });
+
+
+        function cancelarDetallerItem(){
+          limpiarDetalleItem();
+          DeshabilitarDetalleItem();
+        }
+
+
+        function cargarDetalleItemFactura(pk) {
+          $.ajax({
+            url: "/facturas/ajax/cargarfacturadetail/" + pk,
+            type: "GET",
+            dataType: "json",
+            success: function(respuesta) {
+              console.log(respuesta.detalle);
+              HabilitarDetalleItem(1);
+              $('#id_ajuste').val(respuesta.ajuste);
+              $('#id_cantidad').val(respuesta.cantidad);
+              $("#id_descuento").val(respuesta.descuento);
+              $("#id_porcentajedescuentos").val(respuesta.descuentoporcentaje);
+              $("#id_detalleitem").val(respuesta.detalle);
+              $('#id_iva').val(respuesta.iva).trigger('change');
+              $('#id_obra').val(respuesta.obra).trigger('change');
+              $('#id_preciototal').val(respuesta.preciototal);
+              $('#id_rubro').val(respuesta.rubro).trigger('change');
+              $('#id_unidad').val(respuesta.unidad).trigger('change');
+              $('#id_rodado').val(respuesta.rodado).trigger('change');
+            },
+            error: function(xhr, status, error) {
+              console.error("Ocurrió un error: ", error);
+            }
+          });
+        }
+
+
+        function DeshabilitarDetalleItem(){
+            $("#form-detalleitem :input").prop("disabled", true);
+        }
+
+
+        function guardarDetalleItem(){
+          let datos = {
+            ajuste: $('#id_ajuste').val(),
+            cantidad: $('#id_cantidad').val(),
+            descuento: $("#id_descuento").val(),
+            detalleitem: $("#id_detalleitem").val(),
+            editar: editarDetalleItem,
+            idFactura: idFactura,
+            iva: $('#id_iva').val(),
+            obra: $('#id_obra').val(),
+            preciototal: $('#id_preciototal').val(),
+            porcentajedescuentos: $("#id_porcentajedescuentos").val(),
+            rodado: $('#id_rodado').val(),
+            rubro: $('#id_rubro').val(),
+            unidad: $('#id_unidad').val(),
+          };
+
+          let datosJSON = JSON.stringify(datos);
+
+          $.ajax({
+            url: '/facturas/ajax/savefacturadetail/',
+            type: 'POST',
+            contentType: 'application/json',
+            data: datosJSON,
+            success: function(respuesta) {
+              console.log('Respuesta del servidor:', respuesta);
+            },
+            error: function(error) {
+              console.error('Error al enviar los datos:', error); 
+            }
+          });
+        }
+
+
+        function HabilitarDetalleItem(valor){
+            if(valor==1){
+              editarDetalleItem=1;
+            }else{
+              editarDetalleItem=0;
+            }
+            $("#form-detalleitem :input").prop("disabled", false);
+        }
+
+        
+        function limpiarDetalleItem(){
+          $('#id_ajuste').val("");
+          $('#id_cantidad').val("");
+          $("#id_descuento").val("");
+          $("#id_porcentajedescuentos").val("");
+          $("#id_detalleitem").val("");
+          $('#id_iva').val("").trigger('change');
+          $('#id_obra').val("").trigger('change');
+          $('#id_preciototal').val("");
+          $('#id_rubro').val("").trigger('change');
+          $('#id_unidad').val("").trigger('change');
+          $('#id_rodado').val("").trigger('change');
+        }
 
 
         function Volver() {

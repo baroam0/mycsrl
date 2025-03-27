@@ -1,15 +1,15 @@
 
 from datetime import date
+import json
+
 from django.contrib import messages
-
 from django.contrib.auth.decorators import login_required
-
 from django.core import serializers
-
 from django.core.paginator import Paginator
 from django.db.models import F, Q
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
 
 from rodados.models import Rodado
 
@@ -670,9 +670,79 @@ def ajaxeditarfacturadetalle(request):
 def ajaxloaddetallefactura(request, pk):
     if request.method == "GET":
         detallefactura = DetalleFacturaProveedor.objects.get(pk=pk)
-        form = DetalleFacturaProveedorForm(instance=detallefactura)
-        form_html = form.as_p()
-        return JsonResponse({'form_html': form_html})
+
+        detallefactura_dict = {
+            "pk": detallefactura.pk,
+            "ajuste": detallefactura.ajuste,
+            "cantidad": detallefactura.cantidad,
+            "descuento": detallefactura.descuento,
+            "descuentoporcentaje": detallefactura.descuentoporcentaje,
+            "detalle": detallefactura.descripciondetalle.descripciondetalle.upper() if detallefactura.descripciondetalle else None,
+            "iva": detallefactura.iva.pk,
+            "obra": detallefactura.obra.pk,
+            "preciototal": detallefactura.preciototal,
+            "unidad": detallefactura.unidad.pk,
+            "rodado": detallefactura.rodado.pk if detallefactura.rodado else None,
+            "rubro": detallefactura.rubro.pk
+        }
+
+        return JsonResponse(detallefactura_dict)
+
+
+@csrf_exempt
+def ajaxsaverdetallefactura(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)  # Parsear el JSON recibido
+
+            print(type(data))
+            
+            
+            ajuste = data.get('ajuste')
+            idFactura = data.get('idFactura')
+            cantidad = data.get('cantidad')
+            descuento = data.get('descuento')
+            porcentajedescuentos = data.get('porcentajedescuentos')
+            detalleitem = data.get('detalleitem')
+            iva = data.get('iva')
+            obra = data.get('obra')
+            preciototal = data.get('preciototal')
+            rubro = data.get('rubro')
+            unidad = data.get('unidad')
+            rodado = data.get('rodado')
+
+            factura = FacturaProveedor.objects.get(pk=idFactura)
+            iva = Iva.objects.get(pk=iva)
+            obra = Obra.objects.get(pk=obra)
+            
+            if rodado is None:
+                rodado = None
+            else:
+                rodado = Rodado.objects.get(pk=rodado)
+                
+            rubro = Rubro.objects.get(pk=rubro)
+            unidad = Unidad.objects.get(pk=unidad)
+            
+
+            detallefactura = DetalleFacturaProveedor(
+                factura=factura,
+                ajuste=ajuste,
+                cantidad=cantidad,
+                descripciondetalle=detalleitem,
+                descuento=descuento,
+                iva=iva,
+                obra=obra,
+                porcentajedescuentos=porcentajedescuentos,
+                preciototal=preciototal
+            )
+            detallefactura.save()    
+            return JsonResponse({'mensaje': 'Datos guardados exitosamente'}, status=200)
+            
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'JSON inválido'}, status=400)
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+    
 
 
 def ajaxloadunidad(request, pk):
