@@ -677,7 +677,7 @@ def ajaxloaddetallefactura(request, pk):
             "cantidad": detallefactura.cantidad,
             "descuento": detallefactura.descuento,
             "descuentoporcentaje": detallefactura.descuentoporcentaje,
-            "detalle": detallefactura.descripciondetalle.descripciondetalle.upper() if detallefactura.descripciondetalle else None,
+            "detalle": detallefactura.descripciondetalle.pk,
             "iva": detallefactura.iva.pk,
             "obra": detallefactura.obra.pk,
             "preciototal": detallefactura.preciototal,
@@ -693,10 +693,7 @@ def ajaxloaddetallefactura(request, pk):
 def ajaxsaverdetallefactura(request):
     if request.method == 'POST':
         try:
-            data = json.loads(request.body)  # Parsear el JSON recibido
-
-            print(type(data))
-            
+            data = json.loads(request.body)  # Parsear el JSON recibido            
             
             ajuste = data.get('ajuste')
             idFactura = data.get('idFactura')

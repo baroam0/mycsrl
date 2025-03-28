@@ -214,8 +214,13 @@
 
                       <div class="col-sm-6">
                         <div class="form-group">
-                          <label for="id_detalleitem">Detalle</label>
-                            <input class="form-control" id="id_detalleitem" name="detalleitem" type="text">
+                          <label for="id_descripciondetalle">Detalle</label>
+                            <select class="form-control" id="id_descripciondetalle" name="descripciondetalle">
+                              {% for descripciondetalle in descripciondetalles %}
+                                <option value={{descripciondetalle.pk}}> {{ descripciondetalle.descripciondetalle.upper}} </option>
+                              {% endfor %}
+                            </select>
+                            
                         </div>
                       </div>
 
@@ -342,6 +347,8 @@
        
         $(document).ready(function () {
             TranslateDatepickerToEs($("#id_fecha"));
+            
+            $("#id_descripciondetalle").select2();
             $("#id_detalle").select2();
             $("#id_iibb").select2();
             $("#id_iva").select2();
@@ -377,9 +384,11 @@
             dataType: "json",
             success: function(respuesta) {
               console.log(respuesta.detalle);
+              console.log(respuesta.obra);
               HabilitarDetalleItem(1);
               $('#id_ajuste').val(respuesta.ajuste);
               $('#id_cantidad').val(respuesta.cantidad);
+              $("#id_descripciondetalle").val(respuesta.detalle).trigger('change');;
               $("#id_descuento").val(respuesta.descuento);
               $("#id_porcentajedescuentos").val(respuesta.descuentoporcentaje);
               $("#id_detalleitem").val(respuesta.detalle);
@@ -449,6 +458,7 @@
         function limpiarDetalleItem(){
           $('#id_ajuste').val("");
           $('#id_cantidad').val("");
+          $("#id_descripciondetalle").val("").trigger('change');
           $("#id_descuento").val("");
           $("#id_porcentajedescuentos").val("");
           $("#id_detalleitem").val("");
