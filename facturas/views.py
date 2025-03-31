@@ -719,6 +719,8 @@ def ajaxsaverdetallefactura(request):
                 
             rubro = Rubro.objects.get(pk=rubro)
             unidad = Unidad.objects.get(pk=unidad)
+
+            print(data)
             
 
             detallefactura = DetalleFacturaProveedor(
