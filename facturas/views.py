@@ -720,6 +720,8 @@ def ajaxsaverdetallefactura(request):
             rubro = Rubro.objects.get(pk=rubro)
             unidad = Unidad.objects.get(pk=unidad)
 
+            descripciondetalle = Descripciondetalle.objects.get(pk=detalleitem)
+
             print(data)
             
 
@@ -727,11 +729,11 @@ def ajaxsaverdetallefactura(request):
                 factura=factura,
                 ajuste=ajuste,
                 cantidad=cantidad,
-                descripciondetalle=detalleitem,
+                descripciondetalle=descripciondetalle,
                 descuento=descuento,
                 iva=iva,
                 obra=obra,
-                porcentajedescuentos=porcentajedescuentos,
+                descuentoporcentaje=porcentajedescuentos,
                 preciototal=preciototal
             )
             detallefactura.save()    
