@@ -716,24 +716,27 @@ def ajaxsaverdetallefactura(request):
                 rodado = None
             else:
                 rodado = Rodado.objects.get(pk=rodado)
-                
+
             rubro = Rubro.objects.get(pk=rubro)
+            
             unidad = Unidad.objects.get(pk=unidad)
 
             descripciondetalle = Descripciondetalle.objects.get(pk=detalleitem)
 
+            print(" ---- ")
             print(data)
-            
 
             detallefactura = DetalleFacturaProveedor(
                 factura=factura,
                 ajuste=ajuste,
                 cantidad=cantidad,
+                descuentoporcentaje=porcentajedescuentos,
                 descripciondetalle=descripciondetalle,
                 descuento=descuento,
                 iva=iva,
                 obra=obra,
-                descuentoporcentaje=porcentajedescuentos,
+                rubro=rubro,
+                unidad=unidad,
                 preciototal=preciototal
             )
             detallefactura.save()    

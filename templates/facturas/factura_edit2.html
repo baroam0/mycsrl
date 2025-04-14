@@ -284,8 +284,8 @@
                       
                       <div class="col-sm-6">
                         <div class="form-group">
-                          <label for="id_Ajuste"> Ajuste </label>
-                            <input class="form-control" id="id_Ajuste" name="Ajuste" type="number">
+                          <label for="id_ajuste"> Ajuste </label>
+                            <input class="form-control" id="id_ajuste" name="ajuste" type="number">
                         </div>
                       </div>
                     </div>
@@ -389,8 +389,8 @@
             type: "GET",
             dataType: "json",
             success: function(respuesta) {
-              console.log(respuesta.detalle);
-              console.log(respuesta.obra);
+              console.log(respuesta);
+              
               HabilitarDetalleItem(1);
               $('#id_ajuste').val(respuesta.ajuste);
               $('#id_cantidad').val(respuesta.cantidad);
@@ -435,6 +435,8 @@
           };
 
           let datosJSON = JSON.stringify(datos);
+
+          console.log(datosJSON);
 
           $.ajax({
             url: '/facturas/ajax/savefacturadetail/',
