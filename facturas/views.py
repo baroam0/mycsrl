@@ -723,8 +723,6 @@ def ajaxsaverdetallefactura(request):
 
             descripciondetalle = Descripciondetalle.objects.get(pk=detalleitem)
 
-            print(" ---- ")
-            print(data)
 
             detallefactura = DetalleFacturaProveedor(
                 factura=factura,

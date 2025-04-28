@@ -200,7 +200,7 @@
 
                       <div class="col-sm-6">
                         <div class="form-group">
-                          <label for="id_proveedor">Rubro </label>
+                          <label for="id_rubro">Rubro </label>
                           <select class="form-control" id="id_rubro" name="rubro">
                             {% for rubro in rubros %}
                               <option value={{rubro.pk}}> {{ rubro.descripcion.upper}} </option>
@@ -358,7 +358,15 @@
             $("#id_detalle").select2();
             $("#id_iibb").select2();
             $("#id_iva").select2();
-            $("#id_obra").select2();
+
+            $("#id_obra").select2(
+              { 
+                    tags: true, 
+                    placeholder: "Selecciona o agrega una opcion", 
+                    allowClear: true 
+              }
+            );
+
             $("#id_rodado").select2();
             $("#id_rubro").select2();
             $("#id_unidad").select2();
