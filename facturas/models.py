@@ -118,10 +118,10 @@ class FacturaProveedor(models.Model):
     def __str__(self):
         return str(self.fecha)
 
-    def save(self, *args, **kwargs):
-        if self.comprobante:
-            self.comprobante = self.comprobante.replace(" ", "")
-            super(FacturaProveedor, self).save(*args, **kwargs)
+    #def save(self, *args, **kwargs):
+    #    if self.comprobante:
+    #        self.comprobante = self.comprobante.replace(" ", "")
+    #        super(FacturaProveedor, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name_plural = "Facturas"
