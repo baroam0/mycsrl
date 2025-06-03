@@ -2,3 +2,4 @@ admin Manzana5
 jgaleano Mandarina5
 cledesma Naranja5
 majimenez Toronja5
+jromea Tomate5

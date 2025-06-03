@@ -87,13 +87,13 @@ class FacturaProveedorForm(forms.ModelForm):
     comprobante = forms.CharField(label="Comprobante", required=True) 
     fecha = forms.DateField(label="Fecha", required=True)
 
-    """
+
     proveedor = forms.ModelChoiceField(
         queryset=Proveedor.objects.all().order_by('razonsocial'), 
         label="Proveedor", 
         required=True) 
-    """
-        
+
+
     descuentoglobal = forms.DecimalField(label="Descuento Global")
     preciocepcionglobal = forms.DecimalField(label="Percepcion Global")
     ajusteglobal = forms.DecimalField(label="Ajuste Global")
@@ -107,7 +107,7 @@ class FacturaProveedorForm(forms.ModelForm):
 
     class Meta:
         model = FacturaProveedor
-        fields = ["fecha", "comprobante", 
+        fields = ["fecha", "comprobante", "proveedor", 
                   "descuentoglobal", "preciocepcionglobal", 
                   "ajusteglobal"]
 
