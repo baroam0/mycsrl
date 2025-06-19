@@ -1,5 +1,6 @@
 
 from datetime import date
+from decimal import Decimal
 import json
 
 from django.contrib import messages
@@ -471,7 +472,7 @@ def editarfactura(request, pk):
 
         return render(
             request,
-            'facturas/factura_edit.html',
+            'facturas/factura_edit2.html',
             {
                 "descripciondetalles" : descripciondetalles,
                 "factura": factura,
@@ -693,8 +694,9 @@ def ajaxloaddetallefactura(request, pk):
 def ajaxsaverdetallefactura(request):
     if request.method == 'POST':
         try:
-            data = json.loads(request.body)  # Parsear el JSON recibido            
-            
+            data = json.loads(request.body)  # Parsear el JSON recibido
+
+            id_detallefactura = data.get('id_detallefactura')
             ajuste = data.get('ajuste')
             idFactura = data.get('idFactura')
             cantidad = data.get('cantidad')
@@ -718,27 +720,59 @@ def ajaxsaverdetallefactura(request):
                 rodado = Rodado.objects.get(pk=rodado)
 
             rubro = Rubro.objects.get(pk=rubro)
-            
             unidad = Unidad.objects.get(pk=unidad)
+            usuario = request.user
+            
 
-            descripciondetalle = Descripciondetalle.objects.get(pk=detalleitem)
+            try:
+                print(detalleitem)
+                print("pasa por el try")
+                descripciondetalle = Descripciondetalle.objects.get(pk=detalleitem)
+            except:
+                print("no pasa por el try")
+                descripciondetalle = Descripciondetalle(
+                    descripciondetalle = detalleitem,
+                    unidad=unidad,
+                    usuario=usuario
+                )
+                descripciondetalle.save()
+                descripciondetalle = Descripciondetalle.objects.latest('pk')
 
 
-            detallefactura = DetalleFacturaProveedor(
-                factura=factura,
-                ajuste=ajuste,
-                cantidad=cantidad,
-                descuentoporcentaje=porcentajedescuentos,
-                descripciondetalle=descripciondetalle,
-                descuento=descuento,
-                iva=iva,
-                obra=obra,
-                rubro=rubro,
-                unidad=unidad,
-                preciototal=preciototal
-            )
-            detallefactura.save()    
-            return JsonResponse({'mensaje': 'Datos guardados exitosamente'}, status=200)
+            if id_detallefactura:
+                detallefactura = DetalleFacturaProveedor.objects.get(pk=id_detallefactura)
+                detallefactura.factura=factura
+                detallefactura.ajuste=Decimal(ajuste)
+                detallefactura.cantidad=Decimal(cantidad)
+                detallefactura.descuentoporcentaje=Decimal(porcentajedescuentos)
+                detallefactura.descripciondetalle=descripciondetalle
+                detallefactura.descuento=Decimal(descuento)
+                detallefactura.iva=iva
+                detallefactura.obra=obra
+                detallefactura.rubro=rubro
+                detallefactura.unidad=unidad
+                detallefactura.preciototal=Decimal(preciototal)
+                detallefactura.rodado=rodado
+                detallefactura.usuario=usuario
+                detallefactura.save()
+                return JsonResponse({'mensaje': 'Se han actualizado los detalles'}, status=200)
+            else:
+                detallefactura = DetalleFacturaProveedor(
+                    factura=factura,
+                    ajuste=ajuste,
+                    cantidad=cantidad,
+                    descuentoporcentaje=porcentajedescuentos,
+                    descripciondetalle=descripciondetalle,
+                    descuento=descuento,
+                    iva=iva,
+                    obra=obra,
+                    rubro=rubro,
+                    unidad=unidad,
+                    preciototal=preciototal,
+                    usuario=usuario
+                )
+                detallefactura.save()
+                return JsonResponse({'mensaje': 'Datos guardados exitosamente'}, status=200)
             
         except json.JSONDecodeError:
             return JsonResponse({'error': 'JSON inválido'}, status=400)

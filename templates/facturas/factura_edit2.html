@@ -398,6 +398,7 @@
             dataType: "json",
             success: function(respuesta) {
               console.log(respuesta);
+              id_detallefactura=pk;
               
               HabilitarDetalleItem(1);
               $('#id_ajuste').val(respuesta.ajuste);
@@ -427,6 +428,7 @@
 
         function guardarDetalleItem(){
           let datos = {
+            id_detallefactura: id_detallefactura,
             ajuste: $('#id_ajuste').val(),
             cantidad: $('#id_cantidad').val(),
             descuento: $("#id_descuento").val(),
@@ -453,6 +455,11 @@
             data: datosJSON,
             success: function(respuesta) {
               console.log('Respuesta del servidor:', respuesta);
+              Swal.fire(
+                    respuesta.mensaje,
+                    '',
+                    'success'
+                )
             },
             error: function(error) {
               console.error('Error al enviar los datos:', error); 
