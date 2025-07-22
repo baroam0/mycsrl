@@ -472,7 +472,7 @@ def editarfactura(request, pk):
 
         return render(
             request,
-            'facturas/factura_edit2.html',
+            'facturas/factura_edit.html',
             {
                 "descripciondetalles" : descripciondetalles,
                 "factura": factura,
