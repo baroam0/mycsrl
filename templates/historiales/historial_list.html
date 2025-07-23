@@ -115,6 +115,10 @@
     <script>
         $(document).ready(function () {
             $('#id_descripciondetalle').select2();
+
+            if({{parametro}}){
+                $('#id_descripciondetalle').val('{{parametro}}').trigger('change');
+            }
         });
         
     </script>
