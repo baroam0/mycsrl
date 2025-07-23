@@ -24,7 +24,7 @@ def listadohistorial(request):
     else:
         parametro = None
         consulta = DetalleFacturaProveedor.objects.none()
-    paginador = Paginator(consulta, 50)
+    paginador = Paginator(consulta, 10)
 
     if "page" in request.GET:
         page = request.GET.get('page')

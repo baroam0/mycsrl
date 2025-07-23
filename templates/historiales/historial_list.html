@@ -17,23 +17,12 @@
         
         <hr>
 
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{message.tags}}" role="alert">
-                    {{message}}
-                </div>
-            {% endfor %}
-        {% endif %}
-
-
         <form action="/historial/precios" method="GET">
 
             <div class="form-inline">
                 <div class="col-2">
-                    
                 </div>
-                <div class="col-2">
-                </div>
+                
                 <div class="col-8">
 
                     <select class="form-control" id="id_descripciondetalle" name="id_descripciondetalle">
@@ -46,6 +35,8 @@
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
+                <div class="col-2">
+                </div>
             </div>
         </form>
 
@@ -57,6 +48,7 @@
                         <th>Obra</th>
                         <th>Descripcion</th>
                         <th>Proveedor</th>
+                        <th>Comprobante</th>
                         <th>Precio</th>
                         <th>Precio Final</th>
                         <th>Fecha</th>
@@ -69,10 +61,10 @@
                         <td>{{ resultado.obra }}  </td>
                         <td>{{ resultado.descripciondetalle }}  </td>
                         <td>{{ resultado.factura.proveedor }}  </td>
+                        <td>{{ resultado.factura.comprobante }}  </td>
                         <td>$ {{ resultado.getpreciounitario | floatformat:2 }}</td>
                         <td>$ {{ resultado.getpreciounitariofinal | floatformat:2 }}</td>
                         <td>{{ resultado.factura.fecha }}</td>
-                        
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -82,16 +74,15 @@
                 <ul class="pagination justify-content-center">
                     {% if resultados.has_previous %}
                         <li class="page-item">
-                            <a class="page-link" href="?page=1">
+                            <a class="page-link" href="?id_descripciondetalle={{parametro}}&page=1">
                                 <i class="fas fa-angle-double-left"></i>
                             </a>
                         </li>
                         <li class="page-item">
-                            <a class="page-link" href="?page={{ resultados.previous_page_number }}">
+                            <a class="page-link" href="?id_descripciondetalle={{parametro}}&page={{ resultados.previous_page_number }}">
                                 <i class="fas fa-angle-left"></i>
                             </a>
                         </li>
-
                     {% endif %}
 
                     <li class="page-item disabled">
@@ -102,12 +93,12 @@
 
                     {% if resultados.has_next %}
                         <li class="page-item">
-                            <a class="page-link" href="?page={{ resultados.next_page_number }}">
+                            <a class="page-link" href="?id_descripciondetalle={{parametro}}&page={{ resultados.next_page_number }}">
                                 <i class="fas fa-angle-right"></i>
                             </a>
                         </li>
                         <li class="page-item">
-                            <a class="page-link" href="?page={{ resultados.paginator.num_pages }}">
+                            <a class="page-link" href="?id_descripciondetalle={{parametro}}&page={{ resultados.paginator.num_pages }}">
                                 <i class="fas fa-angle-double-right"></i>
                             </a>
                         </li>
@@ -124,6 +115,10 @@
     <script>
         $(document).ready(function () {
             $('#id_descripciondetalle').select2();
+
+            if({{parametro}}){
+                $('#id_descripciondetalle').val('{{parametro}}').trigger('change');
+            }
         });
         
     </script>

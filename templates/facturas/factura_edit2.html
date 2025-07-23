@@ -454,12 +454,14 @@
             contentType: 'application/json',
             data: datosJSON,
             success: function(respuesta) {
-              console.log('Respuesta del servidor:', respuesta);
+              //console.log('Respuesta del servidor:', respuesta);
               Swal.fire(
                     respuesta.mensaje,
                     '',
                     'success'
-                )
+              ).then(() => {
+                window.location.reload(); // Recarga la página después de que el usuario hace clic en "OK"
+              });
             },
             error: function(error) {
               console.error('Error al enviar los datos:', error); 
