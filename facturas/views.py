@@ -12,6 +12,7 @@ from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
+from empresas.models import Empresa
 from rodados.models import Rodado
 
 from .forms import (
@@ -384,6 +385,7 @@ def listadofactura(request):
         facturas = consulta | consultafacturaobras | consultafacturadescripcion | consultafacturarubro | montototal
 
     else:
+        parametro = ""
         facturas = FacturaProveedor.objects.all().order_by('-fecha')
     paginador = Paginator(facturas, 20)
 
@@ -397,8 +399,10 @@ def listadofactura(request):
         request,
         'facturas/factura_list.html',
         {
-            'resultados': resultados
-        })
+            'resultados': resultados,
+            'parametro': parametro
+        }
+    )
 
 
 @login_required(login_url='/login')
@@ -472,7 +476,7 @@ def editarfactura(request, pk):
 
         return render(
             request,
-            'facturas/factura_edit.html',
+            'facturas/factura_edit2.html',
             {
                 "descripciondetalles" : descripciondetalles,
                 "factura": factura,
@@ -709,10 +713,26 @@ def ajaxsaverdetallefactura(request):
             rubro = data.get('rubro')
             unidad = data.get('unidad')
             rodado = data.get('rodado')
+            usuario = request.user
 
             factura = FacturaProveedor.objects.get(pk=idFactura)
             iva = Iva.objects.get(pk=iva)
-            obra = Obra.objects.get(pk=obra)
+
+            try:
+                obra = Obra.objects.get(pk=obra)
+            except:
+                empresa = Empresa.objects.get(pk=1)
+                obra = Obra(
+                    descripcion=obra,
+                    empresa=empresa,
+                    licitacion="",
+                    comitente="",
+                    finalizada=False,
+                    usuario=usuario
+                )
+
+                obra.save()
+                obra = Obra.objects.latest('pk')
             
             if rodado is None:
                 rodado = None
@@ -721,15 +741,10 @@ def ajaxsaverdetallefactura(request):
 
             rubro = Rubro.objects.get(pk=rubro)
             unidad = Unidad.objects.get(pk=unidad)
-            usuario = request.user
-            
 
             try:
-                print(detalleitem)
-                print("pasa por el try")
                 descripciondetalle = Descripciondetalle.objects.get(pk=detalleitem)
             except:
-                print("no pasa por el try")
                 descripciondetalle = Descripciondetalle(
                     descripciondetalle = detalleitem,
                     unidad=unidad,
