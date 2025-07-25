@@ -692,8 +692,6 @@ def ajaxloaddetallefactura(request, pk):
             "rubro": detallefactura.rubro.pk
         }
 
-        print(detallefactura_dict)
-
         return JsonResponse(detallefactura_dict)
 
 
