@@ -684,12 +684,15 @@ def ajaxloaddetallefactura(request, pk):
             "descuentoporcentaje": detallefactura.descuentoporcentaje,
             "detalle": detallefactura.descripciondetalle.pk,
             "iva": detallefactura.iva.pk,
+            "ingresobruto": detallefactura.ingresosbrutos.pk,
             "obra": detallefactura.obra.pk,
             "preciototal": detallefactura.preciototal,
             "unidad": detallefactura.unidad.pk,
             "rodado": detallefactura.rodado.pk if detallefactura.rodado else None,
             "rubro": detallefactura.rubro.pk
         }
+
+        print(detallefactura_dict)
 
         return JsonResponse(detallefactura_dict)
 
@@ -708,6 +711,7 @@ def ajaxsaverdetallefactura(request):
             porcentajedescuentos = data.get('porcentajedescuentos')
             detalleitem = data.get('detalleitem')
             iva = data.get('iva')
+            ingresobruto = data.get('ingresobruto')
             obra = data.get('obra')
             preciototal = data.get('preciototal')
             rubro = data.get('rubro')
@@ -717,6 +721,7 @@ def ajaxsaverdetallefactura(request):
 
             factura = FacturaProveedor.objects.get(pk=idFactura)
             iva = Iva.objects.get(pk=iva)
+            ingresobruto = IngresoBruto.objects.get(pk=ingresobruto)
 
             try:
                 obra = Obra.objects.get(pk=obra)
@@ -763,6 +768,7 @@ def ajaxsaverdetallefactura(request):
                 detallefactura.descripciondetalle=descripciondetalle
                 detallefactura.descuento=Decimal(descuento)
                 detallefactura.iva=iva
+                detallefactura.ingresosbrutos=ingresobruto
                 detallefactura.obra=obra
                 detallefactura.rubro=rubro
                 detallefactura.unidad=unidad
@@ -780,6 +786,7 @@ def ajaxsaverdetallefactura(request):
                     descripciondetalle=descripciondetalle,
                     descuento=descuento,
                     iva=iva,
+                    ingresobruto=ingresobruto,
                     obra=obra,
                     rubro=rubro,
                     unidad=unidad,
@@ -826,6 +833,39 @@ def detallefacturaproveedor_delete(request, pk):
             }
         )
 
+
+@login_required(login_url='/login')
+def actualizadormasivo(request):
+
+    material = Descripciondetalle.objects.all()
+
+    if request.POST:
+        usuario = request.user
+
+        materialorigen = Descripciondetalle.objects.get(pk=parametroorigen)
+        materialdestino = Descripciondetalle.objects.get(pk=parametrodestino)
+
+        facturas = DetalleFacturaProveedor.objects.filter(
+            descripciondetalle=materialorigen).update(descripciondetalle=materialdestino, usuario=usuario)
+
+        messages.success(request, "Se han actualizado los datos.")
+        return render(
+            request, 
+            'facturas/actualizadormasivos.html',
+            {
+                "material":material
+            }
+
+        )
+
+    else:
+        return render(
+            request,
+            'facturas/descripciondetalle_edit.html',
+            {
+                "material":material
+            }
+    )
 
 
 # Create your views here.

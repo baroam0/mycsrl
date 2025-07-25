@@ -265,16 +265,29 @@
                           </select>
                         </div>
                       </div>
+
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <label for="id_ingresobruto"> Ingresos brutos </label>
+                          <select class="form-control" id="id_ingresobruto" name="ingresobruto">
+                            {% for ingresobruto in ingresosbrutos %}
+                              <option value={{ingresobruto.pk}}> {{ ingresobruto.retencion }} </option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
                       
+                      
+                    </div>
+
+                    <div class="row">
                       <div class="col-sm-6">
                         <div class="form-group">
                           <label for="id_descuentos"> Descuentos </label>
                             <input class="form-control" id="id_descuento" name="descuento" type="number">
                         </div>
                       </div>
-                    </div>
 
-                    <div class="row">
                       <div class="col-sm-6">
                         <div class="form-group">
                           <label for="id_porcentajedescuentos"> Porcentaje Descuentos </label>
@@ -282,7 +295,10 @@
                         </div>
                       </div>
                       
-                      <div class="col-sm-6">
+                    </div>
+
+                    <div class="row">
+                      <div class="col-sm-12">
                         <div class="form-group">
                           <label for="id_ajuste"> Ajuste </label>
                             <input class="form-control" id="id_ajuste" name="ajuste" type="number">
@@ -358,6 +374,7 @@
             $("#id_detalle").select2();
             $("#id_iibb").select2();
             $("#id_iva").select2();
+            $("#id_ingresobruto").select2();
 
             $("#id_obra").select2(
               { 
@@ -408,6 +425,7 @@
               $("#id_porcentajedescuentos").val(respuesta.descuentoporcentaje);
               $("#id_detalleitem").val(respuesta.detalle);
               $('#id_iva').val(respuesta.iva).trigger('change');
+              $('#id_ingresobruto').val(respuesta.ingresobruto).trigger('change');
               $('#id_obra').val(respuesta.obra).trigger('change');
               $('#id_preciototal').val(respuesta.preciototal);
               $('#id_rubro').val(respuesta.rubro).trigger('change');
@@ -436,6 +454,7 @@
             editar: editarDetalleItem,
             idFactura: idFactura,
             iva: $('#id_iva').val(),
+            ingresobruto: $('#id_ingresobruto').val(),
             obra: $('#id_obra').val(),
             preciototal: $('#id_preciototal').val(),
             porcentajedescuentos: $("#id_porcentajedescuentos").val(),
@@ -488,6 +507,7 @@
           $("#id_porcentajedescuentos").val("");
           $("#id_detalleitem").val("");
           $('#id_iva').val("").trigger('change');
+          $('#id_ingresobruto').val("").trigger('change');
           $('#id_obra').val("").trigger('change');
           $('#id_preciototal').val("");
           $('#id_rubro').val("").trigger('change');
