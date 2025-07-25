@@ -786,7 +786,7 @@ def ajaxsaverdetallefactura(request):
                     descripciondetalle=descripciondetalle,
                     descuento=descuento,
                     iva=iva,
-                    ingresobruto=ingresobruto,
+                    ingresosbrutos=ingresobruto,
                     obra=obra,
                     rubro=rubro,
                     unidad=unidad,
