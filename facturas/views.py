@@ -840,28 +840,28 @@ def actualizadormasivo(request):
     material = Descripciondetalle.objects.all()
 
     if request.POST:
+        parametroorigen = request.POST['id_materialorigen']
+        parametrodestino = request.POST['id_materialdestino']
         usuario = request.user
-
         materialorigen = Descripciondetalle.objects.get(pk=parametroorigen)
         materialdestino = Descripciondetalle.objects.get(pk=parametrodestino)
 
+        
         facturas = DetalleFacturaProveedor.objects.filter(
-            descripciondetalle=materialorigen).update(descripciondetalle=materialdestino, usuario=usuario)
-
+            descripciondetalle=materialdestino).update(descripciondetalle=materialorigen, usuario=usuario)
         messages.success(request, "Se han actualizado los datos.")
         return render(
             request, 
-            'facturas/actualizadormasivos.html',
+            'facturas/actualizadormasivo.html',
             {
                 "material":material
             }
-
         )
 
     else:
         return render(
             request,
-            'facturas/descripciondetalle_edit.html',
+            'facturas/actualizadormasivo.html',
             {
                 "material":material
             }
@@ -869,3 +869,4 @@ def actualizadormasivo(request):
 
 
 # Create your views here.
+
