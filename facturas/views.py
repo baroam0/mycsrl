@@ -458,6 +458,11 @@ def editarfactura(request, pk):
                 cuit=""
             )
 
+        datos_modificados = request.POST.copy()
+        datos_modificados['proveedor'] = consultaproveedor.pk
+
+        form = FacturaProveedorForm(datos_modificados, instance=factura)
+
         if form.is_valid():
             facturaform = form.save(commit=False)
             facturaform.usuario = usuario
@@ -467,7 +472,6 @@ def editarfactura(request, pk):
             messages.success(request, "Se ha modificado los datos.")
             return redirect('/facturas/editar/' + str(pk))
         else:
-            print(form.errors)
             messages.warning(request, form.errors)
             return redirect('/facturas/editar/' + str(pk))
     else:
