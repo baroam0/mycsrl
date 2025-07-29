@@ -177,7 +177,9 @@ def concepto_edit(request, pk):
 def listadofacturacion(request):
     if "txtBuscar" in request.GET:
         parametro = request.GET.get('txtBuscar')
-        facturaciones = Facturacion.objects.filter(descripcion__contains=parametro)
+        facturas = Facturacion.objects.filter(descripcion__contains=parametro)
+        obras = Facturacion.objects.filter(obra__descripcion__contains=parametro)
+        facturaciones = facturas | obras
     else:
         facturaciones = Facturacion.objects.all()
     paginador = Paginator(facturaciones, 20)
@@ -191,6 +193,7 @@ def listadofacturacion(request):
         request,
         'facturacion/facturacion_list.html',
         {
+            'parametro': parametro,
             'resultados': resultados
         })
 

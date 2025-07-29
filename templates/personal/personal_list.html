@@ -99,12 +99,12 @@
                 <ul class="pagination justify-content-center">
                     {% if resultados.has_previous %}
                         <li class="page-item">
-                            <a class="page-link" href="?page=1">
+                            <a class="page-link" href="?txtBuscar={{parametro}}&page=1">
                                 <i class="fas fa-angle-double-left"></i>
                             </a>
                         </li>
                         <li class="page-item">
-                            <a class="page-link" href="?page={{ resultados.previous_page_number }}">
+                            <a class="page-link" href="?txtBuscar={{parametro}}&page={{ resultados.previous_page_number }}">
                                 <i class="fas fa-angle-left"></i>
                             </a>
                         </li>
@@ -119,12 +119,12 @@
 
                     {% if resultados.has_next %}
                         <li class="page-item">
-                            <a class="page-link" href="?page={{ resultados.next_page_number }}">
+                            <a class="page-link" href="?txtBuscar={{parametro}}&page={{ resultados.next_page_number }}">
                                 <i class="fas fa-angle-right"></i>
                             </a>
                         </li>
                         <li class="page-item">
-                            <a class="page-link" href="?page={{ resultados.paginator.num_pages }}">
+                            <a class="page-link" href="?txtBuscar={{parametro}}&page={{ resultados.paginator.num_pages }}">
                                 <i class="fas fa-angle-double-right"></i>
                             </a>
                         </li>
