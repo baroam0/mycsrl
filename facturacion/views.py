@@ -181,6 +181,7 @@ def listadofacturacion(request):
         obras = Facturacion.objects.filter(obra__descripcion__contains=parametro)
         facturaciones = facturas | obras
     else:
+        parametro=""
         facturaciones = Facturacion.objects.all()
     paginador = Paginator(facturaciones, 20)
 
