@@ -165,38 +165,42 @@ class DetalleFacturaProveedor(models.Model):
         monto = float(self.preciototal / self.cantidad)
         return round(monto,2)
 
+
     def getpreciounitariofinal(self):
-        monto = float(self.preciototal / self.cantidad)
+        try:
+            monto = float(self.preciototal / self.cantidad)
 
-        descuentoproporcional = float(self.factura.descuentoglobal) / float(self.factura.getsubtotalfactura()) * float(self.preciototal) / float(self.cantidad)
-        #descuentoproporcional = round(descuentoproporcional,2)
+            descuentoproporcional = float(self.factura.descuentoglobal) / float(self.factura.getsubtotalfactura()) * float(self.preciototal) / float(self.cantidad)
+            #descuentoproporcional = round(descuentoproporcional,2)
 
-        ajusteproporcional = float(self.factura.ajusteglobal) / float(self.factura.getsubtotalfactura()) * float(self.preciototal) / float(self.cantidad)
-        #ajusteproporcional = round(ajusteproporcional,2)
-        
-        descuentoporcentaje = monto * float(self.descuentoporcentaje) / 100
-        monto = monto - descuentoporcentaje
+            ajusteproporcional = float(self.factura.ajusteglobal) / float(self.factura.getsubtotalfactura()) * float(self.preciototal) / float(self.cantidad)
+            #ajusteproporcional = round(ajusteproporcional,2)
 
-        monto = monto - float(self.descuento)
+            descuentoporcentaje = monto * float(self.descuentoporcentaje) / 100
+            monto = monto - descuentoporcentaje
+            monto = monto - float(self.descuento)
 
-        monto = monto - descuentoproporcional
-        monto = monto + ajusteproporcional        
-        
-        if self.iva:
-            iva = monto * float(self.iva.retencion) / 100
-        else:
-            iva = 0
-        
-        if self.ingresosbrutos:
-            iibb = monto * float(self.ingresosbrutos.retencion) / 100
-        else:
-            iibb = 0
-            
-        monto = monto + iva + iibb
-        monto = monto + float(self.ajuste)
-        return monto
-        
-    
+            monto = monto - descuentoproporcional
+            monto = monto + ajusteproporcional
+
+            if self.iva:
+                iva = monto * float(self.iva.retencion) / 100
+            else:
+                iva = 0
+
+            if self.ingresosbrutos:
+                iibb = monto * float(self.ingresosbrutos.retencion) / 100
+            else:
+                iibb = 0
+
+            monto = monto + iva + iibb
+            monto = monto + float(self.ajuste)
+            return monto
+        except:
+            monto = 0
+            return monto
+
+
     def getpreciofinaltotalitem(self):
         monto = self.getpreciounitariofinal()
         monto = monto * float(self.cantidad)
