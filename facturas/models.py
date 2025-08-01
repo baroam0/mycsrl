@@ -162,8 +162,12 @@ class DetalleFacturaProveedor(models.Model):
     usuario = models.ForeignKey(UserAdm, on_delete=models.CASCADE, default=1)
 
     def getpreciounitario(self):
-        monto = float(self.preciototal / self.cantidad)
-        return round(monto,2)
+        try:
+            monto = float(self.preciototal / self.cantidad)
+            return round(monto,2)
+        except:
+            monto = 0
+            return monto
 
 
     def getpreciounitariofinal(self):
