@@ -52,7 +52,8 @@
                         <th>Comitente</th>
                         <th>Licitación</th>
                         <th>Usuario</th>
-                        <th>Accion</th>
+                        <th>Editar</th>
+                        <th>Borrar</th>
                     </tr>
                 </thead>
 
@@ -69,6 +70,12 @@
                         <td>
                             <button type="button" class="btn btn-link btn-sm" onclick="location.href='/pagos/obra/obraedit/' + {{ resultado.pk }}">
                                 <i class="fas fa-pencil-alt"></i>
+                            </button>
+                        </td>
+
+                        <td>
+                            <button type="button" class="btn btn-link btn-sm" onclick="location.href='/pagos/obra/delete/' + {{ resultado.pk }}">
+                                <i class="fas fa-trash"></i>
                             </button>
                         </td>
                     </tr>
