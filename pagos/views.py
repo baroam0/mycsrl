@@ -384,6 +384,23 @@ def obra_edit(request, pk):
         )
 
 
+def obra_delete(request, pk):
+    obra = Obra.objects.get(pk=pk)
+
+    if request.method =="POST":
+        obra.delete()
+        return redirect('/pagos/obra/listado/')
+        
+    return render(
+            request,
+            'pagos/obra_delete.html',
+            {
+                "obra": obra
+            }
+        )
+
+
+
 ######################################################################
 ########################### SECCION PROVEEDOR ########################
 ######################################################################
