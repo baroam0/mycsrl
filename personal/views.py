@@ -108,7 +108,7 @@ def listadopersonal(request):
             Q(numerodocumento__icontains=parametro)
         ).order_by('apellido')
     else:
-        parametro = None
+        parametro = ""
         personal = Personal.objects.all().order_by('apellido')
     paginador = Paginator(personal, 10)
 
