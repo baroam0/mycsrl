@@ -3,7 +3,7 @@
 
 # Variables
 
-git pull
+#git pull
 
 archivo_a_copiar="/home/mycsrl/proyectos/mycsrl/db.sqlite3"  # Cambia esto por la ruta de tu archivo
 directorio_respaldo="/home/mycsrl/proyectos/mycsrl/bck/bk_db.sqlite"    # Cambia esto por la ruta del directorio de respaldo
