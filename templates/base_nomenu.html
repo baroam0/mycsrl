@@ -44,8 +44,7 @@
 <style>
   @media print{
     @page {
-      size: landscape;
-      
+      size: landscape; 
     }
     
     header {
@@ -53,6 +52,8 @@
       top: 0;
       z-index: 1000;
       background-color: #fff;
+      opacity: 0.3; /* Para que no tape el texto */
+      
     }
 
     footer {page-break-after: always;}
@@ -63,6 +64,7 @@
         top: 0;
         right: 0; /* Ajusta la posición a la derecha */
         /* otros estilos para el encabezado */
+        opacity: 0.3; /* Para que no tape el texto */
   }
 
   
